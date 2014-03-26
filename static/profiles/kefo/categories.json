@@ -1,0 +1,61 @@
+{
+    "Profile": {
+        "id": "profile:Categories",
+        "title": "Categories",
+        "remark":  "This is a pretty useless vocab construct about which we can do nothing because, well,....",
+        "resourceTemplates": [    	       
+            {
+                "id": "rt:Carrier",
+                "resourceLabel": "Carrier",
+				"resourceURI": "http://bibframe.org/vocab/Carrier",
+                    "instanceOf": "http://bibframe.org/vocab/Category",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:Content",
+                "resourceLabel": "Content",
+				"resourceURI": "http://bibframe.org/vocab/Content",
+                    "instanceOf": "http://bibframe.org/vocab/Category",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:Form",
+                "resourceLabel": "Form",
+				"resourceURI": "http://bibframe.org/vocab/Form",
+                    "instanceOf": "http://bibframe.org/vocab/Category",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:MediaType",
+                "resourceLabel": "Media",
+				"resourceURI": "http://bibframe.org/vocab/Media",
+                    "instanceOf": "http://bibframe.org/vocab/Category",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            }
+        ]
+    }
+}

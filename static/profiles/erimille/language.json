@@ -1,0 +1,19 @@
+{
+    "Profile": {
+        "title": "profile:Language",
+        "resourceTemplates": [
+            {
+                "id": "rt:Language",
+				"resourceURI": "http://bibframe.org/vocab/LanguageEntity",
+				"resourceLanguage": "Language",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+				]
+            }
+        ]
+    }
+}

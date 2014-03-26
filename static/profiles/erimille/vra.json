@@ -1,0 +1,318 @@
+{
+    "Profile": {
+		"id": "profile:VRA-Painting",
+        "title": "VRA Painting",
+        "resourceTemplates": [
+            {
+                "id": "rt:Painting",
+                "resourceLabel": "Painting",
+				"resourceURI": "http://bibframe.org/vocab/Painting",
+                    "labelProperty": "http://bibframe.org/vocab/title",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/alternativeTitle",
+						"propertyLabel": "Alternative Title"
+					},
+			{
+						"propertyURI": "http://bibframe.org/vocab/painter",
+						"propertyLabel": "Painter",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:ULAN:Agent"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/culturalConcext",
+						"propertyLabel": "Language",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["bp:language"]
+						}
+					},
+					{
+						"propertyURI": "http://example.org/vocab/vra/beginDate",
+						"propertyLabel": "Begin Date",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": {
+        						"dataTypeURI": "http://bibframe.org/vocab/proposed/ISO8601",
+        						"dataTypeLabel": "ISO 8601",
+        						"dataTypeLabelHint": "ISO"
+                                }
+                            }
+					},
+					{
+						"propertyURI": "http://example.org/vocab/vra/consecratedDate",
+						"propertyLabel": "Consecrated Date",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": {
+        						"dataTypeURI": "http://bibframe.org/vocab/proposed/ISO8601",
+        						"dataTypeLabel": "ISO 8601",
+        						"dataTypeLabelHint": "ISO"
+                                }
+                            }
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/description",
+						"propertyLabel": "Description",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": "",
+    						"valueLang": ""
+    					}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/inscription",
+						"propertyLabel": "Inscription",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": "",
+    						"valueLang": ""
+    					}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/location",
+						"propertyLabel": "Location",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:TGN:Place"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/material",
+						"propertyLabel": "Material",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:AAT:Authority"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/measurement",
+						"propertyLabel": "Measurement",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": "",
+    						"valueLang": ""
+    					}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/relation",
+						"propertyLabel": "Relation",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:Painting"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/rights",
+						"propertyLabel": "Rights",
+						"type": "literal",
+						"valueConstraint": {
+    						"valueDataType": "",
+    						"valueLang": ""
+    					}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/source",
+						"propertyLabel": "Source",
+						"repeatable": "true",
+						"type": "resource"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/stateEdition",
+						"propertyLabel": "State Edition",
+						"valueConstraint": {
+    						"valueDataType": "",
+    						"valueLang": ""
+    					}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/stylePeriod",
+						"propertyLabel": "Style / Period",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:AAT:Period"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/subject",
+						"propertyLabel": "Subject",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:Authority:Topic"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/technique",
+						"propertyLabel": "Technique",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:AAT:Technique"]
+						}
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/textref",
+						"propertyLabel": "Reference"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/vra/workType",
+						"propertyLabel": "Work Type",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["rt:AAT:WorkType"]
+                            }
+                        }
+                ]
+            },
+            {
+                "id": "rt:depicts",
+                "resourceLabel": "Image",
+				"resourceURI": "http://bibframe.org/vocab/Image",
+                    "instanceOf": "http://bibframe.org/vocab/Painting",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/image",
+						"propertyLabel": "Image",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": ["e:Image"]
+						}
+					}
+				]
+            },
+            {
+                "id": "e:Image",
+                "resourceLabel": "Image",
+				"resourceURI": "http://example.org/vocab/bfp/Image",
+                    "labelProperty": "http://example.org/vocab/bfp/filename",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://example.org/vocab/bfp/filename",
+						"propertyLabel": "File Name",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://example.org/vocab/bfp/mimetype",
+						"propertyLabel": "MIME-Type",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/width",
+						"propertyLabel": "Width",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/height",
+						"propertyLabel": "Height",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:ULAN:Agent",
+                "resourceLabel": "Agent",
+				"resourceURI": "http://bibframe.org/vocab/rda/Agent",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:AAT:Authority",
+                "resourceLabel": "Authority",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"resourceURI": "http://bibframe.org/vocab/rda/Authority",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:AAT:Period",
+                "resourceLabel": "Period",
+				"resourceURI": "http://bibframe.org/vocab/rda/Period",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:AAT:Technique",
+                "resourceLabel": "Technique",
+				"resourceURI": "http://bibframe.org/vocab/rda/Technique",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:AAT:WorkType",
+                "resourceLabel": "Type of Work",
+				"resourceURI": "http://bibframe.org/vocab/rda/WorkType",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rt:TGN:Place",
+                "resourceLabel": "Place",
+				"resourceURI": "http://bibframe.org/vocab/rda/Place",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "bp:language",
+				"resourceURI": "http://bibframe.org/vocab/LanguageEntity",
+                    "labelProperty": "http://bibframe.org/vocab/label",
+				"propertyTemplates": [
+					{
+						"mandatory": "true",
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+					}
+				]
+            }
+        ]
+    }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BF Editor</title>
+        
+        <script src="static/js/require.js"></script>
+        <script type="text/javascript" src="static/js/jquery-1.11.0.min.js"></script>
+        
+        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        
+        <script type="text/javascript">
+            var config = {
+                "profiles": [
+                    "erimille/agents",
+                    "erimille/events",
+                    "erimille/language",
+                    "erimille/book",
+                    "erimille/record",
+                    "erimille/vra",
+                    "kefo/authorities",
+                    "kefo/categories",
+                    "kefo/works",
+                    "kefo/instances",
+                    "kefo/annotations"
+                ],
+                
+                "startingPoints": [
+                    {
+                        label: "Electronic Book", 
+                        useResourceTemplates: [  "rt:Work:EricBook", "rt:Instance:ElectronicBook" ]
+                    },
+                    {
+                        label: "HeldItem", 
+                        useResourceTemplates: [ "rt:HeldItem" ]
+                    }
+                ] 
+            }
+            
+            $(document).ready(function(){
+                require.config({
+                    baseUrl: "./",
+                    paths: {
+                        json: "src/lib/json",
+                        text: "src/lib/text",
+                        jquery: "static/js/jquery-1.11.0.min"
+                    }
+                });
+                require( ["src/bfe"],
+                    function(bfe) {
+                        bfeditor = bfe.editor(config, "bfeditor");
+                    }
+                );
+            });
+        </script>
+        
+    </head>
+    <body>
+    
+    <div class="container">
+      <div id="bfeditor" />
+    </div>
+    
+    </body>
+</html>

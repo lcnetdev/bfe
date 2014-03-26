@@ -1,0 +1,157 @@
+{
+	"Profile": {
+		"id": "profile:Agents",
+		"title": "BIBFRAME Agents",
+		"resourceTemplates": [    	       
+			{
+				"id": "rt:Agent:Family",
+				"resourceURI": "http://bibframe.org/vocab/Family",
+				"resourceLabel": "Family",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/label",
+						"propertyLabel": "Label",
+						"type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ISNI",
+					    "propertyLabel": "ISNI",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/VIAF",
+					    "propertyLabel": "VIAF",
+					    "type": "resource"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ORCID",
+					    "propertyLabel": "ORCID",
+					    "type": "resource"
+					}
+				]
+            },
+            {
+                "id": "rt:Agent:Jurisdiction",
+                "resourceURI": "http://bibframe.org/vocab/Jurisdiction",
+                "resourceLabel": "Jurisdiction",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/label",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ISNI",
+					    "propertyLabel": "ISNI",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/VIAF",
+					    "propertyLabel": "VIAF",
+					    "type": "resource"
+					}
+				]
+            },
+            {
+                "id": "rt:Agent:Meeting",
+                "resourceURI": "http://bibframe.org/vocab/Meeting",
+                "resourceLabel": "Meeting",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/label",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ISNI",
+					    "propertyLabel": "ISNI",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/VIAF",
+					    "propertyLabel": "VIAF",
+					    "type": "resource"
+					}
+				]
+            },
+            {
+                "id": "rt:Agent:Organization",
+                "resourceURI": "http://bibframe.org/vocab/Organization",
+                "resourceLabel": "Organization",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/label",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/homePage",
+					    "propertyLabel": "Home Page",
+					    "type": "resource"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/VIAF",
+					    "propertyLabel": "VIAF",
+					    "type": "resource"
+					}
+				]
+            },
+            {
+                "id": "rt:Agent:Person",
+                "resourceURI": "http://bibframe.org/vocab/Person",
+                "resourceLabel": "Person",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/fname",
+					    "propertyLabel": "First Name",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/lname",
+					    "propertyLabel": "Last Name",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/auth/birthDate",
+					    "propertyLabel": "Birth Date",
+					    "type": "literal",
+					    "valueConstraint": {
+					        "valueDataType": {
+					            "dataTypeURI": "http://bibframe.org/vocab/proposed/ISO8601",
+					            "dataTypeLabel": "ISO 8601",
+					            "dataTypeLabelHint": "ISO"
+					        }
+					    }
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/auth/eathDate",
+					    "propertyLabel": "Date of Death",
+					    "type": "literal",
+					    "valueConstraint": {
+					        "valueDataType": {
+					            "dataTypeURI": "http://bibframe.org/vocab/proposed/ISO8601",
+					            "dataTypeLabel": "ISO 8601",
+					            "dataTypeLabelHint": "ISO"
+					        }
+					    }
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ISNI",
+					    "propertyLabel": "ISNI",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/VIAF",
+					    "propertyLabel": "VIAF",
+					    "type": "resource"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/ORCID",
+					    "propertyLabel": "ORCID",
+					    "type": "resource"
+					}
+				]
+            }
+        ]
+    }
+}
