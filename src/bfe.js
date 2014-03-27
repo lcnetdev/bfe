@@ -13,11 +13,14 @@ define(function(require, exports, module) {
     require("jquery");
     require("json");
     
+    var editorconfig = {};
+    var store = {};
     var profiles = [];
     var resourceTemplates = [];
     var startingPoints = [];
     
-    exports.config = function(config) {
+    exports.setConfig = function(config) {
+        editorconfig = config;
         var files = [];
         for (var i=0; i < config.profiles.length; i++) {
             files[i] = "json!static/profiles/" + config.profiles[i] + ".json";
@@ -35,6 +38,8 @@ define(function(require, exports, module) {
                 }
             });
         }
+        
+        editorconfig.baseURI = "http://example.org/";
         //require([files], function(){
         //    console.log(JSON.stringify(json));
         //    return {};
@@ -55,7 +60,7 @@ define(function(require, exports, module) {
     
     exports.editor = function (config, id) {
 
-        this.config(config);
+        this.setConfig(config);
         
         div = document.getElementById(id);
         
@@ -105,7 +110,45 @@ define(function(require, exports, module) {
                 }
             }
         }
-        $("#bfeditor-formdiv").html(JSON.stringify(rts));
+        /*
+            [
+                {
+                    guid,
+                    s,
+                    p,
+                    o
+                }
+            
+            ]
+        */
+        var resources = [];
+        for (var rt=0; rt < rts.length; rt++) {
+            var uuid = guid();
+            var uri = editorconfig.baseURI + uuid;
+            var rdftype = {}
+            rdftype["@id"] = rts[rt].resourceURI;
+            var resource = {};
+            resource["@id"] = uri;
+            resource["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] = [];
+            resource["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].push(rdftype);
+            resources.push(resource);
+        }
+        $("#bfeditor-formdiv").html(JSON.stringify(resources));
+    }
+    
+    /**
+    * Generates a GUID string.
+    * @returns {String} The generated GUID.
+    * @example af8a8416-6e18-a307-bd9c-f2c947bbb3aa
+    * @author Slavik Meltser (slavik@meltser.info).
+    * @link http://slavik.meltser.info/?p=142
+    */
+    function guid() {
+        function _p8(s) {
+            var p = (Math.random().toString(16)+"000000000").substr(2,8);
+            return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+        }
+        return _p8() + _p8(true) + _p8(true) + _p8();
     }
 
     
