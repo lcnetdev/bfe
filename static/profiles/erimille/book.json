@@ -17,9 +17,10 @@
 						"type": "literal"
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/workTitleRemained",
+						"propertyURI": "http://bibframe.org/vocab/workTitleRemainder",
 						"propertyLabel": "Title Remainder",
-						"type": "literal"
+						"type": "literal",
+						"repeatable": "false"
 					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/proposed/author",
@@ -222,6 +223,15 @@
 				"resourceURI": "http://bibframe.org/vocab/Electronic",
                     "instanceOf": "http://bibframe.org/vocab/EricBook",
 				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/instanceOf",
+						"propertyLabel": "Instance Of",
+						"repeatable": "false",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:Work:EricBook" ]
+                            }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/publication",
 						"propertyLabel": "Publication",
