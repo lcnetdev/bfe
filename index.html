@@ -6,7 +6,16 @@
         <script src="static/js/require.js"></script>
         <script type="text/javascript" src="static/js/jquery-1.11.0.min.js"></script>
         
-        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        
+        <style>
+            .modal:nth-of-type(even) {
+                z-index: 1042 !important;
+            }
+            .modal-backdrop.in:nth-of-type(even) {
+                z-index: 1041 !important;
+            }
+        </style>
         
         <script type="text/javascript">
             var config = {
