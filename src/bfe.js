@@ -21,6 +21,11 @@ define(function(require, exports, module) {
     var resourceTemplates = [];
     var startingPoints = [];
     var formTemplates = [];
+    var currentModal = 0;
+    
+    var editordiv;
+    
+    var forms = [];
     
     exports.setConfig = function(config) {
         editorconfig = config;
@@ -65,7 +70,7 @@ define(function(require, exports, module) {
 
         this.setConfig(config);
         
-        div = document.getElementById(id);
+        editordiv = div = document.getElementById(id);
         
         var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
         var menuul = $('<ul>', {id: "bfeditor-menuul", class: "nav nav-sidebar"});
@@ -74,7 +79,7 @@ define(function(require, exports, module) {
             var a = $('<a>', {href: "#", id: "sp-" + i});
             a.html(config.startingPoints[i].label);
             $(a).click(function(){
-                loadForm(this.id);
+                menuSelect(this.id);
             });
             li = li.append(a);
             menuul.append(li);
@@ -93,7 +98,8 @@ define(function(require, exports, module) {
         rowdiv.append(optiondiv);
 
         $(div).append(rowdiv);
-        
+    
+        // Debug div
         var debugdiv = $('<div>', {class: "col-md-12"});
         debugdiv.html("Debug output");
         var debugpre = $('<pre>', {id: "bfeditor-debug"});
@@ -107,19 +113,32 @@ define(function(require, exports, module) {
         };
     };
     
-    function loadForm (spid) {
+    function menuSelect (spid) {
         store = [];
         spnum = parseInt(spid.replace('sp-', ''));
         spoints = editorconfig.startingPoints[spnum];
-        var rts = [];
-        var rtsids = [];
-        for (var urt=0; urt < spoints.useResourceTemplates.length; urt++) {
-            var urtid = spoints.useResourceTemplates[urt];
-            
+        form = getForm(spoints.useResourceTemplates);
+        $("#bfeditor-formdiv").html("");
+        $("#bfeditor-formdiv").append(form.form);
+        $("#bfeditor-debug").html(JSON.stringify(form.formobject.store, undefined, " "));
+    }
+    
+    function getForm (loadResourceTemplatesWithIds) {
+        
+        var fguid = guid();
+        var formobject = {}
+        formobject.id = fguid;
+        formobject.store = [];
+        formobject.resourceTemplates = [];
+        formobject.resourceTemplateIDs = [];
+        formobject.formTemplates = [];
+        
+        for (var urt=0; urt < loadResourceTemplatesWithIds.length; urt++) {
+            var urtid = loadResourceTemplatesWithIds[urt];
             var rt = _.where(resourceTemplates, {"id": urtid})
             if ( rt !== undefined ) {
-                rts.push(rt[0]);
-                rtsids.push(rt[0].id);
+                formobject.resourceTemplates.push(rt[0]);
+                formobject.resourceTemplateIDs.push(rt[0].id);
             }
         }
         /*
@@ -149,7 +168,7 @@ define(function(require, exports, module) {
             
             ]
         */
-        rts.forEach(function(rt) {
+        formobject.resourceTemplates.forEach(function(rt) {
             var id = guid();
             var uri = editorconfig.baseURI + id;
             var triple = {}
@@ -159,7 +178,7 @@ define(function(require, exports, module) {
             triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
             triple.o = rt.resourceURI;
             triple.otype = "uri";
-            store.push(triple);
+            formobject.store.push(triple);
             rt.guid = id;
             
             rt.propertyTemplates.forEach(function(property) {
@@ -170,15 +189,15 @@ define(function(require, exports, module) {
                         vtRefs = property.valueConstraint.valueTemplateRefs;
                         for ( var v=0; v < vtRefs.length; v++) {
                             var vtrs = vtRefs[v];
-                            if ( rtsids.indexOf(vtrs) > -1 && vtrs != rt.id ) {
-                                relatedTemplates = _.where(store, {rtID: vtrs});
+                            if ( formobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id ) {
+                                relatedTemplates = _.where(formobject.store, {rtID: vtrs});
                                 triple = {}
                                 triple.guid = guid();
                                 triple.s = uri;
                                 triple.p = property.propertyURI;
                                 triple.o = relatedTemplates[0].s;
                                 triple.otype = "uri";
-                                store.push(triple);
+                                formobject.store.push(triple);
                                 property.display = "false";
                             }
                         }
@@ -186,25 +205,25 @@ define(function(require, exports, module) {
                 }
             });
         });
-        formTemplates = rts;
+        //formobject.formTemplates = rts;
         
         // Let's create the form
-        var form = $('<form>', {id: "bfeditor-form", class: "form-horizontal", role: "form"});
-        formTemplates.forEach(function(rt) {
+        var form = $('<form>', {id: "bfeditor-form-" + formobject.id, class: "form-horizontal", role: "form"});
+        formobject.resourceTemplates.forEach(function(rt) {
             var resourcediv = $('<div>', {id: rt.guid});
             rt.propertyTemplates.forEach(function(property) {
                 
                 var formgroup = $('<div>', {class: "form-group"});
-                var label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
+                var label = $('<label for="' + formobject.id + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
                 var saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
                 
                 if (property.type == "literal") {
                     
-                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + formobject.id + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
                     
                     button = $('<button type="button" class="btn btn-default">Set</button>');
                     $(button).click(function(){
-                        setLiteral(rt.guid, property.guid);
+                        setLiteral(formobject.id, rt.guid, property.guid);
                     });
                     
                     formgroup.append(label);
@@ -239,40 +258,55 @@ define(function(require, exports, module) {
                             }
                             button.append(ul);
                             */
-                            buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
-                            button = $('<div class="btn-group btn-group-sm"></div>');
-                            buttondiv.append(button);
-                            vtRefs = property.valueConstraint.valueTemplateRefs;
+                            buttondiv = $('<div class="col-sm-8" id="' + formobject.id + property.guid +'"></div>');
+                            buttongrp = $('<div class="btn-group btn-group-sm"></div>');
+                            var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
-                                valueTemplates = _.where(resourceTemplates, {"id": vtrs});
+                                //console.log(vtrs);
+                                var valueTemplates = _.where(resourceTemplates, {"id": vtrs});
                                 if (valueTemplates[0] !== undefined) {
-                                    b = $('<button type="button" class="btn btn-default">' + valueTemplates[0].resourceLabel + '</button>');
-                                    $(b).click(function(){
-                                        openModal(rt.guid, property.guid, valueTemplates[0]);
+                                    var vt = valueTemplates[0];
+                                    var b = $('<button type="button" class="btn btn-default">' + vt.resourceLabel + '</button>');
+                                    $(b).click({formobjectid: formobject.id, rtguid: rt.guid, propertyguid: property.guid, template: vt}, function(event){
+                                        //console.log(event.data.template);
+                                        openModal(event.data.formobjectid, event.data.rtguid, event.data.propertyguid, event.data.template);
                                     });
-                                    button.append(b);
+                                    buttongrp.append(b);
                                 }
                             }
+                            buttondiv.append(buttongrp);
                             
                             formgroup.append(label);
                             formgroup.append(buttondiv);
                             formgroup.append(saves);
+                        } else {
+                            // Type is resource, so should be a URI, but there is
+                            // no template reference for it.  
+                            // So, create label field
+                            var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + formobject.id + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                    
+                            button = $('<button type="button" class="btn btn-default">Set</button>');
+                                $(button).click(function(){
+                                    setResourceFromLabel(rt.guid, property.guid);
+                            });
+                            
+                            formgroup.append(label);
+                            formgroup.append(input);
+                            formgroup.append(button);
+                            formgroup.append(saves);
                     
                         }
-                        
                     }
-
                 }
                 
                 resourcediv.append(formgroup);
             });
             form.append(resourcediv);
         });
-        $("#bfeditor-formdiv").html("");
-        $("#bfeditor-formdiv").append(form);
         
-        formTemplates.forEach(function(rt) {
+        
+        formobject.resourceTemplates.forEach(function(rt) {
             rt.propertyTemplates.forEach(function(property) {
                 if (_.has(property, "valueConstraint")) {
                     if (_.has(property.valueConstraint, "defaultURI")) {
@@ -280,20 +314,21 @@ define(function(require, exports, module) {
                         // set the triple
                         var triple = {}
                         triple.guid = guid();
-                        console.log("data is " + data);
-                        console.log("tguid " + triple.guid);
+                        //console.log("data is " + data);
+                        //console.log("tguid " + triple.guid);
                         triple.s = editorconfig.baseURI + rt.guid;
                         triple.p = property.propertyURI;
                         triple.o = data;
                         triple.otype = "uri";
                         store.push(triple);
+                        formobject.store.push(triple);
                         
                             // set the form
-                        var formgroup = $("#" + property.guid).closest(".form-group");
+                        var formgroup = $("#" + formobject.id + property.guid).closest(".form-group");
                         var save = $(formgroup).find(".btn-toolbar")[0];
                     
                         var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
-                        console.log("tguid for div id " + triple.guid);
+                        //console.log("tguid for div id " + triple.guid);
                         var display = "";
                         if (_.has(property.valueConstraint, "defaultLiteral")) {
                             display = property.valueConstraint.defaultLiteral;
@@ -308,7 +343,7 @@ define(function(require, exports, module) {
                         $(delbutton).click(function(){
                             removeTriple(property.guid, triple);
                         });
-                        console.log("triple " + JSON.stringify(triple));
+                        //console.log("triple " + JSON.stringify(triple));
                     
                         buttongroup.append(displaybutton);
                         buttongroup.append(delbutton);
@@ -320,26 +355,133 @@ define(function(require, exports, module) {
             });
         });
         
-        $("#bfeditor-debug").html(JSON.stringify(store, undefined, " "));
+        forms.push(formobject);
+        return { formobject: formobject, form: form };
     }
     
-    function setLiteral(resourceID, forminputID) {
-        var data = $("#" + forminputID).val();
+    function openModal(callingformobjectid, rtguid, propertyguid, template) {
+        
+        currentModal++;
+        var form = getForm([template.id]);
+        
+        // Modals
+        var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
+            <div class="modal-dialog"> \
+                <div class="modal-content"> \
+                    <div class="modal-header"> \
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
+                        <h4 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h4> \
+                    </div> \
+                    <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
+                    <div class="modal-footer"> \
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> \
+                        <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
+                    </div> \
+                </div> \
+            </div> \
+        </div> '
+        var m = modal.replace(/modalID/g, form.formobject.id);
+        m = $(m);
+        $(editordiv).append(m);
+        //console.log(JSON.stringify(template));
+        //var m = $('#bfeditor-modal-' + currentModal);
+        //$('#bfeditor-modalbody-' + form.formobject.id).empty();
+        $('#bfeditor-modalbody-' + form.formobject.id).append(form.form);
+        $('#bfeditor-modaltitle-' + form.formobject.id).html(template.resourceLabel);
+            
+        $('#bfeditor-modal-' + form.formobject.id).modal('show');
+        $('#bfeditor-modalSave-' + form.formobject.id).click(function(){
+            //alert(JSON.stringify(form.formobject.store, undefined, " "));
+            setResourceFromModal(callingformobjectid, form.formobject.id, rtguid, propertyguid, form.formobject.store);
+        });
+        $('#bfeditor-modal-' + form.formobject.id).on("hide.bs.modal", function(e) {
+            $(this).remove();
+        });
+        $("#bfeditor-debug").html(JSON.stringify(form.formobject.store, undefined, " "));
+    }
+   
+    function setResourceFromModal(formobjectID, modalformid, resourceID, propertyguid, data) {
+        var formobject = _.where(forms, {"id": formobjectID});
+        formobject = formobject[0];
+        console.log("modal form id is: " + modalformid);
+        var triple = {}
+        triple.guid = guid();
+        triple.s = editorconfig.baseURI + resourceID;
+        formobject.resourceTemplates.forEach(function(t) {
+            var properties = _.where(t.propertyTemplates, {"guid": propertyguid})
+            if ( properties[0] !== undefined ) {
+                triple.p = properties[0].propertyURI;
+                triple.o = data[0].s;
+                triple.otype = "uri";
+                    
+                formobject.store.push(triple);
+                data.forEach(function(t) {
+                    formobject.store.push(t);
+                });
+                    
+                var formgroup = $("#" + formobjectID + propertyguid).closest(".form-group");
+                var save = $(formgroup).find(".btn-toolbar")[0];
+                console.log(formgroup);
+                
+                console.log(properties[0].propertyURI);
+                console.log(data);
+                tlabel = _.find(data, function(t){ if (t.p.match(/label/i)) return t.o; });
+                    
+                var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
+                if ( tlabel !== undefined) {
+                    if (tlabel.o.length > 10) {
+                        display = tlabel.o.substr(0,10) + "...";
+                    } else {
+                        display = tlabel.o;
+                    }
+                } else {
+                    display = data[0].s.substr(0,10) + "...";
+                }
+                var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
+                var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
+                $(delbutton).click(function(){
+                    removeTriples(formobjectID, propertyguid, [triple, data]);
+                });
+                    
+                buttongroup.append(displaybutton);
+                buttongroup.append(delbutton);
+                    
+                $(save).append(buttongroup);
+                $("#" + formobjectID + propertyguid).val("");
+                if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
+                    $("#" + formobjectID + propertyguid).attr("disabled", true);
+                }
+                    
+            }
+        });
+        // Remove the form?
+        //forms = _.without(forms, _.findWhere(forms, {"id": formobjectID}));
+        $('#bfeditor-modalSave-' + modalformid).off('click');
+        $('#bfeditor-modal-' + modalformid).modal('hide');
+    
+        $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
+    }
+    
+    function setLiteral(formobjectID, resourceID, inputID) {
+        var formobject = _.where(forms, {"id": formobjectID});
+        formobject = formobject[0];
+        //console.log(inputID);
+        var data = $("#" + formobjectID + inputID).val();
         if (data !== "") {
             var triple = {}
             triple.guid = guid();
             triple.s = editorconfig.baseURI + resourceID;
-            formTemplates.forEach(function(t) {
-                var properties = _.where(t.propertyTemplates, {"guid": forminputID})
+            formobject.resourceTemplates.forEach(function(t) {
+                var properties = _.where(t.propertyTemplates, {"guid": inputID})
                 if ( properties[0] !== undefined ) {
                     triple.p = properties[0].propertyURI;
                     triple.o = data;
                     triple.otype = "literal";
                     triple.olang = "en";
                     
-                    store.push(triple);
+                    formobject.store.push(triple);
                     
-                    var formgroup = $("#" + forminputID).closest(".form-group");
+                    var formgroup = $("#" + formobjectID + inputID).closest(".form-group");
                     var save = $(formgroup).find(".btn-toolbar")[0];
                     
                     var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
@@ -351,31 +493,33 @@ define(function(require, exports, module) {
                     var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
                     var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
                     $(delbutton).click(function(){
-                        removeTriple(forminputID, triple);
+                        removeTriple(formobjectID, inputID, triple);
                     });
                     
                     buttongroup.append(displaybutton);
                     buttongroup.append(delbutton);
                     
                     $(save).append(buttongroup);
-                    $("#" + forminputID).val("");
+                    $("#" + formobjectID + inputID).val("");
                     if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
-                        $("#" + forminputID).attr("disabled", true);
+                        $("#" + formobjectID + inputID).attr("disabled", true);
                     }
                     
                 }
             });
         }
-        $("#bfeditor-debug").html(JSON.stringify(store, undefined, " "));
+        $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
     }
     
-    function removeTriple(forminputID, t) {
+    function removeTriple(formobjectID, inputID, t) {
+        var formobject = _.where(forms, {"id": formobjectID});
+        formobject = formobject[0];
         console.log("removing triple: " + t.guid);
         console.log($("#" + t.guid).attr("class"));
         $("#" + t.guid).empty();
-        $("#" + forminputID).attr("disabled", false);
-        store = _.without(store, _.findWhere(store, {guid: t.guid}));
-        $("#bfeditor-debug").html(JSON.stringify(store, undefined, " "));
+        $("#" + inputID).attr("disabled", false);
+        formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {guid: t.guid}));
+        $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
     }
     
     /**
