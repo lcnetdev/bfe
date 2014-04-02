@@ -24,7 +24,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
                             }
 					},
 					{
@@ -33,7 +33,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
                             }
 					},
 					{
@@ -42,7 +42,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
                             }
 					},
 					{
@@ -50,7 +50,7 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Content" ],
+    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
     						"defaultLiteral": "text"
@@ -89,8 +89,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -181,7 +181,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person" ]
                             }
 					},
 					{
@@ -190,7 +190,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person" ]
                             }
 					},
 					{
@@ -198,7 +198,7 @@
 						"propertyLabel": "Degree Issuing Institution",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Organization" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Organization" ]
                             }
 					},
 					{
@@ -221,7 +221,7 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Content" ],
+    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
     						"defaultLiteral": "text"
@@ -260,8 +260,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -316,7 +316,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person" ]
                             }
 					},
 					{
@@ -325,7 +325,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person" ]
                             }
 					},
 					{
@@ -334,7 +334,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person" ]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person" ]
                             }
 					},
 					{
@@ -342,7 +342,7 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Content" ],
+    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/tdi",
     						"defaultLiteral": "two-dimensional moving image"
@@ -381,8 +381,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -464,7 +464,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -473,7 +473,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -482,7 +482,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -491,7 +491,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -499,7 +499,7 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Content" ],
+    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false"
                             }
 					},
@@ -536,8 +536,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -587,7 +587,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -596,7 +596,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -652,8 +652,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -703,7 +703,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -759,8 +759,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]
@@ -810,7 +810,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -819,7 +819,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -828,7 +828,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -837,7 +837,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -846,7 +846,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -855,7 +855,7 @@
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization"]
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization"]
                             }
 					},
 					{
@@ -933,8 +933,8 @@
 						"propertyLabel": "Subject",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", 
-                                						"rt:Agent:Organization", 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", 
+                                						"rt:kefo:Agent:Organization", 
                                 						"rt:Authority:Place", 
                                 						"rt:Authority:ClassificationEntity", 
                                 						"rt:Authority:Topic" ]

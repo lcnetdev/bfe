@@ -29,7 +29,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Agent:Person", "rt:Agent:Organization" ] 
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ] 
                             }
 					},
 					{

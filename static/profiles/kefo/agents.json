@@ -1,0 +1,139 @@
+{
+	"Profile": {
+		"id": "profile:Agents",
+		"title": "BIBFRAME Agents",
+		"resourceTemplates": [    	       
+			{
+				"id": "rt:kefo:Agent:Family",
+				"resourceURI": "http://bibframe.org/vocab/Family",
+				"resourceLabel": "Family",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+						"propertyLabel": "Label",
+						"type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
+					    "propertyLabel": "Authority source",
+					    "type": "resource",
+					    "valueConstraint": {
+    						"repeatable": "false",
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/authorities/names",
+    						"defaultLiteral": "LC/NAF"
+                        }
+					}
+				]
+            },
+            {
+                "id": "rt:kefo:Agent:Jurisdiction",
+                "resourceURI": "http://bibframe.org/vocab/Jurisdiction",
+                "resourceLabel": "Jurisdiction",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
+					    "propertyLabel": "Authority source",
+					    "type": "resource",
+					    "valueConstraint": {
+    						"repeatable": "false",
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/authorities/names",
+    						"defaultLiteral": "LC/NAF"
+                        }
+					}
+				]
+            },
+            {
+                "id": "rt:kefo:Agent:Meeting",
+                "resourceURI": "http://bibframe.org/vocab/Meeting",
+                "resourceLabel": "Meeting",
+                "propertyTemplates": [
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
+					    "propertyLabel": "Authority source",
+					    "type": "resource",
+					    "valueConstraint": {
+    						"repeatable": "false",
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/authorities/names",
+    						"defaultLiteral": "LC/NAF"
+                        }
+					}
+				]
+            },
+            {
+                "id": "rt:kefo:Agent:Organization",
+                "resourceURI": "http://bibframe.org/vocab/Organization",
+                "resourceLabel": "Organization",
+                "propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/authorities/names"]
+					    }
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
+					    "propertyLabel": "Authority source",
+					    "type": "resource",
+					    "valueConstraint": {
+    						"repeatable": "false",
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/authorities/names",
+    						"defaultLiteral": "LC/NAF"
+                        }
+					}
+				]
+            },
+            {
+                "id": "rt:kefo:Agent:Person",
+                "resourceURI": "http://bibframe.org/vocab/Person",
+                "resourceLabel": "Person",
+                "propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/authorities/names"]
+					    }
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+					    "propertyLabel": "Label",
+					    "type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
+					    "propertyLabel": "Authority source",
+					    "type": "resource",
+					    "valueConstraint": {
+    						"repeatable": "false",
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/authorities/names",
+    						"defaultLiteral": "LC/NAF"
+                        }
+					}
+				]
+            }
+        ]
+    }
+}

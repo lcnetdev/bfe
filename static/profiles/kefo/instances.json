@@ -37,7 +37,7 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Carrier" ],
+    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
     						"defaultLiteral": "volume"
@@ -48,7 +48,7 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:MediaType" ],
+    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
     						"defaultLiteral": "unmediated"
@@ -120,7 +120,7 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Carrier" ],
+    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
     						"defaultLiteral": "audio disc"
@@ -131,7 +131,7 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:MediaType" ],
+    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
     						"defaultLiteral": "audio"
@@ -211,7 +211,7 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Carrier" ],
+    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
     						"defaultLiteral": "audio disc"
@@ -222,7 +222,7 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:MediaType" ],
+    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
     						"defaultLiteral": "audio"
@@ -363,7 +363,7 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Carrier" ],
+    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false"
                             }
 					},
@@ -372,7 +372,7 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:MediaType" ],
+    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false"
                             }
 					},

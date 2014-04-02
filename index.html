@@ -7,14 +7,17 @@
         <script type="text/javascript" src="static/js/jquery-1.11.0.min.js"></script>
         
         <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="static/css/typeahead.css" rel="stylesheet" />
         
         <style>
+        /*
             .modal:nth-of-type(even) {
                 z-index: 1042 !important;
             }
             .modal-backdrop.in:nth-of-type(even) {
                 z-index: 1041 !important;
             }
+        */
         </style>
         
         <script type="text/javascript">
@@ -26,6 +29,7 @@
                     "erimille/book",
                     "erimille/record",
                     "erimille/vra",
+                    "kefo/agents",
                     "kefo/authorities",
                     "kefo/categories",
                     "kefo/works",
@@ -44,15 +48,14 @@
                     }
                 ] 
             }
-            
             $(document).ready(function(){
                 require.config({
                     baseUrl: "./",
                     paths: {
-                        json: "src/lib/json",
                         text: "src/lib/text",
-                        underscore: "src/lib/underscore-min",
-                        jquery: "static/js/jquery-1.11.0.min",
+                        lib: "src/lib",
+                        lookups: "src/lookups",
+                        staticjs: "static/js",
                         bootstrapjs: "static/bootstrap/js/bootstrap.min"
                     }
                 });
