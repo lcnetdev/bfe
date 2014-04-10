@@ -49,7 +49,7 @@ define(function(require, exports, module) {
                 
         q = "";
         if (scheme !== "" && rdftype !== "") {
-            q = q + ' AND cs:' + scheme;
+            q = 'cs:' + scheme + ' AND ' + rdftype;
         } else if (rdftype !== "") {
             q = rdftype;
         } else if (scheme !== "") {

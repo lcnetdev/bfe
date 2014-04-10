@@ -620,7 +620,7 @@ define(function(require, exports, module) {
                 formid = formid.replace('bfeditor-form-', '');
                 var resourceid = $(form).children("div").eq(0).attr("id");
                 var propertyguid = $("#" + event.target.id).attr("data-propertyguid");
-                //console.log(propertyguid);
+                console.log("propertyguid is " + propertyguid);
                 
                 var s = editorconfig.baseURI + resourceid;
                 var p = "";
@@ -639,6 +639,43 @@ define(function(require, exports, module) {
                         t.guid = tguid;
                         formobject.store.push(t);
                     });
+                    
+                    tlabel = _.find(triples, function(t){ if (t.p.match(/label|authorizedAccess/i)) return t.o; });
+                    //console.log(tlabel);
+                    
+                    var formgroup = $("#" + formobject.id + propertyguid).closest(".form-group");
+                    var save = $(formgroup).find(".btn-toolbar")[0];
+                    
+                    var buttongroup = $('<div>', {id: triples[0].guid, class: "btn-group btn-group-xs"});
+                    if ( tlabel !== undefined) {
+                        if (tlabel.o.length > 10) {
+                            display = tlabel.o.substr(0,10) + "...";
+                        } else {
+                            display = tlabel.o;
+                        }
+                    } else {
+                        display = triples[0].s.substr(0,10) + "...";
+                    }
+                    console.log(display);
+                    console.log(propertyguid);
+                    var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
+                    var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
+                    $(delbutton).click(function(){
+                        removeTriples(formobject.id, propertyguid, [triples[0], triples]);
+                    });
+                    
+                    buttongroup.append(displaybutton);
+                    buttongroup.append(delbutton);
+                    
+                    $(save).append(buttongroup);
+                    
+                    $("#" + formobject.id + propertyguid).val("");
+                    $("#" + formobject.id + propertyguid).typeahead('val', "");
+                    $("#" + formobject.id + propertyguid).typeahead('close');
+                    
+                    if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
+                        $("#" + formobject.id + propertyguid).attr("disabled", true);
+                    }
                     
                     //console.log(JSON.stringify(formobject.store));
                 });

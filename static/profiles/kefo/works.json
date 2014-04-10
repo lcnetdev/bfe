@@ -81,8 +81,8 @@
 						"propertyLabel": "Language",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:Language"
-                            }
+					        "useValuesFrom": ["http://id.loc.gov/vocabulary/languages"]
+					    }
 					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/subject",

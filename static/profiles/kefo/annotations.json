@@ -7,7 +7,7 @@
                 "id": "rt:Annotation:HeldItem",
                 "resourceLabel": "Holding",
 				"resourceURI": "http://bibframe.org/vocab/HeldItem",
-                    "instanceOf": "http://bibframe.org/vocab/Annotation",
+                "instanceOf": "http://bibframe.org/vocab/Annotation",
 				"propertyTemplates": [
 					{
 						"propertyURI": "http://bibframe.org/vocab/holdingFor",
