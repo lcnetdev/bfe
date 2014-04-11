@@ -37,10 +37,10 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
-    						"defaultLiteral": "volume"
+    						"defaultLiteral": "volume",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/carriers"]
                             }
 					},
 					{
@@ -48,10 +48,10 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
-    						"defaultLiteral": "unmediated"
+    						"defaultLiteral": "unmediated",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/mediaTypes"]
                             }
 					},
 					{
@@ -120,10 +120,10 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
-    						"defaultLiteral": "audio disc"
+    						"defaultLiteral": "audio disc",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/carriers"]
                             }
 					},
 					{
@@ -131,10 +131,10 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
-    						"defaultLiteral": "audio"
+    						"defaultLiteral": "audio",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/mediaTypes"]
                             }
 					},
 					{
@@ -211,10 +211,10 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
-    						"defaultLiteral": "audio disc"
+    						"defaultLiteral": "audio disc",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/carriers"]
                             }
 					},
 					{
@@ -222,10 +222,10 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
-    						"defaultLiteral": "audio"
+    						"defaultLiteral": "audio",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/mediaTypes"]
                             }
 					},
 					{
@@ -302,8 +302,8 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Carrier" ],
-    						"repeatable": "false"
+    						"repeatable": "false",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/carriers"]
                             }
 					},
 					{
@@ -311,10 +311,10 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:MediaType" ],
     						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
-    						"defaultLiteral": "audio"
+    						"defaultLiteral": "audio",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/mediaTypes"]
                             }
 					},
 					{
@@ -363,8 +363,8 @@
 						"propertyLabel": "Carrier Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Carrier" ],
-    						"repeatable": "false"
+    						"repeatable": "false",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/carriers"]
                             }
 					},
 					{
@@ -372,8 +372,8 @@
 						"propertyLabel": "Media Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:MediaType" ],
-    						"repeatable": "false"
+    						"repeatable": "false",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/mediaTypes"]
                             }
 					},
 					{

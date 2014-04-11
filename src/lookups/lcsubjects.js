@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     var store = [];
     var cache = [];
     
-    exports.scheme = "http://id.loc.gov/authorities/names";
+    exports.scheme = "http://id.loc.gov/authorities/subjects";
 
     exports.source = function(formobject, query, process) {
         console.log(JSON.stringify(formobject.store));
@@ -22,7 +22,7 @@ define(function(require, exports, module) {
             }
         console.log("type is " + type);
         
-        var scheme = "http://id.loc.gov/authorities/names";
+        var scheme = "http://id.loc.gov/authorities/subjects";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
         if ( hits[0] !== undefined ) {
                 console.log(hits[0]);
@@ -70,6 +70,7 @@ define(function(require, exports, module) {
             return;
         }
         if( typeof this.searching != "undefined") {
+            console.log("searching defined");
             clearTimeout(this.searching);
             process([]);
         }
@@ -99,17 +100,18 @@ define(function(require, exports, module) {
                 });
                 return list;
                 */
+                console.log("lcsubjects ajax call");
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
                     success: function (data) {
-                        //console.log(data);
+                        console.log(data);
                         //alert(data);
                         parsedlist = processATOM(data, query);
                         // save result to cache, remove next line if you don't want to use cache
                         cache[q] = parsedlist;
                         // only search if stop typing for 300ms aka fast typers
-                        //console.log(parsedlist);
+                        console.log(parsedlist);
                         //console.log(this);
                         //return process(['John Smith','Jane Smith']);
                         return process(parsedlist);
@@ -148,14 +150,6 @@ define(function(require, exports, module) {
         triple.olang = "en";
         triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authoritySource";
-        triple.o = selected.source;
-        triple.otype = "uri";
-        triples.push(triple);
-        
-        //console.log("finished processing lcnames triples");
         process(triples);
         /*
         If you wanted/needed to make another call.
@@ -186,9 +180,8 @@ define(function(require, exports, module) {
         c = 0;
         for (var k in atomjson) {
             if (atomjson[k][0] == "atom:entry") {
-                var t = "";
-                var u = "";
-                var source = "";
+                t = "";
+                u = "";
                 for (var e in atomjson[k] ) {
                     //alert(atomjson[k][e]);
                     if (atomjson[k][e][0] == "atom:title") {
@@ -198,13 +191,12 @@ define(function(require, exports, module) {
                     if (atomjson[k][e][0] == "atom:link") {
                         //alert(atomjson[k][e][2]);
                         u = atomjson[k][e][1].href;
-                        source = u.substr(0, u.lastIndexOf('/'));
                     }
                     if ( t !== "" && u !== "") {
                         store[t] = {}
                         store[t].label = t;
                         store[t].uri = u;
-                        typeahead_source[c] = { uri: u, source: source, value: t };
+                        typeahead_source[c] = { uri: u, value: t };
                         c++;
                         break;
                     }

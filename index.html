@@ -46,7 +46,43 @@
                         label: "Holding", 
                         useResourceTemplates: [ "rt:Annotation:HeldItem" ]
                     }
-                ] 
+                ],
+                
+                "lookups": [
+                    {
+                        "name": "LCNAF",
+                        "load": "lookups/lcnames",
+                        "schemes": [ "http://id.loc.gov/authorities/names" ]
+                    },
+                    {
+                        "name": "LCSH",
+                        "load": "lookups/lcsubjects",
+                        "schemes": [ "http://id.loc.gov/authorities/subjects" ]
+                    },
+                    {
+                        "name": "Languages",
+                        "load": "lookups/lclanguages",
+                        "schemes": [ "http://id.loc.gov/vocabulary/languages" ]
+                    },
+                    {
+                        "name": "RDA-Content-Types",
+                        "load": "lookups/rdacontenttypes",
+                        "schemes": [ "http://id.loc.gov/vocabulary/contentTypes" ]
+                    },
+                    {
+                        "name": "RDA-Media-Types",
+                        "load": "lookups/rdamediatypes",
+                        "schemes": [ "http://id.loc.gov/vocabulary/mediaTypes" ]
+                    },
+                    {
+                        "name": "RDA-Carriers",
+                        "load": "lookups/rdacarriers",
+                        "schemes": [ "http://id.loc.gov/vocabulary/carriers" ]
+                    }
+                    
+                ]
+                
+                
             }
             $(document).ready(function(){
                 require.config({

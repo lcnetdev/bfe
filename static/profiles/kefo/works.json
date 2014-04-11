@@ -50,10 +50,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
-    						"defaultLiteral": "text"
+    						"defaultLiteral": "text",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{
@@ -221,10 +221,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
-    						"defaultLiteral": "text"
+    						"defaultLiteral": "text",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{
@@ -342,10 +342,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Content" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/tdi",
-    						"defaultLiteral": "two-dimensional moving image"
+    						"defaultLiteral": "two-dimensional moving image",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{
@@ -499,8 +499,8 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category:Content" ],
-    						"editable": "false"
+    						"editable": "false",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{
@@ -604,10 +604,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/ntm",
-    						"defaultLiteral": "notated music"
+    						"defaultLiteral": "notated music",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{
@@ -711,10 +711,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category" ],
     						"editable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/prm",
-    						"defaultLiteral": "performed music"
+    						"defaultLiteral": "performed music",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
                         					{
@@ -863,8 +863,10 @@
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Category" ],
-    						"editable": "false"
+    						"editable": "false",
+    						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/sti",
+    						"defaultLiteral": "performed music",
+    						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
                             }
 					},
 					{

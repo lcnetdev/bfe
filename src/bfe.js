@@ -16,14 +16,13 @@ define(function(require, exports, module) {
     require("bootstrapjs");
     require("lib/typeahead.jquery.min");
     
-    var lcnames = require("lookups/lcnames");
-    
     var editorconfig = {};
     var store = [];
     var profiles = [];
     var resourceTemplates = [];
     var startingPoints = [];
     var formTemplates = [];
+    var lookups = [];
     var currentModal = 0;
     
     var lookupstore = [];
@@ -53,23 +52,14 @@ define(function(require, exports, module) {
             });
         }
         
+        for (var i=0; i < config.lookups.length; i++) {
+            var lu = config.lookups[i];
+            console.log("Loading " + lu.load);
+            require([lu.load], function(r) {
+                    setLookup(r);
+                });
+        }
         editorconfig.baseURI = "http://example.org/";
-        //require([files], function(){
-        //    console.log(JSON.stringify(json));
-        //    return {};
-        //});
-
-        //    var p = "json!static/profiles/" + config.profiles[i] + ".json";
-            //profiles[i] = require([p]);
-            //require([p], function(json){
-            //    profiles[i] = json; 
-            //    console.log(JSON.stringify(json));
-            //    return {};
-            //});
-            //var p = "static/profiles/" + config.profiles[i] + ".json";
-            //$.getJSON(p, function( data ) {
-            //    profiles[i] = data; 
-            //});
     }
     
     exports.editor = function (config, id) {
@@ -119,6 +109,24 @@ define(function(require, exports, module) {
         };
     };
     
+    function setLookup(r) {
+        //console.log(r);
+        console.log(r.scheme);
+        for (var i=0; i < config.lookups.length; i++) {
+            var lu = config.lookups[i];
+            for (var j=0; j < lu.schemes.length; j++) {
+                if (lu.schemes[j] == r.scheme) {
+                    var luobject = {};
+                    console.log("Setting scheme " + lu.schemes[j]);
+                    luobject.name = lu.name;
+                    luobject.scheme = lu.schemes[j];
+                    luobject.load = r;
+                    lookups.push(luobject);
+                }
+            }
+        }
+    }
+    
     function menuSelect (spid) {
         store = [];
         spnum = parseInt(spid.replace('sp-', ''));
@@ -148,49 +156,9 @@ define(function(require, exports, module) {
             if ( rt !== undefined ) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
-                
-                /*
-                if (rt[0].propertyTemplates[13] !== undefined) {
-            console.log("what ius the resourcetemplate object say");
-            console.log("guid of has oether edition: " + rt[0].propertyTemplates[13].guid);
-        }
-        */
             }
         }
         
-        /*
-            [
-                {
-                    guid,
-                    s [uri=string],
-                    p [uri=string],
-                    o [multi=object] {
-                        id=uri [string]
-                        datatype=datatype [string]
-                        lang=lang [string]
-                        value=value [string]
-                    }
-                }
-                
-                
-                {
-                    guid,
-                    s [uri=string],
-                    p [uri=string],
-                    o [string],
-                    otype [string=uri,datatype,literal],
-                    olang [string],
-                    odatatype [string],
-                }
-            
-            ]
-        */
-        /*
-        if (forms[0] !== undefined) {
-            console.log("just before assignging property guids");
-            console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
-        }
-        */
         fobject.resourceTemplates.forEach(function(rt) {
             var id = guid();
             var uri = editorconfig.baseURI + id;
@@ -496,14 +464,23 @@ define(function(require, exports, module) {
                             //console.log(property.valueConstraint.editable);
                             var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
                             $(delbutton).click(function(){
-                                removeTriple(property.guid, triple);
+                                removeTriple(fobject.id, property.guid, triple);
                             });
                             buttongroup.append(delbutton);
                         }
                         
                         save.append(buttongroup);
                         if (property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                            $("#" + fobject.id + property.guid, form).attr("disabled", true);
+                            var el = $("#" + fobject.id + property.guid, form);
+                            if (el.is("input")) {
+                                $(el).prop("disabled", true);
+                            } else {
+                                //console.log(property.propertyLabel);
+                                var buttons = $("div.btn-group", el).find("button");
+                                buttons.each(function() {
+                                    $( this ).prop("disabled", true);
+                                });
+                            }
                         }
                         
                     }
@@ -596,24 +573,104 @@ define(function(require, exports, module) {
             var formobject = _.where(forms, {"id": formid});
             formobject = formobject[0];
             //console.log(formid);
-                
-            //var lcnames = lcnames;
-            $( this ).css("z-index", 3000);
-            $( this ).typeahead(
-                {
-                    minLength: 3,
-                    highlight: true,
-                    displayKey: 'value'
-                },
-                {
-                    matcher: function(item) {
-                        return true;
-                    },
-                    source: function(query, process) {
-                        lcnames.source(formobject, query, process);
-                    }
+            
+            var pguid = $(this).attr("data-propertyguid");
+            var p;
+            formobject.resourceTemplates.forEach(function(t) {
+                var properties = _.where(t.propertyTemplates, {"guid": pguid});
+                //console.log(properties);
+                if ( properties[0] !== undefined ) {
+                    p = properties[0];
                 }
-            );
+            });
+            var uvf = p.valueConstraint.useValuesFrom[0];
+            console.log("uvf is " + uvf);
+            console.log(lookups);
+            var lups = _.where(lookups, {"scheme": uvf});
+            var lu;
+            if ( lups[0] !== undefined ) {
+                console.log(lups[0].scheme);
+                lu = lups[0].load;
+                console.log(lu);
+            }
+            
+            $( this ).css("z-index", 3000);
+            var uvfs = p.valueConstraint.useValuesFrom;
+            var dshashes = [];
+            uvfs.forEach(function(uvf){
+                var lups = _.where(lookups, {"scheme": uvf});
+                var lu;
+                if ( lups[0] !== undefined ) {
+                    var lu = lups[0];
+                    console.log(lu.scheme);
+                    console.log(lu);
+                    
+                    var dshash = {};
+                    dshash.name = lu.name;
+                    //dshash.matcher = function(item) {
+                    //    return true;
+                    //};
+                    dshash.source = function(query, process) {
+                        lu.load.source(formobject, query, process);
+                    };
+                    dshash.templates =  { header: '<h3>' + lu.name + '</h3>' };
+                    dshash.displayKey = 'value';
+                    dshashes.push(dshash);
+                }
+            });
+            console.log(dshashes);
+            var opts = {
+                minLength: 3,
+                highlight: true,
+                displayKey: 'value'
+            };
+            if ( dshashes.length === 1) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0]
+                );
+            } else if ( dshashes.length === 2) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0],
+                    dshashes[1]
+                );
+            } else if ( dshashes.length === 3) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0],
+                    dshashes[1],
+                    dshashes[2]
+                );
+            } else if ( dshashes.length === 4) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0],
+                    dshashes[1],
+                    dshashes[2],
+                    dshashes[3]
+                );
+            } else if ( dshashes.length === 5) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0],
+                    dshashes[1],
+                    dshashes[2],
+                    dshashes[3],
+                    dshashes[4]
+                );
+            } else if ( dshashes.length === 6) {
+                $( this ).typeahead(
+                    opts,
+                    dshashes[0],
+                    dshashes[1],
+                    dshashes[2],
+                    dshashes[3],
+                    dshashes[4],
+                    dshashes[5]
+                );
+            }
+            
             $( this ).on("typeahead:selected", function(event, suggestionobject, datasetname) {
                 var form = $("#" + event.target.id).closest("form").eq(0);
                 var formid = $("#" + event.target.id).closest("form").eq(0).attr("id");
@@ -630,53 +687,98 @@ define(function(require, exports, module) {
                     var properties = _.where(t.propertyTemplates, {"guid": propertyguid});
                     //console.log(properties);
                     if ( properties[0] !== undefined ) {
-                        p = properties[0].propertyURI;
+                        p = properties[0];
                     }
                 });
-                lcnames.getResource(s, p, suggestionobject, function(triples) {
-                    triples.forEach(function(t){
+                
+                /*
+                var uvf = p.valueConstraint.useValuesFrom[0];
+                console.log("uvf is " + uvf);
+                console.log(lookups);
+                var lups = _.where(lookups, {"scheme": uvf});
+                var lu;
+                if ( lups[0] !== undefined ) {
+                    console.log(lups[0].scheme);
+                    lu = lups[0].load;
+                    console.log(lu);
+                }
+                */
+                
+                var lups = _.where(lookups, {"name": datasetname});
+                var lu;
+                if ( lups[0] !== undefined ) {
+                    console.log(lups[0].scheme);
+                    lu = lups[0].load;
+                    console.log(lu);
+                }
+                lu.getResource(s, p.propertyURI, suggestionobject, function(returntriples) {
+                    console.log(returntriples);
+                    var c = 1;
+                    returntriples.forEach(function(t){
                         var tguid = guid();
                         t.guid = tguid;
                         formobject.store.push(t);
-                    });
-                    
-                    tlabel = _.find(triples, function(t){ if (t.p.match(/label|authorizedAccess/i)) return t.o; });
-                    //console.log(tlabel);
-                    
-                    var formgroup = $("#" + formobject.id + propertyguid).closest(".form-group");
-                    var save = $(formgroup).find(".btn-toolbar")[0];
-                    
-                    var buttongroup = $('<div>', {id: triples[0].guid, class: "btn-group btn-group-xs"});
-                    if ( tlabel !== undefined) {
-                        if (tlabel.o.length > 10) {
-                            display = tlabel.o.substr(0,10) + "...";
-                        } else {
-                            display = tlabel.o;
+                        console.log("iteration: " + c);
+                        console.log(formobject.store);
+                        c++;
+                        /*
+                        Can't think of why I wouldn't always want the object,
+                        at least presently, before lunch.
+                        tlabel = "";
+                        if (t.p.match(/label|authorizedAccess/i)) { 
+                            tlabel = t.o;
                         }
-                    } else {
-                        display = triples[0].s.substr(0,10) + "...";
-                    }
-                    console.log(display);
-                    console.log(propertyguid);
-                    var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
-                    var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                    $(delbutton).click(function(){
-                        removeTriples(formobject.id, propertyguid, [triples[0], triples]);
+                        */
+                        var tlabel = t.o;
+                        //console.log(tlabel);
+
+                        formobject.resourceTemplates.forEach(function(rt) {
+                            var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
+                            //console.log(properties);
+                            if ( properties[0] !== undefined ) {
+                                var property = properties[0];
+                                var pguid = property.guid;
+                        
+                                var formgroup = $("#" + formobject.id + pguid).closest(".form-group");
+                                var save = $(formgroup).find(".btn-toolbar")[0];
+                    
+                                var buttongroup = $('<div>', {id: t.guid, class: "btn-group btn-group-xs"});
+                                if ( tlabel !== "" ) {
+                                    if (tlabel.length > 10) {
+                                        display = tlabel.substr(0,10) + "...";
+                                    } else {
+                                        display = tlabel;
+                                    }
+                                } else {
+                                    display = t.s.substr(0,10) + "...";
+                                }
+                                //console.log(display);
+                                //console.log(pguid);
+                                var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
+                                var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
+                                $(delbutton).click(function(){
+                                    removeTriple(formobject.id, pguid, [triples[0], triples]);
+                                });
+                            
+                                buttongroup.append(displaybutton);
+                                buttongroup.append(delbutton);
+                            
+                                $(save).append(buttongroup);
+                    
+                                $("#" + formobject.id + pguid).val("");
+                                $("#" + formobject.id + pguid).typeahead('val', "");
+                                $("#" + formobject.id + pguid).typeahead('close');
+                    
+                                    //console.log(triples);
+                    
+                                if (property.repeatable !== undefined && property.repeatable == "false") {
+                                    $("#" + formobject.id + pguid).attr("disabled", true);
+                                }     
+                                
+                            }
+                        });
+                    
                     });
-                    
-                    buttongroup.append(displaybutton);
-                    buttongroup.append(delbutton);
-                    
-                    $(save).append(buttongroup);
-                    
-                    $("#" + formobject.id + propertyguid).val("");
-                    $("#" + formobject.id + propertyguid).typeahead('val', "");
-                    $("#" + formobject.id + propertyguid).typeahead('close');
-                    
-                    if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
-                        $("#" + formobject.id + propertyguid).attr("disabled", true);
-                    }
-                    
                     //console.log(JSON.stringify(formobject.store));
                 });
             });
@@ -745,9 +847,10 @@ define(function(require, exports, module) {
                         display = tlabel.o;
                     }
                 } else {
+                    tlabel = data[0].s;
                     display = data[0].s.substr(0,10) + "...";
                 }
-                var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
+                var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
                 var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
                 $(delbutton).click(function(){
                     removeTriples(formobjectID, propertyguid, [triple, data]);
@@ -827,7 +930,32 @@ define(function(require, exports, module) {
         console.log("removing triple: " + t.guid);
         console.log($("#" + t.guid).attr("class"));
         $("#" + t.guid).empty();
-        $("#" + inputID).attr("disabled", false);
+
+        var el = $("#" + formobjectID + inputID);
+        if (el.is("input")) {
+            //$(el).attr("disabled", false);
+            //$("#" + formobjectID + inputID).prop( "disabled", false );
+            var inputs = $("#" + formobjectID + inputID).parent().find("input[data-propertyguid='" + inputID +"']");
+            console.log(inputs);
+            // is this a hack because something is broken?
+            inputs.each(function() {
+                $( this ).prop( "disabled", false );
+                $( this ).removeAttr("disabled");
+                $( this ).css( "background-color", "transparent" );
+            });
+            //el.removeAttr("disabled");
+            //var inputclasses = $(el).attr("class");
+            //console.log(inputclasses);
+            //$(el).removeClass(inputclasses);
+            //$(el).addClass(inputclasses);
+        } else {
+            //console.log(property.propertyLabel);
+            var buttons = $("div.btn-group", el).find("button");
+            buttons.each(function() {
+                $( this ).prop( "disabled", false );
+            });
+        }
+        //$("#" + inputID).attr("disabled", false);
         formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {guid: t.guid}));
         $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
     }
