@@ -259,12 +259,12 @@ define(function(require, exports, module) {
             rt.propertyTemplates.forEach(function(property) {
                 
                 var formgroup = $('<div>', {class: "form-group"});
-                var label = $('<label for="' + fobject.id + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
+                var label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
                 var saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
                 
                 if (property.type == "literal") {
                     
-                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + fobject.id + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
                     
                     button = $('<button type="button" class="btn btn-default">Set</button>');
                     $(button).click(function(){
@@ -303,7 +303,7 @@ define(function(require, exports, module) {
                             }
                             button.append(ul);
                             */
-                            buttondiv = $('<div class="col-sm-8" id="' + fobject.id + property.guid +'"></div>');
+                            buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
                             buttongrp = $('<div class="btn-group btn-group-sm"></div>');
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
@@ -337,7 +337,7 @@ define(function(require, exports, module) {
                         } else if (_.has(property.valueConstraint, "useValuesFrom")) {
                             
                             var inputdiv = $('<div class="col-sm-8"></div>');
-                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + fobject.id + property.guid + '" placeholder="' + property.propertyLabel + '">');
+                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '">');
                     
                             /*
                             input.css("z-index", 3000);
@@ -401,13 +401,13 @@ define(function(require, exports, module) {
                         
                         } else {
                             // Type is resource, so should be a URI, but there is
-                            // no template reference for it.  
-                            // So, create label field
-                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + fobject.id + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                            // no "value template reference" or "use values from vocabularies" 
+                            // reference for it so just create label field
+                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
                     
                             button = $('<button type="button" class="btn btn-default">Set</button>');
                                 $(button).click(function(){
-                                    setResourceFromLabel(rt.guid, property.guid);
+                                    setResourceFromLabel(fobject.id, rt.guid, property.guid);
                             });
                             
                             formgroup.append(label);
@@ -416,6 +416,20 @@ define(function(require, exports, module) {
                             formgroup.append(saves);
                     
                         }
+                    } else {
+                        // Type is resource, so should be a URI, but there is
+                        // no constraint for it so just create a label field.
+                        var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                    
+                        button = $('<button type="button" class="btn btn-default">Set</button>');
+                            $(button).click(function(){
+                                setResourceFromLabel(fobject.id, rt.guid, property.guid);
+                        });
+                            
+                        formgroup.append(label);
+                        formgroup.append(input);
+                        formgroup.append(button);
+                        formgroup.append(saves);
                     }
                 }
                 
@@ -442,7 +456,7 @@ define(function(require, exports, module) {
                         fobject.store.push(triple);
                         
                             // set the form
-                        var formgroup = $("#" + fobject.id + property.guid, form).closest(".form-group");
+                        var formgroup = $("#" + property.guid, form).closest(".form-group");
                         var save = $(formgroup).find(".btn-toolbar").eq(0);
                         //console.log(formgroup);
                     
@@ -471,7 +485,7 @@ define(function(require, exports, module) {
                         
                         save.append(buttongroup);
                         if (property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                            var el = $("#" + fobject.id + property.guid, form);
+                            var el = $("#" + property.guid, form);
                             if (el.is("input")) {
                                 $(el).prop("disabled", true);
                             } else {
@@ -739,7 +753,7 @@ define(function(require, exports, module) {
                                 var property = properties[0];
                                 var pguid = property.guid;
                         
-                                var formgroup = $("#" + formobject.id + pguid).closest(".form-group");
+                                var formgroup = $("#" + pguid, formobject.form).closest(".form-group");
                                 var save = $(formgroup).find(".btn-toolbar")[0];
                     
                                 var buttongroup = $('<div>', {id: t.guid, class: "btn-group btn-group-xs"});
@@ -765,14 +779,14 @@ define(function(require, exports, module) {
                             
                                 $(save).append(buttongroup);
                     
-                                $("#" + formobject.id + pguid).val("");
-                                $("#" + formobject.id + pguid).typeahead('val', "");
-                                $("#" + formobject.id + pguid).typeahead('close');
+                                $("#" + pguid, formobject.form).val("");
+                                $("#" + pguid, formobject.form).typeahead('val', "");
+                                $("#" + pguid, formobject.form).typeahead('close');
                     
                                     //console.log(triples);
                     
                                 if (property.repeatable !== undefined && property.repeatable == "false") {
-                                    $("#" + formobject.id + pguid).attr("disabled", true);
+                                    $("#" + pguid, formobject.form).attr("disabled", true);
                                 }     
                                 
                             }
@@ -831,7 +845,7 @@ define(function(require, exports, module) {
                     callingformobject.store.push(t);
                 });
                     
-                var formgroup = $("#" + formobjectID + propertyguid).closest(".form-group");
+                var formgroup = $("#" + propertyguid, callingformobject.form).closest(".form-group");
                 var save = $(formgroup).find(".btn-toolbar")[0];
                 //console.log(formgroup);
                 
@@ -860,9 +874,9 @@ define(function(require, exports, module) {
                 buttongroup.append(delbutton);
                     
                 $(save).append(buttongroup);
-                $("#" + formobjectID + propertyguid).val("");
+                $("#" + propertyguid, callingformobject.form).val("");
                 if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
-                    $("#" + formobjectID + propertyguid).attr("disabled", true);
+                    $("#" + propertyguid, callingformobject.form).attr("disabled", true);
                 }
                     
             }
@@ -879,7 +893,7 @@ define(function(require, exports, module) {
         var formobject = _.where(forms, {"id": formobjectID});
         formobject = formobject[0];
         //console.log(inputID);
-        var data = $("#" + formobjectID + inputID).val();
+        var data = $("#" + inputID, formobject.form).val();
         if (data !== undefined && data !== "") {
             var triple = {}
             triple.guid = guid();
@@ -894,7 +908,7 @@ define(function(require, exports, module) {
                     
                     formobject.store.push(triple);
                     
-                    var formgroup = $("#" + formobjectID + inputID).closest(".form-group");
+                    var formgroup = $("#" + inputID, formobject.form).closest(".form-group");
                     var save = $(formgroup).find(".btn-toolbar")[0];
                     
                     var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
@@ -913,9 +927,57 @@ define(function(require, exports, module) {
                     buttongroup.append(delbutton);
                     
                     $(save).append(buttongroup);
-                    $("#" + formobjectID + inputID).val("");
+                    $("#" + inputID, formobject.form).val("");
                     if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
-                        $("#" + formobjectID + inputID).attr("disabled", true);
+                        $("#" + inputID, formobject.form).attr("disabled", true);
+                    }
+                    
+                }
+            });
+        }
+        $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
+    }
+    
+    function setResourceFromLabel(formobjectID, resourceID, inputID) {
+        var formobject = _.where(forms, {"id": formobjectID});
+        formobject = formobject[0];
+        //console.log(inputID);
+        var data = $("#" + inputID, formobject.form).val();
+        if (data !== undefined && data !== "") {
+            var triple = {}
+            triple.guid = guid();
+            triple.s = editorconfig.baseURI + resourceID;
+            formobject.resourceTemplates.forEach(function(t) {
+                var properties = _.where(t.propertyTemplates, {"guid": inputID})
+                if ( properties[0] !== undefined ) {
+                    triple.p = properties[0].propertyURI;
+                    triple.o = data;
+                    triple.otype = "uri";
+                    
+                    formobject.store.push(triple);
+                    
+                    var formgroup = $("#" + inputID, formobject.form).closest(".form-group");
+                    var save = $(formgroup).find(".btn-toolbar")[0];
+                    
+                    var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
+                    if (data.length > 10) {
+                        display = data.substr(0,10) + "...";
+                    } else {
+                        display = data;
+                    }
+                    var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
+                    var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
+                    $(delbutton).click(function(){
+                        removeTriple(formobjectID, inputID, triple);
+                    });
+                    
+                    buttongroup.append(displaybutton);
+                    buttongroup.append(delbutton);
+                    
+                    $(save).append(buttongroup);
+                    $("#" + inputID, formobject.form).val("");
+                    if (properties[0].repeatable !== undefined && properties[0].repeatable == "false") {
+                        $("#" + inputID, formobject.form).attr("disabled", true);
                     }
                     
                 }
@@ -931,14 +993,14 @@ define(function(require, exports, module) {
         console.log($("#" + t.guid).attr("class"));
         $("#" + t.guid).empty();
 
-        var el = $("#" + formobjectID + inputID);
-        if (el.is("input")) {
+        var $el = $("#" + inputID, formobject.form);
+        if ($el.is("input") && $el.hasClass( "typeahead" )) {
             //$(el).attr("disabled", false);
             //$("#" + formobjectID + inputID).prop( "disabled", false );
-            var inputs = $("#" + formobjectID + inputID).parent().find("input[data-propertyguid='" + inputID +"']");
-            console.log(inputs);
+            var $inputs = $("#" + inputID, formobject.form).parent().find("input[data-propertyguid='" + inputID +"']");
+            console.log($inputs);
             // is this a hack because something is broken?
-            inputs.each(function() {
+            $inputs.each(function() {
                 $( this ).prop( "disabled", false );
                 $( this ).removeAttr("disabled");
                 $( this ).css( "background-color", "transparent" );
@@ -948,10 +1010,14 @@ define(function(require, exports, module) {
             //console.log(inputclasses);
             //$(el).removeClass(inputclasses);
             //$(el).addClass(inputclasses);
+        } else if ($el.is("input")) {
+            $el.prop( "disabled", false );
+            $el.removeAttr("disabled");
+            //el.css( "background-color", "transparent" );
         } else {
             //console.log(property.propertyLabel);
-            var buttons = $("div.btn-group", el).find("button");
-            buttons.each(function() {
+            var $buttons = $("div.btn-group", el).find("button");
+            $buttons.each(function() {
                 $( this ).prop( "disabled", false );
             });
         }
