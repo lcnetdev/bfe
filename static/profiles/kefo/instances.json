@@ -6,9 +6,16 @@
             {
                 "id": "rt:Instance:Book",
                 "resourceLabel": "Book",
-				"resourceURI": "http://bibframe.org/vocab/Book",
-                    "instanceOf": "http://bibframe.org/vocab/Instance",
+				"resourceURI": "http://bibframe.org/vocab/Instance",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameInstance",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/instances"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
 						"propertyLabel": "Is Instance Of Work",
@@ -89,9 +96,16 @@
             {
                 "id": "rt:Instance:VinylRecord",
                 "resourceLabel": "Vinyl Record",
-				"resourceURI": "http://bibframe.org/vocab/VinylRecord",
-                    "instanceOf": "http://bibframe.org/vocab/Instance",
+				"resourceURI": "http://bibframe.org/vocab/Instance",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameInstance",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/instances"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
 						"propertyLabel": "Is Instance Of Work",
@@ -180,9 +194,16 @@
             {
                 "id": "rt:Instance:MusicCD",
                 "resourceLabel": "Music CD",
-				"resourceURI": "http://bibframe.org/vocab/MusicCD",
-                    "instanceOf": "http://bibframe.org/vocab/Instance",
+				"resourceURI": "http://bibframe.org/vocab/Instance",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameInstance",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/instances"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
 						"propertyLabel": "Is Instance Of Work",
@@ -271,9 +292,16 @@
             {
                 "id": "rt:Instance:MusicAudioTrack",
                 "resourceLabel": "Music Audio Track",
-				"resourceURI": "http://bibframe.org/vocab/MusicAudioTrack",
-                    "instanceOf": "http://bibframe.org/vocab/Instance",
+				"resourceURI": "http://bibframe.org/vocab/Instance",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameInstance",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/instances"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
 						"propertyLabel": "Is Instance Of Work",
@@ -332,9 +360,16 @@
             {
                 "id": "rt:Instance:Image",
                 "resourceLabel": "Image",
-				"resourceURI": "http://bibframe.org/vocab/Image",
-                    "instanceOf": "http://bibframe.org/vocab/Instance",
+				"resourceURI": "http://bibframe.org/vocab/Instance",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameInstance",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/instances"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
 						"propertyLabel": "Is Instance Of Work",

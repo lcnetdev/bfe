@@ -6,8 +6,16 @@
             {
                 "id": "rt:Work:Literature",
                 "resourceLabel": "Literature",
-				"resourceURI": "http://bibframe.org/vocab/Literature",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -163,8 +171,16 @@
             {
                 "id": "rt:Work:Thesis",
                 "resourceLabel": "Dissertation/Thesis",
-				"resourceURI": "http://bibframe.org/vocab/Thesis",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -298,8 +314,16 @@
             {
                 "id": "rt:Work:Film",
                 "resourceLabel": "Film",
-				"resourceURI": "http://bibframe.org/vocab/Film",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},				    
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -446,8 +470,16 @@
             {
                 "id": "rt:Work:MusicalCollection",
                 "resourceLabel": "Album",
-				"resourceURI": "http://bibframe.org/vocab/MusicalCollection",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -569,8 +601,16 @@
             {
                 "id": "rt:Work:MusicalComposition",
                 "resourceLabel": "Musical Composition",
-				"resourceURI": "http://bibframe.org/vocab/MusicalComposition",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -685,8 +725,16 @@
             {
                 "id": "rt:Work:MusicalPerformance",
                 "resourceLabel": "Musical Performance",
-				"resourceURI": "http://bibframe.org/vocab/MusicalPerformance",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
@@ -792,8 +840,16 @@
             {
                 "id": "rt:Work:ArtisticComposition",
                 "resourceLabel": "Artistic Composition",
-				"resourceURI": "http://bibframe.org/vocab/ArtisticComposition",
+				"resourceURI": "http://bibframe.org/vocab/Work",
 				"propertyTemplates": [
+                    {
+					    "propertyURI": "http://bibframe.org/vocab/sameWork",
+					    "propertyLabel": "Lookup",
+					    "type": "resource",
+					    "valueConstraint": {
+					        "useValuesFrom": ["http://id.loc.gov/resources/works"]
+					    }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/title",
 						"propertyLabel": "Title",
