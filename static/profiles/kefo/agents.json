@@ -16,13 +16,7 @@
 					{
 					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
 					    "propertyLabel": "Authority source",
-					    "type": "resource",
-					    "valueConstraint": {
-    						"repeatable": "false",
-    						"editable": "false",
-    						"defaultURI": "http://id.loc.gov/authorities/names",
-    						"defaultLiteral": "LC/NAF"
-                        }
+					    "type": "resource"
 					}
 				]
             },
@@ -39,13 +33,7 @@
 					{
 					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
 					    "propertyLabel": "Authority source",
-					    "type": "resource",
-					    "valueConstraint": {
-    						"repeatable": "false",
-    						"editable": "false",
-    						"defaultURI": "http://id.loc.gov/authorities/names",
-    						"defaultLiteral": "LC/NAF"
-                        }
+					    "type": "resource"
 					}
 				]
             },
@@ -62,13 +50,7 @@
 					{
 					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
 					    "propertyLabel": "Authority source",
-					    "type": "resource",
-					    "valueConstraint": {
-    						"repeatable": "false",
-    						"editable": "false",
-    						"defaultURI": "http://id.loc.gov/authorities/names",
-    						"defaultLiteral": "LC/NAF"
-                        }
+					    "type": "resource"
 					}
 				]
             },
@@ -93,13 +75,7 @@
 					{
 					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
 					    "propertyLabel": "Authority source",
-					    "type": "resource",
-					    "valueConstraint": {
-    						"repeatable": "false",
-    						"editable": "false",
-    						"defaultURI": "http://id.loc.gov/authorities/names",
-    						"defaultLiteral": "LC/NAF"
-                        }
+					    "type": "resource"
 					}
 				]
             },
@@ -125,13 +101,7 @@
 					{
 					    "propertyURI": "http://bibframe.org/vocab/authoritySource",
 					    "propertyLabel": "Authority source",
-					    "type": "resource",
-					    "valueConstraint": {
-    						"repeatable": "false",
-    						"editable": "false",
-    						"defaultURI": "http://id.loc.gov/authorities/names",
-    						"defaultLiteral": "LC/NAF"
-                        }
+					    "type": "resource"
 					}
 				]
             }
