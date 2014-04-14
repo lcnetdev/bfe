@@ -63,25 +63,42 @@ define(function(require, exports, module) {
     }
     
     exports.editor = function (config, id) {
-
+console.log("welecome");
         this.setConfig(config);
         
         editordiv = div = document.getElementById(id);
         
         var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
-        var menuul = $('<ul>', {id: "bfeditor-menuul", class: "nav nav-sidebar"});
-        for (var i=0; i < config.startingPoints.length; i++) {
-            var li = $('<li>');
-            var a = $('<a>', {href: "#", id: "sp-" + i});
-            a.html(config.startingPoints[i].label);
-            $(a).click(function(){
-                menuSelect(this.id);
-            });
-            li = li.append(a);
-            menuul.append(li);
-            startingPoints[i] = config.startingPoints[i];
+        for (var h=0; h < config.startingPoints.length; h++) {
+            var sp = config.startingPoints[h];
+            console.log(sp);
+            var menuul = $('<ul>', {class: "nav nav-stacked"});
+            var menuheadingul = null;
+            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
+                menuheading = $('<li><h5 style="font-weight: bold">' + sp.menuGroup + '</h5></li>');
+                menuheadingul = $('<ul class="nav"></ul>');
+                menuheading.append(menuheadingul);
+                menuul.append(menuheading);
+            }
+            console.log("go there");
+            for (var i=0; i < sp.menuItems.length; i++) {
+                var li = $('<li>');
+                var a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
+                a.html(sp.menuItems[i].label);
+                $(a).click(function(){
+                    menuSelect(this.id);
+                });
+                li = li.append(a);
+                console.log($("li > ul", menuul));
+                if ( menuheadingul !== null ) {
+                    menuheadingul.append(li);
+                } else {
+                    menuul.append(li);
+                }
+                //startingPoints[i] = config.startingPoints[i];
+            }
+            menudiv.append(menuul);
         }
-        menudiv.append(menuul);
         
         var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-8"});
         
@@ -129,8 +146,8 @@ define(function(require, exports, module) {
     
     function menuSelect (spid) {
         store = [];
-        spnum = parseInt(spid.replace('sp-', ''));
-        spoints = editorconfig.startingPoints[spnum];
+        spnums = spid.replace('sp-', '').split("_");
+        spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         form = getForm(spoints.useResourceTemplates);
         $("#bfeditor-formdiv").html("");
         $("#bfeditor-formdiv").append(form.form);
@@ -690,6 +707,7 @@ define(function(require, exports, module) {
             }
             
             $( this ).on("typeahead:selected", function(event, suggestionobject, datasetname) {
+                console.log("typeahead selection made");
                 var form = $("#" + event.target.id).closest("form").eq(0);
                 var formid = $("#" + event.target.id).closest("form").eq(0).attr("id");
                 formid = formid.replace('bfeditor-form-', '');
@@ -736,8 +754,8 @@ define(function(require, exports, module) {
                         var tguid = guid();
                         t.guid = tguid;
                         formobject.store.push(t);
-                        console.log("iteration: " + c);
-                        console.log(formobject.store);
+                        //console.log("iteration: " + c);
+                        //console.log(formobject.store);
                         c++;
                         /*
                         Can't think of why I wouldn't always want the object,
@@ -775,7 +793,7 @@ define(function(require, exports, module) {
                                 var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
                                 var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
                                 $(delbutton).click(function(){
-                                    removeTriple(formobject.id, pguid, [triples[0], triples]);
+                                    removeTriple(formobject.id, pguid, returntriples);
                                 });
                             
                                 buttongroup.append(displaybutton);
@@ -795,8 +813,8 @@ define(function(require, exports, module) {
                                 
                             }
                         });
-                    
                     });
+                    console.log(formobject.store);
                     //console.log(JSON.stringify(formobject.store));
                 });
             });
