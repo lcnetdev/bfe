@@ -39,12 +39,43 @@
                 
                 "startingPoints": [
                     {
-                        label: "Electronic Book", 
-                        useResourceTemplates: [  "rt:Work:EricBook", "rt:Instance:ElectronicBook" ]
+                        "menuGroup": "Original Cataloging",
+                        "menuItems": [
+                            {
+                                label: "Electronic Book", 
+                                useResourceTemplates: [  "rt:Work:EricBook", "rt:Instance:ElectronicBook" ]
+                            },
+                            {
+                                label: "Vinyl Record", 
+                                useResourceTemplates: [  "rt:Work:Audio", "vinyl" ]
+                            }
+                        ]
                     },
                     {
-                        label: "Holding", 
-                        useResourceTemplates: [ "rt:Annotation:HeldItem" ]
+                        "menuGroup": "Copy Cataloging",
+                        "menuItems": [
+                            {
+                                label: "New Holding", 
+                                useResourceTemplates: [ "rt:Annotation:HeldItem" ]
+                            }
+                        ]
+                    },
+                    {
+                        "menuGroup": "RDA Entities, for a Book",
+                        "menuItems": [
+                            {
+                                label: "Work/Expression", 
+                                useResourceTemplates: [ "rt:Work:Literature" ]
+                            },
+                            {
+                                label: "Manifestation", 
+                                useResourceTemplates: [ "rt:Instance:Book" ]
+                            },
+                            {
+                                label: "Item", 
+                                useResourceTemplates: [ "rt:Annotation:HeldItem" ]
+                            }
+                        ]
                     }
                 ],
                 
@@ -58,6 +89,16 @@
                         "name": "LCSH",
                         "load": "lookups/lcsubjects",
                         "schemes": [ "http://id.loc.gov/authorities/subjects" ]
+                    },
+                    {
+                        "name": "LC-Works",
+                        "load": "lookups/lcworks",
+                        "schemes": [ "http://id.loc.gov/resources/works" ]
+                    },
+                    {
+                        "name": "LC-Instances",
+                        "load": "lookups/lcinstances",
+                        "schemes": [ "http://id.loc.gov/resources/instances" ]
                     },
                     {
                         "name": "Languages",
