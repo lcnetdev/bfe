@@ -254,6 +254,7 @@ define(function(require, exports, module) {
         
         // Let's create the form
         var form = $('<form>', {id: "bfeditor-form-" + fobject.id, class: "form-horizontal", role: "form"});
+        var forEachFirst = true;
         fobject.resourceTemplates.forEach(function(rt) {
             var resourcediv = $('<div>', {id: rt.guid});
             rt.propertyTemplates.forEach(function(property) {
@@ -398,7 +399,16 @@ define(function(require, exports, module) {
                             formgroup.append(inputdiv);
                             //formgroup.append(button);
                             formgroup.append(saves);
-                        
+                            
+                            if (forEachFirst && property.propertyLabel.indexOf("Lookup") !== -1) {
+                                // This is the first propertty *and* it is a look up.
+                                // Let's treat it special-like.
+                                var saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '">Save changes</button></div>');
+                                var spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                                formgroup.append(saveLookup);
+                                formgroup.append(spacer);
+                            }
+                            
                         } else {
                             // Type is resource, so should be a URI, but there is
                             // no "value template reference" or "use values from vocabularies" 
@@ -434,6 +444,7 @@ define(function(require, exports, module) {
                 }
                 
                 resourcediv.append(formgroup);
+                forEachFirst = false;
             });
             form.append(resourcediv);
         });
@@ -564,16 +575,9 @@ define(function(require, exports, module) {
             
         $('#bfeditor-modal-' + form.formobject.id).modal('show');
         $('#bfeditor-modalSave-' + form.formobject.id).click(function(){
-        
-        /*
-        //alert(JSON.stringify(form.formobject.store, undefined, " "));
-        var callingformobject2 = _.where(forms, {"id": callingformobjectid});
-        callingformobject2 = callingformobject2[0];
-        console.log("Just before serResourceFromModal");
-        console.log("formobjectID is: " + callingformobjectid);
-        console.log("propertyguid is: " + propertyguid);
-        console.log(callingformobject2);
-        */
+            setResourceFromModal(callingformobjectid, form.formobject.id, rtguid, propertyguid, form.formobject.store);
+        });
+        $('#bfeditor-modalSaveLookup-' + form.formobject.id).click(function(){
             setResourceFromModal(callingformobjectid, form.formobject.id, rtguid, propertyguid, form.formobject.store);
         });
         $('#bfeditor-modal-' + form.formobject.id).on("hide.bs.modal", function(e) {
@@ -840,7 +844,8 @@ define(function(require, exports, module) {
                 triple.o = data[0].s;
                 triple.otype = "uri";
                     
-                callingformobject.store.push(triple);
+                // callingformobject.store.push(triple);
+                data.push(triple);
                 data.forEach(function(t) {
                     callingformobject.store.push(t);
                 });
@@ -867,7 +872,7 @@ define(function(require, exports, module) {
                 var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
                 var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
                 $(delbutton).click(function(){
-                    removeTriples(formobjectID, propertyguid, [triple, data]);
+                    removeTriples(formobjectID, propertyguid, data);
                 });
                     
                 buttongroup.append(displaybutton);
@@ -995,35 +1000,32 @@ define(function(require, exports, module) {
 
         var $el = $("#" + inputID, formobject.form);
         if ($el.is("input") && $el.hasClass( "typeahead" )) {
-            //$(el).attr("disabled", false);
-            //$("#" + formobjectID + inputID).prop( "disabled", false );
             var $inputs = $("#" + inputID, formobject.form).parent().find("input[data-propertyguid='" + inputID +"']");
-            console.log($inputs);
             // is this a hack because something is broken?
             $inputs.each(function() {
                 $( this ).prop( "disabled", false );
                 $( this ).removeAttr("disabled");
                 $( this ).css( "background-color", "transparent" );
             });
-            //el.removeAttr("disabled");
-            //var inputclasses = $(el).attr("class");
-            //console.log(inputclasses);
-            //$(el).removeClass(inputclasses);
-            //$(el).addClass(inputclasses);
         } else if ($el.is("input")) {
             $el.prop( "disabled", false );
             $el.removeAttr("disabled");
             //el.css( "background-color", "transparent" );
         } else {
-            //console.log(property.propertyLabel);
-            var $buttons = $("div.btn-group", el).find("button");
+            var $buttons = $("div.btn-group", $el).find("button");
             $buttons.each(function() {
                 $( this ).prop( "disabled", false );
             });
         }
-        //$("#" + inputID).attr("disabled", false);
         formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {guid: t.guid}));
         $("#bfeditor-debug").html(JSON.stringify(formobject.store, undefined, " "));
+    }
+    
+    function removeTriples(formobjectID, inputID, triples) {
+        triples.forEach(function(triple) {
+            // console.log(triple);
+            removeTriple(formobjectID, inputID, triple);
+        });
     }
     
     /**
