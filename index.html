@@ -29,12 +29,15 @@
                     "erimille/book",
                     "erimille/record",
                     "erimille/vra",
-                    "kefo/agents",
-                    "kefo/authorities",
-                    "kefo/categories",
+                    "shared/agents",
+                    "shared/authorities",
+                    "shared/categories",
                     "kefo/works",
                     "kefo/instances",
-                    "kefo/annotations"
+                    "kefo/annotations",
+                    "rda/works",
+                    "rda/instances",
+                    "rda/annotations",
                 ],
                 
                 "startingPoints": [
@@ -65,15 +68,15 @@
                         "menuItems": [
                             {
                                 label: "Work/Expression", 
-                                useResourceTemplates: [ "rt:Work:Literature" ]
+                                useResourceTemplates: [ "rda:Work:Literature" ]
                             },
                             {
                                 label: "Manifestation", 
-                                useResourceTemplates: [ "rt:Instance:Book" ]
+                                useResourceTemplates: [ "rda:Instance:Book" ]
                             },
                             {
                                 label: "Item", 
-                                useResourceTemplates: [ "rt:Annotation:HeldItem" ]
+                                useResourceTemplates: [ "rda:Annotation:HeldItem" ]
                             }
                         ]
                     }

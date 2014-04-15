@@ -1,0 +1,124 @@
+{
+    "Profile": {
+        "id": "profile:rda:Annotations",
+        "title": "BIBFRAME Core Annotations",
+        "resourceTemplates": [
+            {
+                "id": "rda:Annotation:HeldItem",
+                "resourceLabel": "Item",
+				"resourceURI": "http://bibframe.org/vocab/HeldItem",
+                "instanceOf": "http://bibframe.org/vocab/Annotation",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/holdingFor",
+						"propertyLabel": "Associated Manifestation",
+						"repeatable": "false",
+						"type": "resource",
+						"valueConstraint": {
+      						"valueTemplateRefs": [   "rda:Instance:Book",
+                                    						"rda:Instance:VinylRecord",
+                                    						"rda:Instance:MusicCD",
+                                    						"rda:Instance:MusicAudioTrack",
+                                    						"rda:Instance:Image"
+                                    ]
+                            }
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/heldBy",
+						"propertyLabel": "Held By",
+						"repeatable": "true",
+						"type": "resource",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ] 
+                            }
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/subLocation",
+						"propertyLabel": "Sublocation",
+						"repeatable": "true",    
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/lendingPolicy",
+						"propertyLabel": "Lending policy",
+						"repeatable": "true",    
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/reprroductionPolicy",
+						"propertyLabel": "Reproduction policy",
+						"repeatable": "true",    
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/retentionPolicy",
+						"propertyLabel": "Retention policy",
+						"repeatable": "true",    
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/barcode",
+						"propertyLabel": "Barcode",
+						"repeatable": "false",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/circulationStatus",
+						"propertyLabel": "Circulation status",
+						"repeatable": "false",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/copyNote",
+						"propertyLabel": "Copy note",
+						"repeatable": "true",    
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/shelfMark",
+						"propertyLabel": "Shelf mark",
+						"repeatable": "false",
+						"type": "literal"
+                        }
+                ]
+            },
+            {
+                "id": "rda:Annotation:CoverArt",
+                "resourceLabel": "Cover Art",
+				"resourceURI": "http://bibframe.org/vocab/CoverArt",
+                    "instanceOf": "http://bibframe.org/vocab/Annotation",
+				"propertyTemplates": [
+					{
+						"propertyURI": "http://bibframe.org/vocab/coverArtFor",
+						"propertyLabel": "Cover Art For Manifestation",
+						"repeatable": "false",
+						"type": "resource",
+						"valueConstraint": {
+      						"valueTemplateRefs": [ "rda:Instance" ]
+                            }
+					},
+					{
+						"propertyURI": "http://example.org/vocab/bfp/filename",
+						"propertyLabel": "File Name",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://example.org/vocab/bfp/mimetype",
+						"propertyLabel": "MIME-Type",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/width",
+						"propertyLabel": "Width",
+						"type": "literal"
+					},
+					{
+						"propertyURI": "http://bibframe.org/vocab/height",
+						"propertyLabel": "Height",
+						"type": "literal"
+                        }
+				]
+            }
+        ]
+    }
+}
