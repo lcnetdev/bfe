@@ -38,6 +38,7 @@ define(function(require, exports, module) {
         for (var i=0; i < config.profiles.length; i++) {
             files[i] = "json!static/profiles/" + config.profiles[i] + ".json";
             file = "static/profiles/" + config.profiles[i] + ".json";
+            console.log("Loading profile: " + config.profiles[i]);
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -63,7 +64,6 @@ define(function(require, exports, module) {
     }
     
     exports.editor = function (config, id) {
-console.log("welecome");
         this.setConfig(config);
         
         editordiv = div = document.getElementById(id);
@@ -71,7 +71,6 @@ console.log("welecome");
         var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
         for (var h=0; h < config.startingPoints.length; h++) {
             var sp = config.startingPoints[h];
-            console.log(sp);
             var menuul = $('<ul>', {class: "nav nav-stacked"});
             var menuheadingul = null;
             if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
@@ -80,7 +79,6 @@ console.log("welecome");
                 menuheading.append(menuheadingul);
                 menuul.append(menuheading);
             }
-            console.log("go there");
             for (var i=0; i < sp.menuItems.length; i++) {
                 var li = $('<li>');
                 var a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
@@ -89,13 +87,11 @@ console.log("welecome");
                     menuSelect(this.id);
                 });
                 li = li.append(a);
-                console.log($("li > ul", menuul));
                 if ( menuheadingul !== null ) {
                     menuheadingul.append(li);
                 } else {
                     menuul.append(li);
                 }
-                //startingPoints[i] = config.startingPoints[i];
             }
             menudiv.append(menuul);
         }
