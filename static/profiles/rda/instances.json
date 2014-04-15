@@ -18,8 +18,8 @@
                             }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/label",
-						"propertyLabel": "Label",
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title",
 						"type": "literal"
 					},
 					{
@@ -100,8 +100,8 @@
                             }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/label",
-						"propertyLabel": "Label",
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title",
 						"type": "literal"
 					},
 					{
@@ -190,8 +190,8 @@
                             }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/label",
-						"propertyLabel": "Label",
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title",
 						"type": "literal"
 					},
 					{
@@ -280,8 +280,8 @@
                             }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/label",
-						"propertyLabel": "Label",
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title",
 						"type": "literal"
 					},
 					{
@@ -340,8 +340,8 @@
                             }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/label",
-						"propertyLabel": "Label",
+						"propertyURI": "http://bibframe.org/vocab/title",
+						"propertyLabel": "Title",
 						"type": "literal"
 					},
 					{
@@ -395,7 +395,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:TGN:Place"
+    						"valueTemplateRefs": ["rt:TGN:Place"]
                             }
 					},
 					{
@@ -404,7 +404,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:AAT:Authority"
+    						"valueTemplateRefs": ["rt:AAT:Authority"]
                             }
 					},
 					{

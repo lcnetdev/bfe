@@ -51,6 +51,7 @@
 						"type": "resource",
 						"valueConstraint": {
     						"editable": "false",
+    						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
     						"defaultLiteral": "text",
     						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
@@ -723,7 +724,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:Authority:Place"
+    						"valueTemplateRefs": ["rt:Authority:Place"]
                             }
 					},
 					{
@@ -966,7 +967,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:TGN:Place"
+    						"valueTemplateRefs": ["rt:TGN:Place"]
                             }
 					},
 					{
@@ -975,7 +976,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:AAT:Authority"
+    						"valueTemplateRefs": ["rt:AAT:Authority"]
                             }
 					},
 					{
