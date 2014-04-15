@@ -83,10 +83,6 @@ define(function(require, exports, module) {
             for (var s=0; s < suggestions[1].length; s++) {
                 var l = suggestions[1][s];
                 var u = suggestions[3][s];
-                
-                store[l] = {}
-                store[l].label = l;
-                store[l].uri = u;
                 typeahead_source.push({ uri: u, value: l });
             }
         }
