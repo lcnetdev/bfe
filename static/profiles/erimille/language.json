@@ -5,7 +5,7 @@
             {
                 "id": "rt:Language",
 				"resourceURI": "http://bibframe.org/vocab/LanguageEntity",
-				"resourceLanguage": "Language",
+				"resourceLabel": "Language",
 				"propertyTemplates": [
 					{
 						"propertyURI": "http://bibframe.org/vocab/label",

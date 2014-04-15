@@ -100,7 +100,7 @@
 						"propertyLabel": "Language",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "rt:Language"
+    						"valueTemplateRefs": ["rt:Language"]
                             }
 					},
 					{
@@ -238,7 +238,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Event:ProviderEvent" ]
+    						"valueTemplateRefs": [ "rt:Event:PublishEvent" ]
                             }
 					},
 					{
@@ -247,7 +247,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Event:ProviderEvent" ]
+    						"valueTemplateRefs": [ "rt:Event:DistributeEvent" ]
                             }
 					},
 					{
@@ -318,7 +318,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Event:ProviderEvent" ]
+    						"valueTemplateRefs": [ "rt:Event:PublishEvent" ]
                             }
 					},
 					{
@@ -327,7 +327,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "rt:Event:ProviderEvent" ]
+    						"valueTemplateRefs": [ "rt:Event:DistributeEvent" ]
                             }
 					},
 					{

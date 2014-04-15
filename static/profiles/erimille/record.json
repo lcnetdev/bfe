@@ -45,7 +45,7 @@
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": "bp:language"
+    						"valueTemplateRefs":  ["rt:Language"]
                             }
 					},
 					{
@@ -76,11 +76,11 @@
 				"propertyTemplates": [
 					{
 						"propertyURI": "http://bibframe.org/vocab/provider",
-						"propertyLabel": "Label",
+						"propertyLabel": "Provider",
 						"repeatable": "true",
 						"type": "resource",
 						"valueConstraint": {
-    						"valueTemplateRefs": [ "distributeEvent" ]
+    						"valueTemplateRefs": [ "rt:Event:ProducerEvent", "rt:Event:PublishEvent", "rt:Event:DistributeEvent" ]
                             }
 					},
 			{
