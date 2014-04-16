@@ -64,6 +64,16 @@
 						"type": "literal"
 					},
 					{
+					    "propertyURI": "http://bibframe.org/vocab/dimensions",
+						"propertyLabel": "Dimensions",
+						"type": "literal"
+					},
+					{
+					    "propertyURI": "http://bibframe.org/vocab/extent",
+						"propertyLabel": "Extent",
+						"type": "literal"
+					},
+					{
 						"propertyURI": "http://bibframe.org/vocab/ISBN10",
 						"propertyLabel": "ISBN 10",
 						"type": "literal"
