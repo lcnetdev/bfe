@@ -15,15 +15,21 @@ define(function(require, exports, module) {
     require("lib/underscore-min");
     require("bootstrapjs");
     require("lib/typeahead.jquery.min");
+    require("lib/rdf_store_min");
     
     var editorconfig = {};
-    var store = [];
+    //var store = [];
+    var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
     var startingPoints = [];
     var formTemplates = [];
     var lookups = [];
     var currentModal = 0;
+    
+    var loadtemplates = [];
+    var loadtemplatesCount = 0;
+    var loadtemplatesCounter = 0;
     
     var lookupstore = [];
     var lookupcache = [];
@@ -64,6 +70,7 @@ define(function(require, exports, module) {
     }
     
     exports.editor = function (config, id) {
+        
         this.setConfig(config);
         
         editordiv = div = document.getElementById(id);
@@ -116,6 +123,81 @@ define(function(require, exports, module) {
         $(div).append(debugdiv);
         debugpre.html(JSON.stringify(profiles, undefined, " "));
         
+        if (config.load !== undefined) {
+            loadtemplatesCount = config.load.length;
+            config.load.forEach(function(l){
+                $.ajax({
+                    url: l.defaulturi + '.bibframe_raw.jsonp',
+                    dataType: "jsonp",
+                    success: function (data) {
+                        var ntriples = [];
+                        for (var s in data) {
+                            for (var p in data[s]) {
+                                var triple = [];
+                                triple.push(s);
+                                triple.push(p);
+                                data[s][p].forEach(function(o) {
+                                    if (o.type == "uri") {
+                                        triple.push('<' + o.value + '>');
+                                    } else if (o.type == "bnode") {
+                                        triple.push(o.value);
+                                    } else {
+                                        triple.push('"' + o.value + '"');
+                                    }
+                                    var ntriple = triple.join(" ") + ' . ';
+                                    ntriples.push(ntriple);
+                                });
+                            }
+                        }
+                        ntriples = ntriples.join("\n");
+                        //console.log(ntriples);
+                        store.load('text/n3', ntriples, function(success){
+                            if (success) console.log("Loaded data for " + l.defaulturi);
+                            var useguid = guid();
+                            var loadtemplate = {};
+                            var query = 'SELECT * WHERE { <' + l.defaulturi.replace('ml38281/', '') + '> ?p ?o}';
+                            console.log("Query is " + query);
+                            store.execute(query, function(success, results) {
+                                // process results
+                                if (success) {
+                                    console.log(results);
+                                    var tempstore = [];
+                                    results.forEach(function(t){
+                                        var tguid = guid();
+                                        var triple = {};
+                                        triple.guid = tguid;
+                                        if (t.o.value == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                                            triple.rtID = rt.id;
+                                        }
+                                        triple.s = l.defaulturi.replace('ml38281/', '');
+                                        triple.p = t.p.value;
+                                        triple.o = t.o.value;
+                                        if (t.o.token == "uri") {
+                                            triple.otype = "uri";
+                                        } else if (t.o.token == "blank") {
+                                            triple.otype = "uri";
+                                        } else {
+                                            triple.otype = "literal";
+                                            triple.olang = "en";
+                                        }
+                                        console.log(triple);
+                                        tempstore.push(triple);
+                                    });
+                                    loadtemplate.id = useguid;
+                                    loadtemplate.rtID = l.templateID;
+                                    loadtemplate.defaulturi = l.defaulturi.replace('ml38281/', '');
+                                    loadtemplate.data = tempstore;
+                                    loadtemplates.push(loadtemplate);
+                                    console.log("finished query store");
+                                    cbLoadTemplates();
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        }
+
         return {
             "profiles": profiles,
             "div": div
@@ -140,8 +222,22 @@ define(function(require, exports, module) {
         }
     }
     
+    function cbLoadTemplates() {
+        loadtemplatesCounter++;
+        if (loadtemplatesCount == loadtemplatesCounter) {
+            console.log("Got here");
+            form = getForm(loadtemplates);
+            $( ".typeahead", form.form ).each(function() {
+                setTypeahead(this);
+                });
+            $("#bfeditor-formdiv").html("");
+            $("#bfeditor-formdiv").append(form.form);
+            $("#bfeditor-debug").html(JSON.stringify(form.formobject.store, undefined, " "));
+        }
+    }
+    
     function menuSelect (spid) {
-        store = [];
+        store = new rdfstore.Store();
         spnums = spid.replace('sp-', '').split("_");
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         var useguid = guid();
@@ -154,7 +250,16 @@ define(function(require, exports, module) {
         $("#bfeditor-debug").html(JSON.stringify(form.formobject.store, undefined, " "));
     }
     
-    function getForm (loadResourceTemplatesWithIds, baseguid) {
+    /*
+    loadTemplates is an array of objects, each with this structure:
+        {
+            id=guid,
+            rtID=resourceTemplateID,
+            defaulturi="",
+            data=bfestore
+        }
+    */
+    function getForm (loadTemplates) {
         
         var rt;
         var property;
@@ -167,27 +272,35 @@ define(function(require, exports, module) {
         fobject.resourceTemplateIDs = [];
         fobject.formTemplates = [];
         
-        for (var urt=0; urt < loadResourceTemplatesWithIds.length; urt++) {
-            var urtid = loadResourceTemplatesWithIds[urt];
+        for (var urt=0; urt < loadTemplates.length; urt++) {
+            //console.log(loadTemplates[urt]);
+            var urtid = loadTemplates[urt].rtID;
             var rt = _.where(resourceTemplates, {"id": urtid})
             if ( rt !== undefined ) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
+                //console.log(loadTemplates[urt].data);
+                fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
+                fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].defaulturi;
+                fobject.resourceTemplates[urt].useguid = loadTemplates[urt].id;
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             }
         }
         
         fobject.resourceTemplates.forEach(function(rt) {
             var id = guid();
-            var uri = editorconfig.baseURI + baseguid;
+            var uri = editorconfig.baseURI + rt.useguid;
+            if (rt.defaulturi !== undefined && rt.defaulturi !== "") {
+                uri = rt.defaulturi;
+            }
             var triple = {}
-            triple.guid = baseguid;
+            triple.guid = rt.useguid;
             triple.rtID = rt.id;
             triple.s = uri;
             triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
             triple.o = rt.resourceURI;
             triple.otype = "uri";
             fobject.store.push(triple);
-            rt.guid = baseguid;
+            rt.guid = rt.useguid;
             
             rt.propertyTemplates.forEach(function(property) {
                 var pguid = guid();
@@ -214,60 +327,6 @@ define(function(require, exports, module) {
                 }
             });
         });
-        /*
-        for ( var rtnum=0; rtnum < fobject.resourceTemplates.length; rtnum++ ) {
-            var rt = fobject.resourceTemplates[rtnum];
-            var id = guid();
-            var uri = editorconfig.baseURI + id;
-            var triple = {}
-            triple.guid = id;
-            triple.rtID = rt.id;
-            triple.s = uri;
-            triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-            triple.o = rt.resourceURI;
-            triple.otype = "uri";
-            fobject.store.push(triple);
-            fobject.resourceTemplates[rtnum].guid = id;
-            
-            for ( var pnum=0; pnum < rt.propertyTemplates.length; pnum++ ) {
-                var property = rt.propertyTemplates[pnum];
-                var pguid = guid();
-                fobject.resourceTemplates[rtnum].propertyTemplates[pnum].guid = pguid;
-                fobject.resourceTemplates[rtnum].propertyTemplates[pnum].display = "true";
-                if (_.has(property, "valueConstraint")) {
-                    if (_.has(property.valueConstraint, "valueTemplateRefs")) {
-                        var vtRefs = property.valueConstraint.valueTemplateRefs;
-                        for ( var v=0; v < vtRefs.length; v++) {
-                            var vtrs = vtRefs[v];
-                            if ( fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id ) {
-                                var relatedTemplates = _.where(fobject.store, {rtID: vtrs});
-                                triple = {}
-                                triple.guid = guid();
-                                triple.s = uri;
-                                triple.p = property.propertyURI;
-                                triple.o = relatedTemplates[0].s;
-                                triple.otype = "uri";
-                                fobject.store.push(triple);
-                                fobject.resourceTemplates[rtnum].propertyTemplates[pnum].display = "false";
-                            }
-                        }
-                    }
-                }
-            };
-        }
-        */
-        /*
-        if (forms[0] === undefined) {
-            console.log("after assignging property guids - 1st time");
-            console.log("guid of has oether edition: " + fobject.resourceTemplates[0].propertyTemplates[13].guid);
-        } else {
-            console.log("after assignging property guids");
-            console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
-        }
-        console.log("form id: " + fobject.id);
-        console.log(fobject);
-        */
-        //fobject.formTemplates = rts;
         
         // Let's create the form
         var form = $('<form>', {id: "bfeditor-form-" + fobject.id, class: "form-horizontal", role: "form"});
@@ -356,60 +415,7 @@ define(function(require, exports, module) {
                             
                             var inputdiv = $('<div class="col-sm-8"></div>');
                             var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '">');
-                    
-                            /*
-                            input.css("z-index", 3000);
-                            input.typeahead(
-                                {
-                                    minLength: 3,
-                                    highlight: true,
-                                    displayKey: 'value',
-                                },
-                                {
-                                    matcher: function(item) {
-                                        return true;
-                                    },
-                                    source: lcnames.source
-                                }
-                            );
-                            */
-                            /*
-                            input.typeahead(
-                                {
-                                    minLength: 3,
-                                    highlight: true,
-                                    displayKey: 'value',
-                                },
-                                {
-                                    matcher: function(item) {
-                                        return true;
-                                    },
-                                    source: function(query, process){
-                                        var p = process;
-                                        // if in cache use cached value, if don't wanto use cache remove this if statement
-                                        //parentid = $this.parent().attr("id");
-                                        ///
-                                        q = "lcnames-" + query;
-                                        if(lookupcache[q]){
-                                            p(lookupcache[q]);
-                                            return;
-                                        }
-                                        if( typeof searching != "undefined") {
-                                            clearTimeout(searching);
-                                            p([]);
-                                        }
-                                        ///
-                                        searching = setTimeout(function() {
-                                            if ( query.length > 2 ) {
-                                                lcnames.source(query, p);
-                                            } else {
-                                                return [];
-                                            }
-                                        }, 300); // 300 ms
-                                    }
-                                }
-                            );
-                            */
+                            
                             inputdiv.append(input);
                             
                             formgroup.append(label);
@@ -467,8 +473,50 @@ define(function(require, exports, module) {
         });
         
         fobject.resourceTemplates.forEach(function(rt) {
+            rt.data.forEach(function(t) {
+                var triple = {}
+                triple = t;
+                triple.guid = guid();
+                fobject.store.push(triple);
+            });
             rt.propertyTemplates.forEach(function(property) {
-                if (_.has(property, "valueConstraint")) {
+                console.log(rt.data);
+                console.log(property.propertyURI);
+                var propsdata = _.where(rt.data, {"p": property.propertyURI});
+                if (propsdata[0] !== undefined) {
+                    console.log(propsdata);
+                    propsdata.forEach(function(pd) {
+                        var $formgroup = $("#" + property.guid, form).closest(".form-group");
+                        var $save = $formgroup.find(".btn-toolbar").eq(0);
+                        //console.log(formgroup);
+                        
+                        displaydata = pd.s;
+                        var bgvars = { 
+                            "tguid": pd.guid, 
+                            "tlabelhover": displaydata,
+                            "tlabel": displaydata,
+                            "fobjectid": fobject.id,
+                            "inputid": pd.id,
+                            "triples": propsdata
+                        };
+                        var $buttongroup = editDeleteButtonGroup(bgvars);
+                        
+                        $save.append($buttongroup);
+                        if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                            var $el = $("#" + property.guid, form);
+                            if ($el.is("input")) {
+                                $el.prop("disabled", true);
+                            } else {
+                                //console.log(property.propertyLabel);
+                                var $buttons = $("div.btn-group", $el).find("button");
+                                $buttons.each(function() {
+                                    $( this ).prop("disabled", true);
+                                });
+                            }
+                        }
+                    });
+                
+                } else if (_.has(property, "valueConstraint")) {
                     if (_.has(property.valueConstraint, "defaultURI")) {
                         var data = property.valueConstraint.defaultURI;
                         // set the triple
@@ -484,47 +532,34 @@ define(function(require, exports, module) {
                         fobject.store.push(triple);
                         
                             // set the form
-                        var formgroup = $("#" + property.guid, form).closest(".form-group");
-                        var save = $(formgroup).find(".btn-toolbar").eq(0);
+                        var $formgroup = $("#" + property.guid, form).closest(".form-group");
+                        var $save = $formgroup.find(".btn-toolbar").eq(0);
                         //console.log(formgroup);
-                    
-                        var buttongroup = $('<div>', {id: triple.guid, class: "btn-group btn-group-xs"});
-                        //console.log("tguid for div id " + triple.guid);
+                        
                         var display = "";
                         if (_.has(property.valueConstraint, "defaultLiteral")) {
                             display = property.valueConstraint.defaultLiteral;
                         }
-                        if (display.length > 10) {
-                            display = display.substr(0,10) + "...";
-                        } else if (display === "") {
-                            display = data.substr(0,10) + "...";
-                        }
-                        var displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
-                        buttongroup.append(displaybutton);
+                        displaydata = display;
+                        var bgvars = { 
+                            "tguid": triple.guid , 
+                            "tlabelhover": displaydata,
+                            "tlabel": displaydata,
+                            "fobjectid": fobject.id,
+                            "inputid": triple.guid,
+                            "triples": triple
+                        };
+                        var $buttongroup = editDeleteButtonGroup(bgvars);
+                        $save.append($buttongroup);
                         
-                        if (property.valueConstraint.editable === undefined || property.valueConstraint.editable == "true") {
-                            //console.log(property.valueConstraint.editable);
-                            var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
-                            $editbutton.click(function(){
-                                editTriple(fobject.id, property.guid, triple);
-                            });
-                            buttongroup.append($editbutton);
-                            var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                            $delbutton.click(function(){
-                                removeTriple(fobject.id, property.guid, triple);
-                            });
-                            buttongroup.append($delbutton);
-                        }
-                        
-                        save.append(buttongroup);
                         if (property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                            var el = $("#" + property.guid, form);
-                            if (el.is("input")) {
-                                $(el).prop("disabled", true);
+                            var $el = $("#" + property.guid, form);
+                            if ($el.is("input")) {
+                                $el.prop("disabled", true);
                             } else {
                                 //console.log(property.propertyLabel);
-                                var buttons = $("div.btn-group", el).find("button");
-                                buttons.each(function() {
+                                var $buttons = $("div.btn-group", $el).find("button");
+                                $buttons.each(function() {
                                     $( this ).prop("disabled", true);
                                 });
                             }
