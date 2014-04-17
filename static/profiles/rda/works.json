@@ -19,6 +19,15 @@
 						"type": "literal"
 					},
 					{
+						"propertyURI": "http://bibframe.org/vocab/creator",
+						"propertyLabel": "Creator",
+						"type": "resource",
+						"repeatable": "true",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
+                            }
+					},
+					{
 						"propertyURI": "http://id.loc.gov/vocabulary/relators/aut",
 						"propertyLabel": "Author",
 						"type": "resource",
@@ -39,6 +48,15 @@
 					{
 						"propertyURI": "http://id.loc.gov/vocabulary/relators/trl",
 						"propertyLabel": "Translator",
+						"type": "resource",
+						"repeatable": "true",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
+                            }
+					},
+                    {
+						"propertyURI": "http://bibframe.org/vocab/contributor",
+						"propertyLabel": "Contributor",
 						"type": "resource",
 						"repeatable": "true",
 						"valueConstraint": {
