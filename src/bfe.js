@@ -12,14 +12,15 @@ var bfe = new bfe();
 define(function(require, exports, module) {
     require("staticjs/jquery-1.11.0.min");
     require("lib/json");
-    require("lib/underscore-min");
+    //require("lib/underscore-min");
+    require("lib/lodash.min");
     require("bootstrapjs");
     require("lib/typeahead.jquery.min");
     require("lib/rdf_store_min");
     
     var editorconfig = {};
-    //var store = [];
-    var store = new rdfstore.Store();
+    var store = [];
+    //var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
     var startingPoints = [];
@@ -130,28 +131,56 @@ define(function(require, exports, module) {
                     url: l.defaulturi + '.bibframe_raw.jsonp',
                     dataType: "jsonp",
                     success: function (data) {
-                        var ntriples = [];
-                        for (var s in data) {
-                            for (var p in data[s]) {
-                                var triple = [];
-                                triple.push(s);
-                                triple.push(p);
-                                data[s][p].forEach(function(o) {
-                                    if (o.type == "uri") {
-                                        triple.push('<' + o.value + '>');
-                                    } else if (o.type == "bnode") {
-                                        triple.push(o.value);
-                                    } else {
-                                        triple.push('"' + o.value + '"');
+                        console.log(data);
+                        /*
+                            OK, so I would /like/ to just ise rdfstore here
+                            but it is treating literals identified using @value
+                            within JSON objects as resources.  It gives them blank nodes.
+                            So, will parse the JSONLD myself, dagnabbit. 
+                            NOTE: it totally expects JSONLD expanded form.
+                        */
+                            var useguid = guid();
+                            var loadtemplate = {};
+                            var tempstore = [];
+                            data.forEach(function(t){
+                                var s = typeof t["@id"] !== 'undefined' ? t["@id"] : '_:b' + guid();
+                                for (var p in t) {
+                                    if (p !== "@id") {
+                                        t[p].forEach(function(o) {
+                                            var tguid = guid();
+                                            var triple = {};
+                                            triple.guid = tguid;
+                                            if (p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && o["@id"] !== undefined && s == l.defaulturi.replace('ml38281/', '')) {
+                                                triple.rtID = l.templateID;
+                                            }
+                                            triple.s = s;
+                                            triple.p = p;
+                                            if (o["@id"] !== undefined) {
+                                                triple.o = o["@id"];
+                                                triple.otype = "uri";
+                                            } else if (o["@value"] !== undefined) {
+                                                triple.o = o["@value"];
+                                                triple.otype = "literal";
+                                                if (o["@language"] !== undefined) {
+                                                    triple.olang = o["@language"];
+                                                }
+                                            }
+                                            tempstore.push(triple);
+                                            store.push(triple);
+                                        });
                                     }
-                                    var ntriple = triple.join(" ") + ' . ';
-                                    ntriples.push(ntriple);
-                                });
-                            }
-                        }
-                        ntriples = ntriples.join("\n");
-                        //console.log(ntriples);
-                        store.load('text/n3', ntriples, function(success){
+                                }
+                            });
+                            loadtemplate.id = useguid;
+                            loadtemplate.rtID = l.templateID;
+                            loadtemplate.defaulturi = l.defaulturi.replace('ml38281/', '');
+                            loadtemplate.data = tempstore;
+                            loadtemplates.push(loadtemplate);
+                            console.log("finished query store");
+                            cbLoadTemplates();
+                                    
+                        /*
+                        store.load('application/ld+json', data, function(success){
                             if (success) console.log("Loaded data for " + l.defaulturi);
                             var useguid = guid();
                             var loadtemplate = {};
@@ -180,7 +209,7 @@ define(function(require, exports, module) {
                                             triple.otype = "literal";
                                             triple.olang = "en";
                                         }
-                                        console.log(triple);
+                                        //console.log(triple);
                                         tempstore.push(triple);
                                     });
                                     loadtemplate.id = useguid;
@@ -193,6 +222,7 @@ define(function(require, exports, module) {
                                 }
                             });
                         });
+                        */
                     }
                 });
             });
@@ -237,7 +267,8 @@ define(function(require, exports, module) {
     }
     
     function menuSelect (spid) {
-        store = new rdfstore.Store();
+        //store = new rdfstore.Store();
+        store = [];
         spnums = spid.replace('sp-', '').split("_");
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         var useguid = guid();
@@ -264,6 +295,7 @@ define(function(require, exports, module) {
         var rt;
         var property;
         
+        // Create the form object.
         var fguid = guid();
         var fobject = {};
         fobject.id = fguid;
@@ -272,10 +304,10 @@ define(function(require, exports, module) {
         fobject.resourceTemplateIDs = [];
         fobject.formTemplates = [];
         
+        // Load up the requested templates, add seed data.
         for (var urt=0; urt < loadTemplates.length; urt++) {
             //console.log(loadTemplates[urt]);
-            var urtid = loadTemplates[urt].rtID;
-            var rt = _.where(resourceTemplates, {"id": urtid})
+            var rt = _.where(resourceTemplates, {"id": loadTemplates[urt].rtID})
             if ( rt !== undefined ) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
                 //console.log(loadTemplates[urt].data);
@@ -285,55 +317,20 @@ define(function(require, exports, module) {
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             }
         }
-        
-        fobject.resourceTemplates.forEach(function(rt) {
-            var id = guid();
-            var uri = editorconfig.baseURI + rt.useguid;
-            if (rt.defaulturi !== undefined && rt.defaulturi !== "") {
-                uri = rt.defaulturi;
-            }
-            var triple = {}
-            triple.guid = rt.useguid;
-            triple.rtID = rt.id;
-            triple.s = uri;
-            triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-            triple.o = rt.resourceURI;
-            triple.otype = "uri";
-            fobject.store.push(triple);
-            rt.guid = rt.useguid;
-            
-            rt.propertyTemplates.forEach(function(property) {
-                var pguid = guid();
-                property.guid = pguid;
-                property.display = "true";
-                if (_.has(property, "valueConstraint")) {
-                    if (_.has(property.valueConstraint, "valueTemplateRefs")) {
-                        var vtRefs = property.valueConstraint.valueTemplateRefs;
-                        for ( var v=0; v < vtRefs.length; v++) {
-                            var vtrs = vtRefs[v];
-                            if ( fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id ) {
-                                var relatedTemplates = _.where(fobject.store, {rtID: vtrs});
-                                triple = {}
-                                triple.guid = guid();
-                                triple.s = uri;
-                                triple.p = property.propertyURI;
-                                triple.o = relatedTemplates[0].s;
-                                triple.otype = "uri";
-                                fobject.store.push(triple);
-                                property.display = "false";
-                            }
-                        }
-                    }
-                }
-            });
-        });
-        
+
         // Let's create the form
         var form = $('<form>', {id: "bfeditor-form-" + fobject.id, class: "form-horizontal", role: "form"});
         var forEachFirst = true;
         fobject.resourceTemplates.forEach(function(rt) {
-            var resourcediv = $('<div>', {id: rt.guid});
+            console.log(rt);
+            var resourcediv = $('<div>', {id: rt.useguid, "data-uri": rt.defaulturi});
             rt.propertyTemplates.forEach(function(property) {
+                
+                // Each property needs to be uniquely identified, separate from
+                // the resourceTemplate.
+                var pguid = guid();
+                property.guid = pguid;
+                property.display = "true";
                 
                 var formgroup = $('<div>', {class: "form-group"});
                 var label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
@@ -471,33 +468,144 @@ define(function(require, exports, module) {
             });
             form.append(resourcediv);
         });
-        
+
+
+        // OK now we need to populate the form with data, if appropriate.
         fobject.resourceTemplates.forEach(function(rt) {
-            rt.data.forEach(function(t) {
+            if (rt.data.length === 0) {
+                // Assume a fresh form, no pre-loaded data.
+                var id = guid();
+                var uri = editorconfig.baseURI + rt.useguid;
+                if (rt.defaulturi !== undefined && rt.defaulturi !== "") {
+                    uri = rt.defaulturi;
+                }
                 var triple = {}
-                triple = t;
-                triple.guid = guid();
+                triple.guid = rt.useguid;
+                triple.rtID = rt.id;
+                triple.s = uri;
+                triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                triple.o = rt.resourceURI;
+                triple.otype = "uri";
                 fobject.store.push(triple);
-            });
+                rt.guid = rt.useguid;
+                
+                rt.propertyTemplates.forEach(function(property) {
+                    if (_.has(property, "valueConstraint")) {
+                        if (_.has(property.valueConstraint, "valueTemplateRefs")) {
+                            var vtRefs = property.valueConstraint.valueTemplateRefs;
+                            for ( var v=0; v < vtRefs.length; v++) {
+                                var vtrs = vtRefs[v];
+                                /*
+                                    The following will be true, for example, when two 
+                                    profiles are to be rendered in one form.  Say that 
+                                    this "property" is "instanceOf" and this "rt" is 
+                                    an Instance (e.g. "rt:Instance:ElectronicBook").  
+                                    Also a Work (e.g. "rt:Work:EricBook") is to be displayed.
+                                    This litle piece of code associates the Instance
+                                    with the Work in the store.
+                                    Question: if the store is pre-loaded with data,
+                                    how do we dedup at this time?
+                                */
+                                if ( fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id ) {
+                                    var relatedTemplates = _.where(fobject.store, {rtID: vtrs});
+                                    triple = {}
+                                    triple.guid = guid();
+                                    triple.s = uri;
+                                    triple.p = property.propertyURI;
+                                    triple.o = relatedTemplates[0].s;
+                                    triple.otype = "uri";
+                                    fobject.store.push(triple);
+                                    property.display = "false";
+                                }
+                            }
+                        }
+                    }
+                });                
+            } else {
+                // This will likely be insufficient - we'll need the entire 
+                // pre-loaded store in this 'first' form.
+                rt.data.forEach(function(t) {
+                    var triple = {}
+                    triple = t;
+                    triple.guid = guid();
+                    fobject.store.push(triple);
+                });
+            }
+            
+            // Populate form with pre-loaded data.
             rt.propertyTemplates.forEach(function(property) {
-                console.log(rt.data);
-                console.log(property.propertyURI);
-                var propsdata = _.where(rt.data, {"p": property.propertyURI});
+                //console.log(rt.data);
+                //console.log(property.propertyURI);
+                var propsdata = _.where(rt.data, {"s": rt.defaulturi, "p": property.propertyURI});
                 if (propsdata[0] !== undefined) {
+                    // If this property exists for this resource in the pre-loaded data
+                    // then we need to make it appear.
                     console.log(propsdata);
                     propsdata.forEach(function(pd) {
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
                         var $save = $formgroup.find(".btn-toolbar").eq(0);
                         //console.log(formgroup);
-                        
-                        displaydata = pd.s;
+                        var displaydata = "";
+                        var triples = [];
+                        if (pd.otype == "uri") {
+                            var triples = _.where(store, {"s": pd.o});
+                            displaydata = pd.o;
+                            var rtype = "";
+                            if (triples.length > 0) {
+                                triples.forEach(function(t) {
+                                    if ( rtype == "" && t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                                        rtype = t.o;
+                                    }
+                                    // if "type" matches a resourceTemplate.resourceURI && one of the property.valueConstraint.templates equals that resource template id....
+                                    var triplesResourceTemplateID = "";
+                                    if ( rtype != "" ) {
+                                        if (_.has(property, "valueConstraint")) {
+                                            if (_.has(property.valueConstraint, "valueTemplateRefs")) {
+                                                var resourceTs = _.where(resourceTemplates, {"resourceURI": rtype });
+                                                console.log("Found resourcetemplates for " + rtype);
+                                                console.log(resourceTs);
+                                                resourceTs.forEach(function(r) {
+                                                    console.log("Looking for a match with " + r.id);
+                                                    if (triplesResourceTemplateID == "" && _.indexOf(property.valueConstraint.valueTemplateRefs, r.id) !== -1) {
+                                                        console.log("Found a match in");
+                                                        console.log(property.valueConstraint.valueTemplateRefs);
+                                                        console.log("Associating " + r.id);
+                                                        triplesResourceTemplateID = r.id;
+                                                        t.rtID = r.id;
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                    //console.log("triplesResourceTemplateID is " + triplesResourceTemplateID);
+                                    fobject.store.push(t);
+                                
+                                    if (t.p.match(/label/i)) {
+                                        displaydata = t.o;
+                                    }
+                                });
+                                console.log(pd.o);
+                                console.log("triples are");
+                                console.log(triples);
+                            } else {
+                                // It is a URI, but there is no data for it.
+                                triples.push(pd);
+                                console.log("count of triples is " + triples.length);
+                                console.log(triples);
+                            }
+                        } else {
+                            displaydata = pd.o;
+                        }
+                        if (displaydata == "") {
+                            displaydata = pd.s;
+                        }
                         var bgvars = { 
                             "tguid": pd.guid, 
                             "tlabelhover": displaydata,
                             "tlabel": displaydata,
                             "fobjectid": fobject.id,
-                            "inputid": pd.id,
-                            "triples": propsdata
+                            "inputid": pd.guid,
+                            "triples": triples
                         };
                         var $buttongroup = editDeleteButtonGroup(bgvars);
                         
@@ -517,6 +625,7 @@ define(function(require, exports, module) {
                     });
                 
                 } else if (_.has(property, "valueConstraint")) {
+                    // Otherwise do we have a default value?
                     if (_.has(property.valueConstraint, "defaultURI")) {
                         var data = property.valueConstraint.defaultURI;
                         // set the triple
@@ -604,8 +713,13 @@ define(function(require, exports, module) {
             useguid = ts[0].o.substr(ts[0].o.lastIndexOf('/') + 1);
             console.log(useguid);
         }
-        currentModal++;
-        var form = getForm([template.id], useguid);
+        
+        var form = getForm([{
+            id: useguid,
+            rtID: template.id,
+            defaulturi: triples[0].s,
+            data: triples
+        }]);
         
         // Modals
         var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
@@ -651,100 +765,6 @@ define(function(require, exports, module) {
         $( ".typeahead", form.form ).each(function() {
             setTypeahead(this);
         });
-        
-        var formobject = form.formobject;
-        triples.forEach(function(t){
-                        //var tguid = guid();
-                        //t.guid = tguid;
-                        formobject.store.push(t);
-                        //console.log("iteration: " + c);
-                        //console.log(formobject.store);
-                        /*
-                        Can't think of why I wouldn't always want the object,
-                        at least presently, before lunch.
-                        tlabel = "";
-                        if (t.p.match(/label|authorizedAccess/i)) { 
-                            tlabel = t.o;
-                        }
-                        */
-                        var tlabel = t.o;
-                        //console.log(tlabel);
-
-                        formobject.resourceTemplates.forEach(function(rt) {
-                            var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
-                            //console.log(properties);
-                            if ( properties[0] !== undefined ) {
-                                var property = properties[0];
-                                var pguid = property.guid;
-                        
-                                var formgroup = $("#" + pguid, formobject.form).closest(".form-group");
-                                var save = $(formgroup).find(".btn-toolbar")[0];
-                    
-                                var buttongroup = $('<div>', {id: t.guid, class: "btn-group btn-group-xs"});
-                                if ( tlabel !== "" ) {
-                                    if (tlabel.length > 10) {
-                                        display = tlabel.substr(0,10) + "...";
-                                    } else {
-                                        display = tlabel;
-                                    }
-                                } else {
-                                    display = t.s.substr(0,10) + "...";
-                                }
-                                //console.log(display);
-                                //console.log(pguid);
-                                /*
-                                var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
-                                var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                                $(delbutton).click(function(){
-                                    removeTriples(formobject.id, pguid, returntriples);
-                                });
-                            
-                                buttongroup.append(displaybutton);
-                                buttongroup.append(delbutton);
-                                */
-                                var $displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
-                                buttongroup.append($displaybutton);
-                    
-                                var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
-                                $editbutton.click(function(){
-                                    editTriples(formobject.id, pguid, returntriples);
-                                });
-                                buttongroup.append($editbutton);
-                                var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                                $delbutton.click(function(){
-                                    removeTriples(formobject.id, pguid, returntriples);
-                                });
-                                buttongroup.append($delbutton);
-                            
-                                $(save).append(buttongroup);
-                    
-                                $("#" + pguid, formobject.form).val("");
-                                $("#" + pguid, formobject.form).typeahead('val', "");
-                                $("#" + pguid, formobject.form).typeahead('close');
-                    
-                                    //console.log(triples);
-                    
-                                //if (property.repeatable !== undefined && property.repeatable == "false") {
-                                //    $("#" + pguid, formobject.form).attr("disabled", true);
-                                //}
-                                if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                                    console.log("prop is not repeatable");
-                                    var $el = $("#" + pguid, formobject.form)
-                                    if ($el.is("input")) {
-                                        $el.prop("disabled", true);
-                                        $el.css( "background-color", "#EEEEEE" );
-                                    } else {
-                                        //console.log(property.propertyLabel);
-                                        var $buttons = $("div.btn-group", $el).find("button");
-                                        $buttons.each(function() {
-                                            $( this ).prop("disabled", true);
-                                       });
-                                    }
-                                }
-                                
-                            }
-                        });
-                    });
                     
         $("#bfeditor-debug").html(JSON.stringify(form.formobject.store, undefined, " "));
     }
@@ -852,12 +872,12 @@ define(function(require, exports, module) {
         
         var $buttongroup = $('<div>', {id: bgvars.tguid, class: "btn-group btn-group-xs"});
         
-        if (bgvars.tlabel.length > 10) {
-            display = bgvars.tlabel.substr(0,10) + "...";
+        if (bgvars.tlabel.length > 15) {
+            display = bgvars.tlabel.substr(0,15) + "...";
         } else {
             display = bgvars.tlabel;
         }
-        var $displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
+        var $displaybutton = $('<button type="button" class="btn btn-default" title="' + bgvars.tlabelhover + '">' + display +'</button>');
         $buttongroup.append($displaybutton);
         
         var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
@@ -1151,46 +1171,27 @@ define(function(require, exports, module) {
                                 var property = properties[0];
                                 var pguid = property.guid;
                         
-                                var formgroup = $("#" + pguid, formobject.form).closest(".form-group");
-                                var save = $(formgroup).find(".btn-toolbar")[0];
-                    
-                                var buttongroup = $('<div>', {id: t.guid, class: "btn-group btn-group-xs"});
-                                if ( tlabel !== "" ) {
-                                    if (tlabel.length > 10) {
-                                        display = tlabel.substr(0,10) + "...";
-                                    } else {
-                                        display = tlabel;
-                                    }
-                                } else {
-                                    display = t.s.substr(0,10) + "...";
+                                var $formgroup = $("#" + pguid, formobject.form).closest(".form-group");
+                                var save = $formgroup.find(".btn-toolbar")[0];
+                                
+                                displaytriple = _.find(returntriples, function(label) {
+                                    return label.p.match(/label/i);
+                                });
+                                if (displaytriple !== undefined && displaytriple.o !== undefined) {
+                                    tlabel = displaytriple;
                                 }
-                                //console.log(display);
-                                //console.log(pguid);
-                                /*
-                                var displaybutton = $('<button type="button" class="btn btn-default" title="' + tlabel + '">' + display +'</button>');
-                                var delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                                $(delbutton).click(function(){
-                                    removeTriples(formobject.id, pguid, returntriples);
-                                });
+                                
+                                var bgvars = { 
+                                    "tguid": t.guid, 
+                                    "tlabel": tlabel,
+                                    "tlabelhover": tlabel,
+                                    "fobjectid": formobject.id,
+                                    "inputid": pguid,
+                                    "triples": returntriples
+                                };
+                                var $buttongroup = editDeleteButtonGroup(bgvars);
                             
-                                buttongroup.append(displaybutton);
-                                buttongroup.append(delbutton);
-                                */
-                                var $displaybutton = $('<button type="button" class="btn btn-default">' + display +'</button>');
-                                buttongroup.append($displaybutton);
-                    
-                                var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
-                                $editbutton.click(function(){
-                                    editTriples(formobject.id, pguid, returntriples);
-                                });
-                                buttongroup.append($editbutton);
-                                var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-                                $delbutton.click(function(){
-                                    removeTriples(formobject.id, pguid, returntriples);
-                                });
-                                buttongroup.append($delbutton);
-                            
-                                $(save).append(buttongroup);
+                                $(save).append($buttongroup);
                     
                                 $("#" + pguid, formobject.form).val("");
                                 $("#" + pguid, formobject.form).typeahead('val', "");
@@ -1259,6 +1260,7 @@ define(function(require, exports, module) {
     }
     
     function editTriples(formobjectID, inputID, triples) {
+        console.log('editTriples called');
         triples.forEach(function(triple) {
             // console.log(triple);
             editTriple(formobjectID, inputID, triple);
