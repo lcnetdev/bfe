@@ -129,8 +129,18 @@
                 "load": [
                     {
                         "templateID": "rda:Work:Literature",
-                        "defaulturi": "http://id.loc.gov/ml38281/resources/bibs/5226",
-                        "data": "UNUSED, BUT REMEMBER IT"
+                        "defaulturi": "http://id.loc.gov/resources/bibs/5226",
+                        "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
+                        "source": {
+                            "location-safe": "http://id.loc.gov/ml38281/resources/bibs/5226.bibframe_raw.jsonp",
+                            "location": "/static/examples/5226-test.json",
+                            "requestType": "json",
+                            "data": "UNUSED, BUT REMEMBER IT"
+                        }
+                    },
+                    {
+                        "templateID": "rda:Instance:Book",
+                        "defaulturi": "_:b105resourcesbibs5226"
                     }
                 ]
                 
