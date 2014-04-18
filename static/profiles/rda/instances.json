@@ -56,7 +56,7 @@
 					{
 						"propertyURI": "http://bibframe.org/vocab/edition",
 						"propertyLabel": "Edition Statement",
-						"type": "literal"
+						"type": "resource"
 					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/editionResponsibility",
