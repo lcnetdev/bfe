@@ -111,58 +111,33 @@ define(function(require, exports, module) {
             url: u,
             dataType: "jsonp",
             success: function (data) {
-                for (var s in data) {
-                    console.log(s);
-                    for (var p in data[s]) {
-                        console.log(p);
-                        data[s][p].forEach(function (o) {
-                            console.log(p);
-                            if ( 
-                                s == primaryuri &&
-                                p != "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" &&
-                                p != "<http://bibframe.org/vocab/instanceOf>"
-                            )   {
-                                    triple = {};
-                                    triple.s = subjecturi
-                                    triple.p = p.replace(/<|>/g, "");
-                                    triple.o = o.value;
-                                    if (typeof o.type != undefined) {
-                                        if (o.type == "literal") {
-                                            triple.otype = "literal";
-                                            if (typeof o.lang != undefined) {
-                                                triple.olang = o.lang;
-                                            }
-                                        } else if (o.type == "uri") {
-                                            triple.otype = "uri";
-                                        } else if (o.type == "bnode") {
-                                            triple.otype = "uri";
-                                        }
-                                    }
-                                    //nsole.log(triple);
-                                    triples.push(triple);
-                            } else if (s != primaryuri) {
-                                triple = {};
-                                triple.s = s.replace(/<|>/g, "");
-                                triple.p = p.replace(/<|>/g, "");
-                                triple.o = o.value;
-                                if (typeof o.type != undefined) {
-                                    if (o.type == "literal") {
+                data.forEach(function(resource){
+                    var s = resource["@id"];
+                    for (var p in resource) {
+                        if (p !== "@id") {
+                            resource[p].forEach(function(o) {
+                                //if ( s !== selected.uri && p !== "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                                    var triple = {};
+                                    triple.s = s;
+                                    triple.p = p;
+                                    if (o["@id"] !== undefined) {
+                                        triple.o = o["@id"];
+                                        triple.otype = "uri";
+                                    } else if (o["@value"] !== undefined) {
+                                        triple.o = o["@value"];
                                         triple.otype = "literal";
-                                        if (typeof o.lang != undefined) {
-                                            triple.olang = o.lang;
+                                        if (o["@language"] !== undefined) {
+                                            triple.olang = o["@language"];
                                         }
-                                    } else if (o.type == "uri") {
-                                        triple.otype = "uri";
-                                    } else if (o.type == "bnode") {
-                                        triple.otype = "uri";
                                     }
-                                }
-                                triples.push(triple);
-                            }
-                        });
+                                    triples.push(triple);
+                                //}
+                            });
+                        }
                     }
-                }
-            process(triples);
+                });
+                console.log(triples);
+                process(triples);
             }
         });
     }
