@@ -29,8 +29,8 @@ define(function(require, exports, module) {
     var currentModal = 0;
     
     var loadtemplates = [];
-    var loadtemplatesCount = 0;
-    var loadtemplatesCounter = 0;
+    var loadtemplatesANDlookupsCount = 0;
+    var loadtemplatesANDlookupsCounter = 0;
     
     var lookupstore = [];
     var lookupcache = [];
@@ -60,6 +60,7 @@ define(function(require, exports, module) {
             });
         }
         
+        loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.lookups.length;
         for (var i=0; i < config.lookups.length; i++) {
             var lu = config.lookups[i];
             console.log("Loading " + lu.load);
@@ -125,14 +126,14 @@ define(function(require, exports, module) {
         debugpre.html(JSON.stringify(profiles, undefined, " "));
         
         if (config.load !== undefined) {
-            loadtemplatesCount = config.load.length;
+            loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.load.length;
             config.load.forEach(function(l){
                     var useguid = guid();
                     var loadtemplate = {};
                     var tempstore = [];
-                    loadtemplate.id = useguid;
-                    loadtemplate.rtID = l.templateID;
-                    loadtemplate.defaulturi = l.defaulturi;
+                    loadtemplate.templateGUID = useguid;
+                    loadtemplate.resourceTemplateID = l.templateID;
+                    loadtemplate.resourceURI = l.defaulturi;
                     loadtemplate.data = tempstore;
                     loadtemplates.push(loadtemplate);
                 if (l.source !== undefined && l.source.location !== undefined && l.source.requestType !== undefined) {
@@ -148,11 +149,11 @@ define(function(require, exports, module) {
                                 So, will parse the JSONLD myself, dagnabbit. 
                                 NOTE: it totally expects JSONLD expanded form.
                             */
-                            data.forEach(function(t){
-                                var s = typeof t["@id"] !== 'undefined' ? t["@id"] : '_:b' + guid();
-                                for (var p in t) {
+                            data.forEach(function(resource){
+                                var s = typeof resource["@id"] !== 'undefined' ? resource["@id"] : '_:b' + guid();
+                                for (var p in resource) {
                                     if (p !== "@id") {
-                                        t[p].forEach(function(o) {
+                                        resource[p].forEach(function(o) {
                                             var tguid = guid();
                                             var triple = {};
                                             triple.guid = tguid;
@@ -176,6 +177,7 @@ define(function(require, exports, module) {
                                         });
                                     }
                                 }
+                                // If a resource does not have a defined type, do we care?
                             });
                             loadtemplate.data = tempstore;
                             console.log("finished query store");
@@ -254,16 +256,18 @@ define(function(require, exports, module) {
                 }
             }
         }
+        //loadtemplatesANDlookupsCounter++;
+        cbLoadTemplates();
     }
     
     function cbLoadTemplates() {
-        loadtemplatesCounter++;
-        if (loadtemplatesCount == loadtemplatesCounter) {
+        loadtemplatesANDlookupsCounter++;
+        if (loadtemplatesANDlookupsCounter >= loadtemplatesANDlookupsCount) {
             console.log("Got here");
-            form = getForm(loadtemplates);
+            var form = getForm(loadtemplates);
             $( ".typeahead", form.form ).each(function() {
                 setTypeahead(this);
-                });
+            });
             $("#bfeditor-formdiv").html("");
             $("#bfeditor-formdiv").append(form.form);
             $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
@@ -272,25 +276,33 @@ define(function(require, exports, module) {
     
     function menuSelect (spid) {
         //store = new rdfstore.Store();
-        store = [];
         spnums = spid.replace('sp-', '').split("_");
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
-        var useguid = guid();
-        form = getForm(spoints.useResourceTemplates, useguid);
-        $( ".typeahead", form.form ).each(function() {
-            setTypeahead(this);
+        
+        bfestore = [];
+        loadtemplatesCounter = 0;
+        loadtemplatesCount = spoints.useResourceTemplates.length;
+        loadtemplates = [];
+
+        spoints.useResourceTemplates.forEach(function(l){
+            var useguid = guid();
+            var loadtemplate = {};
+            var tempstore = [];
+            loadtemplate.templateGUID = useguid;
+            loadtemplate.resourceTemplateID = l;
+            loadtemplate.resourceURI = editorconfig.baseURI + useguid;
+            loadtemplate.data = tempstore;
+            loadtemplates.push(loadtemplate);
+            cbLoadTemplates();
         });
-        $("#bfeditor-formdiv").html("");
-        $("#bfeditor-formdiv").append(form.form);
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
     }
     
     /*
     loadTemplates is an array of objects, each with this structure:
         {
-            id=guid,
-            rtID=resourceTemplateID,
-            defaulturi="",
+            templateguid=guid,
+            resourceTemplateID=resourceTemplateID,
+            resourceuri="",
             data=bfestore
         }
     */
@@ -311,13 +323,13 @@ define(function(require, exports, module) {
         // Load up the requested templates, add seed data.
         for (var urt=0; urt < loadTemplates.length; urt++) {
             //console.log(loadTemplates[urt]);
-            var rt = _.where(resourceTemplates, {"id": loadTemplates[urt].rtID})
+            var rt = _.where(resourceTemplates, {"id": loadTemplates[urt].resourceTemplateID})
             if ( rt !== undefined && rt[0] !== undefined) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
                 //console.log(loadTemplates[urt].data);
                 fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
-                fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].defaulturi;
-                fobject.resourceTemplates[urt].useguid = loadTemplates[urt].id;
+                fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
+                fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             } else {
                 console.log("WARNING: Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.");
@@ -404,9 +416,10 @@ define(function(require, exports, module) {
                                         console.log("form id: " + fobject.id);
                                         console.log("Other edition id: " + property.guid);
                                     }
-                                    $(b).click({fobjectid: fid, rtguid: rtid, propertyguid: pid, template: vt}, function(event){
+                                    var newResourceURI = editorconfig.baseURI + guid();
+                                    $(b).click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
                                         //console.log(event.data.template);
-                                        openModal(event.data.fobjectid, event.data.rtguid, event.data.propertyguid, event.data.template, []);
+                                        openModal(event.data.fobjectid, event.data.template, event.data.newResourceURI, event.data.propertyguid, []);
                                     });
                                     buttongrp.append(b);
                                 }
@@ -542,6 +555,18 @@ define(function(require, exports, module) {
                     }
                     fobject.store.push(triple);
                 });
+                /*
+                var types = _.where(rt.data, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
+                if (typeof types[0] === undefined) {
+                    var triple = {};
+                    triple.guid = guid();
+                    triple.s = rt.defaulturi;
+                    triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                    triple.o = rt.resourceURI;
+                    triple.otype = "uri";
+                    fobject.store.push(triple);
+                }
+                */
             }
             
             // Populate form with pre-loaded data.
@@ -553,16 +578,18 @@ define(function(require, exports, module) {
                 if (propsdata[0] !== undefined) {
                     // If this property exists for this resource in the pre-loaded data
                     // then we need to make it appear.
-                    console.log(propsdata);
+                    //console.log(propsdata);
                     propsdata.forEach(function(pd) {
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
                         var $save = $formgroup.find(".btn-toolbar").eq(0);
                         //console.log(formgroup);
                         var displaydata = "";
                         var triples = [];
+                        //console.log("pd.otype is " + pd.otype);
                         if (pd.otype == "uri") {
                             var triples = _.where(bfestore, {"s": pd.o});
                             displaydata = pd.o;
+                            //console.log("displaydata is " + displaydata);
                             var rtype = "";
                             if (triples.length > 0) {
                                 triples.forEach(function(t) {
@@ -575,14 +602,14 @@ define(function(require, exports, module) {
                                         if (_.has(property, "valueConstraint")) {
                                             if (_.has(property.valueConstraint, "valueTemplateRefs")) {
                                                 var resourceTs = _.where(resourceTemplates, {"resourceURI": rtype });
-                                                console.log("Found resourcetemplates for " + rtype);
-                                                console.log(resourceTs);
+                                                //console.log("Found resourcetemplates for " + rtype);
+                                                //console.log(resourceTs);
                                                 resourceTs.forEach(function(r) {
-                                                    console.log("Looking for a match with " + r.id);
+                                                    //console.log("Looking for a match with " + r.id);
                                                     if (triplesResourceTemplateID == "" && _.indexOf(property.valueConstraint.valueTemplateRefs, r.id) !== -1) {
-                                                        console.log("Found a match in");
-                                                        console.log(property.valueConstraint.valueTemplateRefs);
-                                                        console.log("Associating " + r.id);
+                                                        //console.log("Found a match in");
+                                                        //console.log(property.valueConstraint.valueTemplateRefs);
+                                                        //console.log("Associating " + r.id);
                                                         triplesResourceTemplateID = r.id;
                                                         t.rtID = r.id;
                                                     }
@@ -599,11 +626,6 @@ define(function(require, exports, module) {
                                 });
                                 console.log(pd.o);
                                 console.log("triples are");
-                                console.log(triples);
-                            } else {
-                                // It is a URI, but there is no data for it.
-                                triples.push(pd);
-                                console.log("count of triples is " + triples.length);
                                 console.log(triples);
                             }
                         } else {
@@ -639,7 +661,8 @@ define(function(require, exports, module) {
                     });
                 
                 } else if (_.has(property, "valueConstraint")) {
-                    // Otherwise do we have a default value?
+                    // Otherwise - if the property is not found in the pre-loaded data
+                    // then do we have a default value?
                     if (_.has(property.valueConstraint, "defaultURI")) {
                         var data = property.valueConstraint.defaultURI;
                         // set the triple
@@ -711,10 +734,15 @@ define(function(require, exports, module) {
         return { formobject: fobject, form: form };
     }
     
-    function openModal(callingformobjectid, rtguid, propertyguid, template, triples) {
+    // callingformobjectid is as described
+    // loadtemplate is the template objet to load.
+    // resourceURI is the resourceURI to assign or to edit
+    // inputID is the ID of hte DOM element within the loadtemplate form
+    // triples is the base data.
+    function openModal(callingformobjectid, loadtemplate, resourceURI, inputID, triples) {
         
-        console.log("rtguid is : " + rtguid);
-        console.log("propertyguid when opening modal: " + propertyguid);
+        console.log("resourceURI is : " + resourceURI);
+        console.log("inputID of DOM element / property when opening modal: " + inputID);
         console.log("callingformobjectid when opening modal: " + callingformobjectid);
         
         /*
@@ -727,18 +755,41 @@ define(function(require, exports, module) {
         console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
         */
         var useguid = guid();
-        var ts = _.where(triples, {s: rtguid});
-        if ( ts[0] !== undefined ) {
-            useguid = ts[0].o.substr(ts[0].o.lastIndexOf('/') + 1);
-            console.log(useguid);
+        var triplespassed = [];
+        if (triples.length === 0) {
+            // This is a fresh Modal, so we need to seed the data.
+            // This happens when one is *not* editing data; it is fresh.
+            var callingformobject = _.where(forms, {"id": callingformobjectid});
+            callingformobject = callingformobject[0];
+            callingformobject.resourceTemplates.forEach(function(t) {
+                var properties = _.where(t.propertyTemplates, {"guid": inputID})
+                if ( properties[0] !== undefined ) {
+                    var triplepassed = {};
+                    triplepassed.s = t.defaulturi;
+                    triplepassed.p = properties[0].propertyURI; //instanceOF
+                    triplepassed.o = resourceURI;
+                    triplepassed.otype = "uri";
+                    triplespassed.push(triplepassed);
+                    
+                    triplepassed = {};
+                    triplepassed.s = resourceURI;
+                    triplepassed.rtID = loadtemplate.id;
+                    triplepassed.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"; //rdf:type
+                    triplepassed.o = loadtemplate.resourceURI;
+                    triplepassed.otype = "uri";
+                    triplespassed.push(triplepassed);
+                }
+            });
+        } else {
+            // Just pass the triples on....
+            triplespassed = triples;
         }
-        
-        console.log("s is " + triples[0].s);
+        console.log(triplespassed);
         var form = getForm([{
-            id: useguid,
-            rtID: template.id,
-            defaulturi: triples[0].s,
-            data: triples
+            templateGUID: useguid,
+            resourceTemplateID: loadtemplate.id,
+            resourceURI: resourceURI,
+            data: triplespassed
         }]);
         
         // Modals
@@ -769,26 +820,26 @@ define(function(require, exports, module) {
         //var m = $('#bfeditor-modal-' + currentModal);
         //$('#bfeditor-modalbody-' + form.formobject.id).empty();
         $('#bfeditor-modalbody-' + form.formobject.id).append(form.form);
-        $('#bfeditor-modaltitle-' + form.formobject.id).html(template.resourceLabel);
+        $('#bfeditor-modaltitle-' + form.formobject.id).html(loadtemplate.resourceLabel);
             
         $('#bfeditor-modal-' + form.formobject.id).modal('show');
         $('#bfeditor-modalSave-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
                 // console.log(triple);
-                removeTriple(callingformobjectid, propertyguid, triple);
+                removeTriple(callingformobjectid, inputID, triple);
             });
             console.log(form.formobject.store);
             console.log("calling setresourcefrommodal");
-            setResourceFromModal(callingformobjectid, form.formobject.id, rtguid, propertyguid, form.formobject.store);
+            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
         });
         $('#bfeditor-modalSaveLookup-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
                 // console.log(triple);
-                removeTriple(callingformobjectid, propertyguid, triple);
+                removeTriple(callingformobjectid, inputID, triple);
             });
             console.log(form.formobject.store);
             console.log("calling setresourcefrommodal");
-            setResourceFromModal(callingformobjectid, form.formobject.id, rtguid, propertyguid, form.formobject.store);
+            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
         });
         $('#bfeditor-modal-' + form.formobject.id).on("hide.bs.modal", function(e) {
             $(this).empty();
@@ -821,6 +872,7 @@ define(function(require, exports, module) {
         callingformobject.resourceTemplates.forEach(function(t) {
             var properties = _.where(t.propertyTemplates, {"guid": propertyguid})
             if ( properties[0] !== undefined ) {
+                //console.log(properties[0].propertyURI);
                 //triple.p = properties[0].propertyURI;
                 //triple.o = data[0].s;
                 //triple.otype = "uri";
@@ -849,12 +901,13 @@ define(function(require, exports, module) {
                 
                 console.log(properties[0].propertyURI);
                 //console.log(data);
-                tlabel = _.find(data, function(t){ if (t.p.match(/label|authorizedAccess/i)) return t.o; });
+                tlabel = _.find(data, function(t){ if (t.p.match(/label|authorizedAccess|title/i)) return t.o; });
                 displaydata = data[0].s;
                 if ( tlabel !== undefined) {
                     displaydata = tlabel.o;
                 }
                 
+                console.log(data);
                 var connector = _.where(data, {"p": properties[0].propertyURI})
                 var bgvars = { 
                         "tguid": connector[0].guid, 
@@ -1029,29 +1082,30 @@ define(function(require, exports, module) {
         var form = $(input).closest("form").eq(0);
         var formid = $(input).closest("form").eq(0).attr("id");
         formid = formid.replace('bfeditor-form-', '');
-            var formobject = _.where(forms, {"id": formid});
-            formobject = formobject[0];
-            //console.log(formid);
+        var formobject = _.where(forms, {"id": formid});
+        formobject = formobject[0];
+        //console.log(formid);
             
-            var pguid = $(input).attr("data-propertyguid");
-            var p;
-            formobject.resourceTemplates.forEach(function(t) {
-                var properties = _.where(t.propertyTemplates, {"guid": pguid});
-                //console.log(properties);
-                if ( properties[0] !== undefined ) {
-                    p = properties[0];
-                }
-            });
-            var uvf = p.valueConstraint.useValuesFrom[0];
-            console.log("uvf is " + uvf);
-            console.log(lookups);
-            var lups = _.where(lookups, {"scheme": uvf});
-            var lu;
-            if ( lups[0] !== undefined ) {
-                console.log(lups[0].scheme);
-                lu = lups[0].load;
-                console.log(lu);
+        var pguid = $(input).attr("data-propertyguid");
+        var p;
+        formobject.resourceTemplates.forEach(function(t) {
+            var properties = _.where(t.propertyTemplates, {"guid": pguid});
+            //console.log(properties);
+            if ( properties[0] !== undefined ) {
+                p = properties[0];
             }
+        });
+        var uvf = p.valueConstraint.useValuesFrom[0];
+        console.log("uvf is " + uvf);
+        console.log(lookups);
+        var lups = _.where(lookups, {"scheme": uvf});
+        console.log(lups);
+        var lu;
+        if ( lups[0] !== undefined ) {
+            console.log(lups[0].scheme);
+            lu = lups[0].load;
+            console.log(lu);
+        }
             
             //$( input ).css("z-index", 3000);
             var uvfs = p.valueConstraint.useValuesFrom;
@@ -1079,7 +1133,7 @@ define(function(require, exports, module) {
             });
             console.log(dshashes);
             var opts = {
-                minLength: 3,
+                minLength: 1,
                 highlight: true,
                 displayKey: 'value'
             };
@@ -1136,6 +1190,8 @@ define(function(require, exports, module) {
                 var formid = $("#" + event.target.id).closest("form").eq(0).attr("id");
                 formid = formid.replace('bfeditor-form-', '');
                 var resourceid = $(form).children("div").eq(0).attr("id");
+                var resourceURI = $(form).find("div[data-uri]").eq(0).attr("data-uri");
+                
                 var propertyguid = $("#" + event.target.id).attr("data-propertyguid");
                 console.log("propertyguid is " + propertyguid);
                 
@@ -1158,83 +1214,82 @@ define(function(require, exports, module) {
                     lu = lups[0].load;
                     console.log(lu);
                 }
-                lu.getResource(s, p.propertyURI, suggestionobject, function(returntriples) {
+                lu.getResource(resourceURI, p.propertyURI, suggestionobject, function(returntriples) {
                     console.log(returntriples);
-                    var c = 1;
                     returntriples.forEach(function(t){
-                        var tguid = guid();
-                        t.guid = tguid;
-                        formobject.store.push(t);
-                        //console.log("iteration: " + c);
-                        //console.log(formobject.store);
-                        c++;
-                        /*
-                        Can't think of why I wouldn't always want the object,
-                        at least presently, before lunch.
-                        tlabel = "";
-                        if (t.p.match(/label|authorizedAccess/i)) { 
-                            tlabel = t.o;
+                        if (t.guid === undefined) {
+                            var tguid = guid();
+                            t.guid = tguid;
                         }
-                        */
-                        var tlabel = t.o;
-                        //console.log(tlabel);
+                        formobject.store.push(t);
+                        bfestore.push(t);
 
-                        formobject.resourceTemplates.forEach(function(rt) {
-                            var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
-                            //console.log(properties);
-                            if ( properties[0] !== undefined ) {
-                                var property = properties[0];
-                                var pguid = property.guid;
+                        // We only want to show those properties that relate to
+                        // *this* resource.
+                        if (t.s == resourceURI) {
+                            formobject.resourceTemplates.forEach(function(rt) {
+                                var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
+                                //console.log(properties);
+                                if ( properties[0] !== undefined ) {
+                                    var property = properties[0];
+                                    var pguid = property.guid;
                         
-                                var $formgroup = $("#" + pguid, formobject.form).closest(".form-group");
-                                var save = $formgroup.find(".btn-toolbar")[0];
+                                    var $formgroup = $("#" + pguid, formobject.form).closest(".form-group");
+                                    var save = $formgroup.find(".btn-toolbar")[0];
                                 
-                                displaytriple = _.find(returntriples, function(label) {
-                                    return label.p.match(/label/i);
-                                });
-                                if (displaytriple !== undefined && displaytriple.o !== undefined) {
-                                    tlabel = displaytriple;
-                                }
+                                    var tlabel = t.o;
+                                    if (t.otype == "uri") {
+                                        var resourcedata = _.where(returntriples, {"s": t.o});
+                                        var displaytriple = _.find(resourcedata, function(label) {
+                                            return label.p.match(/label|title/i);
+                                        });
+                                        if (displaytriple !== undefined && displaytriple.o !== undefined) {
+                                            tlabel = displaytriple.o;
+                                        }
+                                    }
                                 
-                                var bgvars = { 
-                                    "tguid": t.guid, 
-                                    "tlabel": tlabel,
-                                    "tlabelhover": tlabel,
-                                    "fobjectid": formobject.id,
-                                    "inputid": pguid,
-                                    "triples": returntriples
-                                };
-                                var $buttongroup = editDeleteButtonGroup(bgvars);
+                                    var setTriples = [t];
+                                    if (resourcedata !== undefined && resourcedata[0] !== undefined) {
+                                        setTriples = resourcedata;
+                                    }
+
+                                    var bgvars = { 
+                                        "tguid": t.guid, 
+                                        "tlabel": tlabel,
+                                        "tlabelhover": tlabel,
+                                        "fobjectid": formobject.id,
+                                        "inputid": pguid,
+                                        "triples": setTriples
+                                    };
+                                    var $buttongroup = editDeleteButtonGroup(bgvars);
                             
-                                $(save).append($buttongroup);
+                                    $(save).append($buttongroup);
                     
-                                $("#" + pguid, formobject.form).val("");
-                                $("#" + pguid, formobject.form).typeahead('val', "");
-                                $("#" + pguid, formobject.form).typeahead('close');
+                                    $("#" + pguid, formobject.form).val("");
+                                    $("#" + pguid, formobject.form).typeahead('val', "");
+                                    $("#" + pguid, formobject.form).typeahead('close');
                     
                                     //console.log(triples);
                     
-                                //if (property.repeatable !== undefined && property.repeatable == "false") {
-                                //    $("#" + pguid, formobject.form).attr("disabled", true);
-                                //}
-                                if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                                    console.log("prop is not repeatable");
-                                    var $el = $("#" + pguid, formobject.form)
-                                    if ($el.is("input")) {
-                                        $el.prop("disabled", true);
-                                        $el.css( "background-color", "#EEEEEE" );
-                                    } else {
-                                        //console.log(property.propertyLabel);
-                                        var $buttons = $("div.btn-group", $el).find("button");
-                                        $buttons.each(function() {
-                                            $( this ).prop("disabled", true);
-                                       });
+                                    if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                                        console.log("prop is not repeatable");
+                                        var $el = $("#" + pguid, formobject.form)
+                                        if ($el.is("input")) {
+                                            $el.prop("disabled", true);
+                                            $el.css( "background-color", "#EEEEEE" );
+                                        } else {
+                                            //console.log(property.propertyLabel);
+                                            var $buttons = $("div.btn-group", $el).find("button");
+                                            $buttons.each(function() {
+                                                $( this ).prop("disabled", true);
+                                           });
+                                        }
                                     }
                                 }
-                                
-                            }
-                        });
+                            });
+                        }
                     });
+                    storeDeDup();
                     $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
                     console.log(formobject.store);
                 });
@@ -1279,17 +1334,18 @@ define(function(require, exports, module) {
     function editTriples(formobjectID, inputID, triples) {
         console.log('editTriples called');
         var resourceTypes = _.where(triples, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
-        if (typeof resourceTypes !== undefined && resourceTypes[0].rtID !== undefined) {
+        console.log(resourceTypes);
+        if (typeof resourceTypes[0] !== undefined && resourceTypes[0].rtID !== undefined) {
             // function openModal(callingformobjectid, rtguid, propertyguid, template) {
             var callingformobject = _.where(forms, {"id": formobjectID});
             callingformobject = callingformobject[0];
             
             var templates = _.where(resourceTemplates, {"id": resourceTypes[0].rtID});
             if (templates[0] !== undefined) {
-                // in theory, the first triple in a form's store should be the URI for the origin resource.
+                // The subject of the resource matched with the "type"
                 console.log("Opening modal");
                 console.log(triples);
-                openModal(callingformobject.id, callingformobject.store[0].guid, inputID, templates[0], triples);
+                openModal(callingformobject.id, templates[0], resourceTypes[0].s, inputID, triples);
             }
         }
         
@@ -1332,6 +1388,18 @@ define(function(require, exports, module) {
         triples.forEach(function(triple) {
             // console.log(triple);
             removeTriple(formobjectID, inputID, triple);
+        });
+    }
+    
+    function storeDeDup() {
+        bfestore = _.uniq(bfestore, function(t) { 
+            if (t.olang !== undefined) {
+                return t.s + t.p + t.o + t.otype + t.olang
+            } else if (t.odatatype !== undefined) {
+                return t.s + t.p + t.o + t.otype + t.odatatype
+            } else {
+                return t.s + t.p + t.o + t.otype
+            }
         });
     }
     
