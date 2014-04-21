@@ -17,7 +17,7 @@
 					    }
 					},
 					{
-						"propertyURI": "http://bibframe.org/vocab/isInstanceOf",
+						"propertyURI": "http://bibframe.org/vocab/instanceOf",
 						"propertyLabel": "Is Instance Of Work",
 						"repeatable": "true",
 						"type": "resource",
