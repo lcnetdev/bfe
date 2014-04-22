@@ -53,7 +53,7 @@
 					    "propertyLabel": "Lookup",
 					    "type": "resource",
 					    "valueConstraint": {
-					        "useValuesFrom": ["http://id.loc.gov/authorities/subjects"]
+					        "useValuesFrom": ["http://id.loc.gov/authorities/genreForms", "http://id.loc.gov/authorities/subjects"]
 					    }
 					},
 					{

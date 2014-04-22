@@ -73,7 +73,7 @@
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
     						"defaultLiteral": "text",
     						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
-                            }
+                        }
 					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/proposed/creationDate",

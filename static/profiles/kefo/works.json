@@ -27,6 +27,15 @@
 						"type": "literal"
 					},
 					{
+						"propertyURI": "http://bibframe.org/vocab/creator",
+						"propertyLabel": "Creator",
+						"type": "resource",
+						"repeatable": "true",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
+                            }
+					},
+					{
 						"propertyURI": "http://id.loc.gov/vocabulary/relators/aut",
 						"propertyLabel": "Author",
 						"type": "resource",
@@ -53,12 +62,22 @@
     						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
                             }
 					},
+                    {
+						"propertyURI": "http://bibframe.org/vocab/contributor",
+						"propertyLabel": "Contributor",
+						"type": "resource",
+						"repeatable": "true",
+						"valueConstraint": {
+    						"valueTemplateRefs": [ "rt:kefo:Agent:Person", "rt:kefo:Agent:Organization" ]
+                            }
+					},
 					{
 						"propertyURI": "http://bibframe.org/vocab/contentCategory",
 						"propertyLabel": "Content Category",
 						"type": "resource",
 						"valueConstraint": {
     						"editable": "false",
+    						"repeatable": "false",
     						"defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
     						"defaultLiteral": "text",
     						"useValuesFrom": ["http://id.loc.gov/vocabulary/contentTypes"]
