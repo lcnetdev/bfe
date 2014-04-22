@@ -12,21 +12,21 @@ var bfe = new bfe();
 define(function(require, exports, module) {
     require("staticjs/jquery-1.11.0.min");
     require("lib/json");
-    //require("lib/underscore-min");
-    require("lib/lodash.min");
-    require("bootstrapjs");
+    require("lib/lodash.min"); // collection/object/array manipulation
+    require("bootstrapjs"); // modals
     require("lib/typeahead.jquery.min");
-    require("lib/rdf_store_min");
+    // require("lib/rdf_store_min");
     
     var editorconfig = {};
-    var bfestore = [];
+    var bfestore = require("src/bfestore");
     //var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
     var startingPoints = [];
     var formTemplates = [];
-    var lookups = [];
-    var currentModal = 0;
+    //var lookups = [];
+    
+    var tabIndices = 1;
     
     var loadtemplates = [];
     var loadtemplatesANDlookupsCount = 0;
@@ -39,7 +39,79 @@ define(function(require, exports, module) {
     
     var forms = [];
     
+    var lookups = {
+        "http://id.loc.gov/authorities/names": {
+            "name": "LCNAF",
+            "load": require("lookups/lcnames")
+        },
+        "http://id.loc.gov/authorities/subjects": {
+            "name": "LCSH",
+            "load": require("lookups/lcsubjects")
+        },
+        "http://id.loc.gov/authorities/genreForms": {
+            "name": "LCGFT",
+            "load": require("lookups/lcgenreforms")
+        },
+        "http://id.loc.gov/resources/works": {
+            "name": "LC-Works",
+            "load": require("lookups/lcworks")
+        },
+        "http://id.loc.gov/resources/instances": {
+            "name": "LC-Instances",
+            "load": require("lookups/lcinstances")
+        },
+        "http://id.loc.gov/vocabulary/organizations": {
+            "name": "Organizations",
+            "load": require("lookups/lcorganizations")
+        },
+        "http://id.loc.gov/vocabulary/countries": {
+            "name": "Countries",
+            "load": require("lookups/lccountries")
+        },
+        "http://id.loc.gov/vocabulary/geographicAreas": {
+            "name": "GeographicAreas",
+            "load": require("lookups/lcgacs")
+        },
+        "http://id.loc.gov/vocabulary/languages": {
+            "name": "Languages",
+            "load": require("lookups/lclanguages")
+        },
+        "http://id.loc.gov/vocabulary/identifiers": {
+            "name": "Identifiers",
+            "load": require("lookups/lcidentifiers")
+        },
+        "http://id.loc.gov/vocabulary/targetAudiences": {
+            "name": "Audiences",
+            "load": require("lookups/lctargetaudiences")
+        },
+        "http://id.loc.gov/vocabulary/iso639-1": {
+            "name": "ISO639-1",
+            "load": require("lookups/iso6391")
+        },
+        "http://id.loc.gov/vocabulary/iso639-2": {
+            "name": "ISO639-2",
+            "load": require("lookups/iso6392")
+        },
+        "http://id.loc.gov/vocabulary/iso639-5": {
+            "name": "ISO639-5",
+            "load": require("lookups/iso6395")
+        },
+        "http://id.loc.gov/vocabulary/contentTypes": {
+            "name": "RDA-Content-Types",
+            "load": require("lookups/rdacontenttypes")
+        },
+        "http://id.loc.gov/vocabulary/mediaTypes": {
+            "name": "RDA-Media-Types",
+            "load": require("lookups/rdamediatypes")
+        },
+        "http://id.loc.gov/vocabulary/carriers": {
+            "name": "RDA-Carriers",
+            "load": require("lookups/rdacarriers")
+        }
+    };
+    
     exports.setConfig = function(config) {
+                    
         editorconfig = config;
         var files = [];
         for (var i=0; i < config.profiles.length; i++) {
@@ -60,70 +132,18 @@ define(function(require, exports, module) {
             });
         }
         
-        loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.lookups.length;
-        for (var i=0; i < config.lookups.length; i++) {
-            var lu = config.lookups[i];
+        loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + Object.keys(config.lookups).length;
+        for (k in config.lookups) {
+            var lu = config.lookups[k];
             console.log("Loading " + lu.load);
             require([lu.load], function(r) {
-                    setLookup(r);
-                });
+                setLookup(r);
+            });
         }
-        editorconfig.baseURI = "http://example.org/";
-    }
-    
-    exports.editor = function (config, id) {
-        
-        this.setConfig(config);
-        
-        editordiv = div = document.getElementById(id);
-        
-        var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
-        for (var h=0; h < config.startingPoints.length; h++) {
-            var sp = config.startingPoints[h];
-            var menuul = $('<ul>', {class: "nav nav-stacked"});
-            var menuheadingul = null;
-            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
-                menuheading = $('<li><h5 style="font-weight: bold">' + sp.menuGroup + '</h5></li>');
-                menuheadingul = $('<ul class="nav"></ul>');
-                menuheading.append(menuheadingul);
-                menuul.append(menuheading);
-            }
-            for (var i=0; i < sp.menuItems.length; i++) {
-                var li = $('<li>');
-                var a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
-                a.html(sp.menuItems[i].label);
-                $(a).click(function(){
-                    menuSelect(this.id);
-                });
-                li = li.append(a);
-                if ( menuheadingul !== null ) {
-                    menuheadingul.append(li);
-                } else {
-                    menuul.append(li);
-                }
-            }
-            menudiv.append(menuul);
+        if (editorconfig.baseURI === undefined) {
+            editorconfig.baseURI = window.location.protocol + "//" + window.location.host + "/";
         }
-        
-        var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-8"});
-        
-        var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-        
-        var rowdiv = $('<div>', {class: "row"});
-        
-        rowdiv.append(menudiv);
-        rowdiv.append(formdiv);
-        rowdiv.append(optiondiv);
-
-        $(div).append(rowdiv);
-    
-        // Debug div
-        var debugdiv = $('<div>', {class: "col-md-12"});
-        debugdiv.html("Debug output");
-        var debugpre = $('<pre>', {id: "bfeditor-debug"});
-        debugdiv.append(debugpre);
-        $(div).append(debugdiv);
-        debugpre.html(JSON.stringify(profiles, undefined, " "));
+        console.log("baseURI is " + editorconfig.baseURI);
         
         if (config.load !== undefined) {
             loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.load.length;
@@ -134,6 +154,7 @@ define(function(require, exports, module) {
                     loadtemplate.templateGUID = useguid;
                     loadtemplate.resourceTemplateID = l.templateID;
                     loadtemplate.resourceURI = l.defaulturi;
+                    loadtemplate.embedType = "page";
                     loadtemplate.data = tempstore;
                     loadtemplates.push(loadtemplate);
                 if (l.source !== undefined && l.source.location !== undefined && l.source.requestType !== undefined) {
@@ -149,6 +170,13 @@ define(function(require, exports, module) {
                                 So, will parse the JSONLD myself, dagnabbit. 
                                 NOTE: it totally expects JSONLD expanded form.
                             */
+                            tempstore = bfestore.jsonld2store(data);
+                            tempstore.forEach(function(t){
+                                if (t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.otype == "uri" && t.s == l.defaulturi.replace('ml38281/', '')) {
+                                    t.rtID = l.templateID;
+                                }
+                            });
+                            /*
                             data.forEach(function(resource){
                                 var s = typeof resource["@id"] !== 'undefined' ? resource["@id"] : '_:b' + guid();
                                 for (var p in resource) {
@@ -179,6 +207,7 @@ define(function(require, exports, module) {
                                 }
                                 // If a resource does not have a defined type, do we care?
                             });
+                            */
                             loadtemplate.data = tempstore;
                             console.log("finished query store");
                             cbLoadTemplates();
@@ -234,6 +263,93 @@ define(function(require, exports, module) {
             });
         }
 
+    }
+    
+    exports.fulleditor = function (config, id) {
+        
+        this.setConfig(config);
+        
+        editordiv = div = document.getElementById(id);
+        
+        var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
+        for (var h=0; h < config.startingPoints.length; h++) {
+            var sp = config.startingPoints[h];
+            var menuul = $('<ul>', {class: "nav nav-stacked"});
+            var menuheadingul = null;
+            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
+                menuheading = $('<li><h5 style="font-weight: bold">' + sp.menuGroup + '</h5></li>');
+                menuheadingul = $('<ul class="nav"></ul>');
+                menuheading.append(menuheadingul);
+                menuul.append(menuheading);
+            }
+            for (var i=0; i < sp.menuItems.length; i++) {
+                var li = $('<li>');
+                var a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
+                a.html(sp.menuItems[i].label);
+                $(a).click(function(){
+                    menuSelect(this.id);
+                });
+                li = li.append(a);
+                if ( menuheadingul !== null ) {
+                    menuheadingul.append(li);
+                } else {
+                    menuul.append(li);
+                }
+            }
+            menudiv.append(menuul);
+        }
+        
+        var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-10"});
+        
+        //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+        
+        var rowdiv = $('<div>', {class: "row"});
+        
+        rowdiv.append(menudiv);
+        rowdiv.append(formdiv);
+        //rowdiv.append(optiondiv);
+
+        $(div).append(rowdiv);
+    
+        // Debug div
+        var debugdiv = $('<div>', {class: "col-md-12"});
+        debugdiv.html("Debug output");
+        var debugpre = $('<pre>', {id: "bfeditor-debug"});
+        debugdiv.append(debugpre);
+        $(div).append(debugdiv);
+        debugpre.html(JSON.stringify(profiles, undefined, " "));
+
+        return {
+            "profiles": profiles,
+            "div": div
+        };
+    };
+    
+    exports.edit = function (config, id) {
+        
+        this.setConfig(config);
+        
+        editordiv = div = document.getElementById(id);
+        
+        var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-12"});
+        
+        //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+        
+        var rowdiv = $('<div>', {class: "row"});
+        
+        rowdiv.append(formdiv);
+        //rowdiv.append(optiondiv);
+
+        $(div).append(rowdiv);
+    
+        // Debug div
+        var debugdiv = $('<div>', {class: "col-md-12"});
+        debugdiv.html("Debug output");
+        var debugpre = $('<pre>', {id: "bfeditor-debug"});
+        debugdiv.append(debugpre);
+        $(div).append(debugdiv);
+        debugpre.html(JSON.stringify(profiles, undefined, " "));
+
         return {
             "profiles": profiles,
             "div": div
@@ -241,22 +357,13 @@ define(function(require, exports, module) {
     };
     
     function setLookup(r) {
-        //console.log(r);
-        console.log(r.scheme);
-        for (var i=0; i < config.lookups.length; i++) {
-            var lu = config.lookups[i];
-            for (var j=0; j < lu.schemes.length; j++) {
-                if (lu.schemes[j] == r.scheme) {
-                    var luobject = {};
-                    console.log("Setting scheme " + lu.schemes[j]);
-                    luobject.name = lu.name;
-                    luobject.scheme = lu.schemes[j];
-                    luobject.load = r;
-                    lookups.push(luobject);
-                }
-            }
-        }
-        //loadtemplatesANDlookupsCounter++;
+        // console.log(r);
+        console.log("Setting scheme " + r.scheme);
+        var lu = config.lookups[r.scheme];
+        console.log(lu);
+        lookups[r.scheme] = {};
+        lookups[r.scheme].name = lu.name;
+        lookups[r.scheme].load = r;
         cbLoadTemplates();
     }
     
@@ -268,9 +375,30 @@ define(function(require, exports, module) {
             $( ".typeahead", form.form ).each(function() {
                 setTypeahead(this);
             });
+            var $exitButtonGroup = $('<div class="btn-group pull-right"> \
+                <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
+                <!-- <button id="bfeditor-exitsaveasnew" type="button" class="btn btn-primary">Save as new</button> --> \
+                <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
+            </div>');
+            form.form.append($exitButtonGroup);
+            
+            $("#bfeditor-exitcancel", form.form).click(function(){
+                cbLoadTemplates();
+            });
+            $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
+            
+            //$("#bfeditor-exitsaveasnew", form.form).click(function(){
+            //    cbLoadTemplates();
+            //});
+            
+            $("#bfeditor-exitsave", form.form).click(function(){
+                editorconfig.return.callback(bfestore.store);
+            });
+            $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
+            
             $("#bfeditor-formdiv").html("");
             $("#bfeditor-formdiv").append(form.form);
-            $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+            $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
         }
     }
     
@@ -279,7 +407,7 @@ define(function(require, exports, module) {
         spnums = spid.replace('sp-', '').split("_");
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         
-        bfestore = [];
+        bfestore.store = [];
         loadtemplatesCounter = 0;
         loadtemplatesCount = spoints.useResourceTemplates.length;
         loadtemplates = [];
@@ -291,6 +419,7 @@ define(function(require, exports, module) {
             loadtemplate.templateGUID = useguid;
             loadtemplate.resourceTemplateID = l;
             loadtemplate.resourceURI = editorconfig.baseURI + useguid;
+            loadtemplate.embedType = "page";
             loadtemplate.data = tempstore;
             loadtemplates.push(loadtemplate);
             cbLoadTemplates();
@@ -303,6 +432,7 @@ define(function(require, exports, module) {
             templateguid=guid,
             resourceTemplateID=resourceTemplateID,
             resourceuri="",
+            embedType=modal|page
             data=bfestore
         }
     */
@@ -330,6 +460,7 @@ define(function(require, exports, module) {
                 fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
                 fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
                 fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
+                fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             } else {
                 console.log("WARNING: Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.");
@@ -358,9 +489,9 @@ define(function(require, exports, module) {
                 
                 if (property.type == "literal") {
                     
-                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                    button = $('<button type="button" class="btn btn-default">Set</button>');
+                    button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
                     $(button).click(function(){
                         setLiteral(fobject.id, rt.guid, property.guid);
                     });
@@ -407,15 +538,11 @@ define(function(require, exports, module) {
                                 if (valueTemplates[0] !== undefined) {
                                     var vt = valueTemplates[0];
                                     //console.log(vt);
-                                    var b = $('<button type="button" class="btn btn-default">' + vt.resourceLabel + '</button>');
+                                    var b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
                                     
                                     var fid = fobject.id;
                                     var rtid = rt.guid;
                                     var pid = property.guid;
-                                    if ( property.propertyLabel == "Has Other Edition") {
-                                        console.log("form id: " + fobject.id);
-                                        console.log("Other edition id: " + property.guid);
-                                    }
                                     var newResourceURI = editorconfig.baseURI + guid();
                                     $(b).click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
                                         //console.log(event.data.template);
@@ -432,7 +559,7 @@ define(function(require, exports, module) {
                         } else if (_.has(property.valueConstraint, "useValuesFrom")) {
                             
                             var inputdiv = $('<div class="col-sm-8"></div>');
-                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '">');
+                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
                             
                             inputdiv.append(input);
                             
@@ -441,10 +568,10 @@ define(function(require, exports, module) {
                             //formgroup.append(button);
                             formgroup.append(saves);
                             
-                            if (forEachFirst && property.propertyLabel.indexOf("Lookup") !== -1) {
+                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.indexOf("Lookup") !== -1) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
-                                var saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '">Save changes</button></div>');
+                                var saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
                                 var spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
                                 formgroup.append(saveLookup);
                                 formgroup.append(spacer);
@@ -454,11 +581,11 @@ define(function(require, exports, module) {
                             // Type is resource, so should be a URI, but there is
                             // no "value template reference" or "use values from vocabularies" 
                             // reference for it so just create label field
-                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                            button = $('<button type="button" class="btn btn-default">Set</button>');
-                                $(button).click(function(){
-                                    setResourceFromLabel(fobject.id, rt.guid, property.guid);
+                            button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                            $(button).click(function(){
+                                setResourceFromLabel(fobject.id, rt.guid, property.guid);
                             });
                             
                             formgroup.append(label);
@@ -470,9 +597,9 @@ define(function(require, exports, module) {
                     } else {
                         // Type is resource, so should be a URI, but there is
                         // no constraint for it so just create a label field.
-                        var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"></div>');
+                        var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                        button = $('<button type="button" class="btn btn-default">Set</button>');
+                        button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
                             $(button).click(function(){
                                 setResourceFromLabel(fobject.id, rt.guid, property.guid);
                         });
@@ -508,7 +635,7 @@ define(function(require, exports, module) {
                 triple.o = rt.resourceURI;
                 triple.otype = "uri";
                 fobject.store.push(triple);
-                bfestore.push(triple);
+                bfestore.store.push(triple);
                 rt.guid = rt.useguid;
                 
                 rt.propertyTemplates.forEach(function(property) {
@@ -529,7 +656,7 @@ define(function(require, exports, module) {
                                     how do we dedup at this time?
                                 */
                                 if ( fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id ) {
-                                    var relatedTemplates = _.where(bfestore, {rtID: vtrs});
+                                    var relatedTemplates = _.where(bfestore.store, {rtID: vtrs});
                                     triple = {}
                                     triple.guid = guid();
                                     triple.s = uri;
@@ -537,7 +664,7 @@ define(function(require, exports, module) {
                                     triple.o = relatedTemplates[0].s;
                                     triple.otype = "uri";
                                     fobject.store.push(triple);
-                                    bfestore.push(triple);
+                                    bfestore.store.push(triple);
                                     property.display = "false";
                                 }
                             }
@@ -574,7 +701,7 @@ define(function(require, exports, module) {
                 //console.log(rt.data);
                 //console.log(property.propertyURI);
                 console.log("rt.defaulturi is " + rt.defaulturi);
-                var propsdata = _.where(bfestore, {"s": rt.defaulturi, "p": property.propertyURI});
+                var propsdata = _.where(bfestore.store, {"s": rt.defaulturi, "p": property.propertyURI});
                 if (propsdata[0] !== undefined) {
                     // If this property exists for this resource in the pre-loaded data
                     // then we need to make it appear.
@@ -587,7 +714,7 @@ define(function(require, exports, module) {
                         var triples = [];
                         //console.log("pd.otype is " + pd.otype);
                         if (pd.otype == "uri") {
-                            var triples = _.where(bfestore, {"s": pd.o});
+                            var triples = _.where(bfestore.store, {"s": pd.o});
                             displaydata = pd.o;
                             //console.log("displaydata is " + displaydata);
                             var rtype = "";
@@ -680,7 +807,9 @@ define(function(require, exports, module) {
                         triple.otype = "uri";
                         //store.push(triple);
                         fobject.store.push(triple);
-                        bfestore.push(triple);
+                        bfestore.store.push(triple);
+                        console.log("Setting default values");
+                        console.log(triple);
                         
                             // set the form
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
@@ -692,13 +821,18 @@ define(function(require, exports, module) {
                             display = property.valueConstraint.defaultLiteral;
                         }
                         displaydata = display;
+                        var editable = true;
+                        if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === "false") {
+                            editable = false;
+                        }
                         var bgvars = { 
                             "tguid": triple.guid , 
                             "tlabelhover": displaydata,
                             "tlabel": displaydata,
                             "fobjectid": fobject.id,
-                            "inputid": triple.guid,
-                            "triples": triple
+                            "inputid": property.guid,
+                            "editable": editable,
+                            "triples": [triple]
                         };
                         var $buttongroup = editDeleteButtonGroup(bgvars);
                         $save.append($buttongroup);
@@ -740,6 +874,23 @@ define(function(require, exports, module) {
     // inputID is the ID of hte DOM element within the loadtemplate form
     // triples is the base data.
     function openModal(callingformobjectid, loadtemplate, resourceURI, inputID, triples) {
+        
+        // Modals
+        var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="' + tabIndices++ + '" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
+            <div class="modal-dialog"> \
+                <div class="modal-content"> \
+                    <div class="modal-header"> \
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
+                        <h4 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h4> \
+                    </div> \
+                    <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
+                    <div class="modal-footer"> \
+                        <button type="button" class="btn btn-default" id="bfeditor-modalCancel-modalID" data-dismiss="modal">Close</button> \
+                        <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
+                    </div> \
+                </div> \
+            </div> \
+        </div> '
         
         console.log("resourceURI is : " + resourceURI);
         console.log("inputID of DOM element / property when opening modal: " + inputID);
@@ -789,25 +940,10 @@ define(function(require, exports, module) {
             templateGUID: useguid,
             resourceTemplateID: loadtemplate.id,
             resourceURI: resourceURI,
+            embedType: "modal",
             data: triplespassed
         }]);
         
-        // Modals
-        var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
-            <div class="modal-dialog"> \
-                <div class="modal-content"> \
-                    <div class="modal-header"> \
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
-                        <h4 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h4> \
-                    </div> \
-                    <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
-                    <div class="modal-footer"> \
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> \
-                        <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
-                    </div> \
-                </div> \
-            </div> \
-        </div> '
         var m = modal.replace(/modalID/g, form.formobject.id);
         m = $(m);
         $(editordiv).append(m);
@@ -823,6 +959,8 @@ define(function(require, exports, module) {
         $('#bfeditor-modaltitle-' + form.formobject.id).html(loadtemplate.resourceLabel);
             
         $('#bfeditor-modal-' + form.formobject.id).modal('show');
+        $('#bfeditor-modalCancel-' + form.formobject.id).attr("tabindex", tabIndices++);
+            
         $('#bfeditor-modalSave-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
                 // console.log(triple);
@@ -832,6 +970,7 @@ define(function(require, exports, module) {
             console.log("calling setresourcefrommodal");
             setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
         });
+        $('#bfeditor-modalSave-' + form.formobject.id).attr("tabindex", tabIndices++);
         $('#bfeditor-modalSaveLookup-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
                 // console.log(triple);
@@ -849,7 +988,7 @@ define(function(require, exports, module) {
             setTypeahead(this);
         });
                     
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
    
     function setResourceFromModal(formobjectID, modalformid, resourceID, propertyguid, data) {
@@ -882,19 +1021,11 @@ define(function(require, exports, module) {
                 console.log(data);
                 data.forEach(function(t) {
                     callingformobject.store.push(t);
-                    bfestore.push(t);
+                    bfestore.store.push(t);
                 });
                 
-                bfestore = _.uniq(bfestore, function(t) { 
-                    if (t.olang !== undefined) {
-                        return t.s + t.p + t.o + t.otype + t.olang
-                    } else if (t.odatatype !== undefined) {
-                        return t.s + t.p + t.o + t.otype + t.odatatype
-                    } else {
-                        return t.s + t.p + t.o + t.otype
-                    }
-                });
-                    
+                bfestore.storeDedup();
+
                 var $formgroup = $("#" + propertyguid, callingformobject.form).closest(".form-group");
                 var save = $formgroup.find(".btn-toolbar")[0];
                 //console.log(formgroup);
@@ -932,7 +1063,7 @@ define(function(require, exports, module) {
         $('#bfeditor-modalSave-' + modalformid).off('click');
         $('#bfeditor-modal-' + modalformid).modal('hide');
     
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
     
     function editDeleteButtonGroup(bgvars) {
@@ -957,25 +1088,27 @@ define(function(require, exports, module) {
         var $displaybutton = $('<button type="button" class="btn btn-default" title="' + bgvars.tlabelhover + '">' + display +'</button>');
         $buttongroup.append($displaybutton);
         
-        var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
-        $editbutton.click(function(){
-            if (bgvars.triples.length === 1) {
-                editTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
-            } else {
-                editTriples(bgvars.fobjectid, bgvars.inputid, bgvars.triples);
-            }
-        });
-        $buttongroup.append($editbutton);
-
-        var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
-        $delbutton.click(function(){
-            if (bgvars.triples.length === 1) {
-                removeTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
-            } else {
-                removeTriples(bgvars.fobjectid, bgvars.inputid, bgvars.triples);
-            }
-        });
-        $buttongroup.append($delbutton);
+        if ( bgvars.editable === undefined || bgvars.editable === true ) {
+            var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
+            $editbutton.click(function(){
+                if (bgvars.triples.length === 1) {
+                    editTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
+                } else {
+                    editTriples(bgvars.fobjectid, bgvars.inputid, bgvars.triples);
+                }
+            });
+            $buttongroup.append($editbutton);
+    
+            var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
+            $delbutton.click(function(){
+                if (bgvars.triples.length === 1) {
+                    removeTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
+                } else {
+                    removeTriples(bgvars.fobjectid, bgvars.inputid, bgvars.triples);
+                }
+            });
+            $buttongroup.append($delbutton);
+        }
         
         return $buttongroup;
     }
@@ -1001,7 +1134,7 @@ define(function(require, exports, module) {
                     triple.otype = "literal";
                     triple.olang = "en";
                     
-                    bfestore.push(triple);
+                    bfestore.store.push(triple);
                     formobject.store.push(triple);
                     
                     var formgroup = $("#" + inputID, formobject.form).closest(".form-group");
@@ -1027,7 +1160,7 @@ define(function(require, exports, module) {
                 }
             });
         }
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
     
     function setResourceFromLabel(formobjectID, resourceID, inputID) {
@@ -1050,7 +1183,7 @@ define(function(require, exports, module) {
                     triple.o = data;
                     triple.otype = "uri";
                     
-                    bfestore.push(triple);
+                    bfestore.store.push(triple);
                     formobject.store.push(triple);
                     
                     var $formgroup = $("#" + inputID, formobject.form).closest(".form-group");
@@ -1075,7 +1208,7 @@ define(function(require, exports, module) {
                 }
             });
         }
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
     
     function setTypeahead(input) {
@@ -1095,6 +1228,7 @@ define(function(require, exports, module) {
                 p = properties[0];
             }
         });
+        /*
         var uvf = p.valueConstraint.useValuesFrom[0];
         console.log("uvf is " + uvf);
         console.log(lookups);
@@ -1106,30 +1240,27 @@ define(function(require, exports, module) {
             lu = lups[0].load;
             console.log(lu);
         }
+        */
             
             //$( input ).css("z-index", 3000);
             var uvfs = p.valueConstraint.useValuesFrom;
             var dshashes = [];
             uvfs.forEach(function(uvf){
-                var lups = _.where(lookups, {"scheme": uvf});
-                var lu;
-                if ( lups[0] !== undefined ) {
-                    var lu = lups[0];
-                    console.log(lu.scheme);
-                    console.log(lu);
+                // var lups = _.where(lookups, {"scheme": uvf});
+                var lu = lookups[uvf];
+
+                console.log("Setting typeahead scheme: " + uvf);
+                console.log(lu);
                     
-                    var dshash = {};
-                    dshash.name = lu.name;
-                    //dshash.matcher = function(item) {
-                    //    return true;
-                    //};
-                    dshash.source = function(query, process) {
-                        lu.load.source(formobject, query, process);
-                    };
-                    dshash.templates =  { header: '<h3>' + lu.name + '</h3>' };
-                    dshash.displayKey = 'value';
-                    dshashes.push(dshash);
-                }
+                var dshash = {};
+                dshash.name = lu.name;
+                dshash.source = function(query, process) {
+                    lu.load.source(query, process, formobject);
+                };
+                dshash.templates =  { header: '<h3>' + lu.name + '</h3>' };
+                dshash.displayKey = 'value';
+                dshashes.push(dshash);
+                
             });
             console.log(dshashes);
             var opts = {
@@ -1210,7 +1341,7 @@ define(function(require, exports, module) {
                 var lups = _.where(lookups, {"name": datasetname});
                 var lu;
                 if ( lups[0] !== undefined ) {
-                    console.log(lups[0].scheme);
+                    console.log(lups[0]);
                     lu = lups[0].load;
                     console.log(lu);
                 }
@@ -1222,7 +1353,7 @@ define(function(require, exports, module) {
                             t.guid = tguid;
                         }
                         formobject.store.push(t);
-                        bfestore.push(t);
+                        bfestore.store.push(t);
 
                         // We only want to show those properties that relate to
                         // *this* resource.
@@ -1289,8 +1420,8 @@ define(function(require, exports, module) {
                             });
                         }
                     });
-                    storeDeDup();
-                    $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+                    bfestore.storeDedup();
+                    $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
                     console.log(formobject.store);
                 });
             });
@@ -1327,8 +1458,8 @@ define(function(require, exports, module) {
             $el.val(t.o);
         }
         formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {guid: t.guid}));
-        bfestore = _.without(bfestore, _.findWhere(bfestore, {guid: t.guid}));
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {guid: t.guid}));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
     
     function editTriples(formobjectID, inputID, triples) {
@@ -1378,8 +1509,8 @@ define(function(require, exports, module) {
             });
         }
         formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {guid: t.guid}));
-        bfestore = _.without(bfestore, _.findWhere(bfestore, {guid: t.guid}));
-        $("#bfeditor-debug").html(JSON.stringify(bfestore, undefined, " "));
+        bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {guid: t.guid}));
+        $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
     
     function removeTriples(formobjectID, inputID, triples) {
@@ -1388,18 +1519,6 @@ define(function(require, exports, module) {
         triples.forEach(function(triple) {
             // console.log(triple);
             removeTriple(formobjectID, inputID, triple);
-        });
-    }
-    
-    function storeDeDup() {
-        bfestore = _.uniq(bfestore, function(t) { 
-            if (t.olang !== undefined) {
-                return t.s + t.p + t.o + t.otype + t.olang
-            } else if (t.odatatype !== undefined) {
-                return t.s + t.p + t.o + t.otype + t.odatatype
-            } else {
-                return t.s + t.p + t.o + t.otype
-            }
         });
     }
     
