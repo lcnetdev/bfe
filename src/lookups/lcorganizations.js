@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     var cache = [];
     
-    exports.scheme = "http://id.loc.gov/vocabulary/carriers";
+    exports.scheme = "http://id.loc.gov/vocabulary/organizations";
 
     exports.source = function(query, process) {
 
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 
         this.searching = setTimeout(function() {
             if ( query.length > 1 ) {
-                u = "http://id.loc.gov/vocabulary/carriers/suggest/?q=" + q;
+                u = "http://id.loc.gov/vocabulary/organizations/suggest/?q=" + q;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
                     }
                 });
             } else if ( query.length === 1 && query == "?" ) {
-                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=20&q=" + encodeURI("cs:http://id.loc.gov/vocabulary/carriers");
+                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=20&q=" + encodeURI("cs:http://id.loc.gov/vocabulary/organizations");
                 console.log(u);
                 $.ajax({
                     url: u,
@@ -57,6 +57,21 @@ define(function(require, exports, module) {
         triple.s = subjecturi
         triple.p = propertyuri;
         triple.o = selected.uri;
+        triple.otype = "uri";
+        triples.push(triple);
+        
+        triple = {};
+        triple.s = subjecturi
+        triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
+        triple.o = selected.value;
+        triple.otype = "literal";
+        triple.olang = "en";
+        triples.push(triple);
+        
+        triple = {};
+        triple.s = subjecturi
+        triple.p = "http://bibframe.org/vocab/authoritySource";
+        triple.o = selected.source;
         triple.otype = "uri";
         triples.push(triple);
         

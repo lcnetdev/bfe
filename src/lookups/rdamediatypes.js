@@ -1,17 +1,14 @@
 define(function(require, exports, module) {
+    var lcshared = require("lookups/lcshared");
 
     var cache = [];
     
-    exports.scheme = "http://id.loc.gov/vocabulary/languages";
+    exports.scheme = "http://id.loc.gov/vocabulary/mediaTypes";
 
-    exports.source = function(formobject, query, process) {
-        console.log(JSON.stringify(formobject.store));
-        
-        var triples = formobject.store;
+    exports.source = function(query, process) {
 
         console.log('q is ' + query);
         q = encodeURI(query);
-        
         if(cache[q]){
             process(cache[q]);
             return;
@@ -22,14 +19,25 @@ define(function(require, exports, module) {
         }
                 
         this.searching = setTimeout(function() {
-            if ( query.length > 2 ) {
-                u = "http://id.loc.gov/vocabulary/languages/suggest/?q=" + q;
+            if ( query.length > 1 ) {
+                u = "http://id.loc.gov/vocabulary/mediaTypes/suggest/?q=" + q;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
                     success: function (data) {
-                        parsedlist = processSuggestions(data, query);
-                        // save result to cache, remove next line if you don't want to use cache
+                        parsedlist = lcshared.processSuggestions(data, query);
+                        cache[q] = parsedlist;
+                        return process(parsedlist);
+                    }
+                });
+            } else if ( query.length === 1 && query == "?" ) {
+                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=20&q=" + encodeURI("cs:http://id.loc.gov/vocabulary/mediaTypes");
+                console.log(u);
+                $.ajax({
+                    url: u,
+                    dataType: "jsonp",
+                    success: function (data) {
+                        parsedlist = lcshared.processATOM(data, query);
                         cache[q] = parsedlist;
                         return process(parsedlist);
                     }
@@ -53,44 +61,6 @@ define(function(require, exports, module) {
         triples.push(triple);
         
         process(triples);
-        /*
-        If you wanted/needed to make another call.
-        */
-        /*
-        var u = selected.uri + ".jsonp";
-        $.ajax({
-            url: u,
-            dataType: "jsonp",
-            success: function (data) {
-                var triple = {};
-                //triple.guid = guid();
-                triple.s = subjecturi
-                triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
-                triple.o = selected.value;
-                triple.otype = "literal";
-                triple.olang = "en";
-                triples.push(triple);
-                process(triples);
-            }
-        });
-        */
-    
-    }
-    
-    function processSuggestions(suggestions, query) {
-        var typeahead_source = [];
-        if ( suggestions[1] !== undefined ) {
-            for (var s=0; s < suggestions[1].length; s++) {
-                var l = suggestions[1][s];
-                var u = suggestions[3][s];
-                typeahead_source.push({ uri: u, value: l });
-            }
-        }
-        if (typeahead_source.length === 0) {
-            typeahead_source[0] = { uri: "", value: "[No suggestions found for " + query + ".]" };
-        }
-        //console.log(typeahead_source);
-        return typeahead_source;
     }
 
 });

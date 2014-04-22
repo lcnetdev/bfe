@@ -1,16 +1,14 @@
-//define("lcnames", [], function() {
 define(function(require, exports, module) {
-    //require("staticjs/jquery-1.11.0.min");
-    //require("lib/typeahead.jquery.min");
-
-    // Using twitter's typeahead, store may be completely unnecessary
-    var store = [];
+    var lcshared = require("lookups/lcshared");
+    
     var cache = [];
     
+    // This var is required because it is used as an identifier.
     exports.scheme = "http://id.loc.gov/authorities/names";
 
-    exports.source = function(formobject, query, process) {
-        console.log(JSON.stringify(formobject.store));
+    exports.source = function(query, process, formobject) {
+        
+        //console.log(JSON.stringify(formobject.store));
         
         var triples = formobject.store;
         
@@ -76,52 +74,20 @@ define(function(require, exports, module) {
                 
         this.searching = setTimeout(function() {
             if ( query.length > 2 ) {
-                //alert(q)
-                //u = "http://localhost:8281/search/?format=jsonp&start=1&count=10&q=" + q;
                 u = "http://id.loc.gov/search/?format=jsonp&start=1&count=10&q=" + q;
-                //alert(u);
-                /*
-                list = $.ajax({
-                    url: u,
-                    dataType: "jsonp",
-                    success: function (data) {
-                        //console.log(data);
-                        //alert(data);
-                        parsedlist = processATOM(data, query);
-                        // save result to cache, remove next line if you don't want to use cache
-                        cache[q] = parsedlist;
-                        // only search if stop typing for 300ms aka fast typers
-                        console.log(parsedlist);
-                        //return process(['John Smith','Jane Smith']);
-                        return process(parsedlist);
-                    }
-                    //jsonpCallback: "processATOM"
-                });
-                return list;
-                */
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
                     success: function (data) {
-                        //console.log(data);
-                        //alert(data);
-                        parsedlist = processATOM(data, query);
-                        // save result to cache, remove next line if you don't want to use cache
+                        parsedlist = lcshared.processATOM(data, query);
                         cache[q] = parsedlist;
-                        // only search if stop typing for 300ms aka fast typers
-                        //console.log(parsedlist);
-                        //console.log(this);
-                        //return process(['John Smith','Jane Smith']);
                         return process(parsedlist);
                     }
-                    //jsonpCallback: "processATOM"
                 });
             } else {
                 return [];
             }
         }, 300); // 300 ms
-        
-        //return searching;
         
     }
     
@@ -155,7 +121,6 @@ define(function(require, exports, module) {
         triple.otype = "uri";
         triples.push(triple);
         
-        //console.log("finished processing lcnames triples");
         process(triples);
         /*
         If you wanted/needed to make another call.
@@ -181,42 +146,5 @@ define(function(require, exports, module) {
     
     }
     
-    function processATOM(atomjson, query) {
-        var typeahead_source = [];
-        c = 0;
-        for (var k in atomjson) {
-            if (atomjson[k][0] == "atom:entry") {
-                var t = "";
-                var u = "";
-                var source = "";
-                for (var e in atomjson[k] ) {
-                    //alert(atomjson[k][e]);
-                    if (atomjson[k][e][0] == "atom:title") {
-                        //alert(atomjson[k][e][2]);
-                        t = atomjson[k][e][2];
-                    }
-                    if (atomjson[k][e][0] == "atom:link") {
-                        //alert(atomjson[k][e][2]);
-                        u = atomjson[k][e][1].href;
-                        source = u.substr(0, u.lastIndexOf('/'));
-                    }
-                    if ( t !== "" && u !== "") {
-                        store[t] = {}
-                        store[t].label = t;
-                        store[t].uri = u;
-                        typeahead_source[c] = { uri: u, source: source, value: t };
-                        c++;
-                        break;
-                    }
-                }
-            }
-        }
-        //alert(suggestions);
-        if (typeahead_source.length === 0) {
-            typeahead_source[0] = { uri: "", value: "[No suggestions found for " + query + ".]" };
-        }
-        //console.log(typeahead_source);
-        return typeahead_source;
-    }
 
 });

@@ -3,47 +3,11 @@ define(function(require, exports, module) {
     
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/authorities/subjects";
+    exports.scheme = "http://id.loc.gov/authorities/genreForms";
 
-    exports.source = function(query, process, formobject) {
-        //console.log(JSON.stringify(formobject.store));
-        
-        var triples = formobject.store;
-        
-        var type = "";
-        var hits = _.where(triples, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
-        if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
-                type = hits[0].o;
-            }
-        console.log("type is " + type);
-        
-        var scheme = "http://id.loc.gov/authorities/subjects";
-        hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
-        if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
-                scheme = hits[0].o;
-            }
-        console.log("scheme is " + scheme);
-        
-        var rdftype = "";
-        if ( type == "http://bibframe.org/vocab/Person") {
-            rdftype = "rdftype:PersonalName";
-        } else if ( type == "http://bibframe.org/vocab/Topic") {
-            rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
-        } else if ( type == "http://bibframe.org/vocab/Place") {
-            rdftype = "rdftype:Geographic";
-        } else if ( type == "http://bibframe.org/vocab/Organization") {
-            rdftype = "rdftype:CorporateName";
-        } else if ( type == "http://bibframe.org/vocab/Family") {
-            rdftype = "rdftype:FamilyName";
-        } else if ( type == "http://bibframe.org/vocab/Meeting") {
-            rdftype = "rdftype:ConferenceName";
-        } else if ( type == "http://bibframe.org/vocab/Jurisdiction") {
-            rdftype = "rdftype:CorporateName";
-        } else if ( type == "http://bibframe.org/vocab/GenreForm") {
-            rdftype = "rdftype:GenreForm";
-        }
+    exports.source = function(query, process) {
+        var scheme = "http://id.loc.gov/authorities/genreForms";
+        var rdftype = "rdftype:GenreForm";
                 
         var q = "";
         if (scheme !== "" && rdftype !== "") {
