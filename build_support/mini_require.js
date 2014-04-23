@@ -1,3 +1,13 @@
+/*
+    kefo: Copied from Ace editor repository.  This file is needed 
+    to hook up the requirejs defines so they work with a defined 
+    javascript bfe namespace since we use dryice to build and not requirejs.
+    https://github.com/ajaxorg/ace/blob/master/build_support/mini_require.js
+    
+    Beyond the note above, it is not used in any other way.  It is only 
+    invoked when building/minifying the code. 
+*/
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Distributed under the BSD license:
  *
