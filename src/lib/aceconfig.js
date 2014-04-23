@@ -1,6 +1,7 @@
 /*
-    kefo: Copied from Ace editor repository and modified (mostly deletions) to 
-    work in this context.  This file is needed to define the javascript bfe 
+    kefo: The immediate function is copied from the Ace editor repository 
+    and modified (mostly deletions) to work in this context.  This 
+    file is needed to define the javascript bfe 
     namespace since we use dryice to build and not requirejs.
     From: https://github.com/ajaxorg/ace/blob/master/lib/ace/config.js
     
