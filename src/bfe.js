@@ -99,7 +99,6 @@ define(function(require, exports, module) {
         }
     };
     
-    
     /*
     The following two bits of code come from the Ace Editor code base.
     Included here to make 'building' work correctly.  See:
