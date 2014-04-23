@@ -41,7 +41,7 @@ copy({
 var css = copy.createDataObject();
 
 copy({
-    source: ["static/bootstrap/css/bootstrap.css", "static/css/typeahead.css"],
+    source: ["src/css/bootstrap.css", "src/css/typeahead.css"],
     dest: css
 });
 

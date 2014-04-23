@@ -6,8 +6,8 @@
         <script src="static/js/require.js"></script>
         <script type="text/javascript" src="static/js/jquery-1.11.0.min.js"></script>
         
-        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="static/css/typeahead.css" rel="stylesheet" />
+        <link href="src/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="src/css/typeahead.css" rel="stylesheet" />
         
         <script type="text/javascript">
             function myCB(jsonld) {
@@ -179,10 +179,7 @@
                     baseUrl: "./",
                     paths: {
                         src: "src",
-                        text: "src/lib/text",
-                        lib: "src/lib",
-                        staticjs: "static/js",
-                        bootstrapjs: "static/bootstrap/js/bootstrap.min"
+                        text: "src/lib/text"
                     }
                 });
                 require( ["src/bfe"],
