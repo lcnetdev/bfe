@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    var lcshared = require("lookups/lcshared");
+    var lcshared = require("src/lookups/lcshared");
 
     var cache = [];
     

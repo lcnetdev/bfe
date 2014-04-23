@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     
     exports.scheme = "http://id.loc.gov/resources/works";
 
-    exports.source = function(formobject, query, process) {
+    exports.source = function(query, process, formobject) {
         console.log(JSON.stringify(formobject.store));
         
         var triples = formobject.store;

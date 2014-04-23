@@ -91,31 +91,31 @@
                 {
                     "http://id.loc.gov/authorities/names": {
                         "name": "LCNAF",
-                        "load": "lookups/lcnames"
+                        "load": "src/lookups/lcnames"
                     },
                     "http://id.loc.gov/authorities/subjects": {
                         "name": "LCSH",
-                        "load": "lookups/lcsubjects"
+                        "load": "src/lookups/lcsubjects"
                     },
                     "http://id.loc.gov/authorities/genreForms": {
                         "name": "LCGFT",
-                        "load": "lookups/lcgenreforms"
+                        "load": "src/lookups/lcgenreforms"
                     },
                     "http://id.loc.gov/resources/works": {
                         "name": "LC-Works",
-                        "load": "lookups/lcworks"
+                        "load": "src/lookups/lcworks"
                     },
                     "http://id.loc.gov/resources/instances": {
                         "name": "LC-Instances",
-                        "load": "lookups/lcinstances"
+                        "load": "src/lookups/lcinstances"
                     },
                     "http://id.loc.gov/vocabulary/organizations": {
                         "name": "Organizations",
-                        "load": "lookups/lcorganizations"
+                        "load": "src/lookups/lcorganizations"
                     },
                     "http://id.loc.gov/vocabulary/countries": {
                         "name": "Countries",
-                        "load": "lookups/lccountries"
+                        "load": "src/lookups/lccountries"
                     }
                 },
                 "load": [
@@ -189,15 +189,16 @@
                 require.config({
                     baseUrl: "./",
                     paths: {
+                        src: "src",
                         text: "src/lib/text",
                         lib: "src/lib",
-                        lookups: "src/lookups",
                         staticjs: "static/js",
                         bootstrapjs: "static/bootstrap/js/bootstrap.min"
                     }
                 });
                 require( ["src/bfe"],
                     function(bfe) {
+                        window.bfe = bfe;
                         bfeditor = bfe.fulleditor(config, "bfeditor");
                     }
                 );

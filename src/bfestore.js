@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    require("lib/lodash.min");
+    require("src/lib/lodash.min");
 
     exports.store = [];
     

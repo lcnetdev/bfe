@@ -5,7 +5,7 @@
  * Version: 0.3.2 (2013/08/17)
  * Released under the MIT license
  */
-define(['text'], function(text){
+define(['src/lib/text'], function(text){
 
     var CACHE_BUST_QUERY_PARAM = 'bust',
         CACHE_BUST_FLAG = '!bust',

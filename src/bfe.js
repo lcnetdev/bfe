@@ -1,20 +1,9 @@
-/*
-function bfe() {}
-
-bfe.prototype.editor = function(id) {
-    div = document.getElementById(id);
-    div.innerHTML = "Hello there";
-}
-
-var bfe = new bfe();
-*/
-
 define(function(require, exports, module) {
-    require("staticjs/jquery-1.11.0.min");
-    require("lib/json");
-    require("lib/lodash.min"); // collection/object/array manipulation
-    require("bootstrapjs"); // modals
-    require("lib/typeahead.jquery.min");
+    require("src/lib/jquery-2.1.0.min");
+    require("src/lib/json");
+    require("src/lib/lodash.min"); // collection/object/array manipulation
+    require("src/lib/bootstrap.min"); // modals
+    require("src/lib/typeahead.jquery.min");
     // require("lib/rdf_store_min");
     
     var editorconfig = {};
@@ -42,73 +31,83 @@ define(function(require, exports, module) {
     var lookups = {
         "http://id.loc.gov/authorities/names": {
             "name": "LCNAF",
-            "load": require("lookups/lcnames")
+            "load": require("src/lookups/lcnames")
         },
         "http://id.loc.gov/authorities/subjects": {
             "name": "LCSH",
-            "load": require("lookups/lcsubjects")
+            "load": require("src/lookups/lcsubjects")
         },
         "http://id.loc.gov/authorities/genreForms": {
             "name": "LCGFT",
-            "load": require("lookups/lcgenreforms")
+            "load": require("src/lookups/lcgenreforms")
         },
         "http://id.loc.gov/resources/works": {
             "name": "LC-Works",
-            "load": require("lookups/lcworks")
+            "load": require("src/lookups/lcworks")
         },
         "http://id.loc.gov/resources/instances": {
             "name": "LC-Instances",
-            "load": require("lookups/lcinstances")
+            "load": require("src/lookups/lcinstances")
         },
         "http://id.loc.gov/vocabulary/organizations": {
             "name": "Organizations",
-            "load": require("lookups/lcorganizations")
+            "load": require("src/lookups/lcorganizations")
         },
         "http://id.loc.gov/vocabulary/countries": {
             "name": "Countries",
-            "load": require("lookups/lccountries")
+            "load": require("src/lookups/lccountries")
         },
         "http://id.loc.gov/vocabulary/geographicAreas": {
             "name": "GeographicAreas",
-            "load": require("lookups/lcgacs")
+            "load": require("src/lookups/lcgacs")
         },
         "http://id.loc.gov/vocabulary/languages": {
             "name": "Languages",
-            "load": require("lookups/lclanguages")
+            "load": require("src/lookups/lclanguages")
         },
         "http://id.loc.gov/vocabulary/identifiers": {
             "name": "Identifiers",
-            "load": require("lookups/lcidentifiers")
+            "load": require("src/lookups/lcidentifiers")
         },
         "http://id.loc.gov/vocabulary/targetAudiences": {
             "name": "Audiences",
-            "load": require("lookups/lctargetaudiences")
+            "load": require("src/lookups/lctargetaudiences")
         },
         "http://id.loc.gov/vocabulary/iso639-1": {
             "name": "ISO639-1",
-            "load": require("lookups/iso6391")
+            "load": require("src/lookups/iso6391")
         },
         "http://id.loc.gov/vocabulary/iso639-2": {
             "name": "ISO639-2",
-            "load": require("lookups/iso6392")
+            "load": require("src/lookups/iso6392")
         },
         "http://id.loc.gov/vocabulary/iso639-5": {
             "name": "ISO639-5",
-            "load": require("lookups/iso6395")
+            "load": require("src/lookups/iso6395")
         },
         "http://id.loc.gov/vocabulary/contentTypes": {
             "name": "RDA-Content-Types",
-            "load": require("lookups/rdacontenttypes")
+            "load": require("src/lookups/rdacontenttypes")
         },
         "http://id.loc.gov/vocabulary/mediaTypes": {
             "name": "RDA-Media-Types",
-            "load": require("lookups/rdamediatypes")
+            "load": require("src/lookups/rdamediatypes")
         },
         "http://id.loc.gov/vocabulary/carriers": {
             "name": "RDA-Carriers",
-            "load": require("lookups/rdacarriers")
+            "load": require("src/lookups/rdacarriers")
         }
     };
+    
+    exports.aceconfig = require("src/lib/aceconfig");
+
+    /**
+    * Provides access to require in packed noconflict mode
+    * @param {String} moduleName
+    * @returns {Object}
+    *
+    **/
+    exports.require = require;
     
     exports.setConfig = function(config) {
                     
@@ -132,13 +131,15 @@ define(function(require, exports, module) {
             });
         }
         
-        loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + Object.keys(config.lookups).length;
-        for (k in config.lookups) {
-            var lu = config.lookups[k];
-            console.log("Loading " + lu.load);
-            require([lu.load], function(r) {
-                setLookup(r);
-            });
+        if (config.lookups !== undefined) {
+            loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + Object.keys(config.lookups).length;
+            for (k in config.lookups) {
+                var lu = config.lookups[k];
+                console.log("Loading " + lu.load);
+                require([lu.load], function(r) {
+                    setLookup(r);
+                });
+            }
         }
         if (editorconfig.baseURI === undefined) {
             editorconfig.baseURI = window.location.protocol + "//" + window.location.host + "/";

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BF Editor</title>
+        
+        <script src="builds/bfe-0.0.1.min.js"></script>
+        <link href="builds/bfe-0.0.1.min.css" rel="stylesheet" />
+        
+        <script type="text/javascript">
+            function myCB(jsonld) {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
+                document.getElementById("bfeditor").innerHTML = '<pre>' + JSON.stringify(jsonld, undefined, " ") + '</pre>';
+            }
+            
+            var config = {
+                "baseURI": "http://example.org/",
+                "profiles": [
+                    "erimille/agents",
+                    "erimille/events",
+                    "erimille/language",
+                    "erimille/book",
+                    "erimille/record",
+                    "erimille/vra",
+                    "shared/agents",
+                    "shared/authorities",
+                    "shared/categories",
+                    "kefo/works",
+                    "kefo/instances",
+                    "kefo/annotations",
+                    "rda/works",
+                    "rda/instances",
+                    "rda/annotations",
+                ],
+                
+                "startingPoints": [
+                    {
+                        "menuGroup": "Copy Cataloging",
+                        "menuItems": [
+                            {
+                                label: "New Holding", 
+                                useResourceTemplates: [ "rt:Annotation:HeldItem" ]
+                            }
+                        ]
+                    },
+                    {
+                        "menuGroup": "RDA Entities, for a Book",
+                        "menuItems": [
+                            {
+                                label: "Work/Expression", 
+                                useResourceTemplates: [ "rda:Work:Literature" ]
+                            },
+                            {
+                                label: "Manifestation", 
+                                useResourceTemplates: [ "rda:Instance:Book" ]
+                            },
+                            {
+                                label: "Item", 
+                                useResourceTemplates: [ "rda:Annotation:HeldItem" ]
+                            }
+                        ]
+                    },
+                    {
+                        "menuGroup": "Original Cataloging",
+                        "menuItems": [
+                            {
+                                label: "Electronic Book", 
+                                useResourceTemplates: [  "rt:Work:EricBook", "rt:Instance:ElectronicBook" ]
+                            },
+                            {
+                                label: "Vinyl Record", 
+                                useResourceTemplates: [  "rt:Work:Audio", "vinyl" ]
+                            }
+                        ]
+                    }
+                ],
+                "return": {
+                    "format": "jsonld-expanded",
+                    "callback": myCB
+                }
+                
+            }
+
+        </script>
+        
+    </head>
+    <body>
+    
+    <div class="container">
+      <div id="bfeditor" />
+    </div>
+    
+    <script type="text/javascript">
+        var bfeditor = bfe.fulleditor(config, "bfeditor");
+    </script>
+    
+    </body>
+</html>

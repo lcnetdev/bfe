@@ -1,0 +1,29 @@
+{
+    "name": "bfe",
+    "description": "Editor for BIBFRAME data (but more generically an RDF editor)",
+    "keywords": [
+        "bibframe",
+        "editor",
+        "rdf"
+    ],
+    "version": "0.1.0",
+    "homepage" : "http://github.com/kefo/bfe",
+    "engines": {"node": ">= 0.9.0"},
+    "author": "Kevin Ford <kefo@3windmills.com>",
+    "main": "src/bfe",
+    "repository" : {
+        "type" : "git",
+         "url" : "http://github.com/kefo/bfe.git"
+    },
+    "dependencies": {
+        "dryice": "0.4.x",
+        "clean-css": "2.1.x"
+    },
+    "bugs": {
+        "url": "http://github.com/kefo/bfe/issues"
+    },
+    "licenses": [{
+        "type": "MIT",
+        "url": "http://opensource.org/licenses/MIT"
+    }]
+}
