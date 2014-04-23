@@ -99,8 +99,13 @@ define(function(require, exports, module) {
         }
     };
     
+    
+    /*
+    The following two bits of code come from the Ace Editor code base.
+    Included here to make 'building' work correctly.  See:
+    https://github.com/ajaxorg/ace/blob/master/lib/ace/ace.js
+    */
     exports.aceconfig = require("src/lib/aceconfig");
-
     /**
     * Provides access to require in packed noconflict mode
     * @param {String} moduleName
@@ -168,6 +173,8 @@ define(function(require, exports, module) {
                                 OK, so I would /like/ to just ise rdfstore here
                                 but it is treating literals identified using @value
                                 within JSON objects as resources.  It gives them blank nodes.
+                                This does not seem right and I don't have time to
+                                investigate.
                                 So, will parse the JSONLD myself, dagnabbit. 
                                 NOTE: it totally expects JSONLD expanded form.
                             */
@@ -177,38 +184,6 @@ define(function(require, exports, module) {
                                     t.rtID = l.templateID;
                                 }
                             });
-                            /*
-                            data.forEach(function(resource){
-                                var s = typeof resource["@id"] !== 'undefined' ? resource["@id"] : '_:b' + guid();
-                                for (var p in resource) {
-                                    if (p !== "@id") {
-                                        resource[p].forEach(function(o) {
-                                            var tguid = guid();
-                                            var triple = {};
-                                            triple.guid = tguid;
-                                            if (p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && o["@id"] !== undefined && s == l.defaulturi.replace('ml38281/', '')) {
-                                                triple.rtID = l.templateID;
-                                            }
-                                            triple.s = s;
-                                            triple.p = p;
-                                            if (o["@id"] !== undefined) {
-                                                triple.o = o["@id"];
-                                                triple.otype = "uri";
-                                            } else if (o["@value"] !== undefined) {
-                                                triple.o = o["@value"];
-                                                triple.otype = "literal";
-                                                if (o["@language"] !== undefined) {
-                                                    triple.olang = o["@language"];
-                                                }
-                                            }
-                                            tempstore.push(triple);
-                                            bfestore.push(triple);
-                                        });
-                                    }
-                                }
-                                // If a resource does not have a defined type, do we care?
-                            });
-                            */
                             loadtemplate.data = tempstore;
                             console.log("finished query store");
                             cbLoadTemplates();
