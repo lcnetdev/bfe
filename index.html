@@ -39,6 +39,12 @@
                 "rda/works",
                 "rda/instances",
                 "rda/annotations",
+                
+                "bibframe/Agents",
+                "bibframe/Annotations",
+                "bibframe/Authorities",
+                "bibframe/Entities",
+                "bibframe/WIA",
             ],
             
             "startingPoints": [
@@ -82,6 +88,30 @@
                     ]
                 }
             ],
+                "startingPoints": [
+                    {
+                        "menuGroup": "BIBFRAME Generic",
+                        "menuItems": [
+                            {
+                                label: "New HeldItem", 
+                                useResourceTemplates: [ "profile:bf:HeldItem" ]
+                            },
+                            {
+                                label: "New Instance", 
+                                useResourceTemplates: [ "profile:bf:Instance" ]
+                            },
+                            {
+                                label: "New Work", 
+                                useResourceTemplates: [ "profile:bf:Work" ]
+                            },
+                            {
+                                label: "New Work, Instance, & HeldItem", 
+                                useResourceTemplates: [ "profile:bf:Work", "profile:bf:Instance", "profile:bf:HeldItem" ]
+                            },
+                        ]
+                    }
+                ],
+                
             "lookups":
             {
                 "http://id.loc.gov/authorities/names": {
