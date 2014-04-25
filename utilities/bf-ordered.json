@@ -140,6 +140,7 @@
 		"http://bibframe.org/vocab/identifierValue"
 	],
 	"http://bibframe.org/vocab/Instance":	[
+	    "http://bibframe.org/vocab/sameInstance",
 	    "http://bibframe.org/vocab/instanceOf",
 		"http://bibframe.org/vocab/authorizedAccessPoint",
 		"http://bibframe.org/vocab/label",
@@ -406,6 +407,7 @@
 		"http://bibframe.org/vocab/role"
 	],
 	"http://bibframe.org/vocab/Work":	[
+	    "http://bibframe.org/vocab/sameWork",
 		"http://bibframe.org/vocab/authorizedAccessPoint",
 		"http://bibframe.org/vocab/label",
 		"http://bibframe.org/vocab/workTitle",
