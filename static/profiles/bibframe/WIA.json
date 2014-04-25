@@ -9,6 +9,17 @@
     "resourceLabel": "Work",
     "propertyTemplates": [
      {
+      "propertyURI": "http://bibframe.org/vocab/sameWork",
+      "propertyLabel": "Lookup",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/resources/works"
+       ]
+      }
+     },
+     {
       "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
       "propertyLabel": "Authorized access point",
       "type": "literal"
@@ -293,7 +304,12 @@
      {
       "propertyURI": "http://bibframe.org/vocab/relatedTo",
       "propertyLabel": "Related to another resource",
-      "type": "resource"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/relatedWork",
@@ -348,12 +364,22 @@
      {
       "propertyURI": "http://bibframe.org/vocab/accompaniedBy",
       "propertyLabel": "Accompanied by",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/accompanies",
       "propertyLabel": "Accompanies",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/continuedBy",
@@ -418,32 +444,62 @@
      {
       "propertyURI": "http://bibframe.org/vocab/hasDerivative",
       "propertyLabel": "Has derivative",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/hasEquivalent",
       "propertyLabel": "Equivalence",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/hasPart",
       "propertyLabel": "Has part",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isDerivativeOf",
       "propertyLabel": "Is derivative of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isDescriptionOf",
       "propertyLabel": "Is description of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isPartOf",
       "propertyLabel": "Is part of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/mergedToForm",
@@ -478,12 +534,22 @@
      {
       "propertyURI": "http://bibframe.org/vocab/precededBy",
       "propertyLabel": "Preceded By",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/succeededBy",
       "propertyLabel": "Succeeded By",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/systemNumber",
@@ -822,6 +888,17 @@
     "id": "profile:bf:Instance",
     "resourceLabel": "Instance",
     "propertyTemplates": [
+     {
+      "propertyURI": "http://bibframe.org/vocab/sameWork",
+      "propertyLabel": "Lookup",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/resources/works"
+       ]
+      }
+     },
      {
       "propertyURI": "http://bibframe.org/vocab/instanceOf",
       "propertyLabel": "Instance of",
@@ -1282,7 +1359,12 @@
      {
       "propertyURI": "http://bibframe.org/vocab/relatedTo",
       "propertyLabel": "Related to another resource",
-      "type": "resource"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/relatedInstance",
@@ -1297,52 +1379,102 @@
      {
       "propertyURI": "http://bibframe.org/vocab/accompaniedBy",
       "propertyLabel": "Accompanied by",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/accompanies",
       "propertyLabel": "Accompanies",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/hasDerivative",
       "propertyLabel": "Has derivative",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/hasEquivalent",
       "propertyLabel": "Equivalence",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/hasPart",
       "propertyLabel": "Has part",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isDerivativeOf",
       "propertyLabel": "Is derivative of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isDescriptionOf",
       "propertyLabel": "Is description of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/isPartOf",
       "propertyLabel": "Is part of",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/precededBy",
       "propertyLabel": "Preceded By",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/succeededBy",
       "propertyLabel": "Succeeded By",
-      "type": "literal"
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
      },
      {
       "propertyURI": "http://bibframe.org/vocab/identifier",

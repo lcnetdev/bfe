@@ -267,7 +267,7 @@
      {
       "propertyURI": "http://bibframe.org/vocab/summaryOf",
       "propertyLabel": "Resource summarized",
-      "type": "literal"
+      "type": "resource"
      },
      {
       "propertyURI": "http://bibframe.org/vocab/startOfSummary",
