@@ -95,6 +95,17 @@ var modifications = {
             }
         },
         "http://bibframe.org/vocab/Work": {
+            "http://bibframe.org/vocab/sameWork": {
+                "propertyURI": "http://bibframe.org/vocab/sameWork",
+                "propertyLabel": "Lookup",
+                "type": "resource",
+                "valueConstraint": {
+                    "repeatable": "false",
+                    "useValuesFrom": [
+                        "http://id.loc.gov/resources/works"
+                    ]
+                },
+            },
             "http://bibframe.org/vocab/agent": {
                 "valueConstraint": {
                     "valueTemplateRefs": [
@@ -118,6 +129,17 @@ var modifications = {
             }
         },
         "http://bibframe.org/vocab/Instance": {
+            "http://bibframe.org/vocab/sameInstance": {
+                "propertyURI": "http://bibframe.org/vocab/sameWork",
+                "propertyLabel": "Lookup",
+                "type": "resource",
+                "valueConstraint": {
+                    "repeatable": "false",
+                    "useValuesFrom": [
+                        "http://id.loc.gov/resources/works"
+                    ]
+                },
+            },
             "http://bibframe.org/vocab/agent": {
                 "valueConstraint": {
                     "valueTemplateRefs": [
@@ -298,48 +320,101 @@ function processResourceInfo(resources, bfordered) {
             }
             var chosenProps = bfordered[rt.resourceURI];
             chosenProps.forEach(function(cp){
-                var p = lodash.where(resources, {"@id": cp})[0];
                 var pt = {};
-                if (modifications[rt.resourceURI] !== undefined && modifications[rt.resourceURI][cp] !== undefined) {
+                var p = lodash.where(resources, {"@id": cp});
+                if (
+                        p[0] === undefined && 
+                        modifications[rt.resourceURI] !== undefined && 
+                        modifications[rt.resourceURI][cp] !== undefined
+                    ) {
+                    // This property URI was not found in the vocabulary *but* it is accounted 
+                    // for in the modifications.  So, use it.
                     pt = modifications[rt.resourceURI][cp];
-                }
-                if (pt.propertyURI === undefined) {
-                    pt.propertyURI = p["@id"];
-                }
-                if (pt.propertyLabel === undefined) {
-                    pt.propertyLabel = p["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
-                }
-                pt.type = "literal";
-                if ( p["http://www.w3.org/2000/01/rdf-schema#range"] !== undefined && p["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] != "http://www.w3.org/2000/01/rdf-schema#Literal" ) {
-                        // Assume this is a resource for now
-                    // Will likely be a problem in the future
-                    pt.type = "resource";
-                    if (
-                            modifications[rt.resourceURI] !== undefined && 
-                            modifications[rt.resourceURI][pt.propertyURI] !== undefined &&
-                            modifications[rt.resourceURI][pt.propertyURI].valueConstraint !== undefined
-                        ) {
-                        pt.valueConstraint = modifications[rt.resourceURI][pt.propertyURI].valueConstraint; 
-                    } else if (p["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] != "http://bibframe.org/vocab/Resource") {
-                        p["http://www.w3.org/2000/01/rdf-schema#range"].forEach(function(range) {
-                            if (range["@id"] !== undefined && range["@id"].match("http://bibframe.org/vocab/")) {
-                                if (pt.valueConstraint === undefined) { 
-                                    pt.valueConstraint = { "valueTemplateRefs": [] };
-                                } else if (pt.valueConstraint.valueTemplateRefs === undefined) { 
-                                    pt.valueConstraint.valueTemplateRefs = [];
-                                }
-                                if ( range["@id"] == "http://bibframe.org/vocab/Agent" ) {
-                                    pt.valueConstraint.valueTemplateRefs = ["profile:bf:Person", "profile:bf:Organization", "profile:bf:Family", "profile:bf:Meeting", "profile:bf:Jurisdiction" ];
-                                } else {
-                                    pt.valueConstraint.valueTemplateRefs.push(range["@id"].replace("http://bibframe.org/vocab/", "profile:bf:"));
-                                }
-                            }
-                        });
+                    rt.propertyTemplates.push(pt);
+                } else {
+                    p = p[0];
+                    if (modifications[rt.resourceURI] !== undefined && modifications[rt.resourceURI][cp] !== undefined) {
+                        pt = modifications[rt.resourceURI][cp];
                     }
+                    if (pt.propertyURI === undefined) {
+                        pt.propertyURI = p["@id"];
+                    }
+                    if (pt.propertyLabel === undefined) {
+                        pt.propertyLabel = p["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
+                    }   
+                    pt.type = "literal";
+                    if ( p["http://www.w3.org/2000/01/rdf-schema#range"] !== undefined && p["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] != "http://www.w3.org/2000/01/rdf-schema#Literal" ) {
+                            // Assume this is a resource for now
+                        // Will likely be a problem in the future
+                        pt.type = "resource";
+                        if (
+                                modifications[rt.resourceURI] !== undefined && 
+                                modifications[rt.resourceURI][pt.propertyURI] !== undefined &&
+                                modifications[rt.resourceURI][pt.propertyURI].valueConstraint !== undefined
+                            ) {
+                            pt.valueConstraint = modifications[rt.resourceURI][pt.propertyURI].valueConstraint; 
+                        } else if (p["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] == "http://bibframe.org/vocab/Resource" && rt.resourceURI.match(/Work|Instance/)) {
+                            if (pt.valueConstraint === undefined) { 
+                                pt.valueConstraint = { "valueTemplateRefs": [] };
+                            } else if (pt.valueConstraint.valueTemplateRefs === undefined) { 
+                                pt.valueConstraint.valueTemplateRefs = [];
+                            }
+                            pt.valueConstraint.valueTemplateRefs = [ rt.id ];
+                        } else if (p["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] != "http://bibframe.org/vocab/Resource") {
+                            p["http://www.w3.org/2000/01/rdf-schema#range"].forEach(function(range) {
+                                if (range["@id"] !== undefined && range["@id"].match("http://bibframe.org/vocab/")) {
+                                    if (pt.valueConstraint === undefined) { 
+                                        pt.valueConstraint = { "valueTemplateRefs": [] };
+                                    } else if (pt.valueConstraint.valueTemplateRefs === undefined) { 
+                                        pt.valueConstraint.valueTemplateRefs = [];
+                                    }
+                                    if ( range["@id"] == "http://bibframe.org/vocab/Agent" ) {
+                                        pt.valueConstraint.valueTemplateRefs = ["profile:bf:Person", "profile:bf:Organization", "profile:bf:Family", "profile:bf:Meeting", "profile:bf:Jurisdiction" ];
+                                    } else {
+                                        pt.valueConstraint.valueTemplateRefs.push(range["@id"].replace("http://bibframe.org/vocab/", "profile:bf:"));
+                                    }
+                                }
+                            });
+                        }
+                    } else if ( p["http://www.w3.org/2000/01/rdf-schema#subPropertyOf"] !== undefined ) {
+                        // This property is a sub property, and its superproperty might have a range.  oy.
+                        var sp = p["http://www.w3.org/2000/01/rdf-schema#subPropertyOf"][0]["@id"];
+                        var sps = lodash.where(resources, {"@id": sp})[0];
+                        pt.type = "resource";
+                        if (
+                                modifications[rt.resourceURI] !== undefined && 
+                                modifications[rt.resourceURI][pt.propertyURI] !== undefined &&
+                                modifications[rt.resourceURI][pt.propertyURI].valueConstraint !== undefined
+                            ) {
+                            pt.valueConstraint = modifications[rt.resourceURI][pt.propertyURI].valueConstraint; 
+                        } else if (sps["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] == "http://bibframe.org/vocab/Resource" && rt.resourceURI.match(/Work|Instance/)) {
+                            if (pt.valueConstraint === undefined) { 
+                                pt.valueConstraint = { "valueTemplateRefs": [] };
+                            } else if (pt.valueConstraint.valueTemplateRefs === undefined) { 
+                                pt.valueConstraint.valueTemplateRefs = [];
+                            }
+                            pt.valueConstraint.valueTemplateRefs = [ rt.id ];
+                        } else if (sps["http://www.w3.org/2000/01/rdf-schema#range"][0]["@id"] != "http://bibframe.org/vocab/Resource") {
+                            sps["http://www.w3.org/2000/01/rdf-schema#range"].forEach(function(range) {
+                                if (range["@id"] !== undefined && range["@id"].match("http://bibframe.org/vocab/")) {
+                                    if (pt.valueConstraint === undefined) { 
+                                        pt.valueConstraint = { "valueTemplateRefs": [] };
+                                    } else if (pt.valueConstraint.valueTemplateRefs === undefined) { 
+                                        pt.valueConstraint.valueTemplateRefs = [];
+                                    }
+                                    if ( range["@id"] == "http://bibframe.org/vocab/Agent" ) {
+                                        pt.valueConstraint.valueTemplateRefs = ["profile:bf:Person", "profile:bf:Organization", "profile:bf:Family", "profile:bf:Meeting", "profile:bf:Jurisdiction" ];
+                                    } else {
+                                        pt.valueConstraint.valueTemplateRefs.push(range["@id"].replace("http://bibframe.org/vocab/", "profile:bf:"));
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    rt.propertyTemplates.push(pt);
                 }
-                rt.propertyTemplates.push(pt);
+            
             });
-            //profileRTs.push(rt);
         });
         var fname = profile.Profile.id.replace("profile:bf:", "") + ".json";
         console.log("Writing: " + fname);
