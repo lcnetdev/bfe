@@ -296,8 +296,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         }
     };
     
+    /*
+    The following two bits of code come from the Ace Editor code base.
+    Included here to make 'building' work correctly.  See:
+    https://github.com/ajaxorg/ace/blob/master/lib/ace/ace.js
+    */
     exports.aceconfig = require("src/lib/aceconfig");
-
     /**
     * Provides access to require in packed noconflict mode
     * @param {String} moduleName
@@ -365,6 +369,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 OK, so I would /like/ to just ise rdfstore here
                                 but it is treating literals identified using @value
                                 within JSON objects as resources.  It gives them blank nodes.
+                                This does not seem right and I don't have time to
+                                investigate.
                                 So, will parse the JSONLD myself, dagnabbit. 
                                 NOTE: it totally expects JSONLD expanded form.
                             */
@@ -374,38 +380,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                     t.rtID = l.templateID;
                                 }
                             });
-                            /*
-                            data.forEach(function(resource){
-                                var s = typeof resource["@id"] !== 'undefined' ? resource["@id"] : '_:b' + guid();
-                                for (var p in resource) {
-                                    if (p !== "@id") {
-                                        resource[p].forEach(function(o) {
-                                            var tguid = guid();
-                                            var triple = {};
-                                            triple.guid = tguid;
-                                            if (p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && o["@id"] !== undefined && s == l.defaulturi.replace('ml38281/', '')) {
-                                                triple.rtID = l.templateID;
-                                            }
-                                            triple.s = s;
-                                            triple.p = p;
-                                            if (o["@id"] !== undefined) {
-                                                triple.o = o["@id"];
-                                                triple.otype = "uri";
-                                            } else if (o["@value"] !== undefined) {
-                                                triple.o = o["@value"];
-                                                triple.otype = "literal";
-                                                if (o["@language"] !== undefined) {
-                                                    triple.olang = o["@language"];
-                                                }
-                                            }
-                                            tempstore.push(triple);
-                                            bfestore.push(triple);
-                                        });
-                                    }
-                                }
-                                // If a resource does not have a defined type, do we care?
-                            });
-                            */
                             loadtemplate.data = tempstore;
                             console.log("finished query store");
                             cbLoadTemplates();
@@ -681,23 +655,23 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 property.guid = pguid;
                 property.display = "true";
                 
-                var formgroup = $('<div>', {class: "form-group"});
-                var label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
-                var saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
+                var $formgroup = $('<div>', {class: "form-group"});
+                var $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
+                var $saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
                 
                 if (property.type == "literal") {
                     
-                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                    var $input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                    button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
-                    $(button).click(function(){
+                    $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                    $button.click(function(){
                         setLiteral(fobject.id, rt.guid, property.guid);
                     });
                     
-                    formgroup.append(label);
-                    formgroup.append(input);
-                    formgroup.append(button);
-                    formgroup.append(saves);
+                    $formgroup.append($label);
+                    $formgroup.append($input);
+                    $formgroup.append($button);
+                    $formgroup.append($saves);
                 }
                 
                 if (property.type == "resource") {
@@ -726,90 +700,93 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             }
                             button.append(ul);
                             */
-                            buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
-                            buttongrp = $('<div class="btn-group btn-group-sm"></div>');
+                            $buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
+                            $buttongrp = $('<div class="btn-group btn-group-sm"></div>');
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
-                                //console.log(vtrs);
                                 var valueTemplates = _.where(resourceTemplates, {"id": vtrs});
                                 if (valueTemplates[0] !== undefined) {
                                     var vt = valueTemplates[0];
                                     //console.log(vt);
-                                    var b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
+                                    var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
                                     
                                     var fid = fobject.id;
                                     var rtid = rt.guid;
                                     var pid = property.guid;
                                     var newResourceURI = editorconfig.baseURI + guid();
-                                    $(b).click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
+                                    $b.click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
                                         //console.log(event.data.template);
                                         openModal(event.data.fobjectid, event.data.template, event.data.newResourceURI, event.data.propertyguid, []);
                                     });
-                                    buttongrp.append(b);
+                                    $buttongrp.append($b);
                                 }
                             }
-                            buttondiv.append(buttongrp);
+                            $buttondiv.append($buttongrp);
                             
-                            formgroup.append(label);
-                            formgroup.append(buttondiv);
-                            formgroup.append(saves);
+                            $formgroup.append($label);
+                            $formgroup.append($buttondiv);
+                            $formgroup.append($saves);
                         } else if (_.has(property.valueConstraint, "useValuesFrom")) {
                             
-                            var inputdiv = $('<div class="col-sm-8"></div>');
-                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
+
+                            var $inputdiv = $('<div class="col-sm-8"></div>');
+                            var $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
                             
-                            inputdiv.append(input);
+                            $inputdiv.append($input);
                             
-                            formgroup.append(label);
-                            formgroup.append(inputdiv);
+                            $formgroup.append($label);
+                            $formgroup.append($inputdiv);
                             //formgroup.append(button);
-                            formgroup.append(saves);
+                            $formgroup.append($saves);
                             
-                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.indexOf("Lookup") !== -1) {
+                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
-                                var saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                                var spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
-                                formgroup.append(saveLookup);
-                                formgroup.append(spacer);
+                                var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
+                                var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                                $formgroup.append($saveLookup);
+                                $formgroup.append($spacer);
+                            } else {
+                                // let's suppress it
+                                $input.prop("disabled", true);
                             }
                             
                         } else {
                             // Type is resource, so should be a URI, but there is
                             // no "value template reference" or "use values from vocabularies" 
                             // reference for it so just create label field
-                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                            var $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                            button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                            $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
                             $(button).click(function(){
                                 setResourceFromLabel(fobject.id, rt.guid, property.guid);
                             });
                             
-                            formgroup.append(label);
-                            formgroup.append(input);
-                            formgroup.append(button);
-                            formgroup.append(saves);
+                            $formgroup.append($label);
+                            $formgroup.append($input);
+                            $formgroup.append($button);
+                            $formgroup.append($saves);
                     
                         }
                     } else {
                         // Type is resource, so should be a URI, but there is
                         // no constraint for it so just create a label field.
-                        var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                        var $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                        button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
-                            $(button).click(function(){
+                        $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                            $button.click(function(){
                                 setResourceFromLabel(fobject.id, rt.guid, property.guid);
                         });
                             
-                        formgroup.append(label);
-                        formgroup.append(input);
-                        formgroup.append(button);
-                        formgroup.append(saves);
+                        $formgroup.append($label);
+                        $formgroup.append($input);
+                        $formgroup.append($button);
+                        $formgroup.append($saves);
                     }
                 }
                 
-                $resourcediv.append(formgroup);
+                $resourcediv.append($formgroup);
                 forEachFirst = false;
             });
             form.append($resourcediv);
@@ -842,6 +819,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
+                                //console.log(rt.resourceURI);
+                                //console.log(property.propertyURI);
+                                //console.log(vtrs);
                                 /*
                                     The following will be true, for example, when two 
                                     profiles are to be rendered in one form.  Say that 
@@ -3549,8 +3529,9 @@ bfe.define('src/lookups/rdacarriers', ['require', 'exports', 'module' , 'src/loo
 
 });
 /*
-    kefo: Copied from Ace editor repository and modified (mostly deletions) to 
-    work in this context.  This file is needed to define the javascript bfe 
+    kefo: The immediate function is copied from the Ace editor repository 
+    and modified (mostly deletions) to work in this context.  This 
+    file is needed to define the javascript bfe 
     namespace since we use dryice to build and not requirejs.
     From: https://github.com/ajaxorg/ace/blob/master/lib/ace/config.js
     
