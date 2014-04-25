@@ -508,7 +508,6 @@ define(function(require, exports, module) {
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
-                                //console.log(vtrs);
                                 var valueTemplates = _.where(resourceTemplates, {"id": vtrs});
                                 if (valueTemplates[0] !== undefined) {
                                     var vt = valueTemplates[0];
