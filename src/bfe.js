@@ -458,23 +458,23 @@ define(function(require, exports, module) {
                 property.guid = pguid;
                 property.display = "true";
                 
-                var formgroup = $('<div>', {class: "form-group"});
-                var label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
-                var saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
+                var $formgroup = $('<div>', {class: "form-group"});
+                var $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label">' + property.propertyLabel + '</label>');
+                var $saves = $('<div class="form-group"><div class="col-sm-3"></div><div class="col-sm-8"><div class="btn-toolbar" role="toolbar"></div></div></div>');
                 
                 if (property.type == "literal") {
                     
-                    var input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                    var $input = $('<div class="col-sm-8"><input type="email" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                    button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
-                    $(button).click(function(){
+                    $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                    $button.click(function(){
                         setLiteral(fobject.id, rt.guid, property.guid);
                     });
                     
-                    formgroup.append(label);
-                    formgroup.append(input);
-                    formgroup.append(button);
-                    formgroup.append(saves);
+                    $formgroup.append($label);
+                    $formgroup.append($input);
+                    $formgroup.append($button);
+                    $formgroup.append($saves);
                 }
                 
                 if (property.type == "resource") {
@@ -503,8 +503,8 @@ define(function(require, exports, module) {
                             }
                             button.append(ul);
                             */
-                            buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
-                            buttongrp = $('<div class="btn-group btn-group-sm"></div>');
+                            $buttondiv = $('<div class="col-sm-8" id="' + property.guid +'"></div>');
+                            $buttongrp = $('<div class="btn-group btn-group-sm"></div>');
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
@@ -512,80 +512,84 @@ define(function(require, exports, module) {
                                 if (valueTemplates[0] !== undefined) {
                                     var vt = valueTemplates[0];
                                     //console.log(vt);
-                                    var b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
+                                    var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
                                     
                                     var fid = fobject.id;
                                     var rtid = rt.guid;
                                     var pid = property.guid;
                                     var newResourceURI = editorconfig.baseURI + guid();
-                                    $(b).click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
+                                    $b.click({fobjectid: fid, newResourceURI: newResourceURI, propertyguid: pid, template: vt}, function(event){
                                         //console.log(event.data.template);
                                         openModal(event.data.fobjectid, event.data.template, event.data.newResourceURI, event.data.propertyguid, []);
                                     });
-                                    buttongrp.append(b);
+                                    $buttongrp.append($b);
                                 }
                             }
-                            buttondiv.append(buttongrp);
+                            $buttondiv.append($buttongrp);
                             
-                            formgroup.append(label);
-                            formgroup.append(buttondiv);
-                            formgroup.append(saves);
+                            $formgroup.append($label);
+                            $formgroup.append($buttondiv);
+                            $formgroup.append($saves);
                         } else if (_.has(property.valueConstraint, "useValuesFrom")) {
                             
-                            var inputdiv = $('<div class="col-sm-8"></div>');
-                            var input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
+
+                            var $inputdiv = $('<div class="col-sm-8"></div>');
+                            var $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
                             
-                            inputdiv.append(input);
+                            $inputdiv.append($input);
                             
-                            formgroup.append(label);
-                            formgroup.append(inputdiv);
+                            $formgroup.append($label);
+                            $formgroup.append($inputdiv);
                             //formgroup.append(button);
-                            formgroup.append(saves);
+                            $formgroup.append($saves);
                             
-                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.indexOf("Lookup") !== -1) {
+                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
-                                var saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                                var spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
-                                formgroup.append(saveLookup);
-                                formgroup.append(spacer);
+                                var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
+                                var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                                $formgroup.append($saveLookup);
+                                $formgroup.append($spacer);
+                            } else {
+                                // let's suppress it
+                                $input.prop("disabled", true);
                             }
                             
                         } else {
                             // Type is resource, so should be a URI, but there is
                             // no "value template reference" or "use values from vocabularies" 
                             // reference for it so just create label field
-                            var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                            var $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                            button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                            $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
                             $(button).click(function(){
                                 setResourceFromLabel(fobject.id, rt.guid, property.guid);
                             });
                             
-                            formgroup.append(label);
-                            formgroup.append(input);
-                            formgroup.append(button);
-                            formgroup.append(saves);
+                            $formgroup.append($label);
+                            $formgroup.append($input);
+                            $formgroup.append($button);
+                            $formgroup.append($saves);
                     
                         }
                     } else {
                         // Type is resource, so should be a URI, but there is
                         // no constraint for it so just create a label field.
-                        var input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+                        var $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
                     
-                        button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
-                            $(button).click(function(){
+                        $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button>');
+                            $button.click(function(){
                                 setResourceFromLabel(fobject.id, rt.guid, property.guid);
                         });
                             
-                        formgroup.append(label);
-                        formgroup.append(input);
-                        formgroup.append(button);
-                        formgroup.append(saves);
+                        $formgroup.append($label);
+                        $formgroup.append($input);
+                        $formgroup.append($button);
+                        $formgroup.append($saves);
                     }
                 }
                 
-                $resourcediv.append(formgroup);
+                $resourcediv.append($formgroup);
                 forEachFirst = false;
             });
             form.append($resourcediv);
@@ -618,6 +622,9 @@ define(function(require, exports, module) {
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
+                                //console.log(rt.resourceURI);
+                                //console.log(property.propertyURI);
+                                //console.log(vtrs);
                                 /*
                                     The following will be true, for example, when two 
                                     profiles are to be rendered in one form.  Say that 
