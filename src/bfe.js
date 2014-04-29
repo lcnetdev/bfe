@@ -132,6 +132,7 @@ define(function(require, exports, module) {
                 async: false,
                 url: file,
                 success: function(data) {
+                    $("#bfeditor-loader").width($("#bfeditor-loader").width()+5+"%");
                     profiles.push(data);
                     for (var rt=0; rt < data.Profile.resourceTemplates.length; rt++) {
                         resourceTemplates.push(data.Profile.resourceTemplates[rt]);
@@ -255,11 +256,28 @@ define(function(require, exports, module) {
     
     exports.fulleditor = function (config, id) {
         
-        this.setConfig(config);
-        
         editordiv = document.getElementById(id);
         
         var $menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
+        var $formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-10"});
+        //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+        var $rowdiv = $('<div>', {class: "row"});
+        
+        var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
+                        <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
+                            <span class="sr-only">80% Complete</span>\
+                        </div>\
+                    </div>');
+
+        $formdiv.append($loader);
+        $rowdiv.append($menudiv);
+        $rowdiv.append($formdiv);
+        //rowdiv.append(optiondiv);
+
+        $(editordiv).append($rowdiv);
+        
+        this.setConfig(config);
+        
         for (var h=0; h < config.startingPoints.length; h++) {
             var sp = config.startingPoints[h];
             var $menuul = $('<ul>', {class: "nav nav-stacked"});
@@ -286,18 +304,6 @@ define(function(require, exports, module) {
             }
             $menudiv.append($menuul);
         }
-        
-        var $formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-10"});
-        
-        //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-        
-        var $rowdiv = $('<div>', {class: "row"});
-        
-        $rowdiv.append($menudiv);
-        $rowdiv.append($formdiv);
-        //rowdiv.append(optiondiv);
-
-        $(editordiv).append($rowdiv);
     
         // Debug div
         if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == "DEBUG") {
@@ -372,37 +378,41 @@ define(function(require, exports, module) {
     }
     
     function cbLoadTemplates() {
+        $("#bfeditor-loader").width($("#bfeditor-loader").width()+5+"%");
         loadtemplatesANDlookupsCounter++;
         if (loadtemplatesANDlookupsCounter >= loadtemplatesANDlookupsCount) {
-            bfelog.addMsg(new Error(), "DEBUG", "Loading selected template(s)", loadtemplates);
-            var form = getForm(loadtemplates);
-            $( ".typeahead", form.form ).each(function() {
-                setTypeahead(this);
-            });
-            var $exitButtonGroup = $('<div class="btn-group pull-right"> \
-                <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
-                <!-- <button id="bfeditor-exitsaveasnew" type="button" class="btn btn-primary">Save as new</button> --> \
-                <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-            </div>');
-            form.form.append($exitButtonGroup);
-            
-            $("#bfeditor-exitcancel", form.form).click(function(){
-                cbLoadTemplates();
-            });
-            $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
-            
-            //$("#bfeditor-exitsaveasnew", form.form).click(function(){
-            //    cbLoadTemplates();
-            //});
-            
-            $("#bfeditor-exitsave", form.form).click(function(){
-                editorconfig.return.callback(bfestore.store2jsonldExpanded());
-            });
-            $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
-            
             $("#bfeditor-formdiv").html("");
-            $("#bfeditor-formdiv").append(form.form);
-            $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
+            if (loadtemplates.length > 0) {
+                bfelog.addMsg(new Error(), "DEBUG", "Loading selected template(s)", loadtemplates);
+                var form = getForm(loadtemplates);
+                $( ".typeahead", form.form ).each(function() {
+                    setTypeahead(this);
+                });
+                var $exitButtonGroup = $('<div class="btn-group pull-right"> \
+                    <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
+                    <!-- <button id="bfeditor-exitsaveasnew" type="button" class="btn btn-primary">Save as new</button> --> \
+                    <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
+                </div>');
+                form.form.append($exitButtonGroup);
+                
+                $("#bfeditor-exitcancel", form.form).click(function(){
+                    cbLoadTemplates();
+                });
+                $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
+                
+                //$("#bfeditor-exitsaveasnew", form.form).click(function(){
+                //    cbLoadTemplates();
+                //});
+                
+                $("#bfeditor-exitsave", form.form).click(function(){
+                    editorconfig.return.callback(bfestore.store2jsonldExpanded());
+                });
+                $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
+                
+                $("#bfeditor-formdiv").html("");
+                $("#bfeditor-formdiv").append(form.form);
+                $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
+            }
         }
     }
     
