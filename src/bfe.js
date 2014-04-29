@@ -179,7 +179,7 @@ define(function(require, exports, module) {
                             bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + l.source.location);
                             bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
                             /*
-                                OK, so I would /like/ to just ise rdfstore here
+                                OK, so I would /like/ to just use rdfstore here
                                 but it is treating literals identified using @value
                                 within JSON objects as resources.  It gives them blank nodes.
                                 This does not seem right and I don't have time to
@@ -314,7 +314,9 @@ define(function(require, exports, module) {
 
         return {
             "profiles": profiles,
-            "div": editordiv
+            "div": editordiv,
+            "bfestore": bfestore,
+            "bfelog": bfelog,
         };
     };
     
@@ -350,7 +352,9 @@ define(function(require, exports, module) {
 
         return {
             "profiles": profiles,
-            "div": editordiv
+            "div": editordiv,
+            "bfestore": bfestore,
+            "bfelog": bfelog,
         };
     };
     
@@ -392,7 +396,7 @@ define(function(require, exports, module) {
             //});
             
             $("#bfeditor-exitsave", form.form).click(function(){
-                editorconfig.return.callback(bfestore.store);
+                editorconfig.return.callback(bfestore.store2jsonldExpanded());
             });
             $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
             
@@ -461,6 +465,11 @@ define(function(require, exports, module) {
                 fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
                 fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
                 fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
+                // We need to make sure this resourceTemplate has a defaulturi
+                if (fobject.resourceTemplates[urt].defaulturi === undefined) {
+                    fobject.resourceTemplates[urt].defaulturi = editorconfig.baseURI + loadTemplates[urt].templateGUID;
+                }
+                
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             } else {
                 bfelog.addMsg(new Error(), "WARN", "Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.");
@@ -697,7 +706,7 @@ define(function(require, exports, module) {
                 if (propsdata[0] !== undefined) {
                     // If this property exists for this resource in the pre-loaded data
                     // then we need to make it appear.
-                    bfelog.addMsg(new Error(), "DEBUG", "Found pre-loaded data for " + property.propertyURI, pd);
+                    bfelog.addMsg(new Error(), "DEBUG", "Found pre-loaded data for " + property.propertyURI);
                     propsdata.forEach(function(pd) {
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
                         var $save = $formgroup.find(".btn-toolbar").eq(0);
