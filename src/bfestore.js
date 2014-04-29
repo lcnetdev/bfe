@@ -13,6 +13,7 @@ define(function(require, exports, module) {
                 return t.s + t.p + t.o + t.otype
             }
         });
+        return exports.store;
     }
     
     exports.jsonld2store = function(jsonld) {
@@ -43,6 +44,69 @@ define(function(require, exports, module) {
             // If a resource does not have a defined type, do we care?
         });
         return exports.store;
+    }
+    
+    exports.store2html = function() {
+        var nl = "\n";
+        var nlindent = nl + "\t";
+        var nlindentindent = nl + "\t\t";
+        var predata = "";
+        var json = exports.store2jsonldExpanded();
+        json.forEach(function(resource) {
+            predata += nl + "ID: " + resource["@id"];
+            predata += nlindent + "Type(s)";
+            resource["@type"].forEach(function(t) {
+                predata += nlindentindent + t["@id"];
+            });
+            for (var t in resource) {
+                if (t !== "@type" && t !== "@id") {
+                    var prop = t.replace("http://bibframe.org/vocab/", "bf:");
+                    prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
+                    predata += nlindent + prop;
+                    resource[t].forEach(function(o) {
+                        if (o["@id"] !== undefined) {
+                            predata += nlindentindent + o["@id"];
+                        } else {
+                            predata += nlindentindent + o["@value"];
+                        }
+                    });
+                }
+            }
+            predata += nl + nl;
+        });
+        return predata;
+    }
+    
+    exports.store2jsonldExpanded = function() {
+        var json = [];
+        exports.storeDedup();
+        groupedResources = _.groupBy(exports.store, function(t) { return t.s; });
+        for (var resourceURI in groupedResources) {
+            var j = {};
+            j["@id"] = resourceURI;
+            groupedProperties = _.groupBy(groupedResources[resourceURI], function(t) { return t.p; });
+            for (var propertyURI in groupedProperties) {
+                var prop = propertyURI;
+                if (propertyURI == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                    prop = "@type";
+                }
+                j[prop] = [];
+                groupedProperties[propertyURI].forEach(function(r) {
+                    if (r.otype == "uri") {
+                        j[prop].push({"@id": r.o});
+                    } else {
+                        var o = {}
+                        if (r.olang !== undefined && r.olang !== "") {
+                            o["@language"] = r.olang;
+                        }
+                        o["@value"] = r.o;
+                        j[prop].push(o);
+                    }
+                });
+            }
+            json.push(j);
+        };
+        return json;
     }
     
     /**
