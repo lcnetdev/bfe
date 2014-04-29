@@ -17,8 +17,9 @@
     
     <script type="text/javascript">
         function myCB(jsonld) {
+            var humanized = bfeditor.bfestore.store2html();
             document.body.scrollTop = document.documentElement.scrollTop = 0;
-            document.getElementById("bfeditor").innerHTML = '<pre>' + JSON.stringify(jsonld, undefined, " ") + '</pre>';
+            document.getElementById("bfeditor").innerHTML = '<div class="row"><div class="col-md-12 text-right"><a href="development.html"><button type="button" class="btn btn-default btn-lg">Start Over</button></a></div></div><h1>Simple HTML View</h1><pre>' + humanized + '</pre><br /><h1>JSONLD-Expanded</h1><pre>' + JSON.stringify(jsonld, undefined, " ") + '</pre>';
         }
             
         var config = {
@@ -153,9 +154,8 @@
                     "defaulturi": "http://id.loc.gov/resources/bibs/5226",
                     "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
                     "source": {
-                        "location-safe": "http://id.loc.gov/ml38281/resources/bibs/5226.bibframe_raw.jsonp",
-                        "location": "/static/examples/5226-test.json",
-                        "requestType": "json",
+                        "location": "http://id.loc.gov/resources/bibs/5226.bibframe_raw.jsonp",
+                        "requestType": "jsonp",
                         "data": "UNUSED, BUT REMEMBER IT"
                     }
                 },
@@ -164,6 +164,7 @@
                     "defaulturi": "_:b105resourcesbibs5226"
                 }
             ],
+            /*
             "load": [
                 {
                     "templateID": "rda:Work:MusicalCollection"
@@ -172,6 +173,7 @@
                     "templateID": "rda:Instance:MusicCD"
                 }
             ],
+            */
             "return": {
                 "format": "jsonld-expanded",
                 "callback": myCB
