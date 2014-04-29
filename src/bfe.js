@@ -317,6 +317,11 @@ define(function(require, exports, module) {
         
         var $footer = $('<div>', {class: "col-md-12"});
         $(editordiv).append($footer);
+        
+        if (loadtemplatesANDlookupsCount === 0) {
+            // There was nothing to load, so we need to get rid of the loader.
+            $formdiv.html("");
+        }
 
         return {
             "profiles": profiles,
