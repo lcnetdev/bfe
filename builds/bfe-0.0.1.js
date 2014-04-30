@@ -195,7 +195,7 @@ function exportAce(ns) {
 exportAce(ACE_NAMESPACE);
 
 })();
-bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.min', 'src/lib/json', 'src/lib/lodash.min', 'src/lib/bootstrap.min', 'src/lib/typeahead.jquery.min', 'src/bfestore', 'src/lookups/lcnames', 'src/lookups/lcsubjects', 'src/lookups/lcgenreforms', 'src/lookups/lcworks', 'src/lookups/lcinstances', 'src/lookups/lcorganizations', 'src/lookups/lccountries', 'src/lookups/lcgacs', 'src/lookups/lclanguages', 'src/lookups/lcidentifiers', 'src/lookups/lctargetaudiences', 'src/lookups/iso6391', 'src/lookups/iso6392', 'src/lookups/iso6395', 'src/lookups/rdacontenttypes', 'src/lookups/rdamediatypes', 'src/lookups/rdacarriers', 'src/lib/aceconfig'], function(require, exports, module) {
+bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.min', 'src/lib/json', 'src/lib/lodash.min', 'src/lib/bootstrap.min', 'src/lib/typeahead.jquery.min', 'src/bfestore', 'src/bfelogging', 'src/lookups/lcnames', 'src/lookups/lcsubjects', 'src/lookups/lcgenreforms', 'src/lookups/lcworks', 'src/lookups/lcinstances', 'src/lookups/lcorganizations', 'src/lookups/lccountries', 'src/lookups/lcgacs', 'src/lookups/lclanguages', 'src/lookups/lcidentifiers', 'src/lookups/lctargetaudiences', 'src/lookups/iso6391', 'src/lookups/iso6392', 'src/lookups/iso6395', 'src/lookups/rdacontenttypes', 'src/lookups/rdamediatypes', 'src/lookups/rdacarriers', 'src/lib/aceconfig'], function(require, exports, module) {
     require("src/lib/jquery-2.1.0.min");
     require("src/lib/json");
     require("src/lib/lodash.min"); // collection/object/array manipulation
@@ -205,6 +205,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     
     var editorconfig = {};
     var bfestore = require("src/bfestore");
+    var bfelog = require("src/bfelogging");
     //var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
@@ -313,21 +314,30 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     exports.setConfig = function(config) {
                     
         editorconfig = config;
+        
+        // Set up logging
+        bfelog.init(editorconfig);
+        
         var files = [];
         for (var i=0; i < config.profiles.length; i++) {
             files[i] = "json!static/profiles/" + config.profiles[i] + ".json";
             file = "static/profiles/" + config.profiles[i] + ".json";
-            console.log("Loading profile: " + config.profiles[i]);
+            bfelog.addMsg(new Error(), "INFO", "Loading profile: " + config.profiles[i]);
             $.ajax({
                 type: "GET",
                 dataType: "json",
                 async: false,
                 url: file,
                 success: function(data) {
+                    $("#bfeditor-loader").width($("#bfeditor-loader").width()+5+"%");
                     profiles.push(data);
                     for (var rt=0; rt < data.Profile.resourceTemplates.length; rt++) {
                         resourceTemplates.push(data.Profile.resourceTemplates[rt]);
                     }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to load profile: " + file);
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
                 }
             });
         }
@@ -336,7 +346,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + Object.keys(config.lookups).length;
             for (k in config.lookups) {
                 var lu = config.lookups[k];
-                console.log("Loading " + lu.load);
+                bfelog.addMsg(new Error(), "INFO", "Loading lookup: " + lu.load);
                 require([lu.load], function(r) {
                     setLookup(r);
                 });
@@ -345,28 +355,29 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         if (editorconfig.baseURI === undefined) {
             editorconfig.baseURI = window.location.protocol + "//" + window.location.host + "/";
         }
-        console.log("baseURI is " + editorconfig.baseURI);
+        bfelog.addMsg(new Error(), "INFO", "baseURI is " + editorconfig.baseURI);
         
         if (config.load !== undefined) {
             loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.load.length;
             config.load.forEach(function(l){
-                    var useguid = guid();
-                    var loadtemplate = {};
-                    var tempstore = [];
-                    loadtemplate.templateGUID = useguid;
-                    loadtemplate.resourceTemplateID = l.templateID;
-                    loadtemplate.resourceURI = l.defaulturi;
-                    loadtemplate.embedType = "page";
-                    loadtemplate.data = tempstore;
-                    loadtemplates.push(loadtemplate);
+                var useguid = guid();
+                var loadtemplate = {};
+                var tempstore = [];
+                loadtemplate.templateGUID = useguid;
+                loadtemplate.resourceTemplateID = l.templateID;
+                loadtemplate.resourceURI = l.defaulturi;
+                loadtemplate.embedType = "page";
+                loadtemplate.data = tempstore;
+                loadtemplates.push(loadtemplate);
                 if (l.source !== undefined && l.source.location !== undefined && l.source.requestType !== undefined) {
                     $.ajax({
                         url: l.source.location,
                         dataType: l.source.requestType,
                         success: function (data) {
-                            console.log(data);
+                            bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + l.source.location);
+                            bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
                             /*
-                                OK, so I would /like/ to just ise rdfstore here
+                                OK, so I would /like/ to just use rdfstore here
                                 but it is treating literals identified using @value
                                 within JSON objects as resources.  It gives them blank nodes.
                                 This does not seem right and I don't have time to
@@ -381,7 +392,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 }
                             });
                             loadtemplate.data = tempstore;
-                            console.log("finished query store");
                             cbLoadTemplates();
                             /*
                             store.load('application/ld+json', data, function(success){
@@ -427,6 +437,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 });
                             });
                             */
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + l.source.location);
+                            bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
                         }
                     });
                 } else {
@@ -439,61 +453,78 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     
     exports.fulleditor = function (config, id) {
         
-        this.setConfig(config);
+        editordiv = document.getElementById(id);
         
-        editordiv = div = document.getElementById(id);
-        
-        var menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
-        for (var h=0; h < config.startingPoints.length; h++) {
-            var sp = config.startingPoints[h];
-            var menuul = $('<ul>', {class: "nav nav-stacked"});
-            var menuheadingul = null;
-            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
-                menuheading = $('<li><h5 style="font-weight: bold">' + sp.menuGroup + '</h5></li>');
-                menuheadingul = $('<ul class="nav"></ul>');
-                menuheading.append(menuheadingul);
-                menuul.append(menuheading);
-            }
-            for (var i=0; i < sp.menuItems.length; i++) {
-                var li = $('<li>');
-                var a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
-                a.html(sp.menuItems[i].label);
-                $(a).click(function(){
-                    menuSelect(this.id);
-                });
-                li = li.append(a);
-                if ( menuheadingul !== null ) {
-                    menuheadingul.append(li);
-                } else {
-                    menuul.append(li);
-                }
-            }
-            menudiv.append(menuul);
-        }
-        
-        var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-10"});
-        
+        var $menudiv = $('<div>', {id: "bfeditor-menudiv", class: "col-md-2 sidebar"});
+        var $formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-10"});
         //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+        var $rowdiv = $('<div>', {class: "row"});
         
-        var rowdiv = $('<div>', {class: "row"});
-        
-        rowdiv.append(menudiv);
-        rowdiv.append(formdiv);
+        var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
+                        <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
+                            <span class="sr-only">80% Complete</span>\
+                        </div>\
+                    </div>');
+
+        $formdiv.append($loader);
+        $rowdiv.append($menudiv);
+        $rowdiv.append($formdiv);
         //rowdiv.append(optiondiv);
 
-        $(div).append(rowdiv);
+        $(editordiv).append($rowdiv);
+        
+        this.setConfig(config);
+        
+        for (var h=0; h < config.startingPoints.length; h++) {
+            var sp = config.startingPoints[h];
+            var $menuul = $('<ul>', {class: "nav nav-stacked"});
+            var menuheadingul = null;
+            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== "") {
+                $menuheading = $('<li><h5 style="font-weight: bold">' + sp.menuGroup + '</h5></li>');
+                $menuheadingul = $('<ul class="nav"></ul>');
+                $menuheading.append($menuheadingul);
+                $menuul.append($menuheading);
+            }
+            for (var i=0; i < sp.menuItems.length; i++) {
+                var $li = $('<li>');
+                var $a = $('<a>', {href: "#", id: "sp-" + h + "_" + i});
+                $a.html(sp.menuItems[i].label);
+                $a.click(function(){
+                    menuSelect(this.id);
+                });
+                $li.append($a);
+                if ( $menuheadingul !== null ) {
+                    $menuheadingul.append($li);
+                } else {
+                    $menuul.append($li);
+                }
+            }
+            $menudiv.append($menuul);
+        }
     
         // Debug div
-        var debugdiv = $('<div>', {class: "col-md-12"});
-        debugdiv.html("Debug output");
-        var debugpre = $('<pre>', {id: "bfeditor-debug"});
-        debugdiv.append(debugpre);
-        $(div).append(debugdiv);
-        debugpre.html(JSON.stringify(profiles, undefined, " "));
+        if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == "DEBUG") {
+            var $debugdiv = $('<div>', {class: "col-md-12"});
+            $debugdiv.html("Debug output");
+            var $debugpre = $('<pre>', {id: "bfeditor-debug"});
+            $debugdiv.append($debugpre);
+            $(editordiv).append($debugdiv);
+            $debugpre.html(JSON.stringify(profiles, undefined, " "));
+        }
+        
+        var $footer = $('<div>', {class: "col-md-12"});
+        $(editordiv).append($footer);
+        
+        if (loadtemplatesANDlookupsCount === 0) {
+            // There was nothing to load, so we need to get rid of the loader.
+            $formdiv.html("");
+        }
 
         return {
             "profiles": profiles,
-            "div": div
+            "div": editordiv,
+            "bfestore": bfestore,
+            "bfelog": bfelog,
         };
     };
     
@@ -501,76 +532,89 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         
         this.setConfig(config);
         
-        editordiv = div = document.getElementById(id);
+        editordiv = document.getElementById(id);
         
-        var formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-12"});
+        var $formdiv = $('<div>', {id: "bfeditor-formdiv", class: "col-md-12"});
         
         //var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
         
-        var rowdiv = $('<div>', {class: "row"});
+        var $rowdiv = $('<div>', {class: "row"});
         
-        rowdiv.append(formdiv);
+        $rowdiv.append($formdiv);
         //rowdiv.append(optiondiv);
 
-        $(div).append(rowdiv);
+        $(editordiv).append($rowdiv);
     
         // Debug div
-        var debugdiv = $('<div>', {class: "col-md-12"});
-        debugdiv.html("Debug output");
-        var debugpre = $('<pre>', {id: "bfeditor-debug"});
-        debugdiv.append(debugpre);
-        $(div).append(debugdiv);
-        debugpre.html(JSON.stringify(profiles, undefined, " "));
+        if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == "DEBUG") {
+            var $debugdiv = $('<div>', {class: "col-md-12"});
+            $debugdiv.html("Debug output");
+            var $debugpre = $('<pre>', {id: "bfeditor-debug"});
+            $debugdiv.append($debugpre);
+            $(editordiv).append($debugdiv);
+            $debugpre.html(JSON.stringify(profiles, undefined, " "));
+        }
+        
+        var $footer = $('<div>', {class: "col-md-12"});
+        $(editordiv).append($footer);
 
         return {
             "profiles": profiles,
-            "div": div
+            "div": editordiv,
+            "bfestore": bfestore,
+            "bfelog": bfelog,
         };
     };
     
     function setLookup(r) {
-        // console.log(r);
-        console.log("Setting scheme " + r.scheme);
-        var lu = config.lookups[r.scheme];
-        console.log(lu);
-        lookups[r.scheme] = {};
-        lookups[r.scheme].name = lu.name;
-        lookups[r.scheme].load = r;
+        if (r.scheme !== undefined) {
+            bfelog.addMsg(new Error(), "INFO", "Setting up scheme " + r.scheme);
+            var lu = config.lookups[r.scheme];
+            lookups[r.scheme] = {};
+            lookups[r.scheme].name = lu.name;
+            lookups[r.scheme].load = r;
+        } else {
+            bfelog.addMsg(new Error(), "WARN", "Loading lookup FAILED", r);
+        }
         cbLoadTemplates();
     }
     
     function cbLoadTemplates() {
+        $("#bfeditor-loader").width($("#bfeditor-loader").width()+5+"%");
         loadtemplatesANDlookupsCounter++;
         if (loadtemplatesANDlookupsCounter >= loadtemplatesANDlookupsCount) {
-            console.log("Got here");
-            var form = getForm(loadtemplates);
-            $( ".typeahead", form.form ).each(function() {
-                setTypeahead(this);
-            });
-            var $exitButtonGroup = $('<div class="btn-group pull-right"> \
-                <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
-                <!-- <button id="bfeditor-exitsaveasnew" type="button" class="btn btn-primary">Save as new</button> --> \
-                <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-            </div>');
-            form.form.append($exitButtonGroup);
-            
-            $("#bfeditor-exitcancel", form.form).click(function(){
-                cbLoadTemplates();
-            });
-            $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
-            
-            //$("#bfeditor-exitsaveasnew", form.form).click(function(){
-            //    cbLoadTemplates();
-            //});
-            
-            $("#bfeditor-exitsave", form.form).click(function(){
-                editorconfig.return.callback(bfestore.store);
-            });
-            $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
-            
             $("#bfeditor-formdiv").html("");
-            $("#bfeditor-formdiv").append(form.form);
-            $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
+            if (loadtemplates.length > 0) {
+                bfelog.addMsg(new Error(), "DEBUG", "Loading selected template(s)", loadtemplates);
+                var form = getForm(loadtemplates);
+                $( ".typeahead", form.form ).each(function() {
+                    setTypeahead(this);
+                });
+                var $exitButtonGroup = $('<div class="btn-group pull-right"> \
+                    <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
+                    <!-- <button id="bfeditor-exitsaveasnew" type="button" class="btn btn-primary">Save as new</button> --> \
+                    <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
+                </div>');
+                form.form.append($exitButtonGroup);
+                
+                $("#bfeditor-exitcancel", form.form).click(function(){
+                    cbLoadTemplates();
+                });
+                $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
+                
+                //$("#bfeditor-exitsaveasnew", form.form).click(function(){
+                //    cbLoadTemplates();
+                //});
+                
+                $("#bfeditor-exitsave", form.form).click(function(){
+                    editorconfig.return.callback(bfestore.store2jsonldExpanded());
+                });
+                $("#bfeditor-exitsave", form.form).attr("tabindex", tabIndices++);
+                
+                $("#bfeditor-formdiv").html("");
+                $("#bfeditor-formdiv").append(form.form);
+                $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
+            }
         }
     }
     
@@ -633,9 +677,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
                 fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
                 fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
+                // We need to make sure this resourceTemplate has a defaulturi
+                if (fobject.resourceTemplates[urt].defaulturi === undefined) {
+                    fobject.resourceTemplates[urt].defaulturi = editorconfig.baseURI + loadTemplates[urt].templateGUID;
+                }
+                
                 fobject.resourceTemplateIDs[urt] = rt[0].id;
             } else {
-                console.log("WARNING: Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.");
+                bfelog.addMsg(new Error(), "WARN", "Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.");
             }
         }
 
@@ -643,8 +692,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         var form = $('<form>', {id: "bfeditor-form-" + fobject.id, class: "form-horizontal", role: "form"});
         var forEachFirst = true;
         fobject.resourceTemplates.forEach(function(rt) {
-            console.log(rt);
-            var $resourcediv = $('<div>', {id: rt.useguid, "data-uri": rt.defaulturi});
+            bfelog.addMsg(new Error(), "DEBUG", "Creating form for: " + rt.id, rt);
+            var $resourcediv = $('<div>', {id: rt.useguid, "data-uri": rt.defaulturi}); // is data-uri used?
             var $resourcedivheading = $('<h3>' + rt.resourceLabel + '</h3>');
             $resourcediv.append($resourcedivheading);
             rt.propertyTemplates.forEach(function(property) {
@@ -860,30 +909,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     }
                     fobject.store.push(triple);
                 });
-                /*
-                var types = _.where(rt.data, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
-                if (typeof types[0] === undefined) {
-                    var triple = {};
-                    triple.guid = guid();
-                    triple.s = rt.defaulturi;
-                    triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-                    triple.o = rt.resourceURI;
-                    triple.otype = "uri";
-                    fobject.store.push(triple);
-                }
-                */
             }
             
             // Populate form with pre-loaded data.
+            bfelog.addMsg(new Error(), "DEBUG", "Populating form with pre-loaded data, if any");
             rt.propertyTemplates.forEach(function(property) {
-                //console.log(rt.data);
-                //console.log(property.propertyURI);
-                console.log("rt.defaulturi is " + rt.defaulturi);
                 var propsdata = _.where(bfestore.store, {"s": rt.defaulturi, "p": property.propertyURI});
                 if (propsdata[0] !== undefined) {
                     // If this property exists for this resource in the pre-loaded data
                     // then we need to make it appear.
-                    //console.log(propsdata);
+                    bfelog.addMsg(new Error(), "DEBUG", "Found pre-loaded data for " + property.propertyURI);
                     propsdata.forEach(function(pd) {
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
                         var $save = $formgroup.find(".btn-toolbar").eq(0);
@@ -912,6 +947,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                                 resourceTs.forEach(function(r) {
                                                     //console.log("Looking for a match with " + r.id);
                                                     if (triplesResourceTemplateID == "" && _.indexOf(property.valueConstraint.valueTemplateRefs, r.id) !== -1) {
+                                                        bfelog.addMsg(new Error(), "DEBUG", "Assocating one resource with another from loaded templates");
                                                         //console.log("Found a match in");
                                                         //console.log(property.valueConstraint.valueTemplateRefs);
                                                         //console.log("Associating " + r.id);
@@ -922,16 +958,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                             }
                                         }
                                     }
-                                    //console.log("triplesResourceTemplateID is " + triplesResourceTemplateID);
                                     fobject.store.push(t);
-                                
                                     if (t.p.match(/label/i)) {
                                         displaydata = t.o;
                                     }
                                 });
-                                console.log(pd.o);
-                                console.log("triples are");
-                                console.log(triples);
                             }
                         } else {
                             displaydata = pd.o;
@@ -969,12 +1000,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     // Otherwise - if the property is not found in the pre-loaded data
                     // then do we have a default value?
                     if (_.has(property.valueConstraint, "defaultURI")) {
+                        bfelog.addMsg(new Error(), "DEBUG", "Setting default data for " + property.propertyURI);
                         var data = property.valueConstraint.defaultURI;
                         // set the triple
                         var triple = {}
                         triple.guid = guid();
-                        //console.log("data is " + data);
-                        //console.log("tguid " + triple.guid);
                         if (rt.defaulturi !== undefined && rt.defaulturi !== "") {
                             triple.s = rt.defaulturi;
                         } else {
@@ -983,16 +1013,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                         triple.p = property.propertyURI;
                         triple.o = data;
                         triple.otype = "uri";
-                        //store.push(triple);
                         fobject.store.push(triple);
                         bfestore.store.push(triple);
-                        console.log("Setting default values");
-                        console.log(triple);
                         
-                            // set the form
+                        // set the form
                         var $formgroup = $("#" + property.guid, form).closest(".form-group");
                         var $save = $formgroup.find(".btn-toolbar").eq(0);
-                        //console.log(formgroup);
                         
                         var display = "";
                         if (_.has(property.valueConstraint, "defaultLiteral")) {
@@ -1032,17 +1058,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 }
             });
         });
-        /*
-        if (forms[0] === undefined) {
-            console.log("setting fobject to forms - 1st time");
-            console.log("guid of has oether edition: " + fobject.resourceTemplates[0].propertyTemplates[13].guid);
-        } else {
-            console.log("setting fobject to forms");
-            console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
-        }
-        */
+
         forms.push(fobject);
-        console.log(fobject);
+        bfelog.addMsg(new Error(), "DEBUG", "Newly created formobject.", fobject);
         return { formobject: fobject, form: form };
     }
     
@@ -1070,19 +1088,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             </div> \
         </div> '
         
-        console.log("resourceURI is : " + resourceURI);
-        console.log("inputID of DOM element / property when opening modal: " + inputID);
-        console.log("callingformobjectid when opening modal: " + callingformobjectid);
+        bfelog.addMsg(new Error(), "DEBUG", "Opening modal for resourceURI " + resourceURI);
+        bfelog.addMsg(new Error(), "DEBUG", "inputID of DOM element / property when opening modal: " + inputID);
+        bfelog.addMsg(new Error(), "DEBUG", "callingformobjectid when opening modal: " + callingformobjectid);
         
-        /*
-        var callingformobject1 = _.where(forms, {"id": callingformobjectid});
-        callingformobject1 = callingformobject1[0];
-        console.log("Calling openModal");
-        console.log("formobjectID is: " + callingformobjectid);
-        console.log("propertyguid is: " + propertyguid);
-        console.log(callingformobject1);
-        console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
-        */
         var useguid = guid();
         var triplespassed = [];
         if (triples.length === 0) {
@@ -1113,7 +1122,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             // Just pass the triples on....
             triplespassed = triples;
         }
-        console.log(triplespassed);
+        bfelog.addMsg(new Error(), "DEBUG", "triplespassed within modal", triplespassed);
         var form = getForm([{
             templateGUID: useguid,
             resourceTemplateID: loadtemplate.id,
@@ -1126,13 +1135,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         m = $(m);
         $(editordiv).append(m);
 
-        /*
-        console.log("Modal form created.");
-        console.log("guid of has oether edition: " + forms[0].resourceTemplates[0].propertyTemplates[13].guid);
-        */
-        //console.log(JSON.stringify(template));
-        //var m = $('#bfeditor-modal-' + currentModal);
-        //$('#bfeditor-modalbody-' + form.formobject.id).empty();
         $('#bfeditor-modalbody-' + form.formobject.id).append(form.form);
         $('#bfeditor-modaltitle-' + form.formobject.id).html(loadtemplate.resourceLabel);
             
@@ -1141,21 +1143,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             
         $('#bfeditor-modalSave-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
-                // console.log(triple);
                 removeTriple(callingformobjectid, inputID, triple);
             });
-            console.log(form.formobject.store);
-            console.log("calling setresourcefrommodal");
             setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
         });
         $('#bfeditor-modalSave-' + form.formobject.id).attr("tabindex", tabIndices++);
         $('#bfeditor-modalSaveLookup-' + form.formobject.id).click(function(){
             triples.forEach(function(triple) {
-                // console.log(triple);
                 removeTriple(callingformobjectid, inputID, triple);
             });
-            console.log(form.formobject.store);
-            console.log("calling setresourcefrommodal");
             setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
         });
         $('#bfeditor-modal-' + form.formobject.id).on("hide.bs.modal", function(e) {
@@ -1180,23 +1176,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         console.log(callingformobject);
         console.log(data);
         */
-        console.log("modal form id is: " + modalformid);
+        bfelog.addMsg(new Error(), "DEBUG", "Setting resource from modal");
+        bfelog.addMsg(new Error(), "DEBUG", "modal form id is: " + modalformid);
         var callingformobject = _.where(forms, {"id": formobjectID});
         callingformobject = callingformobject[0];
-        //var triple = {}
-        //triple.guid = guid();
-        //triple.s = editorconfig.baseURI + resourceID;
         callingformobject.resourceTemplates.forEach(function(t) {
             var properties = _.where(t.propertyTemplates, {"guid": propertyguid})
             if ( properties[0] !== undefined ) {
-                //console.log(properties[0].propertyURI);
-                //triple.p = properties[0].propertyURI;
-                //triple.o = data[0].s;
-                //triple.otype = "uri";
-                    
-                // callingformobject.store.push(triple);
-                //data.push(triple);
-                console.log(data);
+
+                bfelog.addMsg(new Error(), "DEBUG", "Data from modal: ", data);
                 data.forEach(function(t) {
                     callingformobject.store.push(t);
                     bfestore.store.push(t);
@@ -1208,15 +1196,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 var save = $formgroup.find(".btn-toolbar")[0];
                 //console.log(formgroup);
                 
-                console.log(properties[0].propertyURI);
-                //console.log(data);
+                bfelog.addMsg(new Error(), "DEBUG", "Selected property from calling form: " + properties[0].propertyURI);
                 tlabel = _.find(data, function(t){ if (t.p.match(/label|authorizedAccess|title/i)) return t.o; });
                 displaydata = data[0].s;
                 if ( tlabel !== undefined) {
                     displaydata = tlabel.o;
                 }
                 
-                console.log(data);
                 var connector = _.where(data, {"p": properties[0].propertyURI})
                 var bgvars = { 
                         "tguid": connector[0].guid, 
@@ -1406,210 +1392,188 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 p = properties[0];
             }
         });
-        /*
-        var uvf = p.valueConstraint.useValuesFrom[0];
-        console.log("uvf is " + uvf);
-        console.log(lookups);
-        var lups = _.where(lookups, {"scheme": uvf});
-        console.log(lups);
-        var lu;
-        if ( lups[0] !== undefined ) {
-            console.log(lups[0].scheme);
-            lu = lups[0].load;
-            console.log(lu);
-        }
-        */
-            
-            //$( input ).css("z-index", 3000);
-            var uvfs = p.valueConstraint.useValuesFrom;
-            var dshashes = [];
-            uvfs.forEach(function(uvf){
-                // var lups = _.where(lookups, {"scheme": uvf});
-                var lu = lookups[uvf];
 
-                console.log("Setting typeahead scheme: " + uvf);
-                console.log(lu);
+        var uvfs = p.valueConstraint.useValuesFrom;
+        var dshashes = [];
+        uvfs.forEach(function(uvf){
+        // var lups = _.where(lookups, {"scheme": uvf});
+            var lu = lookups[uvf];
+
+            bfelog.addMsg(new Error(), "DEBUG", "Setting typeahead scheme: " + uvf);
+            bfelog.addMsg(new Error(), "DEBUG", "Lookup is", lu);
                     
-                var dshash = {};
-                dshash.name = lu.name;
-                dshash.source = function(query, process) {
-                    lu.load.source(query, process, formobject);
-                };
-                dshash.templates =  { header: '<h3>' + lu.name + '</h3>' };
-                dshash.displayKey = 'value';
-                dshashes.push(dshash);
-                
-            });
-            console.log(dshashes);
-            var opts = {
-                minLength: 1,
-                highlight: true,
-                displayKey: 'value'
+            var dshash = {};
+            dshash.name = lu.name;
+            dshash.source = function(query, process) {
+                lu.load.source(query, process, formobject);
             };
-            if ( dshashes.length === 1) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0]
-                );
-            } else if ( dshashes.length === 2) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0],
-                    dshashes[1]
-                );
-            } else if ( dshashes.length === 3) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0],
-                    dshashes[1],
-                    dshashes[2]
-                );
-            } else if ( dshashes.length === 4) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0],
-                    dshashes[1],
-                    dshashes[2],
-                    dshashes[3]
-                );
-            } else if ( dshashes.length === 5) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0],
-                    dshashes[1],
-                    dshashes[2],
-                    dshashes[3],
-                    dshashes[4]
-                );
-            } else if ( dshashes.length === 6) {
-                $( input ).typeahead(
-                    opts,
-                    dshashes[0],
-                    dshashes[1],
-                    dshashes[2],
-                    dshashes[3],
-                    dshashes[4],
-                    dshashes[5]
-                );
-            }
+            dshash.templates =  { header: '<h3>' + lu.name + '</h3>' };
+            dshash.displayKey = 'value';
+            dshashes.push(dshash);
+        });
+        
+        bfelog.addMsg(new Error(), "DEBUG", "Data source hashes", dshashes);
+        var opts = {
+            minLength: 1,
+            highlight: true,
+            displayKey: 'value'
+        };
+        if ( dshashes.length === 1) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0]
+            );
+        } else if ( dshashes.length === 2) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0],
+                dshashes[1]
+            );
+        } else if ( dshashes.length === 3) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0],
+                dshashes[1],
+                dshashes[2]
+            );
+        } else if ( dshashes.length === 4) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0],
+                dshashes[1],
+                dshashes[2],
+                dshashes[3]
+            );
+        } else if ( dshashes.length === 5) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0],
+                dshashes[1],
+                dshashes[2],
+                dshashes[3],
+                dshashes[4]
+            );
+        } else if ( dshashes.length === 6) {
+            $( input ).typeahead(
+                opts,
+                dshashes[0],
+                dshashes[1],
+                dshashes[2],
+                dshashes[3],
+                dshashes[4],
+                dshashes[5]
+            );
+        }
+        // Need more than 6?  That's crazy talk, man, crazy talk.
             
-            $( input ).on("typeahead:selected", function(event, suggestionobject, datasetname) {
-                console.log("typeahead selection made");
-                var form = $("#" + event.target.id).closest("form").eq(0);
-                var formid = $("#" + event.target.id).closest("form").eq(0).attr("id");
-                formid = formid.replace('bfeditor-form-', '');
-                var resourceid = $(form).children("div").eq(0).attr("id");
-                var resourceURI = $(form).find("div[data-uri]").eq(0).attr("data-uri");
+        $( input ).on("typeahead:selected", function(event, suggestionobject, datasetname) {
+            bfelog.addMsg(new Error(), "DEBUG", "Typeahead selection made");
+            var form = $("#" + event.target.id).closest("form").eq(0);
+            var formid = $("#" + event.target.id).closest("form").eq(0).attr("id");
+            formid = formid.replace('bfeditor-form-', '');
+            var resourceid = $(form).children("div").eq(0).attr("id");
+            var resourceURI = $(form).find("div[data-uri]").eq(0).attr("data-uri");
                 
-                var propertyguid = $("#" + event.target.id).attr("data-propertyguid");
-                console.log("propertyguid is " + propertyguid);
+            var propertyguid = $("#" + event.target.id).attr("data-propertyguid");
+            bfelog.addMsg(new Error(), "DEBUG", "propertyguid for typeahead input is " + propertyguid);
                 
-                var s = editorconfig.baseURI + resourceid;
-                var p = "";
-                var formobject = _.where(forms, {"id": formid});
-                formobject = formobject[0];
-                formobject.resourceTemplates.forEach(function(t) {
-                    var properties = _.where(t.propertyTemplates, {"guid": propertyguid});
-                    //console.log(properties);
-                    if ( properties[0] !== undefined ) {
-                        p = properties[0];
-                    }
-                });
-                
-                var lups = _.where(lookups, {"name": datasetname});
-                var lu;
-                if ( lups[0] !== undefined ) {
-                    console.log(lups[0]);
-                    lu = lups[0].load;
-                    console.log(lu);
+            var s = editorconfig.baseURI + resourceid;
+            var p = "";
+            var formobject = _.where(forms, {"id": formid});
+            formobject = formobject[0];
+            formobject.resourceTemplates.forEach(function(t) {
+                var properties = _.where(t.propertyTemplates, {"guid": propertyguid});
+                //console.log(properties);
+                if ( properties[0] !== undefined ) {
+                    p = properties[0];
                 }
-                lu.getResource(resourceURI, p.propertyURI, suggestionobject, function(returntriples) {
-                    console.log(returntriples);
-                    returntriples.forEach(function(t){
-                        if (t.guid === undefined) {
-                            var tguid = guid();
-                            t.guid = tguid;
-                        }
-                        formobject.store.push(t);
-                        bfestore.store.push(t);
-
-                        // We only want to show those properties that relate to
-                        // *this* resource.
-                        if (t.s == resourceURI) {
-                            formobject.resourceTemplates.forEach(function(rt) {
-                                var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
-                                //console.log(properties);
-                                if ( properties[0] !== undefined ) {
-                                    var property = properties[0];
-                                    var pguid = property.guid;
-                        
-                                    var $formgroup = $("#" + pguid, formobject.form).closest(".form-group");
-                                    var save = $formgroup.find(".btn-toolbar")[0];
-                                
-                                    var tlabel = t.o;
-                                    if (t.otype == "uri") {
-                                        var resourcedata = _.where(returntriples, {"s": t.o});
-                                        var displaytriple = _.find(resourcedata, function(label) {
-                                            return label.p.match(/label|title/i);
-                                        });
-                                        if (displaytriple !== undefined && displaytriple.o !== undefined) {
-                                            tlabel = displaytriple.o;
-                                        }
-                                    }
-                                
-                                    var setTriples = [t];
-                                    if (resourcedata !== undefined && resourcedata[0] !== undefined) {
-                                        setTriples = resourcedata;
-                                    }
-
-                                    var bgvars = { 
-                                        "tguid": t.guid, 
-                                        "tlabel": tlabel,
-                                        "tlabelhover": tlabel,
-                                        "fobjectid": formobject.id,
-                                        "inputid": pguid,
-                                        "triples": setTriples
-                                    };
-                                    var $buttongroup = editDeleteButtonGroup(bgvars);
+            });
+                
+            var lups = _.where(lookups, {"name": datasetname});
+            var lu;
+            if ( lups[0] !== undefined ) {
+                bfelog.addMsg(new Error(), "DEBUG", "Found lookup for datasetname: " + datasetname, lups[0]);
+                lu = lups[0].load;
+            }
+            lu.getResource(resourceURI, p.propertyURI, suggestionobject, function(returntriples) {
+                bfelog.addMsg(new Error(), "DEBUG", "Triples returned from lookup's getResource func:", returntriples);
+                returntriples.forEach(function(t){
+                    if (t.guid === undefined) {
+                        var tguid = guid();
+                        t.guid = tguid;
+                    }
+                    formobject.store.push(t);
+                    bfestore.store.push(t);
+                    
+                    // We only want to show those properties that relate to
+                    // *this* resource.
+                    if (t.s == resourceURI) {
+                        formobject.resourceTemplates.forEach(function(rt) {
+                            var properties = _.where(rt.propertyTemplates, {"propertyURI": t.p});
+                            if ( properties[0] !== undefined ) {
+                                var property = properties[0];
+                                var pguid = property.guid;
+                    
+                                var $formgroup = $("#" + pguid, formobject.form).closest(".form-group");
+                                var save = $formgroup.find(".btn-toolbar")[0];
                             
-                                    $(save).append($buttongroup);
-                    
-                                    $("#" + pguid, formobject.form).val("");
-                                    $("#" + pguid, formobject.form).typeahead('val', "");
-                                    $("#" + pguid, formobject.form).typeahead('close');
-                    
-                                    //console.log(triples);
-                    
-                                    if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
-                                        console.log("prop is not repeatable");
-                                        var $el = $("#" + pguid, formobject.form)
-                                        if ($el.is("input")) {
-                                            $el.prop("disabled", true);
-                                            $el.css( "background-color", "#EEEEEE" );
-                                        } else {
-                                            //console.log(property.propertyLabel);
-                                            var $buttons = $("div.btn-group", $el).find("button");
-                                            $buttons.each(function() {
-                                                $( this ).prop("disabled", true);
-                                           });
-                                        }
+                                var tlabel = t.o;
+                                if (t.otype == "uri") {
+                                    var resourcedata = _.where(returntriples, {"s": t.o});
+                                    var displaytriple = _.find(resourcedata, function(label) {
+                                        return label.p.match(/label|title/i);
+                                    });
+                                    if (displaytriple !== undefined && displaytriple.o !== undefined) {
+                                        tlabel = displaytriple.o;
                                     }
                                 }
-                            });
-                        }
-                    });
-                    bfestore.storeDedup();
-                    $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
-                    console.log(formobject.store);
+                            
+                                var setTriples = [t];
+                                if (resourcedata !== undefined && resourcedata[0] !== undefined) {
+                                    setTriples = resourcedata;
+                                }
+                                var bgvars = { 
+                                    "tguid": t.guid, 
+                                    "tlabel": tlabel,
+                                    "tlabelhover": tlabel,
+                                    "fobjectid": formobject.id,
+                                    "inputid": pguid,
+                                    "triples": setTriples
+                                };
+                                var $buttongroup = editDeleteButtonGroup(bgvars);
+                            
+                                $(save).append($buttongroup);
+                    
+                                $("#" + pguid, formobject.form).val("");
+                                $("#" + pguid, formobject.form).typeahead('val', "");
+                                $("#" + pguid, formobject.form).typeahead('close');
+                    
+                                if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                                    var $el = $("#" + pguid, formobject.form)
+                                    if ($el.is("input")) {
+                                        $el.prop("disabled", true);
+                                        $el.css( "background-color", "#EEEEEE" );
+                                    } else {
+                                        var $buttons = $("div.btn-group", $el).find("button");
+                                        $buttons.each(function() {
+                                            $( this ).prop("disabled", true);
+                                       });
+                                    }
+                                }
+                            }
+                        });
+                    }
                 });
+                bfestore.storeDedup();
+                $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
             });
+        });
     }
     
     function editTriple(formobjectID, inputID, t) {
         var formobject = _.where(forms, {"id": formobjectID});
         formobject = formobject[0];
-        console.log("editing triple: " + t.guid);
-        console.log(t);
+        bfelog.addMsg(new Error(), "DEBUG", "Editing triple: " + t.guid, t);
         $("#" + t.guid).empty();
 
         var $el = $("#" + inputID, formobject.form);
@@ -1641,9 +1605,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     }
     
     function editTriples(formobjectID, inputID, triples) {
-        console.log('editTriples called');
+        bfelog.addMsg(new Error(), "DEBUG", "Editing triples", triples);
         var resourceTypes = _.where(triples, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
-        console.log(resourceTypes);
+        bfelog.addMsg(new Error(), "DEBUG", "Triples represent these resourceTypes", resourceTypes);
         if (typeof resourceTypes[0] !== undefined && resourceTypes[0].rtID !== undefined) {
             // function openModal(callingformobjectid, rtguid, propertyguid, template) {
             var callingformobject = _.where(forms, {"id": formobjectID});
@@ -1652,8 +1616,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             var templates = _.where(resourceTemplates, {"id": resourceTypes[0].rtID});
             if (templates[0] !== undefined) {
                 // The subject of the resource matched with the "type"
-                console.log("Opening modal");
-                console.log(triples);
+                bfelog.addMsg(new Error(), "DEBUG", "Opening modal for editing", triples);
                 openModal(callingformobject.id, templates[0], resourceTypes[0].s, inputID, triples);
             }
         }
@@ -1663,8 +1626,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     function removeTriple(formobjectID, inputID, t) {
         var formobject = _.where(forms, {"id": formobjectID});
         formobject = formobject[0];
-        console.log("removing triple: " + t.guid);
-        console.log("FormobjectID: " + formobjectID);
+        bfelog.addMsg(new Error(), "DEBUG", "Removing triple: " + t.guid, t);
         $("#" + t.guid).empty();
 
         var $el = $("#" + inputID, formobject.form);
@@ -1692,10 +1654,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     }
     
     function removeTriples(formobjectID, inputID, triples) {
-        console.log("removing triples for formobjectID: " + formobjectID + " and inputID: " + inputID);
-        console.log(triples);
+        bfelog.addMsg(new Error(), "DEBUG", "Removing triples for formobjectID: " + formobjectID + " and inputID: " + inputID, triples);
         triples.forEach(function(triple) {
-            // console.log(triple);
             removeTriple(formobjectID, inputID, triple);
         });
     }
@@ -1857,7 +1817,7 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-+function(a){"use strict";var b=function(b,c){this.options=c,this.$element=a(b),this.$backdrop=this.isShown=null,this.options.remote&&this.$element.find(".modal-content").load(this.options.remote,a.proxy(function(){this.$element.trigger("loaded.bs.modal")},this))};b.DEFAULTS={backdrop:!0,keyboard:!0,show:!0},b.prototype.toggle=function(a){return this[this.isShown?"hide":"show"](a)},b.prototype.show=function(b){var c=this,d=a.Event("show.bs.modal",{relatedTarget:b});this.$element.trigger(d);if(this.isShown||d.isDefaultPrevented())return;this.isShown=!0,this.escape(),this.$element.on("click.dismiss.bs.modal",'[data-dismiss="modal"]',a.proxy(this.hide,this)),this.backdrop(function(){var d=a.support.transition&&c.$element.hasClass("fade");c.$element.parent().length||c.$element.appendTo(document.body),c.$element.show().scrollTop(0),d&&c.$element[0].offsetWidth,c.$element.addClass("in").attr("aria-hidden",!1),c.enforceFocus();var e=a.Event("shown.bs.modal",{relatedTarget:b});d?c.$element.find(".modal-dialog").one(a.support.transition.end,function(){c.$element.focus().trigger(e)}).emulateTransitionEnd(300):c.$element.focus().trigger(e)})},b.prototype.hide=function(b){b&&b.preventDefault(),b=a.Event("hide.bs.modal"),this.$element.trigger(b);if(!this.isShown||b.isDefaultPrevented())return;this.isShown=!1,this.escape(),a(document).off("focusin.bs.modal"),this.$element.removeClass("in").attr("aria-hidden",!0).off("click.dismiss.bs.modal"),a.support.transition&&this.$element.hasClass("fade")?this.$element.one(a.support.transition.end,a.proxy(this.hideModal,this)).emulateTransitionEnd(300):this.hideModal()},b.prototype.enforceFocus=function(){a(document).off("focusin.bs.modal").on("focusin.bs.modal",a.proxy(function(a){this.$element[0]!==a.target&&!this.$element.has(a.target).length&&this.$element.focus()},this))},b.prototype.escape=function(){this.isShown&&this.options.keyboard?this.$element.on("keyup.dismiss.bs.modal",a.proxy(function(a){a.which==27&&this.hide()},this)):this.isShown||this.$element.off("keyup.dismiss.bs.modal")},b.prototype.hideModal=function(){var a=this;this.$element.hide(),this.backdrop(function(){a.removeBackdrop(),a.$element.trigger("hidden.bs.modal")})},b.prototype.removeBackdrop=function(){this.$backdrop&&this.$backdrop.remove(),this.$backdrop=null},b.prototype.backdrop=function(b){var c=this.$element.hasClass("fade")?"fade":"";if(this.isShown&&this.options.backdrop){var d=a.support.transition&&c;this.$backdrop=a('<div class="modal-backdrop '+c+'" />').appendTo(document.body),this.$element.on("click.dismiss.bs.modal",a.proxy(function(a){if(a.target!==a.currentTarget)return;this.options.backdrop=="static"?this.$element[0].focus.call(this.$element[0]):this.hide.call(this)},this)),d&&this.$backdrop[0].offsetWidth,this.$backdrop.addClass("in");if(!b)return;d?this.$backdrop.one(a.support.transition.end,b).emulateTransitionEnd(150):b()}else!this.isShown&&this.$backdrop?(this.$backdrop.removeClass("in"),a.support.transition&&this.$element.hasClass("fade")?this.$backdrop.one(a.support.transition.end,b).emulateTransitionEnd(150):b()):b&&b()};var c=a.fn.modal;a.fn.modal=function(c,d){return this.each(function(){var e=a(this),f=e.data("bs.modal"),g=a.extend({},b.DEFAULTS,e.data(),typeof c=="object"&&c);f||e.data("bs.modal",f=new b(this,g)),typeof c=="string"?f[c](d):g.show&&f.show(d)})},a.fn.modal.Constructor=b,a.fn.modal.noConflict=function(){return a.fn.modal=c,this},a(document).on("click.bs.modal.data-api",'[data-toggle="modal"]',function(b){var c=a(this),d=c.attr("href"),e=a(c.attr("data-target")||d&&d.replace(/.*(?=#[^\s]+$)/,"")),f=e.data("bs.modal")?"toggle":a.extend({remote:!/#/.test(d)&&d},e.data(),c.data());c.is("a")&&b.preventDefault(),e.modal(f,this).one("hide",function(){c.is(":visible")&&c.focus()})}),a(document).on("show.bs.modal",".modal",function(){a(document.body).addClass("modal-open")}).on("hidden.bs.modal",".modal",function(){a(document.body).removeClass("modal-open")})}(jQuery),+function(a){"use strict";var b=function(a,b){this.type=this.options=this.enabled=this.timeout=this.hoverState=this.$element=null,this.init("tooltip",a,b)};b.DEFAULTS={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,container:!1},b.prototype.init=function(b,c,d){this.enabled=!0,this.type=b,this.$element=a(c),this.options=this.getOptions(d);var e=this.options.trigger.split(" ");for(var f=e.length;f--;){var g=e[f];if(g=="click")this.$element.on("click."+this.type,this.options.selector,a.proxy(this.toggle,this));else if(g!="manual"){var h=g=="hover"?"mouseenter":"focusin",i=g=="hover"?"mouseleave":"focusout";this.$element.on(h+"."+this.type,this.options.selector,a.proxy(this.enter,this)),this.$element.on(i+"."+this.type,this.options.selector,a.proxy(this.leave,this))}}this.options.selector?this._options=a.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},b.prototype.getDefaults=function(){return b.DEFAULTS},b.prototype.getOptions=function(b){return b=a.extend({},this.getDefaults(),this.$element.data(),b),b.delay&&typeof b.delay=="number"&&(b.delay={show:b.delay,hide:b.delay}),b},b.prototype.getDelegateOptions=function(){var b={},c=this.getDefaults();return this._options&&a.each(this._options,function(a,d){c[a]!=d&&(b[a]=d)}),b},b.prototype.enter=function(b){var c=b instanceof this.constructor?b:a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);clearTimeout(c.timeout),c.hoverState="in";if(!c.options.delay||!c.options.delay.show)return c.show();c.timeout=setTimeout(function(){c.hoverState=="in"&&c.show()},c.options.delay.show)},b.prototype.leave=function(b){var c=b instanceof this.constructor?b:a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);clearTimeout(c.timeout),c.hoverState="out";if(!c.options.delay||!c.options.delay.hide)return c.hide();c.timeout=setTimeout(function(){c.hoverState=="out"&&c.hide()},c.options.delay.hide)},b.prototype.show=function(){var b=a.Event("show.bs."+this.type);if(this.hasContent()&&this.enabled){this.$element.trigger(b);if(b.isDefaultPrevented())return;var c=this,d=this.tip();this.setContent(),this.options.animation&&d.addClass("fade");var e=typeof this.options.placement=="function"?this.options.placement.call(this,d[0],this.$element[0]):this.options.placement,f=/\s?auto?\s?/i,g=f.test(e);g&&(e=e.replace(f,"")||"top"),d.detach().css({top:0,left:0,display:"block"}).addClass(e),this.options.container?d.appendTo(this.options.container):d.insertAfter(this.$element);var h=this.getPosition(),i=d[0].offsetWidth,j=d[0].offsetHeight;if(g){var k=this.$element.parent(),l=e,m=document.documentElement.scrollTop||document.body.scrollTop,n=this.options.container=="body"?window.innerWidth:k.outerWidth(),o=this.options.container=="body"?window.innerHeight:k.outerHeight(),p=this.options.container=="body"?0:k.offset().left;e=e=="bottom"&&h.top+h.height+j-m>o?"top":e=="top"&&h.top-m-j<0?"bottom":e=="right"&&h.right+i>n?"left":e=="left"&&h.left-i<p?"right":e,d.removeClass(l).addClass(e)}var q=this.getCalculatedOffset(e,h,i,j);this.applyPlacement(q,e),this.hoverState=null;var r=function(){c.$element.trigger("shown.bs."+c.type)};a.support.transition&&this.$tip.hasClass("fade")?d.one(a.support.transition.end,r).emulateTransitionEnd(150):r()}},b.prototype.applyPlacement=function(b,c){var d,e=this.tip(),f=e[0].offsetWidth,g=e[0].offsetHeight,h=parseInt(e.css("margin-top"),10),i=parseInt(e.css("margin-left"),10);isNaN(h)&&(h=0),isNaN(i)&&(i=0),b.top=b.top+h,b.left=b.left+i,a.offset.setOffset(e[0],a.extend({using:function(a){e.css({top:Math.round(a.top),left:Math.round(a.left)})}},b),0),e.addClass("in");var j=e[0].offsetWidth,k=e[0].offsetHeight;c=="top"&&k!=g&&(d=!0,b.top=b.top+g-k);if(/bottom|top/.test(c)){var l=0;b.left<0&&(l=b.left*-2,b.left=0,e.offset(b),j=e[0].offsetWidth,k=e[0].offsetHeight),this.replaceArrow(l-f+j,j,"left")}else this.replaceArrow(k-g,k,"top");d&&e.offset(b)},b.prototype.replaceArrow=function(a,b,c){this.arrow().css(c,a?50*(1-a/b)+"%":"")},b.prototype.setContent=function(){var a=this.tip(),b=this.getTitle();a.find(".tooltip-inner")[this.options.html?"html":"text"](b),a.removeClass("fade in top bottom left right")},b.prototype.hide=function(){function e(){b.hoverState!="in"&&c.detach(),b.$element.trigger("hidden.bs."+b.type)}var b=this,c=this.tip(),d=a.Event("hide.bs."+this.type);this.$element.trigger(d);if(d.isDefaultPrevented())return;return c.removeClass("in"),a.support.transition&&this.$tip.hasClass("fade")?c.one(a.support.transition.end,e).emulateTransitionEnd(150):e(),this.hoverState=null,this},b.prototype.fixTitle=function(){var a=this.$element;(a.attr("title")||typeof a.attr("data-original-title")!="string")&&a.attr("data-original-title",a.attr("title")||"").attr("title","")},b.prototype.hasContent=function(){return this.getTitle()},b.prototype.getPosition=function(){var b=this.$element[0];return a.extend({},typeof b.getBoundingClientRect=="function"?b.getBoundingClientRect():{width:b.offsetWidth,height:b.offsetHeight},this.$element.offset())},b.prototype.getCalculatedOffset=function(a,b,c,d){return a=="bottom"?{top:b.top+b.height,left:b.left+b.width/2-c/2}:a=="top"?{top:b.top-d,left:b.left+b.width/2-c/2}:a=="left"?{top:b.top+b.height/2-d/2,left:b.left-c}:{top:b.top+b.height/2-d/2,left:b.left+b.width}},b.prototype.getTitle=function(){var a,b=this.$element,c=this.options;return a=b.attr("data-original-title")||(typeof c.title=="function"?c.title.call(b[0]):c.title),a},b.prototype.tip=function(){return this.$tip=this.$tip||a(this.options.template)},b.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")},b.prototype.validate=function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},b.prototype.enable=function(){this.enabled=!0},b.prototype.disable=function(){this.enabled=!1},b.prototype.toggleEnabled=function(){this.enabled=!this.enabled},b.prototype.toggle=function(b){var c=b?a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type):this;c.tip().hasClass("in")?c.leave(c):c.enter(c)},b.prototype.destroy=function(){clearTimeout(this.timeout),this.hide().$element.off("."+this.type).removeData("bs."+this.type)};var c=a.fn.tooltip;a.fn.tooltip=function(c){return this.each(function(){var d=a(this),e=d.data("bs.tooltip"),f=typeof c=="object"&&c;if(!e&&c=="destroy")return;e||d.data("bs.tooltip",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.tooltip.Constructor=b,a.fn.tooltip.noConflict=function(){return a.fn.tooltip=c,this}}(jQuery)/*!
++function(a){"use strict";var b='[data-dismiss="alert"]',c=function(c){a(c).on("click",b,this.close)};c.prototype.close=function(b){function f(){e.trigger("closed.bs.alert").remove()}var c=a(this),d=c.attr("data-target");d||(d=c.attr("href"),d=d&&d.replace(/.*(?=#[^\s]*$)/,""));var e=a(d);b&&b.preventDefault(),e.length||(e=c.hasClass("alert")?c:c.parent()),e.trigger(b=a.Event("close.bs.alert"));if(b.isDefaultPrevented())return;e.removeClass("in"),a.support.transition&&e.hasClass("fade")?e.one(a.support.transition.end,f).emulateTransitionEnd(150):f()};var d=a.fn.alert;a.fn.alert=function(b){return this.each(function(){var d=a(this),e=d.data("bs.alert");e||d.data("bs.alert",e=new c(this)),typeof b=="string"&&e[b].call(d)})},a.fn.alert.Constructor=c,a.fn.alert.noConflict=function(){return a.fn.alert=d,this},a(document).on("click.bs.alert.data-api",b,c.prototype.close)}(jQuery),+function(a){"use strict";var b=function(c,d){this.$element=a(c),this.options=a.extend({},b.DEFAULTS,d),this.isLoading=!1};b.DEFAULTS={loadingText:"loading..."},b.prototype.setState=function(b){var c="disabled",d=this.$element,e=d.is("input")?"val":"html",f=d.data();b+="Text",f.resetText||d.data("resetText",d[e]()),d[e](f[b]||this.options[b]),setTimeout(a.proxy(function(){b=="loadingText"?(this.isLoading=!0,d.addClass(c).attr(c,c)):this.isLoading&&(this.isLoading=!1,d.removeClass(c).removeAttr(c))},this),0)},b.prototype.toggle=function(){var a=!0,b=this.$element.closest('[data-toggle="buttons"]');if(b.length){var c=this.$element.find("input");c.prop("type")=="radio"&&(c.prop("checked")&&this.$element.hasClass("active")?a=!1:b.find(".active").removeClass("active")),a&&c.prop("checked",!this.$element.hasClass("active")).trigger("change")}a&&this.$element.toggleClass("active")};var c=a.fn.button;a.fn.button=function(c){return this.each(function(){var d=a(this),e=d.data("bs.button"),f=typeof c=="object"&&c;e||d.data("bs.button",e=new b(this,f)),c=="toggle"?e.toggle():c&&e.setState(c)})},a.fn.button.Constructor=b,a.fn.button.noConflict=function(){return a.fn.button=c,this},a(document).on("click.bs.button.data-api","[data-toggle^=button]",function(b){var c=a(b.target);c.hasClass("btn")||(c=c.closest(".btn")),c.button("toggle"),b.preventDefault()})}(jQuery),+function(a){"use strict";var b=function(b,c){this.options=c,this.$element=a(b),this.$backdrop=this.isShown=null,this.options.remote&&this.$element.find(".modal-content").load(this.options.remote,a.proxy(function(){this.$element.trigger("loaded.bs.modal")},this))};b.DEFAULTS={backdrop:!0,keyboard:!0,show:!0},b.prototype.toggle=function(a){return this[this.isShown?"hide":"show"](a)},b.prototype.show=function(b){var c=this,d=a.Event("show.bs.modal",{relatedTarget:b});this.$element.trigger(d);if(this.isShown||d.isDefaultPrevented())return;this.isShown=!0,this.escape(),this.$element.on("click.dismiss.bs.modal",'[data-dismiss="modal"]',a.proxy(this.hide,this)),this.backdrop(function(){var d=a.support.transition&&c.$element.hasClass("fade");c.$element.parent().length||c.$element.appendTo(document.body),c.$element.show().scrollTop(0),d&&c.$element[0].offsetWidth,c.$element.addClass("in").attr("aria-hidden",!1),c.enforceFocus();var e=a.Event("shown.bs.modal",{relatedTarget:b});d?c.$element.find(".modal-dialog").one(a.support.transition.end,function(){c.$element.focus().trigger(e)}).emulateTransitionEnd(300):c.$element.focus().trigger(e)})},b.prototype.hide=function(b){b&&b.preventDefault(),b=a.Event("hide.bs.modal"),this.$element.trigger(b);if(!this.isShown||b.isDefaultPrevented())return;this.isShown=!1,this.escape(),a(document).off("focusin.bs.modal"),this.$element.removeClass("in").attr("aria-hidden",!0).off("click.dismiss.bs.modal"),a.support.transition&&this.$element.hasClass("fade")?this.$element.one(a.support.transition.end,a.proxy(this.hideModal,this)).emulateTransitionEnd(300):this.hideModal()},b.prototype.enforceFocus=function(){a(document).off("focusin.bs.modal").on("focusin.bs.modal",a.proxy(function(a){this.$element[0]!==a.target&&!this.$element.has(a.target).length&&this.$element.focus()},this))},b.prototype.escape=function(){this.isShown&&this.options.keyboard?this.$element.on("keyup.dismiss.bs.modal",a.proxy(function(a){a.which==27&&this.hide()},this)):this.isShown||this.$element.off("keyup.dismiss.bs.modal")},b.prototype.hideModal=function(){var a=this;this.$element.hide(),this.backdrop(function(){a.removeBackdrop(),a.$element.trigger("hidden.bs.modal")})},b.prototype.removeBackdrop=function(){this.$backdrop&&this.$backdrop.remove(),this.$backdrop=null},b.prototype.backdrop=function(b){var c=this.$element.hasClass("fade")?"fade":"";if(this.isShown&&this.options.backdrop){var d=a.support.transition&&c;this.$backdrop=a('<div class="modal-backdrop '+c+'" />').appendTo(document.body),this.$element.on("click.dismiss.bs.modal",a.proxy(function(a){if(a.target!==a.currentTarget)return;this.options.backdrop=="static"?this.$element[0].focus.call(this.$element[0]):this.hide.call(this)},this)),d&&this.$backdrop[0].offsetWidth,this.$backdrop.addClass("in");if(!b)return;d?this.$backdrop.one(a.support.transition.end,b).emulateTransitionEnd(150):b()}else!this.isShown&&this.$backdrop?(this.$backdrop.removeClass("in"),a.support.transition&&this.$element.hasClass("fade")?this.$backdrop.one(a.support.transition.end,b).emulateTransitionEnd(150):b()):b&&b()};var c=a.fn.modal;a.fn.modal=function(c,d){return this.each(function(){var e=a(this),f=e.data("bs.modal"),g=a.extend({},b.DEFAULTS,e.data(),typeof c=="object"&&c);f||e.data("bs.modal",f=new b(this,g)),typeof c=="string"?f[c](d):g.show&&f.show(d)})},a.fn.modal.Constructor=b,a.fn.modal.noConflict=function(){return a.fn.modal=c,this},a(document).on("click.bs.modal.data-api",'[data-toggle="modal"]',function(b){var c=a(this),d=c.attr("href"),e=a(c.attr("data-target")||d&&d.replace(/.*(?=#[^\s]+$)/,"")),f=e.data("bs.modal")?"toggle":a.extend({remote:!/#/.test(d)&&d},e.data(),c.data());c.is("a")&&b.preventDefault(),e.modal(f,this).one("hide",function(){c.is(":visible")&&c.focus()})}),a(document).on("show.bs.modal",".modal",function(){a(document.body).addClass("modal-open")}).on("hidden.bs.modal",".modal",function(){a(document.body).removeClass("modal-open")})}(jQuery),+function(a){"use strict";var b=function(a,b){this.type=this.options=this.enabled=this.timeout=this.hoverState=this.$element=null,this.init("tooltip",a,b)};b.DEFAULTS={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,container:!1},b.prototype.init=function(b,c,d){this.enabled=!0,this.type=b,this.$element=a(c),this.options=this.getOptions(d);var e=this.options.trigger.split(" ");for(var f=e.length;f--;){var g=e[f];if(g=="click")this.$element.on("click."+this.type,this.options.selector,a.proxy(this.toggle,this));else if(g!="manual"){var h=g=="hover"?"mouseenter":"focusin",i=g=="hover"?"mouseleave":"focusout";this.$element.on(h+"."+this.type,this.options.selector,a.proxy(this.enter,this)),this.$element.on(i+"."+this.type,this.options.selector,a.proxy(this.leave,this))}}this.options.selector?this._options=a.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},b.prototype.getDefaults=function(){return b.DEFAULTS},b.prototype.getOptions=function(b){return b=a.extend({},this.getDefaults(),this.$element.data(),b),b.delay&&typeof b.delay=="number"&&(b.delay={show:b.delay,hide:b.delay}),b},b.prototype.getDelegateOptions=function(){var b={},c=this.getDefaults();return this._options&&a.each(this._options,function(a,d){c[a]!=d&&(b[a]=d)}),b},b.prototype.enter=function(b){var c=b instanceof this.constructor?b:a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);clearTimeout(c.timeout),c.hoverState="in";if(!c.options.delay||!c.options.delay.show)return c.show();c.timeout=setTimeout(function(){c.hoverState=="in"&&c.show()},c.options.delay.show)},b.prototype.leave=function(b){var c=b instanceof this.constructor?b:a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);clearTimeout(c.timeout),c.hoverState="out";if(!c.options.delay||!c.options.delay.hide)return c.hide();c.timeout=setTimeout(function(){c.hoverState=="out"&&c.hide()},c.options.delay.hide)},b.prototype.show=function(){var b=a.Event("show.bs."+this.type);if(this.hasContent()&&this.enabled){this.$element.trigger(b);if(b.isDefaultPrevented())return;var c=this,d=this.tip();this.setContent(),this.options.animation&&d.addClass("fade");var e=typeof this.options.placement=="function"?this.options.placement.call(this,d[0],this.$element[0]):this.options.placement,f=/\s?auto?\s?/i,g=f.test(e);g&&(e=e.replace(f,"")||"top"),d.detach().css({top:0,left:0,display:"block"}).addClass(e),this.options.container?d.appendTo(this.options.container):d.insertAfter(this.$element);var h=this.getPosition(),i=d[0].offsetWidth,j=d[0].offsetHeight;if(g){var k=this.$element.parent(),l=e,m=document.documentElement.scrollTop||document.body.scrollTop,n=this.options.container=="body"?window.innerWidth:k.outerWidth(),o=this.options.container=="body"?window.innerHeight:k.outerHeight(),p=this.options.container=="body"?0:k.offset().left;e=e=="bottom"&&h.top+h.height+j-m>o?"top":e=="top"&&h.top-m-j<0?"bottom":e=="right"&&h.right+i>n?"left":e=="left"&&h.left-i<p?"right":e,d.removeClass(l).addClass(e)}var q=this.getCalculatedOffset(e,h,i,j);this.applyPlacement(q,e),this.hoverState=null;var r=function(){c.$element.trigger("shown.bs."+c.type)};a.support.transition&&this.$tip.hasClass("fade")?d.one(a.support.transition.end,r).emulateTransitionEnd(150):r()}},b.prototype.applyPlacement=function(b,c){var d,e=this.tip(),f=e[0].offsetWidth,g=e[0].offsetHeight,h=parseInt(e.css("margin-top"),10),i=parseInt(e.css("margin-left"),10);isNaN(h)&&(h=0),isNaN(i)&&(i=0),b.top=b.top+h,b.left=b.left+i,a.offset.setOffset(e[0],a.extend({using:function(a){e.css({top:Math.round(a.top),left:Math.round(a.left)})}},b),0),e.addClass("in");var j=e[0].offsetWidth,k=e[0].offsetHeight;c=="top"&&k!=g&&(d=!0,b.top=b.top+g-k);if(/bottom|top/.test(c)){var l=0;b.left<0&&(l=b.left*-2,b.left=0,e.offset(b),j=e[0].offsetWidth,k=e[0].offsetHeight),this.replaceArrow(l-f+j,j,"left")}else this.replaceArrow(k-g,k,"top");d&&e.offset(b)},b.prototype.replaceArrow=function(a,b,c){this.arrow().css(c,a?50*(1-a/b)+"%":"")},b.prototype.setContent=function(){var a=this.tip(),b=this.getTitle();a.find(".tooltip-inner")[this.options.html?"html":"text"](b),a.removeClass("fade in top bottom left right")},b.prototype.hide=function(){function e(){b.hoverState!="in"&&c.detach(),b.$element.trigger("hidden.bs."+b.type)}var b=this,c=this.tip(),d=a.Event("hide.bs."+this.type);this.$element.trigger(d);if(d.isDefaultPrevented())return;return c.removeClass("in"),a.support.transition&&this.$tip.hasClass("fade")?c.one(a.support.transition.end,e).emulateTransitionEnd(150):e(),this.hoverState=null,this},b.prototype.fixTitle=function(){var a=this.$element;(a.attr("title")||typeof a.attr("data-original-title")!="string")&&a.attr("data-original-title",a.attr("title")||"").attr("title","")},b.prototype.hasContent=function(){return this.getTitle()},b.prototype.getPosition=function(){var b=this.$element[0];return a.extend({},typeof b.getBoundingClientRect=="function"?b.getBoundingClientRect():{width:b.offsetWidth,height:b.offsetHeight},this.$element.offset())},b.prototype.getCalculatedOffset=function(a,b,c,d){return a=="bottom"?{top:b.top+b.height,left:b.left+b.width/2-c/2}:a=="top"?{top:b.top-d,left:b.left+b.width/2-c/2}:a=="left"?{top:b.top+b.height/2-d/2,left:b.left-c}:{top:b.top+b.height/2-d/2,left:b.left+b.width}},b.prototype.getTitle=function(){var a,b=this.$element,c=this.options;return a=b.attr("data-original-title")||(typeof c.title=="function"?c.title.call(b[0]):c.title),a},b.prototype.tip=function(){return this.$tip=this.$tip||a(this.options.template)},b.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")},b.prototype.validate=function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},b.prototype.enable=function(){this.enabled=!0},b.prototype.disable=function(){this.enabled=!1},b.prototype.toggleEnabled=function(){this.enabled=!this.enabled},b.prototype.toggle=function(b){var c=b?a(b.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type):this;c.tip().hasClass("in")?c.leave(c):c.enter(c)},b.prototype.destroy=function(){clearTimeout(this.timeout),this.hide().$element.off("."+this.type).removeData("bs."+this.type)};var c=a.fn.tooltip;a.fn.tooltip=function(c){return this.each(function(){var d=a(this),e=d.data("bs.tooltip"),f=typeof c=="object"&&c;if(!e&&c=="destroy")return;e||d.data("bs.tooltip",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.tooltip.Constructor=b,a.fn.tooltip.noConflict=function(){return a.fn.tooltip=c,this}}(jQuery)/*!
  * typeahead.js 0.10.2
  * https://github.com/twitter/typeahead.js
  * Copyright 2013-2014 Twitter, Inc. and other contributors; Licensed MIT
@@ -1878,6 +1838,7 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
                 return t.s + t.p + t.o + t.otype
             }
         });
+        return exports.store;
     }
     
     exports.jsonld2store = function(jsonld) {
@@ -1910,6 +1871,71 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
         return exports.store;
     }
     
+    exports.store2html = function() {
+        var nl = "\n";
+        var nlindent = nl + "\t";
+        var nlindentindent = nl + "\t\t";
+        var predata = "";
+        var json = exports.store2jsonldExpanded();
+        json.forEach(function(resource) {
+            predata += nl + "ID: " + resource["@id"];
+            if (resource["@type"] !== undefined) {
+                predata += nlindent + "Type(s)";
+                resource["@type"].forEach(function(t) {
+                    predata += nlindentindent + t["@id"];
+                });
+            }
+            for (var t in resource) {
+                if (t !== "@type" && t !== "@id") {
+                    var prop = t.replace("http://bibframe.org/vocab/", "bf:");
+                    prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
+                    predata += nlindent + prop;
+                    resource[t].forEach(function(o) {
+                        if (o["@id"] !== undefined) {
+                            predata += nlindentindent + o["@id"];
+                        } else {
+                            predata += nlindentindent + o["@value"];
+                        }
+                    });
+                }
+            }
+            predata += nl + nl;
+        });
+        return predata;
+    }
+    
+    exports.store2jsonldExpanded = function() {
+        var json = [];
+        exports.storeDedup();
+        groupedResources = _.groupBy(exports.store, function(t) { return t.s; });
+        for (var resourceURI in groupedResources) {
+            var j = {};
+            j["@id"] = resourceURI;
+            groupedProperties = _.groupBy(groupedResources[resourceURI], function(t) { return t.p; });
+            for (var propertyURI in groupedProperties) {
+                var prop = propertyURI;
+                if (propertyURI == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                    prop = "@type";
+                }
+                j[prop] = [];
+                groupedProperties[propertyURI].forEach(function(r) {
+                    if (r.otype == "uri") {
+                        j[prop].push({"@id": r.o});
+                    } else {
+                        var o = {}
+                        if (r.olang !== undefined && r.olang !== "") {
+                            o["@language"] = r.olang;
+                        }
+                        o["@value"] = r.o;
+                        j[prop].push(o);
+                    }
+                });
+            }
+            json.push(j);
+        };
+        return json;
+    }
+    
     /**
     * Generates a GUID string.
     * @returns {String} The generated GUID.
@@ -1924,6 +1950,94 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
         }
         return _p8() + _p8(true) + _p8(true) + _p8();
     }
+});bfe.define('src/bfelogging', ['require', 'exports', 'module' ], function(require, exports, module) {
+
+    var level = "INFO";
+    var toConsole = true;
+    var domain = window.location.protocol + "//" + window.location.host + "/";
+    
+    exports.log = [];
+    
+    exports.getLog = function() {
+        return exports.log;
+    }
+    
+    exports.init = function(config) {
+        if (config.logging !== undefined) {
+            if (config.logging.level !== undefined && config.logging.level == "DEBUG") {
+                level = config.logging.level;
+            }
+            if (config.logging.toConsole !== undefined && !config.logging.toConsole) {
+                toConsole = config.logging.toConsole;
+            }
+        }
+        var msg = "Logging instantiated: level is " + level + "; log to console is set to " + toConsole;
+        exports.addMsg(new Error(), "INFO", msg);
+        exports.addMsg(new Error(), "INFO", domain);
+    };
+    
+    // acceptable ltypes are:  INFO, DEBUG, WARN, ERROR
+    exports.addMsg = function(error, ltype, data, obj) {
+        if (error.lineNumber === undefined && error.fileName === undefined) {
+            // Not firefox, so let's try and see if it is chrome
+            try {
+                var stack = error.stack.split("\n");
+                var fileinfo = stack[1].substring(stack[1].indexOf("(") + 1);
+                fileinfo = fileinfo.replace(domain, "");
+                var infoparts = fileinfo.split(":");
+                error.fileName = infoparts[0];
+                error.lineNumber = infoparts[1]; 
+            } catch(e) {
+                // Probably IE.
+                error.fileName = "unknown";
+                error.lineNumber = "?";     
+                
+            }
+        }
+        error.fileName = error.fileName.replace(domain, "");
+        if (level == "INFO" && ltype.match(/INFO|WARN|ERROR/)) {
+            setMsg(ltype, data, error, obj);
+            consoleOut(ltype, data, error, obj);
+        } else if (level == "DEBUG")  {
+            setMsg(ltype, data, error, obj);
+            consoleOut(ltype, data, error, obj);
+        }
+    };
+    
+    function consoleOut(ltype, data, error, obj) {
+        if (toConsole) {
+            console.log(error.fileName + ":" + error.lineNumber + " -> " + data);
+            if (typeof data==="object" || data instanceof Array) {
+                console.log(data);
+            }
+            if (obj !== undefined && (typeof obj==="object" || obj instanceof Array)) {
+                console.log(obj);
+            }
+        }
+    }
+    
+    function setMsg(ltype, data, error, obj) {
+        var dateTime = new Date();
+        var locale = dateTime.toJSON();
+        var localestr = dateTime.toLocaleString();
+        var entry = {};
+        entry.dt = dateTime;
+        entry.dtLocaleSort = locale;
+        entry.dtLocaleReadable = localestr;
+        entry.type = ltype;
+        entry.fileName = error.fileName;
+        entry.lineNumber = error.lineNumber;
+        if (typeof data==="object" || data instanceof Array) {
+            entry.msg = JSON.stringify(data);
+        } else {
+            entry.msg = data;
+        }
+        if (obj !== undefined && (typeof obj==="object" || obj instanceof Array)) {
+            entry.obj = JSON.stringify(obj);
+        }
+        exports.log.push(entry);
+    }
+
 });bfe.define('src/lookups/lcnames', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
     var lcshared = require("src/lookups/lcshared");
     
