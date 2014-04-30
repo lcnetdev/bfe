@@ -21,9 +21,9 @@ Twitter's [Bootstrap] and a few additional custom CSS declarations.
 [demo-page]: http://bibframe.org/tools/editor/
 [bfi]: http://www.loc.gov/bibframe/
 [profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
-[JQuery] http://jquery.com/
-[Lo-Dash] http://lodash.com/
-[Bootstrap] http://getbootstrap.com/
+[JQuery]: http://jquery.com/
+[Lo-Dash]: http://lodash.com/
+[Bootstrap]: http://getbootstrap.com/
 [typeahead.js]: https://github.com/twitter/typeahead.js
 
 
@@ -196,7 +196,15 @@ Specification][profilespec].
 
 <!-- section links -->
 
-
+[JQuery]: http://jquery.com/
+[Lo-Dash]: http://lodash.com/
+[Bootstrap]: http://getbootstrap.com/
+[typeahead.js]: https://github.com/twitter/typeahead.js
+[require.js]: http://requirejs.org/
+[dryice]: https://github.com/mozilla/dryice
+[ace]: https://github.com/ajaxorg/ace
+[Zepheira]: https://zepheira.com/
+[profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
 
 
 Maintainers
