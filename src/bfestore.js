@@ -54,10 +54,12 @@ define(function(require, exports, module) {
         var json = exports.store2jsonldExpanded();
         json.forEach(function(resource) {
             predata += nl + "ID: " + resource["@id"];
-            predata += nlindent + "Type(s)";
-            resource["@type"].forEach(function(t) {
-                predata += nlindentindent + t["@id"];
-            });
+            if (resource["@type"] !== undefined) {
+                predata += nlindent + "Type(s)";
+                resource["@type"].forEach(function(t) {
+                    predata += nlindentindent + t["@id"];
+                });
+            }
             for (var t in resource) {
                 if (t !== "@type" && t !== "@id") {
                     var prop = t.replace("http://bibframe.org/vocab/", "bf:");
