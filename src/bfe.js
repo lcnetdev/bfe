@@ -121,10 +121,8 @@ define(function(require, exports, module) {
         // Set up logging
         bfelog.init(editorconfig);
         
-        var files = [];
         for (var i=0; i < config.profiles.length; i++) {
-            files[i] = "json!static/profiles/" + config.profiles[i] + ".json";
-            file = "static/profiles/" + config.profiles[i] + ".json";
+            file = config.profiles[i];
             bfelog.addMsg(new Error(), "INFO", "Loading profile: " + config.profiles[i]);
             $.ajax({
                 type: "GET",
