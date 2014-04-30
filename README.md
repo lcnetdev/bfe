@@ -11,8 +11,8 @@ This repository includes a development example, a "production" example, and
 various BIBFRAME Profiles with which to begin experimenting. In order 
 to get started with `bfe` quickly and easily, there are two main aspects of `bfe`: 
 a javascript library and an accompanying CSS file.  The packaged javascript 
-library bundles a few additional libraries, some of which are [JQuery],  
-[Lo-Dash], elements from Twitter's [Bootstrap.js][Bootstrap], and 
+library bundles a few additional libraries, some of which are [JQuery], [Lo-Dash], 
+elements from Twitter's [Bootstrap.js][Bootstrap], and 
 Twitter's [typeahead.js].  The CSS bundle includes mostly elements of 
 Twitter's [Bootstrap] and a few additional custom CSS declarations.
 
@@ -196,15 +196,7 @@ Specification][profilespec].
 
 <!-- section links -->
 
-[JQuery] http://jquery.com/
-[Lo-Dash] http://lodash.com/
-[Bootstrap] http://getbootstrap.com/
-[typeahead.js]: https://github.com/twitter/typeahead.js
-[require.js]: http://requirejs.org/
-[dryice]: https://github.com/mozilla/dryice
-[ace]: https://github.com/ajaxorg/ace
-[Zepheira]: https://zepheira.com/
-[profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
+
 
 
 Maintainers
