@@ -32,10 +32,10 @@ Getting Started
 
 Take a look at the `index.html` file.  Pay particular attention to the 
 includes - the javascript file and CSS - at the top of the page.  Those includes 
-and the little bit of configuration below is all that is needed.  
+and the little bit of configuration below those includes is all that is needed.  
 
 If you do not want to clone this repository and use it locally, then, in order 
-to acquire those includes, you chould download the minified, raw versions from the 
+to acquire those includes, you should download the minified, raw versions from the 
 `builds` directory:
 * Javascript - https://github.com/kefo/bfe/blob/master/builds/bfe-0.0.1.min.js
 * CSS - https://github.com/kefo/bfe/blob/master/builds/bfe-0.0.1.min.css
@@ -72,8 +72,12 @@ Browser Support
 * Opera - 12+
 
 **NOTE:** `bfe` has not been tested in all browsers, not to mention mobile ones.
+
+
 **NOTE:** `bfe` has also not been **thoroughly** tested in the browsers for which
 support is currently listed.  It has been developed primarily in Firefox 29.
+
+
 **NOTE:** `bfe` will not work in IE versions 8 and 9, for certain.
 
 
@@ -109,17 +113,30 @@ and ask in that forum.
 Version and Versioning
 ----------
 
-The current release is labelled 0.0.1.
+Builds are numbered and committed with the following format:
+
+`<major>.<minor>.<patch>`
+
+The initial release is labelled 0.1.0.
+
+Usually, the numbering would entail:
+
+* The major increases when backwards compatibility breaks
+* An increase of the minor indicates a new addition or feature
+* The patch increases for bug fixes and other miscellaneous changes.
 
 Considerable development is expected in the next few weeks during which time 
-compatibility could easily be broken, though this will be avoided whenever 
-possible.
+backwards compatibility could easily be broken, though this will be avoided whenever 
+possible.  There will be no commitment to ensuring 'backwards compatibility' until 
+the `<major>` reaches '1'.  Do not live link (now or in general).
 
 
 Testing
 -------
 
-Ha.  Joking aside, some kind of testing support is being investigated.
+Ha.  
+
+Joking aside, some kind of testing support is being investigated.
 
 
 Roadmap
@@ -131,7 +148,8 @@ In no particular order:
   not currently.
 * Support for the notion of "sessions," to capture administrative metadata.
 * Implement automated testing.
-* Create additional lookups (for VIAF, FAST, etc) for bundling, so they ship with `bfe`.
+* Create additional lookups for bundling (for VIAF, FAST, etc), so such lookups
+  ship with `bfe`.
 * Code clean up and refactoring.  As this README is being written (30 April 2014), 
   `bfe`'s code is all of 5 weeks old.  It was written very quickly (during a 
   period that included a 10-day hiatus) and it shows.
@@ -150,7 +168,7 @@ You are all most welcome.
 From a design standpoint, the objective with `bfe` is to create the simplest 
 'pluggable' form editor one can to maximize experimental implementer's abilities 
 to create/edit BIBFRAME data.  It might be a little weighty as a result, but 
-that was/is the objective.  Still, there's lots to do and the roadmap above includes 
+ease-of-use is the objective.  Still, there's lots to do and the roadmap above includes 
 a few of those things.  
 
 All contributions are welcome.  If you do not code, surely you will discover an 
@@ -175,17 +193,17 @@ main one in which is Mozilla's [dryice].
 Acknowledgements
 ----------
 
-In addition to all the good people who have worked on [JQuery],  
-[Lo-Dash], Twitter's [Bootstrap], Twitter's [typeahead.js], [require.js], 
-[dryice], and more, all of whom made this simpler, special recognition needs to 
+In addition to all the good people who have worked on [JQuery], [Lo-Dash], 
+Twitter's [Bootstrap], Twitter's [typeahead.js], [require.js], [dryice], and 
+more, all of whom made this simpler, special recognition needs to 
 go to the fine individuals who have worked on [Ajax.org's Ace editor][ace] and 
 the team of developers at [Zepheira].
 
 Using `require.js`, `Ace`'s developers figured out a great way to bundle their code 
 into a single distributable.  `Ace`'s methods were studied and emulated, and when 
-that wasn't enough, their code was ported (with credit, of course).  The `Ace`'s 
-devs also just have a really smart way of approaching this type of javascript 
-project.
+that wasn't enough, their code was ported (with credit, of course, and only in support
+of building the package with `dryice`).  The `Ace`'s devs also just have a really 
+smart way of approaching this type of javascript project.
 
 In late 2013, and demo-ed at the American Library Association's Midwinter Conference,
 Zepheira developed a prototype BIBFRAME Editor.  Although that project never moved 
