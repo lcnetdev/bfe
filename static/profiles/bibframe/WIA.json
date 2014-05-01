@@ -128,7 +128,14 @@
       "valueConstraint": {
        "valueTemplateRefs": [
         "profile:bf:Work",
-        "profile:bf:Authority"
+        "profile:bf:Topic",
+        "profile:bf:Place",
+        "profile:bf:Temporal",
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
        ]
       }
      },
