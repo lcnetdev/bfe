@@ -150,9 +150,9 @@ In no particular order:
 * Implement automated testing.
 * Create additional lookups for bundling (for VIAF, FAST, etc), so such lookups
   ship with `bfe`.
-* Code clean up and refactoring.  As this README is being written (30 April 2014), 
-  `bfe`'s code is all of 5 weeks old.  It was written very quickly (during a 
-  period that included a 10-day hiatus) and it shows.
+* Code clean up, refactoring, and documentation.  As this README is being 
+  written (30 April 2014), `bfe`'s code is all of 5 weeks old.  It was written 
+  very quickly (during a period that included a 10-day hiatus) and it shows.
 
 
 <!-- section links -->
