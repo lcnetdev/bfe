@@ -37,8 +37,8 @@ and the little bit of configuration below those includes is all that is needed.
 If you do not want to clone this repository and use it locally, then, in order 
 to acquire those includes, you should download the minified, raw versions from the 
 `builds` directory:
-* Javascript - https://github.com/kefo/bfe/blob/master/builds/bfe-0.0.1.min.js
-* CSS - https://github.com/kefo/bfe/blob/master/builds/bfe-0.0.1.min.css
+* Javascript - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.0.1.min.js
+* CSS - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.0.1.min.css
 
 There are also non-minified versions available.
 
@@ -49,8 +49,8 @@ Documentation
 * [API]
 * [Lookups][lookups-info]
 
-[API]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md
-[lookups-info]: https://github.com/kefo/bfe/blob/master/docs/bfe-lookups.md
+[API]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-api.md
+[lookups-info]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-lookups.md
 
 
 Demo?
@@ -87,7 +87,7 @@ Issues
 
 Oh, there will most certainly be issues.  Log them here:
 
-https://github.com/kefo/bfe/issues
+https://github.com/lcnetdev/bfe/issues
 
 
 Support
@@ -105,7 +105,7 @@ and ask in that forum.
 
 <!-- section links -->
 
-[Issues]: https://github.com/kefo/bfe/issues
+[Issues]: https://github.com/lcnetdev/bfe/issues
 [kefo]: mailto:kefo@3windmills.com
 [@3windmills]: https://twitter.com/3windmills
 [listserv]: http://listserv.loc.gov/cgi-bin/wa?SUBED1=bibframe&A=1
@@ -185,8 +185,8 @@ main one being Mozilla's [dryice].
 
 <!-- section links -->
 
-[issue]: https://github.com/kefo/bfe/issues
-[Lookup]: https://github.com/kefo/bfe/tree/master/src/lookups
+[issue]: https://github.com/lcnetdev/bfe/issues
+[Lookup]: https://github.com/lcnetdev/bfe/tree/master/src/lookups
 [node.js]: http://nodejs.org/
 [dryice]: https://github.com/mozilla/dryice
 
@@ -262,5 +262,5 @@ stops at `bfe` original code and does not convey to these projects.
 
 See a more detailed itemization of the licensing breakdown at:
 
-https://github.com/kefo/bfe/tree/master/LICENSE.txt
+https://github.com/lcnetdev/bfe/tree/master/LICENSE.txt
 

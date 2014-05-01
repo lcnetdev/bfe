@@ -7,7 +7,7 @@ lookup performs post-selection processing and returns the data to the editor.
 
 The best thing to do is look at an example:
 
-https://github.com/kefo/bfe/blob/master/src/lookups/rdacarriers.js
+https://github.com/lcnetdev/bfe/blob/master/src/lookups/rdacarriers.js
 
 **Note**: The above file calls a helper file, in which some of the magic happens.
 
@@ -35,5 +35,5 @@ used.
 
 <!-- section links -->
 
-[bfestore]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md#bfestore
-[configuring-bfe]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md#configuring-bfe
+[bfestore]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-api.md#bfestore
+[configuring-bfe]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-api.md#configuring-bfe

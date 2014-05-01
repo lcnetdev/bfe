@@ -172,7 +172,7 @@ Optional
 <!-- section links -->
 
 [profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
-[lookups-info]: https://github.com/kefo/bfe/blob/master/docs/bfe-lookups.md
+[lookups-info]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-lookups.md
 
 ----------------
 
