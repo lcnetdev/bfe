@@ -161,7 +161,7 @@ Optional
 * `lookups`: (Object) an object of objects.  The object's key is a scheme identifier
   used or expected to be used with the `useValuesFrom` property constraint from 
   a property in a property template which is part of a profile's resource template.
-  For more about the `useValuesFrom` property, see the [Profile Specification][[profilespec].
+  For more about the `useValuesFrom` property, see the [Profile Specification][profilespec].
   Each object consists of two properties.  `name` is a label/identifier for the lookup.
   It is used by the typeahead library.  `load` is the location of the Javascript 
   file the contains the functions required to populate the typeahead drop down
