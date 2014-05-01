@@ -2,7 +2,7 @@
 ----------------
 
 `bfe` is a Javascript UI application that renders an HTML form based on defined 
-Profiles.  There are things to know about configuring `bfe`.
+Profiles.  There are things to know about configuring and using `bfe`.
 
 Contents
 -----------------
@@ -13,33 +13,36 @@ Contents
 * [`bfelog`](#bfelog)
 
 
+----------------
+
 ### `bfe`
 
 The defined, Javascript namespace for `bfe` when loaded.
 
 
-#### bfe.fulleditor(Object config, String id) 
+#### bfe.fulleditor(Object configObject, String divid) 
 
 Invokes the "full editor," meaning a left-side navigation menu will be included.
-See [below][#configuring] for more about the `config` object.  `id` is the HTML 
-DOM identiifier in which the editor will be loaded.  Use a `div`.
+See [below](#configuring-bfe) for more about the `config` object.  `id` is the 
+identifier of the HTML element into which the editor will be loaded.  Use a `div`.
 
 ```javascript
 var bfeditor = bfe.fulleditor(configObject, divid);
 ```
 
 
-#### bfe.editor(Object config, String id) 
+#### bfe.editor(Object configObject, String divid) 
 
 Invokes only the `form` component of the "editor," meaning a left-side navigation 
-menu will *not* be included. See [below][#configuring] for more about the 
-`config` object.  `id` is the HTML DOM identiifier in which the editor will 
-be loaded.  Use a `div`.
+menu will *not* be included. See [below](#configuring-bfe) for more about the 
+`config` object.  `id` is the identifier of the HTML element into which the editor 
+will be loaded.  Use a `div`.
 
 ```javascript
 var bfeditor = bfe.editor(configObject, divid);
 ```
 
+----------------
 
 ### Configuring `bfe`
 
@@ -123,7 +126,7 @@ Required
   the data should be formatted/serialized.  Only "jsonld-expanded" is supported 
   presently.  `callback` is the name of the callback function, which expects one 
   parameter, the returned data formatted according to the `format` instruction.
-* `startingPoints` (fulleditor only): (Array) Each member of the array is an object representing 
+* `startingPoints` (only for fulleditor): (Array) Each member of the array is an object representing 
   a menu group, which consists of a heading (`menuGroup`) and an array of 
   items (`menuItems`). Each item has a `label` and an array of applicable 
   resource templates (`useResourceTemplates`) to be used when rendering that item.
@@ -171,10 +174,11 @@ Optional
 [profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
 [lookups-info]: https://github.com/kefo/bfe/blob/master/docs/bfe-lookups.md
 
+----------------
 
 ### `bfestore`
 
-The `bfestore` is an in memory store of the data being created or modified.  If 
+The `bfestore` is an in-memory store of the data being created or modified.  If 
 data is loaded for editing, the store is populated with that data.  As data is 
 otherwise created, deleted, or modified during an editing session, the store is 
 updated accordingly.  `bfestore` provides a few methods for accessing the data.
@@ -219,6 +223,7 @@ provide quick and dirty human-readable access to the data in the store.
 
 Returns the store as JSON object formatted according to jsonld expanded syntax.
 
+----------------
 
 ### `bfelog`
 
