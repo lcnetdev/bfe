@@ -15,10 +15,9 @@ define(function(require, exports, module) {
         var type = "";
         var hits = _.where(triples, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
         if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/authorities/names";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
@@ -26,7 +25,7 @@ define(function(require, exports, module) {
                 console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         var rdftype = "";
         if ( type == "http://bibframe.org/vocab/Person") {
@@ -60,7 +59,7 @@ define(function(require, exports, module) {
         } else {
             q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
         }
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){

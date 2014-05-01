@@ -9,8 +9,7 @@ define(function(require, exports, module) {
     exports.scheme = "http://id.loc.gov/resources/instances";
 
     exports.source = function(query, process, formobject) {
-        console.log(JSON.stringify(formobject.store));
-        
+
         var triples = formobject.store;
         
         var type = "";
@@ -19,7 +18,7 @@ define(function(require, exports, module) {
                 console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/resources/instances";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
@@ -27,7 +26,7 @@ define(function(require, exports, module) {
                 console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         //var rdftype = "rdftype:Instance";
         var rdftype = "";
@@ -41,7 +40,7 @@ define(function(require, exports, module) {
             q = 'cs:' + scheme;
         }
         q = q + " " + query
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){
