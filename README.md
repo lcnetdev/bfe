@@ -119,7 +119,7 @@ Builds are numbered and committed with the following format:
 
 The initial release is labelled 0.1.0.
 
-Usually, the numbering would entail:
+Usually, the numbering would follow that:
 
 * The major increases when backwards compatibility breaks
 * An increase of the minor indicates a new addition or feature
@@ -180,7 +180,7 @@ all the required files dynamically and is meant - as its name would suggest -
 for development purposes.  
 
 'Building' `bfe` requires [node.js].  See `package.json` for dependencies, the 
-main one in which is Mozilla's [dryice].
+main one being Mozilla's [dryice].
 
 <!-- section links -->
 
@@ -196,16 +196,17 @@ Acknowledgements
 In addition to all the good people who have worked on [JQuery], [Lo-Dash], 
 Twitter's [Bootstrap], Twitter's [typeahead.js], [require.js], [dryice], and 
 more, all of whom made this simpler, special recognition needs to 
-go to the fine individuals who have worked on [Ajax.org's Ace editor][ace] and 
-the team of developers at [Zepheira].
+go to the developers who have worked on [Ajax.org's Ace editor][ace] and 
+the fine individuals at [Zepheira].
 
 Using `require.js`, `Ace`'s developers figured out a great way to bundle their code 
 into a single distributable.  `Ace`'s methods were studied and emulated, and when 
-that wasn't enough, their code was ported (with credit, of course, and only in support
-of building the package with `dryice`).  The `Ace`'s devs also just have a really 
-smart way of approaching this type of javascript project.
+that wasn't enough, their code was ported (with credit, of course, and those 
+snippets were ported only in support of building the package with `dryice`).  The 
+`Ace`'s devs also just have a really smart way of approaching this type of 
+javascript project.
 
-In late 2013, and demo-ed at the American Library Association's Midwinter Conference,
+In late 2013, and demoed at the American Library Association's Midwinter Conference,
 Zepheira developed a prototype BIBFRAME Editor.  Although that project never moved 
 beyond an experimental phase, Zepheira's work was nevertheless extremely influential, 
 especially with respect to `bfe`'s UI design. (None of the code in `bfe` was ported 
@@ -235,7 +236,7 @@ Maintainers
 * **You? Please.**
 
 
-Authors
+Author
 -------
 
 * **Kevin Ford** 
