@@ -2060,10 +2060,9 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
         var type = "";
         var hits = _.where(triples, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
         if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/authorities/names";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
@@ -2071,7 +2070,7 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
                 console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         var rdftype = "";
         if ( type == "http://bibframe.org/vocab/Person") {
@@ -2105,7 +2104,7 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
         } else {
             q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
         }
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){
@@ -2255,18 +2254,17 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
         var type = "";
         var hits = _.where(triples, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
         if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/authorities/subjects";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
         if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
+                //console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         var rdftype = "";
         if ( type == "http://bibframe.org/vocab/Person") {
@@ -2300,7 +2298,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
         } else {
             q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
         }
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){
@@ -2308,7 +2306,6 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
             return;
         }
         if( typeof this.searching != "undefined") {
-            console.log("searching defined");
             clearTimeout(this.searching);
             process([]);
         }
@@ -2497,17 +2494,15 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module' ], function(re
     exports.scheme = "http://id.loc.gov/resources/works";
 
     exports.source = function(query, process, formobject) {
-        console.log(JSON.stringify(formobject.store));
         
         var triples = formobject.store;
         
         var type = "";
         var hits = _.where(triples, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
         if ( hits[0] !== undefined ) {
-                console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/resources/works";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
@@ -2515,7 +2510,7 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module' ], function(re
                 console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         //var rdftype = "rdftype:Instance";
         var rdftype = "";
@@ -2529,7 +2524,7 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module' ], function(re
             q = 'cs:' + scheme;
         }
         q = q + " " + query
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){
@@ -2624,7 +2619,7 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module' ], function(re
                         }
                     }
                 });
-                console.log(triples);
+                //console.log(triples);
                 process(triples);
             }
         });
@@ -2674,8 +2669,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module' ], functio
     exports.scheme = "http://id.loc.gov/resources/instances";
 
     exports.source = function(query, process, formobject) {
-        console.log(JSON.stringify(formobject.store));
-        
+
         var triples = formobject.store;
         
         var type = "";
@@ -2684,7 +2678,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module' ], functio
                 console.log(hits[0]);
                 type = hits[0].o;
             }
-        console.log("type is " + type);
+        //console.log("type is " + type);
         
         var scheme = "http://id.loc.gov/resources/instances";
         hits = _.where(triples, {"p": "http://bibframe.org/vocab/authoritySource"})
@@ -2692,7 +2686,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module' ], functio
                 console.log(hits[0]);
                 scheme = hits[0].o;
             }
-        console.log("scheme is " + scheme);
+        //console.log("scheme is " + scheme);
         
         //var rdftype = "rdftype:Instance";
         var rdftype = "";
@@ -2706,7 +2700,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module' ], functio
             q = 'cs:' + scheme;
         }
         q = q + " " + query
-        console.log('q is ' + q);
+        //console.log('q is ' + q);
         q = encodeURI(q);
         
         if(cache[q]){
