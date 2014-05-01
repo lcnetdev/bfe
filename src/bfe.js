@@ -329,7 +329,7 @@ define(function(require, exports, module) {
         };
     };
     
-    exports.edit = function (config, id) {
+    exports.editor = function (config, id) {
         
         this.setConfig(config);
         
@@ -415,6 +415,7 @@ define(function(require, exports, module) {
                 $("#bfeditor-formdiv").html("");
                 $("#bfeditor-formdiv").append(form.form);
                 $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
+                $("#bfeditor-debug").html(JSON.stringify(bfelog.getLog(), undefined, " "));
             }
         }
     }
