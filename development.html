@@ -152,8 +152,8 @@
             /*
             "load": [
                 {
-                    "templateID": "rt:Work:Literature",
-                    "defaulturi": "http://id.loc.gov/resources/bibs/5226",
+                    "templateID": "profile:bf:Work",
+                    "defaulturi": "http://id.loc.gov/ml38281/resources/bibs/5226",
                     "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
                     "source": {
                         "location": "http://id.loc.gov/resources/bibs/5226.bibframe_raw.jsonp",
@@ -162,7 +162,7 @@
                     }
                 },
                 {
-                    "templateID": "rda:Instance:Book",
+                    "templateID": "profile:bf:Instance",
                     "defaulturi": "_:b105resourcesbibs5226"
                 }
             ],
@@ -170,10 +170,10 @@
             /*
             "load": [
                 {
-                    "templateID": "rda:Work:MusicalCollection"
+                    "templateID": "profile:bf:Work"
                 },
                 {
-                    "templateID": "rda:Instance:MusicCD"
+                    "templateID": "profile:bf:Instance"
                 }
             ],
             */
@@ -229,6 +229,7 @@
             function(bfe) {
                 window.bfe = bfe;
                 bfeditor = bfe.fulleditor(config, "bfeditor");
+                //bfeditor = bfe.editor(config, "bfeditor");
             }
         );
     </script>
