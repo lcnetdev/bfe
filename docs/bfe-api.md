@@ -1,4 +1,4 @@
-`bfe` Configuration
+`bfe` API
 ----------------
 
 `bfe` is a Javascript UI application that renders an HTML form based on defined 
@@ -7,10 +7,10 @@ Profiles.  There are things to know about configuring `bfe`.
 Contents
 -----------------
 
-[`bfe`](#bfe)
-[Configuring `bfe`](#configuring%20`bfe`)
-[`bfestore`](#bfestore)
-[`bfelog`](#bfelog)
+* [`bfe`](#bfe)
+* [Configuring `bfe`](#configuring-bfe)
+* [`bfestore`](#bfestore)
+* [`bfelog`](#bfelog)
 
 
 ### `bfe`
