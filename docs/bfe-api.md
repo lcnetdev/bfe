@@ -227,9 +227,10 @@ Returns the store as JSON object formatted according to jsonld expanded syntax.
 
 ### `bfelog`
 
-`bfelog` manages INFO and DEBUG logging for `bfe`.  See the [`bfe` config 
-options above][#configuring] for more information about setting logging levels. 
-`bfelog` was put together quickly and is a candidate for serious rethinking.
+`bfelog` manages INFO and DEBUG logging for `bfe`.  See the 
+[`bfe` config options above](#configuring-bfe) for more information about setting 
+logging levels. `bfelog` was put together quickly and is a candidate for serious 
+rethinking.
 
 #### bfe.bfelog.getLog()
 
