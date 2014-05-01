@@ -262,5 +262,5 @@ stops at `bfe` original code and does not convey to these projects.
 
 See a more detailed itemization of the licensing breakdown at:
 
-https://github.com/kefo/bfe/tree/master/LICENSE.md
+https://github.com/kefo/bfe/tree/master/LICENSE.txt
 
