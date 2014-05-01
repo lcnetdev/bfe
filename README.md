@@ -84,7 +84,7 @@ support is currently listed.  It has been developed primarily in Firefox 29.
 Issues
 ------
 
-Oh, there will be issues.   Log them here:
+Oh, there will most certainly be issues.  Log them here:
 
 https://github.com/kefo/bfe/issues
 
