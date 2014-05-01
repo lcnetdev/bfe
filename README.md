@@ -229,7 +229,7 @@ Specification][profilespec].
 Contributors
 -----------
 
-* **You? Please.**
+* **Your name could be here!**
 
 
 Maintainer
