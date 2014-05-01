@@ -164,6 +164,11 @@
       "type": "literal"
      },
      {
+      "propertyURI": "http://bibframe.org/vocab/electronicLocator",
+      "propertyLabel": "Electronic location",
+      "type": "literal"
+     },
+     {
       "propertyURI": "http://bibframe.org/vocab/subLocation",
       "propertyLabel": "Held in sublocation",
       "type": "literal"
