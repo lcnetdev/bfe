@@ -9,7 +9,7 @@ The best thing to do is look at an example:
 
 https://github.com/kefo/bfe/blob/master/src/lookups/rdacarriers.js
 
-**Note*: The above file calls a helper file, in which some of the magic happens.
+**Note**: The above file calls a helper file, in which some of the magic happens.
 
 Each lookup must contain three exported objects:
 
@@ -37,14 +37,3 @@ used.
 
 [bfestore]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md#bfestore
 [configuring-bfe]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md#configuring-bfe
-
-Contents
------------------
-
-* [`bfe`](#bfe)
-* [Configuring `bfe`](#configuring-bfe)
-* [`bfestore`](#bfestore)
-* [`bfelog`](#bfelog)
-
-
-----------------
