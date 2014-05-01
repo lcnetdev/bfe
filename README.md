@@ -46,10 +46,10 @@ There are also non-minified versions available.
 Documentation 
 -------------
 
-* [Configuration]
+* [API]
 * [Lookups][lookups-info]
 
-[Configuration]: https://github.com/kefo/bfe/blob/master/docs/configuring-bfe.md
+[API]: https://github.com/kefo/bfe/blob/master/docs/bfe-api.md
 [lookups-info]: https://github.com/kefo/bfe/blob/master/docs/bfe-lookups.md
 
 
