@@ -47,9 +47,10 @@ Documentation
 -------------
 
 * [Configuration]
-* Creating a Lookup (Coming soon)
+* [Lookups][lookups-info]
 
-[Configuration]: https://github.com/kefo/bfe/blob/master/docs/CONFIGURATION.md
+[Configuration]: https://github.com/kefo/bfe/blob/master/docs/configuring-bfe.md
+[lookups-info]: https://github.com/kefo/bfe/blob/master/docs/bfe-lookups.md
 
 
 Demo?
