@@ -45,39 +45,7 @@ define(function(require, exports, module) {
         });
         return exports.store;
     }
-    
-    exports.store2html = function() {
-        var nl = "\n";
-        var nlindent = nl + "\t";
-        var nlindentindent = nl + "\t\t";
-        var predata = "";
-        var json = exports.store2jsonldExpanded();
-        json.forEach(function(resource) {
-            predata += nl + "ID: " + resource["@id"];
-            if (resource["@type"] !== undefined) {
-                predata += nlindent + "Type(s)";
-                resource["@type"].forEach(function(t) {
-                    predata += nlindentindent + t["@id"];
-                });
-            }
-            for (var t in resource) {
-                if (t !== "@type" && t !== "@id") {
-                    var prop = t.replace("http://bibframe.org/vocab/", "bf:");
-                    prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
-                    predata += nlindent + prop;
-                    resource[t].forEach(function(o) {
-                        if (o["@id"] !== undefined) {
-                            predata += nlindentindent + o["@id"];
-                        } else {
-                            predata += nlindentindent + o["@value"];
-                        }
-                    });
-                }
-            }
-            predata += nl + nl;
-        });
-        return predata;
-    }
+
     
     exports.store2jsonldExpanded = function() {
         var json = [];
@@ -109,6 +77,39 @@ define(function(require, exports, module) {
             json.push(j);
         };
         return json;
+    }
+    
+    exports.store2text = function() {
+        var nl = "\n";
+        var nlindent = nl + "\t";
+        var nlindentindent = nl + "\t\t";
+        var predata = "";
+        var json = exports.store2jsonldExpanded();
+        json.forEach(function(resource) {
+            predata += nl + "ID: " + resource["@id"];
+            if (resource["@type"] !== undefined) {
+                predata += nlindent + "Type(s)";
+                resource["@type"].forEach(function(t) {
+                    predata += nlindentindent + t["@id"];
+                });
+            }
+            for (var t in resource) {
+                if (t !== "@type" && t !== "@id") {
+                    var prop = t.replace("http://bibframe.org/vocab/", "bf:");
+                    prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
+                    predata += nlindent + prop;
+                    resource[t].forEach(function(o) {
+                        if (o["@id"] !== undefined) {
+                            predata += nlindentindent + o["@id"];
+                        } else {
+                            predata += nlindentindent + o["@value"];
+                        }
+                    });
+                }
+            }
+            predata += nl + nl;
+        });
+        return predata;
     }
     
     /**
