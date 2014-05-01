@@ -17,7 +17,7 @@
     
     <script type="text/javascript">
         function myCB(jsonld) {
-            var humanized = bfeditor.bfestore.store2html();
+            var humanized = bfeditor.bfestore.store2text();
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             document.getElementById("bfeditor").innerHTML = '<div class="row"><div class="col-md-12 text-right"><a href="development.html"><button type="button" class="btn btn-default btn-lg">Start Over</button></a></div></div><h1>Simple HTML View</h1><pre>' + humanized + '</pre><br /><h1>JSONLD-Expanded</h1><pre>' + JSON.stringify(jsonld, undefined, " ") + '</pre>';
         }
