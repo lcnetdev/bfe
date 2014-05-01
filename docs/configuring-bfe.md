@@ -8,8 +8,8 @@ Contents
 -----------------
 
 * [Usage](#usage)
-  * [API](#api)
-  * [Configuring `bfe`](#configuring)
+  * [`bfe`](#bfe)
+  * [Configuring `bfe`](#configuring bfe)
   * [`bfestore`](#bfestore)
   * [`bfelog`](#bfelog)
 * [Limitations](#limitations)
@@ -18,14 +18,12 @@ Contents
 Usage
 -----
 
-### API
-
-#### `bfe`
+### `bfe`
 
 The defined, Javascript namespace for `bfe` when loaded.
 
 
-#### `bfe.fulleditor(Object config, String id) 
+#### bfe.fulleditor(Object config, String id) 
 
 Invokes the "full editor," meaning a left-side navigation menu will be included.
 See [below][#configuring] for more about the `config` object.  `id` is the HTML 
@@ -36,7 +34,7 @@ var bfeditor = bfe.fulleditor(configObject, divid);
 ```
 
 
-#### `bfe.editor(Object config, String id) 
+#### bfe.editor(Object config, String id) 
 
 Invokes only the `form` component of the "editor," meaning a left-side navigation 
 menu will *not* be included. See [below][#configuring] for more about the 
@@ -186,7 +184,7 @@ data is loaded for editing, the store is populated with that data.  As data is
 otherwise created, deleted, or modified during an editing session, the store is 
 updated accordingly.  `bfestore` provides a few methods for accessing the data.
 
-#### `bfe.bfestore.store`
+#### bfe.bfestore.store
 
 Is the store itself.  The store is an array of triples of the following form.
 
@@ -211,29 +209,29 @@ Is the store itself.  The store is an array of triples of the following form.
 ]
 ```
 
-#### `bfe.bfestore.storeDedup()`
+#### bfe.bfestore.storeDedup()
 
 Returns the store after deduping.  Nominally clears the store of duplicate triples.
 It is usually not necessary to call this; the store is deduped before calling the 
 below methods.
 
-#### `bfe.bfestore.store2text()`
+#### bfe.bfestore.store2text()
 
 Returns the store formatted as text.  This is a throw away function designed to 
 provide quick and dirty human-readable access to the data in the store.
 
-#### `bfe.bfestore.store2jsonldExpanded()`
+#### bfe.bfestore.store2jsonldExpanded()
 
 Returns the store as JSON object formatted according to jsonld expanded syntax.
 
 
 ### `bfelog`
 
-`bfelogging` manages INFO and DEBUG logging for `bfe`.  See the [`bfe` config 
+`bfelog` manages INFO and DEBUG logging for `bfe`.  See the [`bfe` config 
 options above][#configuring] for more information about setting logging levels. 
-`bfelogging` was put together quickly and is a candidate for serious rethinking.
+`bfelog` was put together quickly and is a candidate for serious rethinking.
 
-#### `bfe.bfelog.getLog()`
+#### bfe.bfelog.getLog()
 
 Returns the log as a JSON object.  Sample:
 
