@@ -9,7 +9,7 @@ var project = copy.createCommonJsProject({
     roots: [ BFEHOME ]
 });
 
-var version = "0.0.1";
+var version = "0.1.0";
 
 copy({
         source: ["build_support/mini_require.js"],
@@ -28,13 +28,13 @@ copy({
 copy({
     source: bfe,
     filter: [copy.filter.moduleDefines, namespace("bfe"), exportAce("bfe", "src/bfe", "bfe")],
-    dest: 'builds/bfe-' + version + '.js'
+    dest: 'builds/bfe.js'
 });
 
 copy({
     source: bfe,
     filter: [copy.filter.moduleDefines, namespace("bfe"), copy.filter.uglifyjs, exportAce("bfe", "src/bfe", "bfe")],
-    dest: 'builds/bfe-' + version + '.min.js'
+    dest: 'builds/bfe.min.js'
 });
 
 
@@ -47,7 +47,7 @@ copy({
 
 copy({
     source: css,
-    dest: 'builds/bfe-' + version + '.css'
+    dest: 'builds/bfe.css'
 });
 
 copy({
@@ -56,7 +56,7 @@ copy({
         function(data) {
             return new CleanCSS().minify(data);
         }],
-    dest: 'builds/bfe-' + version + '.min.css'
+    dest: 'builds/bfe.min.css'
 });
 
 
