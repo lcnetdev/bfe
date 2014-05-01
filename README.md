@@ -226,14 +226,18 @@ Specification][profilespec].
 [profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
 
 
-Maintainers
+Contributors
+-----------
+
+* **You? Please.**
+
+
+Maintainer
 -----------
 
 * **Kevin Ford** 
   * [GitHub](https://github.com/kefo)
   * [@3windmills](https://twitter.com/3windmills) 
-
-* **You? Please.**
 
 
 Author
