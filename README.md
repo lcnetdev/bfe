@@ -135,7 +135,7 @@ the `<major>` reaches '1'.  Do not live link (now or in general).
 Testing
 -------
 
-Ha.  
+Ha!
 
 Joking aside, some kind of testing support is being investigated.
 
