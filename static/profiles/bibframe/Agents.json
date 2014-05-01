@@ -67,11 +67,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    },
@@ -119,11 +114,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    },
@@ -171,11 +161,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    },
@@ -217,11 +202,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    },
@@ -269,11 +249,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    },
@@ -321,11 +296,6 @@
       "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
       "propertyLabel": "Other authority information",
       "type": "resource"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/role",
-      "propertyLabel": "Role term",
-      "type": "literal"
      }
     ]
    }

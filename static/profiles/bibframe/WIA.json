@@ -472,7 +472,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isDerivativeOf",
+      "propertyURI": "http://bibframe.org/vocab/derivativeOf",
       "propertyLabel": "Is derivative of",
       "type": "resource",
       "valueConstraint": {
@@ -482,7 +482,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isDescriptionOf",
+      "propertyURI": "http://bibframe.org/vocab/descriptionOf",
       "propertyLabel": "Is description of",
       "type": "resource",
       "valueConstraint": {
@@ -492,7 +492,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isPartOf",
+      "propertyURI": "http://bibframe.org/vocab/partOf",
       "propertyLabel": "Is part of",
       "type": "resource",
       "valueConstraint": {
@@ -1427,7 +1427,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isDerivativeOf",
+      "propertyURI": "http://bibframe.org/vocab/derivativeOf",
       "propertyLabel": "Is derivative of",
       "type": "resource",
       "valueConstraint": {
@@ -1437,7 +1437,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isDescriptionOf",
+      "propertyURI": "http://bibframe.org/vocab/descriptionOf",
       "propertyLabel": "Is description of",
       "type": "resource",
       "valueConstraint": {
@@ -1447,7 +1447,7 @@
       }
      },
      {
-      "propertyURI": "http://bibframe.org/vocab/isPartOf",
+      "propertyURI": "http://bibframe.org/vocab/partOf",
       "propertyLabel": "Is part of",
       "type": "resource",
       "valueConstraint": {
