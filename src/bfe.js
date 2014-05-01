@@ -580,7 +580,12 @@ define(function(require, exports, module) {
                             $formgroup.append($saves);
                         } else if (_.has(property.valueConstraint, "useValuesFrom")) {
                             
-
+                            // Let's supress the lookup unless it is in a modal for now.
+                            if (rt.embedType != "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
+                                forEachFirst = false;
+                                return;
+                            }
+                                
                             var $inputdiv = $('<div class="col-sm-8"></div>');
                             var $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
                             
