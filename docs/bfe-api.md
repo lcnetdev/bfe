@@ -7,16 +7,11 @@ Profiles.  There are things to know about configuring `bfe`.
 Contents
 -----------------
 
-* [Usage](#usage)
-  * [`bfe`](#bfe)
-  * [Configuring `bfe`](#configuring bfe)
-  * [`bfestore`](#bfestore)
-  * [`bfelog`](#bfelog)
-* [Limitations](#limitations)
+[`bfe`](#bfe)
+[Configuring `bfe`](#configuring%20`bfe`)
+[`bfestore`](#bfestore)
+[`bfelog`](#bfelog)
 
-
-Usage
------
 
 ### `bfe`
 
