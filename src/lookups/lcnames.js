@@ -105,20 +105,22 @@ define(function(require, exports, module) {
         triple.otype = "uri";
         triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
-        triple.o = selected.value;
-        triple.otype = "literal";
-        triple.olang = "en";
-        triples.push(triple);
+        if (propertyuri.indexOf("http://bibframe.org/vocab/") > -1 || propertyuri.indexOf("http://id.loc.gov/vocabulary/relators/") > -1) {
+            triple = {};
+            triple.s = subjecturi
+            triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
+            triple.o = selected.value;
+            triple.otype = "literal";
+            triple.olang = "en";
+            triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authoritySource";
-        triple.o = selected.source;
-        triple.otype = "uri";
-        triples.push(triple);
+            triple = {};
+            triple.s = subjecturi
+            triple.p = "http://bibframe.org/vocab/authoritySource";
+            triple.o = selected.source;
+            triple.otype = "uri";
+            triples.push(triple);
+        }
         
         process(triples);
         /*
