@@ -793,6 +793,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             //formgroup.append(button);
                             $formgroup.append($saves);
                             
+                            
+                            /*
+                            // If the first conditional is active, is this even necessary?
                             if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
@@ -804,6 +807,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 // let's suppress it
                                 $input.prop("disabled", true);
                             }
+                            */
+                            
+                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
+                                // This is the first propertty *and* it is a look up.
+                                // Let's treat it special-like.
+                                var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
+                                var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                                $formgroup.append($saveLookup);
+                                $formgroup.append($spacer);
+                            }
+                        
                             
                         } else {
                             // Type is resource, so should be a URI, but there is
@@ -2150,20 +2164,22 @@ var Y=s();typeof define=="function"&&typeof define.amd=="object"&&define.amd?(G.
         triple.otype = "uri";
         triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
-        triple.o = selected.value;
-        triple.otype = "literal";
-        triple.olang = "en";
-        triples.push(triple);
+        if (propertyuri.indexOf("http://bibframe.org/vocab/") > -1 || propertyuri.indexOf("http://id.loc.gov/vocabulary/relators/") > -1) {
+            triple = {};
+            triple.s = subjecturi
+            triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
+            triple.o = selected.value;
+            triple.otype = "literal";
+            triple.olang = "en";
+            triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authoritySource";
-        triple.o = selected.source;
-        triple.otype = "uri";
-        triples.push(triple);
+            triple = {};
+            triple.s = subjecturi
+            triple.p = "http://bibframe.org/vocab/authoritySource";
+            triple.o = selected.source;
+            triple.otype = "uri";
+            triples.push(triple);
+        }
         
         process(triples);
         /*
@@ -2344,13 +2360,15 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
         triple.otype = "uri";
         triples.push(triple);
         
-        triple = {};
-        triple.s = subjecturi
-        triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
-        triple.o = selected.value;
-        triple.otype = "literal";
-        triple.olang = "en";
-        triples.push(triple);
+        if (propertyuri.indexOf("http://bibframe.org/vocab/") > -1 || propertyuri.indexOf("http://id.loc.gov/vocabulary/relators/") > -1) {
+            triple = {};
+            triple.s = subjecturi
+            triple.p = "http://bibframe.org/vocab/authorizedAccessPoint";
+            triple.o = selected.value;
+            triple.otype = "literal";
+            triple.olang = "en";
+            triples.push(triple);
+        }
         
         process(triples);
         /*
