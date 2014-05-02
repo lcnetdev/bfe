@@ -1300,7 +1300,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     triple.p = properties[0].propertyURI;
                     triple.o = data;
                     triple.otype = "literal";
-                    triple.olang = "en";
+                    //triple.olang = "";
                     
                     bfestore.store.push(triple);
                     formobject.store.push(triple);
