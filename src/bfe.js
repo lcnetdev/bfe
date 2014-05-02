@@ -1103,7 +1103,7 @@ define(function(require, exports, module) {
                     triple.p = properties[0].propertyURI;
                     triple.o = data;
                     triple.otype = "literal";
-                    triple.olang = "en";
+                    //triple.olang = "";
                     
                     bfestore.store.push(triple);
                     formobject.store.push(triple);
