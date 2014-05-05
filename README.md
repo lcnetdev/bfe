@@ -228,6 +228,7 @@ Specification][profilespec].
 Contributors
 -----------
 
+* [Jeremy Nelson](https://github.com/jermnelson)
 * **Your name could be here!**
 
 
