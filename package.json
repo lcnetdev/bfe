@@ -17,7 +17,8 @@
     },
     "dependencies": {
         "dryice": "0.4.x",
-        "clean-css": "2.1.x"
+        "clean-css": "2.1.x",
+        "connect": "2.15.x"
     },
     "bugs": {
         "url": "http://github.com/kefo/bfe/issues"
