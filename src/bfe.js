@@ -596,6 +596,9 @@ define(function(require, exports, module) {
                             //formgroup.append(button);
                             $formgroup.append($saves);
                             
+                            
+                            /*
+                            // If the first conditional is active, is this even necessary?
                             if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
@@ -607,6 +610,17 @@ define(function(require, exports, module) {
                                 // let's suppress it
                                 $input.prop("disabled", true);
                             }
+                            */
+                            
+                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
+                                // This is the first propertty *and* it is a look up.
+                                // Let's treat it special-like.
+                                var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
+                                var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                                $formgroup.append($saveLookup);
+                                $formgroup.append($spacer);
+                            }
+                        
                             
                         } else {
                             // Type is resource, so should be a URI, but there is
@@ -1103,7 +1117,7 @@ define(function(require, exports, module) {
                     triple.p = properties[0].propertyURI;
                     triple.o = data;
                     triple.otype = "literal";
-                    triple.olang = "en";
+                    //triple.olang = "";
                     
                     bfestore.store.push(triple);
                     formobject.store.push(triple);

@@ -118,8 +118,6 @@ Builds are numbered and committed with the following format:
 
 `<major>.<minor>.<patch>`
 
-The initial release is labelled 0.1.0.
-
 Usually, the numbering would follow that:
 
 * The major increases when backwards compatibility breaks
