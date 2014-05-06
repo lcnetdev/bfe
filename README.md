@@ -30,9 +30,23 @@ Twitter's [Bootstrap] and a few additional custom CSS declarations.
 Getting Started
 ---------------
 
-Take a look at the `index.html` file.  Pay particular attention to the 
-includes - the javascript file and CSS - at the top of the page.  Those includes 
-and the little bit of configuration below those includes is all that is needed.  
+`bfe` should be run on or within a server.  To run the demo or development version, 
+you can use the simple nodejs-based server - found in the main `bfe` directory - 
+that ships with `bfe`:
+
+```bash
+node server-bfe.js
+```
+or something like Python's SimpleHTTPServer:
+
+```bash
+python -m SimpleHTTPServer
+```
+
+As for integrating `bfe` with your own project, take a look at the `index.html` 
+file.  Pay particular attention to the includes - the javascript file and CSS - 
+at the top of the page.  Those includes and the little bit of configuration below 
+those includes is all that is needed.  
 
 If you do not want to clone this repository and use it locally, then, in order 
 to acquire those includes, you should download the minified, raw versions from the 
