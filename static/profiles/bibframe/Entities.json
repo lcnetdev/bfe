@@ -377,16 +377,6 @@
     "resourceLabel": "Title Entity",
     "propertyTemplates": [
      {
-      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-      "propertyLabel": "Authorized access point",
-      "type": "literal"
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/label",
-      "propertyLabel": "Simple label",
-      "type": "literal"
-     },
-     {
       "propertyURI": "http://bibframe.org/vocab/titleType",
       "propertyLabel": "Variant title type",
       "type": "literal"
