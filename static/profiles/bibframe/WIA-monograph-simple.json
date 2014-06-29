@@ -1,0 +1,564 @@
+{
+ "Profile": {
+  "id": "profile:bf:WIA",
+  "title": "BIBFRAME Work, Instance, and HeldItem for a Monograph - Simple",
+  "resourceTemplates": [
+   {
+    "resourceURI": "http://bibframe.org/vocab/Work",
+    "id": "profile:bf:Work:Monograph",
+    "resourceLabel": "Work - Monograph",
+    "propertyTemplates": [
+     {
+      "propertyURI": "http://bibframe.org/vocab/sameWork",
+      "propertyLabel": "Lookup",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/resources/works"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+      "propertyLabel": "Authorized access point",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/title",
+      "propertyLabel": "Title",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/titleVariation",
+      "propertyLabel": "Title variation",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Title"
+       ]
+      }
+     },
+     {
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      },
+      "propertyURI": "http://id.loc.gov/vocabulary/relators/aut",
+      "propertyLabel": "Author",
+      "type": "resource"
+     },
+     {
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      },
+      "propertyURI": "http://id.loc.gov/vocabulary/relators/edt",
+      "propertyLabel": "Editor",
+      "type": "resource"
+     },
+    {
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      },
+      "propertyURI": "http://id.loc.gov/vocabulary/relators/trl",
+      "propertyLabel": "Translator",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/originDate",
+      "propertyLabel": "Date of work",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/originPlace",
+      "propertyLabel": "Place of creation",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Place"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/genre",
+      "propertyLabel": "Genre, etc.",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Category"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/subject",
+      "propertyLabel": "Subject",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work",
+        "profile:bf:Topic",
+        "profile:bf:Place",
+        "profile:bf:Temporal",
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/classificationDdc",
+      "propertyLabel": "DDC Classification",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Classification"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/classificationLcc",
+      "propertyLabel": "LCC Classification",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Classification"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/contentCategory",
+      "propertyLabel": "Work content category",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/vocabulary/contentTypes"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/intendedAudience",
+      "propertyLabel": "Intended audience",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:IntendedAudience"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/language",
+      "propertyLabel": "Language of work",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/vocabulary/languages"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/note",
+      "propertyLabel": "Note",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/geographicCoverageNote",
+      "propertyLabel": "Geographic coverage",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/relatedWork",
+      "propertyLabel": "Related Work",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/translation",
+      "propertyLabel": "Has translation",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/translationOf",
+      "propertyLabel": "Translation of",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/identifier",
+      "propertyLabel": "Identifier",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/local",
+      "propertyLabel": "Local identifier",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "resourceURI": "http://bibframe.org/vocab/Instance",
+    "id": "profile:bf:Instance:Monograph",
+    "resourceLabel": "Instance/Manifestation - Monograph",
+    "propertyTemplates": [
+     {
+      "propertyURI": "http://bibframe.org/vocab/sameInstance",
+      "propertyLabel": "Lookup",
+      "type": "resource",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/resources/instances"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/instanceOf",
+      "propertyLabel": "Instance of",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Work:Monograph"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+      "propertyLabel": "Authorized access point",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/title",
+      "propertyLabel": "Title",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/titleStatement",
+      "propertyLabel": "Transcribed title",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/abbreviatedTitle",
+      "propertyLabel": "Abbreviated title",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Title"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/edition",
+      "propertyLabel": "Edition statement",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/editionResponsibility",
+      "propertyLabel": "Edition responsibility",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/mediaCategory",
+      "propertyLabel": "Media type",
+      "type": "resource",
+      "repeatable": "false",
+      "valueConstraint": {
+        "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
+         "defaultLiteral": "unmediated",
+         "editable": "false",
+        "useValuesFrom": [
+          "http://id.loc.gov/vocabulary/mediaTypes"
+        ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/carrierCategory",
+      "propertyLabel": "Carrier",
+      "type": "resource",
+      "repeatable": "false",
+      "valueConstraint": {
+        "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
+         "defaultLiteral": "volume",
+        "useValuesFrom": [
+          "http://id.loc.gov/vocabulary/carriers"
+        ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/dimensions",
+      "propertyLabel": "Dimensions",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/extent",
+      "propertyLabel": "Page nos.",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/publication",
+      "propertyLabel": "Publication",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Provider"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/providerStatement",
+      "propertyLabel": "Provider statement",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/note",
+      "propertyLabel": "Note",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/preferredCitation",
+      "propertyLabel": "Preferred citation",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/otherPhysicalFormat",
+      "propertyLabel": "Has other physical format",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/relatedTo",
+      "propertyLabel": "Related to another resource",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/hasDerivative",
+      "propertyLabel": "Has derivative",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/hasEquivalent",
+      "propertyLabel": "Equivalence",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/derivativeOf",
+      "propertyLabel": "Is derivative of",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/identifier",
+      "propertyLabel": "Identifier",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/isbn10",
+      "propertyLabel": "ISBN10",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/isbn13",
+      "propertyLabel": "ISBN13",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/local",
+      "propertyLabel": "Local identifier",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/publisherNumber",
+      "propertyLabel": "Other publisher assigned number",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Identifier"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "resourceURI": "http://bibframe.org/vocab/HeldItem",
+    "id": "profile:bf:HeldItem:Monograph",
+    "resourceLabel": "Holding - Monograph",
+    "propertyTemplates": [
+     {
+      "propertyURI": "http://bibframe.org/vocab/holdingFor",
+      "propertyLabel": "Holding for",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance:Monograph"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/heldBy",
+      "propertyLabel": "Held by",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/lendingPolicy",
+      "propertyLabel": "Lending policy",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/reproductionPolicy",
+      "propertyLabel": "Reproduction policy",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/retentionPolicy",
+      "propertyLabel": "Retention policy",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/electronicLocator",
+      "propertyLabel": "Electronic location",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/subLocation",
+      "propertyLabel": "Held in sublocation",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/barcode",
+      "propertyLabel": "Barcode",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/circulationStatus",
+      "propertyLabel": "Circulation status",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/copyNote",
+      "propertyLabel": "Copy note",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/itemId",
+      "propertyLabel": "System item identifier",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/shelfMark",
+      "propertyLabel": "Shelf Location",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/shelfMarkDdc",
+      "propertyLabel": "DDC call number",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/shelfMarkLcc",
+      "propertyLabel": "LCC call number",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/accessCondition",
+      "propertyLabel": "Access condition",
+      "type": "literal"
+     }
+    ]
+   }
+  ]
+ }
+}
