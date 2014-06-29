@@ -51,6 +51,7 @@
                 "/static/profiles/bibframe/Authorities.json",
                 "/static/profiles/bibframe/Entities.json",
                 "/static/profiles/bibframe/WIA.json",
+                "/static/profiles/bibframe/WIA-monograph-simple.json",
             ],
             
             "startingPoints": [
@@ -113,6 +114,27 @@
                             {
                                 label: "New Work, Instance, & HeldItem Combined", 
                                 useResourceTemplates: [ "profile:bf:Work", "profile:bf:Instance", "profile:bf:HeldItem" ]
+                            },
+                        ]
+                    },
+                    {
+                        "menuGroup": "BIBFRAME Simple",
+                        "menuItems": [
+                            {
+                                label: "Add holding", 
+                                useResourceTemplates: [ "profile:bf:HeldItem:Monograph" ]
+                            },
+                            {
+                                label: "Catalog manifestation", 
+                                useResourceTemplates: [ "profile:bf:Instance:Monograph" ]
+                            },
+                            {
+                                label: "New work", 
+                                useResourceTemplates: [ "profile:bf:Work:Monograph" ]
+                            },
+                            {
+                                label: "New monograph (New Work, Instance, and Holding)", 
+                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:Instance:Monograph", "profile:bf:HeldItem:Monograph" ]
                             },
                         ]
                     }
