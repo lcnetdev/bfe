@@ -26,7 +26,7 @@
      },
      {
       "propertyURI": "http://bibframe.org/vocab/label",
-      "propertyLabel": "Property value",
+      "propertyLabel": "Simple label",
       "type": "literal"
      },
      {
@@ -896,13 +896,13 @@
     "resourceLabel": "Instance",
     "propertyTemplates": [
      {
-      "propertyURI": "http://bibframe.org/vocab/sameWork",
+      "propertyURI": "http://bibframe.org/vocab/sameInstance",
       "propertyLabel": "Lookup",
       "type": "resource",
       "valueConstraint": {
        "repeatable": "false",
        "useValuesFrom": [
-        "http://id.loc.gov/resources/works"
+        "http://id.loc.gov/resources/instances"
        ]
       }
      },
@@ -923,7 +923,7 @@
      },
      {
       "propertyURI": "http://bibframe.org/vocab/label",
-      "propertyLabel": "Property value",
+      "propertyLabel": "Simple label",
       "type": "literal"
      },
      {
@@ -1866,6 +1866,16 @@
     "resourceLabel": "Item held",
     "propertyTemplates": [
      {
+      "propertyURI": "http://bibframe.org/vocab/holdingFor",
+      "propertyLabel": "Holding for",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Instance"
+       ]
+      }
+     },
+     {
       "propertyURI": "http://bibframe.org/vocab/heldBy",
       "propertyLabel": "Held by",
       "type": "resource",
@@ -1876,16 +1886,6 @@
         "profile:bf:Family",
         "profile:bf:Meeting",
         "profile:bf:Jurisdiction"
-       ]
-      }
-     },
-     {
-      "propertyURI": "http://bibframe.org/vocab/holdingFor",
-      "propertyLabel": "Holding for",
-      "type": "resource",
-      "valueConstraint": {
-       "valueTemplateRefs": [
-        "profile:bf:Instance"
        ]
       }
      },
