@@ -57,9 +57,9 @@ define(function(require, exports, module) {
             groupedProperties = _.groupBy(groupedResources[resourceURI], function(t) { return t.p; });
             for (var propertyURI in groupedProperties) {
                 var prop = propertyURI;
-                if (propertyURI == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
-                    prop = "@type";
-                }
+                //if (propertyURI == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                //    prop = "@type";
+                //}
                 j[prop] = [];
                 groupedProperties[propertyURI].forEach(function(r) {
                     if (r.otype == "uri") {
