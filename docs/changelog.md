@@ -6,6 +6,9 @@ This change log pertains to builds.
 
 ----------------
 
+* 0.1.5 (2014-10-03)
+  * Fix: Use '@type' in JSONLD expanded.
+
 * 0.1.4 (2014-08-11)
   * Bug Fix: Invalid JSONLD expanded.
 
