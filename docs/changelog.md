@@ -6,6 +6,9 @@ This change log pertains to builds.
 
 ----------------
 
+* 0.1.4 (2014-08-11)
+  * Bug Fix: Invalid JSONLD expanded.
+
 * 0.1.3 (2014-05-06)
   * Bug Fix: Bad var name resulting in 'undefined.'
 
