@@ -145,6 +145,26 @@
       }
      },
      {
+      "propertyURI": "http://bibframe.org/vocab/classificationNlm",
+      "propertyLabel": "NLM Classification",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Classification"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/classification",
+      "propertyLabel": "Classification",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Classification"
+       ]
+      }
+     },
+     {
       "propertyURI": "http://bibframe.org/vocab/contentCategory",
       "propertyLabel": "Work content category",
       "type": "resource",
