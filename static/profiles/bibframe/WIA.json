@@ -1,7 +1,8 @@
 {
  "Profile": {
   "id": "profile:bf:WIA",
-  "title": "Generic BIBFRAME Work, Instance, and HeldItem",
+  "title": "WIA",
+  "description": "Generic BIBFRAME Work, Instance, and HeldItem",
   "resourceTemplates": [
    {
     "resourceURI": "http://bibframe.org/vocab/Work",

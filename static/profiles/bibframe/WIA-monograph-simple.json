@@ -1,7 +1,8 @@
 {
  "Profile": {
-  "id": "profile:bf:WIA",
-  "title": "BIBFRAME Work, Instance, and HeldItem for a Monograph - Simple",
+  "id": "profile:bf:WIA-monograph-simple",
+  "title": "WIA-monograph-simple",
+  "description": "BIBFRAME Work, Instance, and HeldItem for a Monograph - Simple",
   "resourceTemplates": [
    {
     "resourceURI": "http://bibframe.org/vocab/Work",
