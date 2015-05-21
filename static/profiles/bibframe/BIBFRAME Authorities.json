@@ -1,0 +1,171 @@
+{
+ "Profile": {
+  "id": "profile:bf:Authorities",
+  "title": "BIBFRAME Authorities",
+  "resourceTemplates": [
+   {
+    "resourceURI": "http://bibframe.org/vocab/Topic",
+    "id": "profile:bf:Topic",
+    "resourceLabel": "Topic",
+    "propertyTemplates": [
+     {
+      "propertyLabel": "Lookup",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/authorities/subjects",
+        "http://id.loc.gov/authorities/names"
+       ]
+      },
+      "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+      "propertyLabel": "Authorized access point",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/label",
+      "propertyLabel": "Simple label",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorityAssigner",
+      "propertyLabel": "Authority assigner",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authoritySource",
+      "propertyLabel": "Authority source",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
+      "propertyLabel": "Other authority information",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/role",
+      "propertyLabel": "Role term",
+      "type": "literal"
+     }
+    ]
+   },
+   {
+    "resourceURI": "http://bibframe.org/vocab/Place",
+    "id": "profile:bf:Place",
+    "resourceLabel": "Place",
+    "propertyTemplates": [
+     {
+      "propertyLabel": "Lookup",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/authorities/subjects",
+        "http://id.loc.gov/authorities/names"
+       ]
+      },
+      "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+      "propertyLabel": "Authorized access point",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorityAssigner",
+      "propertyLabel": "Authority assigner",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authoritySource",
+      "propertyLabel": "Authority source",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
+      "propertyLabel": "Other authority information",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/role",
+      "propertyLabel": "Role term",
+      "type": "literal"
+     }
+    ]
+   },
+   {
+    "resourceURI": "http://bibframe.org/vocab/Temporal",
+    "id": "profile:bf:Temporal",
+    "resourceLabel": "Temporal Concept",
+    "propertyTemplates": [
+     {
+      "propertyLabel": "Lookup",
+      "valueConstraint": {
+       "repeatable": "false",
+       "useValuesFrom": [
+        "http://id.loc.gov/authorities/subjects"
+       ]
+      },
+      "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+      "propertyLabel": "Authorized access point",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authorityAssigner",
+      "propertyLabel": "Authority assigner",
+      "type": "resource",
+      "valueConstraint": {
+       "valueTemplateRefs": [
+        "profile:bf:Person",
+        "profile:bf:Organization",
+        "profile:bf:Family",
+        "profile:bf:Meeting",
+        "profile:bf:Jurisdiction"
+       ]
+      }
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/authoritySource",
+      "propertyLabel": "Authority source",
+      "type": "literal"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/referenceAuthority",
+      "propertyLabel": "Other authority information",
+      "type": "resource"
+     },
+     {
+      "propertyURI": "http://bibframe.org/vocab/role",
+      "propertyLabel": "Role term",
+      "type": "literal"
+     }
+    ]
+   }
+  ]
+ }
+}
