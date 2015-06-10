@@ -1,8 +1,7 @@
 {
  "Profile": {
-  "id": "profile:bf:WIA-monograph-simple",
+  "id": "profile:bf:WIA",
   "title": "WIA-monograph-simple",
-  "description": "BIBFRAME Work, Instance, and HeldItem for a Monograph - Simple",
   "resourceTemplates": [
    {
     "resourceURI": "http://bibframe.org/vocab/Work",
@@ -27,8 +26,10 @@
      },
      {
       "propertyURI": "http://bibframe.org/vocab/title",
-      "propertyLabel": "Title",
-      "type": "literal"
+      "propertyLabel": "Preferred Title for the Work (RDA 6.2.2)",
+      "type": "literal",
+      "remark":"http://access.rdatoolkit.org/rdachp6_rda6-2036.html"
+
      },
      {
       "propertyURI": "http://bibframe.org/vocab/titleVariation",
@@ -326,12 +327,9 @@
       "type": "resource",
       "repeatable": "false",
       "valueConstraint": {
-        "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
-         "defaultLiteral": "unmediated",
-         "editable": "false",
-        "useValuesFrom": [
-          "http://id.loc.gov/vocabulary/mediaTypes"
-        ]
+	"useValuesFrom": [
+	  "http://id.loc.gov/vocabulary/mediaTypes"
+	]
       }
      },
      {
@@ -340,8 +338,6 @@
       "type": "resource",
       "repeatable": "false",
       "valueConstraint": {
-        "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
-         "defaultLiteral": "volume",
         "useValuesFrom": [
           "http://id.loc.gov/vocabulary/carriers"
         ]
