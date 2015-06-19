@@ -29,73 +29,15 @@
             },
             "baseURI": "http://example.org/",
             "profiles": [
-                /*
-                "erimille/agents",
-                "erimille/events",
-                "erimille/language",
-                "erimille/book",
-                "erimille/record",
-                "erimille/vra",
-                "shared/agents",
-                "shared/authorities",
-                "shared/categories",
-                "kefo/works",
-                "kefo/instances",
-                "kefo/annotations",
-                "rda/works",
-                "rda/instances",
-                "rda/annotations",
-                */
-                "/static/profiles/bibframe/Agents.json",
-                "/static/profiles/bibframe/Annotations.json",
-                "/static/profiles/bibframe/Authorities.json",
-                "/static/profiles/bibframe/Entities.json",
+                "/static/profiles/bibframe/BIBFRAME Agents.json",
+                "/static/profiles/bibframe/BIBFRAME Annotations.json",
+                "/static/profiles/bibframe/BIBFRAME Authorities.json",
+                "/static/profiles/bibframe/BIBFRAME Entities.json",
                 "/static/profiles/bibframe/WIA.json",
                 "/static/profiles/bibframe/WIA-monograph-simple.json",
             ],
             
             "startingPoints": [
-                {
-                    "menuGroup": "Copy Cataloging",
-                    "menuItems": [
-                        {
-                            label: "New Holding", 
-                            useResourceTemplates: [ "rt:Annotation:HeldItem" ]
-                        }
-                    ]
-                },
-                {
-                    "menuGroup": "RDA Entities, for a Book",
-                    "menuItems": [
-                        {
-                            label: "Work/Expression", 
-                            useResourceTemplates: [ "rda:Work:Literature" ]
-                        },
-                        {
-                            label: "Manifestation", 
-                            useResourceTemplates: [ "rda:Instance:Book" ]
-                        },
-                        {
-                            label: "Item", 
-                            useResourceTemplates: [ "rda:Annotation:HeldItem" ]
-                        }
-                    ]
-                },
-                {
-                    "menuGroup": "Original Cataloging",
-                    "menuItems": [
-                        {
-                            label: "Electronic Book", 
-                            useResourceTemplates: [  "rt:Work:EricBook", "rt:Instance:ElectronicBook" ]
-                        },
-                        {
-                            label: "Vinyl Record", 
-                            useResourceTemplates: [  "rt:Work:Audio", "vinyl" ]
-                        }
-                    ]
-                }
-            ],
-                "startingPoints": [
                     {
                         "menuGroup": "BIBFRAME Generic",
                         "menuItems": [

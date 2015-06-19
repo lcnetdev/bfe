@@ -16,12 +16,12 @@
             var config = {
                 "baseURI": "http://example.org/",
                 "profiles": [
-                    "/static/profiles/bibframe/BIBFRAME Agents.json",
-                    "/static/profiles/bibframe/BIBFRAME Annotations.json",
-                    "/static/profiles/bibframe/BIBFRAME Authorities.json",
-                    "/static/profiles/bibframe/BIBFRAME Entities.json",
-                    "/static/profiles/bibframe/WIA.json",
-                    "/static/profiles/bibframe/WIA-monograph-simple.json",
+                    "/static/bfe/static/profiles/bibframe/BIBFRAME Agents.json",
+                    "/static/bfe/static/profiles/bibframe/BIBFRAME Annotations.json",
+                    "/static/bfe/static/profiles/bibframe/BIBFRAME Authorities.json",
+                    "/static/bfe/static/profiles/bibframe/BIBFRAME Entities.json",
+                    "/static/bfe/static/profiles/bibframe/WIA.json",
+                    "/static/bfe/static/profiles/bibframe/WIA-monograph-simple.json",
                 ],
                 "startingPoints": [
                     {
@@ -66,28 +66,7 @@
                             },
                         ]
                     }
-		    {
-                        "menuGroup": "BIBFRAME - Simple Monograph",
-                        "menuItems": [
-                            {
-                                label: "Add holding",
-                                useResourceTemplates: [ "profile:bf:HeldItem:Monograph-simple" ]
-                            },
-                            {
-                                label: "Catalog manifestation",
-                                useResourceTemplates: [ "profile:bf:Instance:Monograph-simple" ]
-                            },
-                            {
-                                label: "New work",
-                                useResourceTemplates: [ "profile:bf:Work:Monograph-simple" ]
-                            },
-                            {
-                                label: "New monograph (New Work, Instance, and Holding)",
-                                useResourceTemplates: [ "profile:bf:Work:Monograph-simple", "profile:bf:Instance:Monograph-simple", "profile:bf:HeldItem:Monograph-simple" ]
-                            },
-                        ]
 
-		    }
                 ],
                 "return": {
                     "format": "jsonld-expanded",
