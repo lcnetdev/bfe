@@ -528,7 +528,7 @@ define(function(require, exports, module) {
                 if (property.type == "resource") {
                     
                     if (_.has(property, "valueConstraint")) {
-                        if (_.has(property.valueConstraint, "valueTemplateRefs")) {
+                        if (_.has(property.valueConstraint, "valueTemplateRefs") && _.isEmpty(property.valueConstraint.valueTemplateRefs)) {
                             /*
                             *  The below gives you a form like Z produced.   Keep for time being.
                             */
@@ -685,7 +685,7 @@ define(function(require, exports, module) {
                 
                 rt.propertyTemplates.forEach(function(property) {
                     if (_.has(property, "valueConstraint")) {
-                        if (_.has(property.valueConstraint, "valueTemplateRefs")) {
+                        if (_.has(property.valueConstraint, "valueTemplateRefs") && _.isEmpty(property.valueConstraint.valueTemplateRefs)) {
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for ( var v=0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
@@ -761,7 +761,7 @@ define(function(require, exports, module) {
                                     var triplesResourceTemplateID = "";
                                     if ( rtype != "" ) {
                                         if (_.has(property, "valueConstraint")) {
-                                            if (_.has(property.valueConstraint, "valueTemplateRefs")) {
+                                            if (_.has(property.valueConstraint, "valueTemplateRefs") _.isEmpty(property.valueConstraint.valueTemplateRefs)) {
                                                 var resourceTs = _.where(resourceTemplates, {"resourceURI": rtype });
                                                 //console.log("Found resourcetemplates for " + rtype);
                                                 //console.log(resourceTs);

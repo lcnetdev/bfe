@@ -1,7 +1,7 @@
 {
  "Profile": {
   "id": "profile:bf:Annotations",
-  "title": "BIBFRAME Agents",
+  "title": "BIBFRAME Annotations",
   "_remark": "HeldItem included in Profile profile:bf:WIA.",
   "resourceTemplates": [
    {

@@ -1,7 +1,7 @@
 {
  "Profile": {
   "id": "profile:bf:Authorities",
-  "title": "BIBFRAME Agents",
+  "title": "BIBFRAME Authorities",
   "resourceTemplates": [
    {
     "resourceURI": "http://bibframe.org/vocab/Topic",

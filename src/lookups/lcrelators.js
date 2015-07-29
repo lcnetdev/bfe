@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     var cache = [];
     
-    exports.scheme = "http://id.loc.gov/vocabulary/targetAudiences";
+    exports.scheme = "http://id.loc.gov/vocabulary/relators";
 
     exports.source = function(query, process) {
 
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 
         this.searching = setTimeout(function() {
             if ( query.length > 1 ) {
-                u = "http://id.loc.gov/vocabulary/targetAudiences/suggest/?q=" + q;
+                u = "http://id.loc.gov/vocabulary/relators/suggest/?q=" + q;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
                     }
                 });
             } else if ( query.length === 1 && query == "?" ) {
-                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=20&q=" + encodeURI("cs:http://id.loc.gov/vocabulary/targetAudiences");
+                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=20&q=" + encodeURI("cs:http://id.loc.gov/vocabulary/relators");
                 console.log(u);
                 $.ajax({
                     url: u,

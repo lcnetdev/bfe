@@ -74,7 +74,7 @@ Demo?
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/tools/editor/
+[demo-page]: http://bibframe.org:8283/tools/editor2/
 
 
 Browser Support
@@ -88,9 +88,8 @@ Browser Support
 
 **NOTE:** `bfe` has not been tested in all browsers, not to mention mobile ones.
 
-
 **NOTE:** `bfe` has also not been **thoroughly** tested in the browsers for which
-support is currently listed.  It has been developed primarily in Firefox 29.
+support is currently listed.  It has been developed primarily in Chrome.
 
 
 **NOTE:** `bfe` will not work in IE versions 8 and 9, for certain.
