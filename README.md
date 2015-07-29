@@ -74,7 +74,7 @@ Demo?
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/tools/editor/
+[demo-page]: http://bibframe.org:8283/tools/editor2/
 
 
 Browser Support
