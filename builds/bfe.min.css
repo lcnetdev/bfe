@@ -1579,7 +1579,7 @@ table th[class*="col-"] {
 @media (max-width: 767px) {
   .table-responsive {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     overflow-y: hidden;
     overflow-x: scroll;
     -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -1732,7 +1732,7 @@ input[type="date"] {
   line-height: 34px;
 }
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 .radio,
 .checkbox {
@@ -2002,6 +2002,9 @@ select[multiple].input-lg {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.btn a{
+    font-weight: bold;
 }
 .btn:focus,
 .btn:active:focus,
@@ -2492,7 +2495,7 @@ input[type="button"].btn-block {
 .navbar-fixed-bottom .dropdown .dropdown-menu {
   top: auto;
   bottom: 100%;
-  margin-bottom: 1px;
+  margin-bottom: 5px;
 }
 @media (min-width: 768px) {
   .navbar-right .dropdown-menu {
@@ -3260,7 +3263,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 @media (max-width: 767px) {
   .navbar-form .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
   }
 }
 @media (min-width: 768px) {
@@ -4199,4 +4202,8 @@ button.close {
 
 .tt-suggestion p {
   margin: 0;
+}
+
+div#save-btn {
+    margin-bottom: 10px;
 }

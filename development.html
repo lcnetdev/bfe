@@ -1,202 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-<head>
-    <title>BF Editor</title>
-    <script src="static/js/require.js"></script>
-    <link href="src/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="src/css/typeahead.css" rel="stylesheet" />
-</head>
+  <head>
+    <title>(Bibliographic Framework Initiative Technical Site - BIBFRAME.ORG)</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}images/favicon.ico"/>
+    <link rel="stylesheet" href="/static/css/blue/style.css" type="text/css" media="print, projection, screen" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-<body>
-    
-    <div class="container">
-      <div id="bfeditor" />
-    </div>
-    
-    <script type="text/javascript">
-        function myCB(jsonld) {
-            var humanized = bfeditor.bfestore.store2text();
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-            document.getElementById("bfeditor").innerHTML = '<div class="row"><div class="col-md-12 text-right"><a href="development.html"><button type="button" class="btn btn-default btn-lg">Start Over</button></a></div></div><h1>Simple HTML View</h1><pre>' + humanized + '</pre><br /><h1>JSONLD-Expanded</h1><pre>' + JSON.stringify(jsonld, undefined, " ") + '</pre>';
-        }
-            
-        var config = {
-            "logging": {
-                "level": "DEBUG",
-                "toConsole": true
-            },
-            "baseURI": "http://example.org/",
-            "profiles": [
-                "/static/profiles/bibframe/BIBFRAME Agents.json",
-                "/static/profiles/bibframe/BIBFRAME Annotations.json",
-                "/static/profiles/bibframe/BIBFRAME Authorities.json",
-                "/static/profiles/bibframe/BIBFRAME Entities.json",
-                "/static/profiles/bibframe/WIA.json",
-                "/static/profiles/bibframe/WIA-monograph-simple.json",
-            ],
-            
-            "startingPoints": [
-                    {
-                        "menuGroup": "BIBFRAME Generic",
-                        "menuItems": [
-                            {
-                                label: "New HeldItem", 
-                                useResourceTemplates: [ "profile:bf:HeldItem" ]
-                            },
-                            {
-                                label: "New Instance", 
-                                useResourceTemplates: [ "profile:bf:Instance" ]
-                            },
-                            {
-                                label: "New Work", 
-                                useResourceTemplates: [ "profile:bf:Work" ]
-                            },
-                            {
-                                label: "New Work, Instance, & HeldItem Combined", 
-                                useResourceTemplates: [ "profile:bf:Work", "profile:bf:Instance", "profile:bf:HeldItem" ]
-                            },
-                        ]
-                    },
-                    {
-                        "menuGroup": "BIBFRAME Simple",
-                        "menuItems": [
-                            {
-                                label: "Add holding", 
-                                useResourceTemplates: [ "profile:bf:HeldItem:Monograph" ]
-                            },
-                            {
-                                label: "Catalog manifestation", 
-                                useResourceTemplates: [ "profile:bf:Instance:Monograph" ]
-                            },
-                            {
-                                label: "New work", 
-                                useResourceTemplates: [ "profile:bf:Work:Monograph" ]
-                            },
-                            {
-                                label: "New monograph (New Work, Instance, and Holding)", 
-                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:Instance:Monograph", "profile:bf:HeldItem:Monograph" ]
-                            },
-                        ]
-                    }
-                ],
-                
-            "lookups":
-            {
-                "http://id.loc.gov/authorities/names": {
-                    "name": "LCNAF",
-                    "load": "src/lookups/lcnames"
-                },
-                "http://id.loc.gov/authorities/subjects": {
-                    "name": "LCSH",
-                    "load": "src/lookups/lcsubjects"
-                },
-                "http://id.loc.gov/authorities/genreForms": {
-                    "name": "LCGFT",
-                    "load": "src/lookups/lcgenreforms"
-                },
-                "http://id.loc.gov/resources/works": {
-                    "name": "LC-Works",
-                    "load": "src/lookups/lcworks"
-                },
-                "http://id.loc.gov/resources/instances": {
-                    "name": "LC-Instances",
-                    "load": "src/lookups/lcinstances"
-                },
-                "http://id.loc.gov/vocabulary/organizations": {
-                    "name": "Organizations",
-                    "load": "src/lookups/lcorganizations"
-                },
-                "http://id.loc.gov/vocabulary/countries": {
-                    "name": "Countries",
-                    "load": "src/lookups/lccountries"
-                }
-            },
-            /*
-            "load": [
-                {
-                    "templateID": "profile:bf:Work",
-                    "defaulturi": "http://id.loc.gov/resources/bibs/5226",
-                    "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
-                    "source": {
-                        "location": "http://id.loc.gov/resources/bibs/5226.bibframe_raw.jsonp",
-                        "requestType": "jsonp",
-                        "data": "UNUSED, BUT REMEMBER IT"
-                    }
-                },
-                {
-                    "templateID": "profile:bf:Instance",
-                    "defaulturi": "_:b105resourcesbibs5226"
-                }
-            ],
-            */
-            /*
-            "load": [
-                {
-                    "templateID": "profile:bf:Work"
-                },
-                {
-                    "templateID": "profile:bf:Instance"
-                }
-            ],
-            */
-            "return": {
-                "format": "jsonld-expanded",
-                "callback": myCB
-            }
-            
-        }
-        /*
-        ,
-            
-            "load": [
-                {
-                    "templateID": "rt:Work:Literature",
-                    "defaulturi": "http://id.loc.gov/resources/bibs/5226",
-                    "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
-                    "source": {
-                        "location-safe": "http://id.loc.gov/ml38281/resources/bibs/5226.bibframe_raw.jsonp",
-                        "location": "/static/examples/5226-test.json",
-                        "requestType": "json",
-                        "data": "UNUSED, BUT REMEMBER IT"
-                    }
-                },
-                {
-                    "templateID": "rda:Instance:Book",
-                    "defaulturi": "_:b105resourcesbibs5226"
-                }
-            ],
-            
-                "load": [
-                {
-                    "templateID": "rt:Instance:Book",
-                    "defaulturi": "_:b105resourcesbibs5226",
-                    "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
-                    "source": {
-                        "location-safe": "http://id.loc.gov/ml38281/resources/bibs/5226.bibframe_raw.jsonp",
-                        "location": "/static/examples/5226-test.json",
-                        "requestType": "json",
-                        "data": "UNUSED, BUT REMEMBER IT"
-                    }
-                }
-            ]
-            */
-        require.config({
-            baseUrl: "./",
-            paths: {
-                src: "src",
-                text: "src/lib/text"
-            }
+    <!-- <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" /> -->
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <link href="/static/css/style-doc.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="http://balupton.github.io/jquery-syntaxhighlighter/scripts/jquery.syntaxhighlighter.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">/*<![CDATA[*/
+
+        $.SyntaxHighlighter.init({
+            'lineNumbers': false
+            });
+
+        $(".collapse").collapse();
+
+        $(document).ready(function() {
+            getExamples();
         });
-        require( ["src/bfe"],
-            function(bfe) {
-                window.bfe = bfe;
-                bfeditor = bfe.fulleditor(config, "bfeditor");
-                //bfeditor = bfe.editor(config, "bfeditor");
-            }
-        );
-    </script>
 
-</body>
+        /*]]>*/</script>
+
+    <script type="text/javascript" src="/static/js/bibframe.js"></script>
+
+    <script type="text/javascript" src="/static/bfe/builds/bfe.js"></script>
+    <link rel="stylesheet" href="/static/bfe/builds/bfe.css" />
+
+    <script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
+
+        <script type="text/javascript">
+                $(document).ready(function()
+                        {
+                                $("#morePropsTable").tablesorter({sortList: [[0,0]]});
+                                $("#moreClassesTable").tablesorter({sortList: [[0,0]]});
+
+                                $("#propsTable1").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable2").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable3").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable4").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable5").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable6").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable7").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable8").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable9").tablesorter({sortList: [[0,0]]});
+                                $("#propsTable-").tablesorter({sortList: [[0,0]]});
+
+                                $("#vocabUpdatesTable").tablesorter({sortList: [[2,1]]});
+
+                        }
+                );
+        </script>
+
+    <style>
+        @media screen {
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        }
+        @media print {
+            a[href]:after {
+                content: none;
+            }
+        }
+        </style>
+
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">BIBFRAME Editor Demo</a>
+            </div>
+            <div class="collapse navbar-collapse visible-print" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="divider"></li>
+                    <li><a href="http://www.loc.gov/bibframe/">&laquo; Back to LC BIBFRAME Site</a></li>
+                    <li class="divider"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!-- Breadcrumbs -->
+<ol class="breadcrumb">
+<li><a href = "/">Home</a></li>
+<li><a href = "/">Editor</a></li>
+</ol>
+
+<div id="bfeditor" class="container-fluid">
+    <div id="iealert"></div>
+</div>    
+
+<script type="text/javascript" src="static/js/config-dev.js"></script>
+
+<br/><br/><br/>
+
+<hr>
+   <footer class="bs-footer" role="contentinfo">
+    <div class="container">
+          <p>This is a development view of the Bibliographic Framework Initiative project's editor. For more information, go to  <a href="http://www.loc.gov/bibframe/">www.loc.gov/bibframe</a>.</p>
+    </div>
+   </footer>
+  </body>
 </html>
+
