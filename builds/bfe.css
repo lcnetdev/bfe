@@ -762,7 +762,7 @@ pre code {
   position: relative;
   min-height: 1px;
   padding-left: 15px;
-  padding-right: 15px;
+  padding-right: 0px;
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
   float: left;
@@ -2323,7 +2323,7 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-sm,
 .btn-group-sm > .btn {
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
@@ -4140,8 +4140,8 @@ button.close {
   font-size: 24px;
   line-height: 30px;
   border: 2px solid #ccc;
-  */
   width: 400px;
+  */
   -webkit-border-radius: 8px;
      -moz-border-radius: 8px;
           border-radius: 8px;
@@ -4154,6 +4154,10 @@ button.close {
 
 .typeahead:focus {
   border: 2px solid #0097cf;
+}
+
+.twitter-typeahead {
+  width: 100%;
 }
 
 .tt-query {
