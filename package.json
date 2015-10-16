@@ -6,14 +6,19 @@
         "editor",
         "rdf"
     ],
-    "version": "0.1.0",
-    "homepage" : "http://github.com/kefo/bfe",
+    "version": "0.2.0",
+    "homepage" : "http://github.com/lcnetdev/bfe",
     "engines": {"node": ">= 0.9.0"},
-    "author": "Kevin Ford <kefo@3windmills.com>",
+    "author": "Kirk Hess <khes@loc.gov>",
     "main": "src/bfe",
     "repository" : {
         "type" : "git",
-         "url" : "http://github.com/kefo/bfe.git"
+         "url" : "http://github.com/lcnetdev/bfe.git"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-contrib-uglify": "~0.5.0",
+        "grunt-contrib-cssmin": "~0.14.0"
     },
     "dependencies": {
         "dryice": "0.4.x",
@@ -21,7 +26,7 @@
         "connect": "2.15.x"
     },
     "bugs": {
-        "url": "http://github.com/kefo/bfe/issues"
+        "url": "http://github.com/lcnetdev/bfe/issues"
     },
     "licenses": [{
         "type": "MIT",
