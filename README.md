@@ -51,10 +51,8 @@ those includes is all that is needed.
 If you do not want to clone this repository and use it locally, then, in order 
 to acquire those includes, you should download the minified, raw versions from the 
 `builds` directory:
-* Javascript - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.0.1.min.js
-* CSS - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.0.1.min.css
-
-There are also non-minified versions available.
+* Javascript - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.2.0.min.js
+* CSS - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.2.0.min.css
 
 
 Documentation 
@@ -70,11 +68,11 @@ Documentation
 Demo?
 --------
 
-[Absolutely.][demo-page]
+[Online Demo][demo-page]
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org:8283/tools/editor2/
+[demo-page]: http://bibframe.org/tools/editor/
 
 
 Browser Support
@@ -82,23 +80,19 @@ Browser Support
 
 * Chrome 34
 * Firefox 24+
-* Safari - UNKNOWN
-* Internet Explorer 10+ - UNKNOWN
+* Safari - 6+
+* Internet Explorer 10+
 * Opera - 12+
-
-**NOTE:** `bfe` has not been tested in all browsers, not to mention mobile ones.
 
 **NOTE:** `bfe` has also not been **thoroughly** tested in the browsers for which
 support is currently listed.  It has been developed primarily in Chrome.
-
-
-**NOTE:** `bfe` will not work in IE versions 8 and 9, for certain.
+It has been tested in both Chrome and Safari mobile versions.
 
 
 Issues
 ------
 
-Oh, there will most certainly be issues.  Log them here:
+Log them here:
 
 https://github.com/lcnetdev/bfe/issues
 
@@ -110,8 +104,8 @@ For technical questions about `bfe`, you can use the GitHub [Issues] feature, bu
 please "label" your question a 'question.'
 
 Although you are encouraged to ask your quesion publicly (the answer might 
-help everyone), you may also email this repository's [maintainer][kefo] 
-directly or tweet him at [@3windmills]. 
+help everyone), you may also email this repository's [maintainer][khes] 
+directly. 
 
 For general questions about BIBFRAME, you can subscribe to the [BIBFRAME Listserv][listserv] 
 and ask in that forum.
@@ -119,63 +113,29 @@ and ask in that forum.
 <!-- section links -->
 
 [Issues]: https://github.com/lcnetdev/bfe/issues
-[kefo]: mailto:kefo@3windmills.com
-[@3windmills]: https://twitter.com/3windmills
+[khes]: mailto:khes@loc.gov
 [listserv]: http://listserv.loc.gov/cgi-bin/wa?SUBED1=bibframe&A=1
-
-
-Version and Versioning
-----------
-
-Builds are numbered and committed with the following format:
-
-`<major>.<minor>.<patch>`
-
-Usually, the numbering would follow that:
-
-* The major increases when backwards compatibility breaks
-* An increase of the minor indicates a new addition or feature
-* The patch increases for bug fixes and other miscellaneous changes.
-
-Considerable development is expected in the next few weeks during which time 
-backwards compatibility could easily be broken, though this will be avoided whenever 
-possible.  There will be no commitment to ensuring 'backwards compatibility' until 
-the `<major>` reaches '1'.  Do not live link (now or in general).
-
-
-Testing
--------
-
-Ha!
-
-Joking aside, some kind of testing support is being investigated.
 
 
 Roadmap
 ----------
+v0.2.x
+* Support LC Bibframe Pilot
+* Request.js has been deprecated
+* Dryice build has been replaced with Grunt.
 
-In no particular order:
+v0.3.x
+* Document config.js
+* Refactor bfelookups.js into more generic component.
+* Implement save/load api
 
-* Implement the entire [BIBFRAME Profile Specification][profilespec]. `bfe` does 
-  not currently.
-* Support for the notion of "sessions," to capture administrative metadata.
+v0.4.x
+* Implement v2.0 of vocabulary.
+* Rewrite editor using Angular.js.
 * Implement automated testing.
-* Create additional lookups for bundling (for VIAF, FAST, etc), so such lookups
-  ship with `bfe`.
-* Code clean up, refactoring, and documentation.  As this README is being 
-  written (30 April 2014), `bfe`'s code is all of 5 weeks old.  It was written 
-  very quickly (during a period that included a 10-day hiatus) and it shows.
-
-
-<!-- section links -->
-
-[profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
-
 
 Developers
 ----------
-
-You are all most welcome.  
 
 From a design standpoint, the objective with `bfe` is to create the simplest 
 'pluggable' form editor one can to maximize experimental implementer's abilities 
@@ -184,22 +144,21 @@ ease-of-use is the objective.  Still, there's lots to do and the roadmap above i
 a few of those things.  
 
 All contributions are welcome.  If you do not code, surely you will discover an 
-[issue] you can report.  Do you manage a Linked Data Service/API?  Perhaps you might 
-contribute a [Lookup].  
+[issue] you can report.  
 
-`development.html` does not use the bundled javascript library but instead loads 
-all the required files dynamically and is meant - as its name would suggest - 
-for development purposes.  
+'Building' `bfe` requires npm, bundled with [node.js] and [grunt].  See `package.json` for dependencies. 
+See `Gruntfile.json` for build instructions.
 
-'Building' `bfe` requires [node.js].  See `package.json` for dependencies, the 
-main one being Mozilla's [dryice].
+Basic build steps:
+* npm init
+* grunt
 
 <!-- section links -->
 
 [issue]: https://github.com/lcnetdev/bfe/issues
-[Lookup]: https://github.com/lcnetdev/bfe/tree/master/src/lookups
-[node.js]: http://nodejs.org/
-[dryice]: https://github.com/mozilla/dryice
+[Lookup]: https://github.com/lcnetdev/bfe/tree/master/src/bfelookups.js
+[node.js]: http://nodejs.org
+[Grunt]: http://gruntjs.com
 
 
 Acknowledgements
@@ -242,23 +201,15 @@ Contributors
 -----------
 
 * [Jeremy Nelson](https://github.com/jermnelson)
-* **Your name could be here!**
+* [Kevin Ford](https://github.com/kefo)
+* [Kirk Hess](https://github.com/kirkhess)
 
 
 Maintainer
 -----------
 
-* **Kevin Ford** 
-  * [GitHub](https://github.com/kefo)
-  * [@3windmills](https://twitter.com/3windmills) 
-
-
-Author
--------
-
-* **Kevin Ford** 
-  * [GitHub](https://github.com/kefo)
-  * [@3windmills](https://twitter.com/3windmills) 
+* **Kirk Hess** 
+  * [GitHub](https://github.com/kirkhess)
 
 
 License
@@ -271,8 +222,3 @@ http://creativecommons.org/publicdomain/mark/1.0/
 **NOTE:**  `bfe` includes or depends on software from other open source projects, all or 
 most of which will carry their own license and copyright.  The Public Domain mark 
 stops at `bfe` original code and does not convey to these projects.
-
-See a more detailed itemization of the licensing breakdown at:
-
-https://github.com/lcnetdev/bfe/tree/master/LICENSE.txt
-
