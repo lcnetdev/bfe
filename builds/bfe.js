@@ -683,7 +683,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 
                      $("#bfeditor-exitsave").click(function(){
 
-                        if(editorconfig.logging.level == "DEBUG"){
+                        if(editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == "DEBUG"){
                            //save disabled
                            $("#bfeditor > .row").remove();
                            $("#bfeditor > .footer").remove();
@@ -1425,11 +1425,25 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                          return t.o; 
                     } 
                 });
-                //probably needs a fix
-                displaydata = data[0].s;
+                //if there's a lable, use it. Otherwise, create a label fromt the literals, and if no literals, use the uri.
                 if ( tlabel !== undefined) {
                     displaydata = tlabel.o;
                     displayuri = tlabel.s;
+                } else {
+                    for (i in data) {
+                        var displaydata;
+                        if (data[i].otype === "literal"){
+                            if (displaydata === undefined) {
+                                displaydata = "";
+                            } 
+                            displaydata += data[i].o + " ";
+                        }
+                    }
+                    displayuri = data[0].s;
+                    if (displaydata === undefined){
+                        displaydata = data[0].s;
+                    }
+                        displaydata.trimRight();
                 }
                 
                 var connector = _.where(data, {"p": properties[0].propertyURI})
