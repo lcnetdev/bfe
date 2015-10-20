@@ -46,7 +46,7 @@
 
 (function() {
 
-var ACE_NAMESPACE = "";
+var ACE_NAMESPACE = "bfe";
 
 var global = (function() {
     return this;

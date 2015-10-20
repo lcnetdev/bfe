@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+bfe.define('src/bfestore', ['require', 'exports', 'module' , 'src/lib/lodash.min'], function(require, exports, module) {
     require("src/lib/lodash.min");
 
     exports.store = [];
@@ -71,7 +71,11 @@ define(function(require, exports, module) {
                         if (r.olang !== undefined && r.olang !== "") {
                             o["@language"] = r.olang;
                         }
-                        o["@value"] = r.o;
+                        if (r.p=="@type"){
+                          o = r.o;
+                        } else {
+                           o["@value"] = r.o;
+                        }
                         j[prop].push(o);
                     }
                 });
@@ -92,13 +96,20 @@ define(function(require, exports, module) {
             if (resource["@type"] !== undefined) {
                 predata += nlindent + "Type(s)";
                 resource["@type"].forEach(function(t) {
-                    predata += nlindentindent + t["@id"];
+                    //predata += nlindentindent + t["@id"];
+                    if(t["@value"] !== undefined){
+                        predata += nlindentindent + t["@value"];
+                    } else {
+                        predata += nlindentindent + t;
+                    }
                 });
             }
             for (var t in resource) {
                 if (t !== "@type" && t !== "@id") {
                     var prop = t.replace("http://bibframe.org/vocab/", "bf:");
                     prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
+                    prop = prop.replace("http://bibframe.org/vocab2/", "bf2:");
+                    prop = prop.replace("http://rdaregistry.info/termList/", "rda");
                     predata += nlindent + prop;
                     resource[t].forEach(function(o) {
                         if (o["@id"] !== undefined) {
@@ -117,15 +128,17 @@ define(function(require, exports, module) {
     /**
     * Generates a GUID string.
     * @returns {String} The generated GUID.
-    * @example af8a8416-6e18-a307-bd9c-f2c947bbb3aa
-    * @author Slavik Meltser (slavik@meltser.info).
-    * @link http://slavik.meltser.info/?p=142
+    * @example GCt1438871386
     */
     function guid() {
-        function _p8(s) {
-            var p = (Math.random().toString(16)+"000000000").substr(2,8);
-            return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+        function _randomChoice() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            for (var i = 0; i < 1; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
         }
-        return _p8() + _p8(true) + _p8(true) + _p8();
+        return _randomChoice() + _randomChoice() + _randomChoice() + parseInt(Date.now() / 1000);
     }
+
 });

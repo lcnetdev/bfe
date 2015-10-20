@@ -1,11 +1,8 @@
 /*
-    kefo: The immediate function is copied from the Ace editor repository 
-    and modified (mostly deletions) to work in this context.  This 
-    file is needed to define the javascript bfe 
-    namespace since we use dryice to build and not requirejs.
+    This file is needed to define the javascript bfe namespace.
+    @deprecated 0.2.0 does not use dryice.
     From: https://github.com/ajaxorg/ace/blob/master/lib/ace/config.js
     
-    Beyond the note above, it is not used in any other way.
 */
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -37,8 +34,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ***** END LICENSE BLOCK ***** */
-
-define(function(require, exports, module) {
+bfe.define('src/lib/aceconfig', ['require', 'exports', 'module' ], function(require, exports, module) {
 
 var global = (function() {
     return this;
@@ -115,3 +111,16 @@ function deHyphenate(str) {
 }
 
 });
+/*
+ * @deprecated v0.2.0
+ */
+(function() {
+    bfe.require(["src/bfe"], function(a) {
+        console.log(a);
+        a && a.aceconfig.init();
+        if (!window.bfe)
+            window.bfe = {};
+        for (var key in a) if (a.hasOwnProperty(key))
+            bfe[key] = a[key];
+    });
+})();

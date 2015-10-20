@@ -196,11 +196,11 @@ exportAce(ACE_NAMESPACE);
 
 })();
 bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.min', 'src/lib/json', 'src/lib/lodash.min', 'src/lib/bootstrap.min', 'src/lib/typeahead.jquery.min', 'src/bfestore', 'src/bfelogging', 'src/lookups/lcnames', 'src/lookups/lcsubjects', 'src/lookups/lcgenreforms', 'src/lookups/lcworks', 'src/lookups/lcinstances', 'src/lookups/lcorganizations', 'src/lookups/lccountries', 'src/lookups/lcgacs', 'src/lookups/lclanguages', 'src/lookups/lcidentifiers', 'src/lookups/lctargetaudiences', 'src/lookups/iso6391', 'src/lookups/iso6392', 'src/lookups/iso6395', 'src/lookups/rdacontenttypes', 'src/lookups/rdamediatypes', 'src/lookups/rdacarriers','src/lookups/rdamodeissue', 'src/lookups/lcrelators','src/lookups/lcperformanceMediums','src/lookups/rdamusnotation','src/lookups/rdaformatnotemus', 'src/lib/aceconfig'], function(require, exports, module) {
-    require("src/lib/jquery-2.1.0.min");
-    require("src/lib/json");
-    require("src/lib/lodash.min"); // collection/object/array manipulation
-    require("src/lib/bootstrap.min"); // modals
-    require("src/lib/typeahead.jquery.min");
+    //require("src/lib/jquery-2.1.0.min");
+    //require("src/lib/json");
+    //require("src/lib/lodash.min"); // collection/object/array manipulation
+    //require("src/lib/bootstrap.min"); // modals
+    //require("src/lib/typeahead.jquery.min");
     // require("lib/rdf_store_min");
     
     var editorconfig = {};
