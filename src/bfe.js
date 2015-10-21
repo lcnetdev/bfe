@@ -457,7 +457,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 $("#bfeditor-exitcancel", form.form).attr("tabindex", tabIndices++);
                 
                 $("#bfeditor-exitpreview", form.form).click(function(){
-                     //editorconfig.return.callback(bfestore.store2jsonldExpanded());
                      var humanized = bfeditor.bfestore.store2text();
                      //var n3 = bfeditor.bfestore.store2n3();
                      var jsonld = bfeditor.bfestore.store2jsonldExpanded();
@@ -496,12 +495,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                            $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
                            $('#bfeditor-formdiv').append($messagediv);
                         } else {
-
+                        //saving using bfmodel
                         var csrf = getCookie('csrftoken');
-                        //var csrf = $("#csrf-token > input").val();
+
                         $.post("/tools/bibframe/save",
-                           {     username: "admin",
-                                 password: "kh@20540",
+                           {     
                                  json: JSON.stringify(bfestore.store2jsonldExpanded()),
                                  csrfmiddlewaretoken: csrf
                            },
@@ -514,19 +512,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                  }
                             });
 
-                            //$.ajax({
-                            //    type:"PUT",
-                            //    async:false,
-                            //    url: "http://bibframe.org:9200/resources/bibframe/"+data.name,
-                            //    data: JSON.stringify(bfestore.store2jsonldExpanded()),
-                            //    dataType: "json",
-                            //    contentType: "application/json; charset=utf-8"                            
                              $.ajax({
                               type:"POST",
                               url: "/api/",
-                              data: data,
-                              username: "admin",
-                              password: "kh@20540"
+                              data: data
                              }).done(function (data) {
                                 editorconfig.return.callback(data);
                                 console.log("success");
