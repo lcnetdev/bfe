@@ -762,7 +762,7 @@ pre code {
   position: relative;
   min-height: 1px;
   padding-left: 15px;
-  padding-right: 15px;
+  padding-right: 0px;
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
   float: left;
@@ -1579,7 +1579,7 @@ table th[class*="col-"] {
 @media (max-width: 767px) {
   .table-responsive {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     overflow-y: hidden;
     overflow-x: scroll;
     -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -1732,7 +1732,7 @@ input[type="date"] {
   line-height: 34px;
 }
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 .radio,
 .checkbox {
@@ -2003,6 +2003,9 @@ select[multiple].input-lg {
   -ms-user-select: none;
   user-select: none;
 }
+.btn a{
+    font-weight: bold;
+}
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus {
@@ -2034,7 +2037,7 @@ fieldset[disabled] .btn {
 }
 .btn-default {
   color: #333333;
-  background-color: #ffffff;
+  background-color: #ebebeb;
   border-color: #cccccc;
 }
 .btn-default:hover,
@@ -2043,7 +2046,7 @@ fieldset[disabled] .btn {
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
   color: #333333;
-  background-color: #ebebeb;
+  background-color: #dbdbdb;
   border-color: #adadad;
 }
 .btn-default:active,
@@ -2320,7 +2323,7 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-sm,
 .btn-group-sm > .btn {
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
@@ -2492,7 +2495,7 @@ input[type="button"].btn-block {
 .navbar-fixed-bottom .dropdown .dropdown-menu {
   top: auto;
   bottom: 100%;
-  margin-bottom: 1px;
+  margin-bottom: 5px;
 }
 @media (min-width: 768px) {
   .navbar-right .dropdown-menu {
@@ -3260,7 +3263,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 @media (max-width: 767px) {
   .navbar-form .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
   }
 }
 @media (min-width: 768px) {

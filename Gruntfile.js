@@ -7,8 +7,10 @@ module.exports = function(grunt) {
                 banner: '/* <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */',
             },
             dist: {
-                src: ['build_support/mini_require.js','src/bfe.js','src/lib/lodash.min.js','src/lib/typeahead.jquery.min.js','src/bfestore.js','src/bfelogging.js','src/bfelookups.js','src/lib/aceconfig.js'], 
-                dest: 'builds/bfe.js',
+                files: {
+                'builds/bfe.js' : ['build_support/mini_require.js','src/bfe.js','src/lib/lodash.min.js','src/lib/typeahead.jquery.min.js','src/bfestore.js','src/bfelogging.js','src/bfelookups.js','src/lib/aceconfig.js'], 
+                'builds/bfe.css' : ['src/css/bootstrap.css', 'src/css/typeahead.css'],
+                }
             },
         },
 		uglify: {
@@ -29,7 +31,6 @@ module.exports = function(grunt) {
                  },
             },
             combine: {
-                 //For some reason, this one is dest then src
                  files: {
                       'builds/bfe.min.css': ['builds/bfe.css']
                  }
