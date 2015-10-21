@@ -31,7 +31,7 @@ Getting Started
 ---------------
 
 `bfe` should be run on or within a server.  To run the demo or development version, 
-you can use the simple nodejs-based server - found in the main `bfe` directory - 
+you can use the simple express-based server - found in the main `bfe` directory - 
 that ships with `bfe`:
 
 ```bash
@@ -147,10 +147,11 @@ All contributions are welcome.  If you do not code, surely you will discover an
 [issue] you can report.  
 
 'Building' `bfe` requires npm, bundled with [node.js] and [grunt].  See `package.json` for dependencies. 
-See `Gruntfile.json` for build instructions.
+See `Gruntfile.json` for build dependencies.
 
 Basic build steps:
 * npm init
+* npm install
 * grunt
 
 <!-- section links -->
