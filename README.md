@@ -51,8 +51,8 @@ those includes is all that is needed.
 If you do not want to clone this repository and use it locally, then, in order 
 to acquire those includes, you should download the minified, raw versions from the 
 `builds` directory:
-* Javascript - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.2.0.min.js
-* CSS - https://github.com/lcnetdev/bfe/blob/master/builds/bfe-0.2.0.min.css
+* Javascript - https://github.com/lcnetdev/bfe/blob/v0.2.0/builds/bfe.min.js
+* CSS - https://github.com/lcnetdev/bfe/blob/v0.2.0/builds/bfe.min.css
 
 
 Documentation 
