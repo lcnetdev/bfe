@@ -4,9 +4,14 @@
    
 */
 var port = 8000;
-var connect = require('connect');
 var util = require('util');
-connect.createServer(connect.static(__dirname)).listen(port)
+var express = require('express')
+var serveStatic = require('serve-static')
+ 
+var app = express()
+ 
+app.use(serveStatic('__dirname', {'index': ['default.html', 'default.htm']}))
+app.listen(port);
+
 util.puts('BIBFRAME Editor running on ' + port);
 util.puts('Press Ctrl + C to stop.'); 
-

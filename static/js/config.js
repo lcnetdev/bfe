@@ -16,6 +16,7 @@
         function myCB(data) {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         }
+
         var config = {
             "baseURI": "http://bibframe.org/",
             "profiles": [
@@ -124,6 +125,9 @@
                         ]}
 
             ],
+            "save": {
+                //insert save logic here
+            },
             "return": {
                 "format": "jsonld-expanded",
                 "callback": myCB

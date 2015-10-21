@@ -673,8 +673,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 
                      $("#bfeditor-exitsave").click(function(){
 
-                        if(editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == "DEBUG"){
-                           //save disabled
+                        if (editorconfig.save.callback !== undefined) {
+                            editorconfig.save.callback(bfestore.store2jsonldExpanded(),getCookie('csrftoken') );
+                        } else {
+                            //save disabled
                            $("#bfeditor > .row").remove();
                            $("#bfeditor > .footer").remove();
                            $("#bfeditor-debugdiv").remove();
@@ -682,42 +684,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                            var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
                            $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
                            $('#bfeditor-formdiv').append($messagediv);
-                        } else {
-                        //saving using bfmodel
-                        var csrf = getCookie('csrftoken');
-
-                        $.post("/tools/bibframe/save",
-                           {     
-                                 json: JSON.stringify(bfestore.store2jsonldExpanded()),
-                                 csrfmiddlewaretoken: csrf
-                           },
-                           function (data) {
-                            $.ajaxSetup({
-                               beforeSend: function(xhr, settings) {
-                                     if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                                         xhr.setRequestHeader("X-CSRFToken", csrf);
-                                     }                                
-                                 }
-                            });
-
-                             $.ajax({
-                              type:"POST",
-                              url: "/api/",
-                              data: data
-                             }).done(function (data) {
-                                editorconfig.return.callback(data);
-                                console.log("success");
-                             }).fail(function (data){
-                                console.log(data.responseText);
-                             }).always(function(){                       
-                                $("#bfeditor > .row").remove();
-                                $("#bfeditor > .footer").remove();
-                                bfeditor = bfe.fulleditor(config, "bfeditor");
-                                var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                                $messagediv.append('<span class="str"><h3>Record Created</h3><a href='+data.url+'>'+data.name+'</a></span>');
-                                $('#bfeditor-formdiv').append($messagediv);
-                             });
-                        });
                         }
                     });
 
