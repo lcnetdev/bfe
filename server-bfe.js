@@ -1,17 +1,13 @@
-/*
-   Minimal BIBFRAME Editor Node.js server. To run from the command-line:
-   node server-bfe.js
-   
-*/
+//   Minimal BIBFRAME Editor Node.js server. To run from the command-line:
+//   node server-bfe.jsy
+
 var port = 8000;
-var util = require('util');
-var express = require('express')
-var serveStatic = require('serve-static')
+var express = require('express');
  
-var app = express()
+var app = express();
  
-app.use(serveStatic('__dirname', {'index': ['default.html', 'default.htm']}))
+app.use(express.static(__dirname + '/'));
 app.listen(port);
 
-util.puts('BIBFRAME Editor running on ' + port);
-util.puts('Press Ctrl + C to stop.'); 
+console.log('BIBFRAME Editor running on ' + port);
+console.log('Press Ctrl + C to stop.'); 
