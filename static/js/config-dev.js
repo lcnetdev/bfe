@@ -128,19 +128,7 @@
                         ]}
 
             ],
-/*            "load": [
-                {
-                    "templateID": "profile:bf:Work:Monograph",
-                    "defaulturi": "http://bibframe.org:8283/resources/vMa1444745726",
-                    "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
-                    "source": {
-                        "location": "http://bibframe.org:8283/resources/vMa1444745726/bibframe.json",
-                        "requestType": "json",
-                        "data": "UNUSED, BUT REMEMBER IT"
-                    }
-                }
-            ],
-*/"load": [
+            "load": [
                 {
                     "templateID": "profile:bf:Work:Monograph",
                     "defaulturi": "http://id.loc.gov/resources/bibs/5226",

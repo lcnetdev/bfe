@@ -1,4 +1,4 @@
-/* bfe 2015-10-21 *//* ***** BEGIN LICENSE BLOCK *****
+/* bfe 2015-10-23 *//* ***** BEGIN LICENSE BLOCK *****
  * Distributed under the BSD license:
  *
  * Copyright (c) 2010, Ajax.org B.V.
@@ -1929,12 +1929,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         var returnval = "_:bnode";
         
         $.ajax({
-            type: "GET",
-            async: false,
-            cache: true,
             dataType: "json",
-            contentType: "application/json",
-            url: rt.resourceURI.replace("/vocab", ":8283/vocab") + ".json",
+            url: rt.resourceURI,
             success: function(data) {
                 data.some(function(resource){
                     if(resource["@id"] === rt.resourceURI){
