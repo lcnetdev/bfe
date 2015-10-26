@@ -1741,8 +1741,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         var returnval = "_:bnode";
         
         $.ajax({
+            type: "GET",
+            async: false,
+            cache: true,
             dataType: "json",
-            url: rt.resourceURI,
+            contentType: "application/json",
+            url: rt.resourceURI + ".json",
             success: function(data) {
                 data.some(function(resource){
                     if(resource["@id"] === rt.resourceURI){
