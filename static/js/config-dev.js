@@ -16,11 +16,82 @@
         function myCB(data) {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         }
+
+        function save(data, csrf){
+
+            $.post("/tools/bibframe/save",
+               {     
+                     json: JSON.stringify(data),
+                     csrfmiddlewaretoken: csrf
+               },
+               function (data) {
+                /*$.ajaxSetup({
+                   beforeSend: function(xhr, settings) {
+                         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                             xhr.setRequestHeader("X-CSRFToken", csrf);
+                         }                                
+                     }                    
+                });*/
+
+                 $.ajax({
+                  type:"POST",
+                  url: "/api/",
+                  data: data
+                 }).done(function (data) {
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
+                    console.log("success");
+                 }).fail(function (data){
+                    console.log(data.responseText);
+                 }).always(function(){                       
+                    $("#bfeditor > .row").remove();
+                    $("#bfeditor > .footer").remove();
+                    bfeditor = bfe.fulleditor(config, "bfeditor");
+                    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+                    $messagediv.append('<span class="str"><h3>Record Created</h3><a href='+data.url+'>'+data.name+'</a></span>');
+                    $('#bfeditor-formdiv').append($messagediv);
+                 });
+            });
+        }
+
+        function retrieve(url, bfestore, bfelog, callback){
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function (data) {
+                    bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
+                    bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                    tempstore = bfestore.jsonld2store(data);
+                    callback();
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + l.source.location);
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                }
+            });
+        }
+
+        function deleteId(id, bfelog){
+            var url = "http://bibframe.org:8283/api/" + id;
+            $.ajax({
+                type: "DELETE",                
+                url: url,
+                dataType: "json",
+                success: function (data) {
+                    bfelog.addMsg(new Error(), "INFO", "Deleted " + id);
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to delete: " + url);
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                }
+            });
+
+        }
+
         var config = {
-            "logging": {
+/*            "logging": {
                 "level": "DEBUG",
                 "toConsole": true
-            },
+            },*/
             "baseURI": "http://bibframe.org/",
             "profiles": [
                 "static/profiles/bibframe/BIBFRAME Agents.json",
@@ -33,7 +104,9 @@
                 "static/profiles/bibframe/WEI-serial.json",
                 "static/profiles/bibframe/WEI-cartographic.json",
                 "static/profiles/bibframe/WEI-BluRayDVD.json",
-                "static/profiles/bibframe/WEI-Audio\ CD.json"
+                "static/profiles/bibframe/WEI-Audio\ CD.json",
+                "static/profiles/bibframe/dc-simple.json",
+                "static/profiles/bibframe/lcsh-lcnaf.json"
             ],
             "startingPoints": [
                         {"menuGroup": "Monograph",
@@ -49,7 +122,12 @@
                             {
                                 label: "Work, Instance", 
                                 useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph", "profile:bf:Instance:Monograph" ]
+                            },
+                            {
+                                label: "Work, Instance w/AdminMetadata",
+                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta" ]
                             }
+
                         ]},
                         {"menuGroup": "Notated Music",
                         "menuItems": [
@@ -125,12 +203,40 @@
                                 label: "Work, Instance",
                                 useResourceTemplates: [ "profile:bf:Work:AudioCD", "profile:bf:RDAExpression:AudioCD", "profile:bf:Instance:AudioCD" ]
                             }
+                        ]},
+                        {"menuGroup": "Dublin Core",
+                        "menuItems": [
+                            {
+                                label: "Simple, all literals", 
+                                useResourceTemplates: [ "profile:dc:simple1" ]
+                            },
+                            {
+                                label: "Simple, uses lookups", 
+                                useResourceTemplates: [ "profile:dc:simple2" ]
+                            }
+                        ]},
+                        {
+                        "menuGroup": "SKOS",
+                        "menuItems": [
+                            {
+                                label: "SKOS Concept Profile, for LCSH", 
+                                useResourceTemplates: [ "profile:skos:concept:lcsh:base" ]
+                            }
                         ]}
 
             ],
-            "load": [
+            "save": {
+                //"callback": save
+            },
+            "retrieve": {
+                "callback": retrieve
+            },
+            "deleteId": {
+                "callback": deleteId
+            },
+/*            "load": [
                 {
-                    "templateID": "profile:bf:Work:Monograph",
+                    "templateID": ["profile:bf:Work:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta"],
                     "defaulturi": "http://id.loc.gov/resources/bibs/5226",
                     "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
                     "source": {
@@ -139,7 +245,7 @@
                         "data": "UNUSED, BUT REMEMBER IT"
                     }
                 }
-            ],
+            ],*/
             "return": {
                 "format": "jsonld-expanded",
                 "callback": myCB
