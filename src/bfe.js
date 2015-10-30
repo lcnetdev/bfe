@@ -1201,7 +1201,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     if (displaydata === undefined){
                         displaydata = data[0].s;
                     }
-                        displaydata.trimRight();
+                        displaydata.trim();
                 }
                 
                 var connector = _.where(data, {"p": properties[0].propertyURI})

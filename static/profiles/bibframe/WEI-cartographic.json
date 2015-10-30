@@ -169,12 +169,12 @@
             "remark": "http://access.rdatoolkit.org/7.4.html",
             "repeatable": "true",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
               "valueTemplateRefs": [
-                ""
+                "profile:bf:Cartography:Coordinates"
               ]
             }
           },
@@ -1832,6 +1832,65 @@
         "id": "profile:bf:RelatedManifestation:Cartographic",
         "resourceURI": "http://bibframe.org/vocab2/relatedManifestation",
         "resourceLabel": "Related Manifestation"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/westCoordinates",
+            "propertyLabel": "West"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/eastCoordinates",
+            "propertyLabel": "East"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/northCoordinates",
+            "propertyLabel": "North"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/southCoordinates",
+            "propertyLabel": "South"
+          }
+        ],
+        "id": "profile:bf:Cartography:Coordinates",
+        "resourceURI": "http://bibframe.org/vocab2/Coordinates",
+        "resourceLabel": "Cartographic Coordinates"
       }
     ],
     "contact": "NDMSO",

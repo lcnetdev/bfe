@@ -216,7 +216,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     var editordiv;
     
     var forms = [];
-    
+
+    var ms_ie = false;
+    var ua = window.navigator.userAgent;
+    var old_ie = ua.indexOf('MSIE ');
+    var new_ie = ua.indexOf('Trident/');
+
+    if ((old_ie > -1) || (new_ie > -1)) {
+        ms_ie = true;
+    }
+
     var lookups = {
         "http://id.loc.gov/authorities/names": {
             "name": "LCNAF",
@@ -810,8 +819,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             this.value = this.value + "\u2117";
                         }
                     });
-                    
-                    $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '"><i class="fa fa-plus"></i></button></div>');
+                    if(ms_ie){
+                        $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
+                    } else {                    
+                        $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '"><i class="fa fa-plus"></i></button></div>');
+                    }
 
                     $button.click(function(){
                         setLiteral(fobject.id, rt.useguid, property.guid);                        
@@ -1389,7 +1401,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     if (displaydata === undefined){
                         displaydata = data[0].s;
                     }
-                        displaydata.trimRight();
+                        displaydata.trim();
                 }
                 
                 var connector = _.where(data, {"p": properties[0].propertyURI})
@@ -1452,7 +1464,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         
         if ( bgvars.editable === undefined || bgvars.editable === true ) {
             //var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
+            if(ms_ie){
+            var $editbutton = $('<button class="btn btn-warning" type="button"><span>&#9998;</span></button>');
+            } else {
             var $editbutton = $('<button class="btn btn-warning" type="button"> <span class="glyphicon glyphicon-pencil"></span></button>');
+            }
             $editbutton.click(function(){
                 if (bgvars.triples.length === 1) {
                     editTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
@@ -1462,7 +1478,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             });
             $buttongroup.append($editbutton);
          }
-            var $delbutton = $('<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span> </button>');  
+            if(ms_ie){
+                var $delbutton = $('<button class="btn btn-danger" type="button"><span>&#10005;</span></button>');
+            } else {
+                var $delbutton = $('<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span> </button>');  
+            }
 //          var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
             $delbutton.click(function(){
                 if (bgvars.triples.length === 1) {
@@ -3298,7 +3318,7 @@ bfe.define('src/lookups/rdamodeissue', ['require', 'exports', 'module' , 'src/lo
 
     var cache = [];
     
-    exports.scheme = "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue";
+    /*exports.scheme = "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue";
 
     exports.source = function(query, process){
         return lcshared.simpleQuery(query, cache, exports.scheme, process);
@@ -3307,7 +3327,54 @@ bfe.define('src/lookups/rdamodeissue', ['require', 'exports', 'module' , 'src/lo
     exports.getResource = function(subjecturi, propertyuri, selected, process) {
         selected.uri = selected.uri.replace("gov/", "gov/ml38281/");
         return lcshared.getResource(subjecturi,propertyuri,selected,process);
-    }
+    }*/
+    exports.scheme = "http://rdaregistry.info/termList/ModeIssue";
+
+    exports.source = function(query, process) {
+
+        console.log('q is ' + query);
+        q = encodeURI(query);
+        if(cache[q]){
+            process(cache[q]);
+            return;
+        }
+        if( typeof this.searching != "undefined") {
+            clearTimeout(this.searching);
+            process([]);
+        }
+
+        this.searching = setTimeout(function() {
+           if ( query === '' || query === ' ') {
+                u = exports.scheme + ".json-ld";
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        return process(parsedlist);
+                    }
+                });
+             } else if (query.length > 1) {
+                u = exports.scheme + ".json-ld";
+                console.log(u);
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        cache[q] = parsedlist;
+                        return process(parsedlist);
+                    }
+                });
+            } else {
+                return [];
+            }
+        }, 300); // 300 ms
+    };
+
+    exports.getResource = lcshared.getResource;
+
+
 
 });
 bfe.define('src/lookups/rdamusnotation', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
