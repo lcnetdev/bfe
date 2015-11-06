@@ -17,39 +17,67 @@
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         }
 
-        function save(data, csrf){
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
 
-            $.post("/tools/bibframe/save",
-               {     
-                     json: JSON.stringify(data),
-                     csrfmiddlewaretoken: csrf
-               },
-               function (data) {
-                /*$.ajaxSetup({
-                   beforeSend: function(xhr, settings) {
-                         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                             xhr.setRequestHeader("X-CSRFToken", csrf);
-                         }                                
-                     }                    
-                });*/
+        function getCSRF(){
+           //eventually you'll have to login       
+           var cookieValue = null;
+           if (document.cookie && document.cookie != '') {
+               var cookies = document.cookie.split(';');
+               for (var i = 0; i < cookies.length; i++) {
+                   var cookie = jQuery.trim(cookies[i]);
+                   var name = "csrftoken";
+                   if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                       break;
+                   }
+                }
+            }       
+            return cookieValue;            
+        }
 
-                 $.ajax({
-                  type:"POST",
-                  url: "/api/",
-                  data: data
-                 }).done(function (data) {
+        function setCSRF(xhr, settings, csrf) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf);
+            }
+        }
+
+        function save(data, csrf, bfelog){
+
+            $.post("/tools/bibframe/save",{
+                json: JSON.stringify(data),
+                    csrf: csrf
+                }).done(function (data) {
+                $.ajax({
+                   url: "/api/",
+                   type: "POST",
+                   data:JSON.stringify(data),
+                   csrf: csrf,
+                   dataType: "json",
+                   contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
                     document.body.scrollTop = document.documentElement.scrollTop = 0;
-                    console.log("success");
-                 }).fail(function (data){
-                    console.log(data.responseText);
-                 }).always(function(){                       
-                    $("#bfeditor > .row").remove();
-                    $("#bfeditor > .footer").remove();
-                    bfeditor = bfe.fulleditor(config, "bfeditor");
+                    bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
+                }).fail(function (data){
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to save: " + url);
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown + "; Text: " + responseText);
+                }).always(function(){                       
+                    $('#bfeditor-formdiv').empty();
+                    $('[href=#browse]').tab('show');
+                    bfeditor.bfestore.store = [];
+                    $('#table_id').DataTable().ajax.reload();
+
                     var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
                     $messagediv.append('<span class="str"><h3>Record Created</h3><a href='+data.url+'>'+data.name+'</a></span>');
                     $('#bfeditor-formdiv').append($messagediv);
                  });
+            }).fail(function(data){
+                    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+                    $messagediv.append('<span class="str"><h3>Save Failed</h3>'+data.responseText+'</span>');
+                    $('#bfeditor-formdiv').prepend($messagediv);
             });
         }
 
@@ -60,22 +88,29 @@
                 success: function (data) {
                     bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
                     bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                    bfestore.store = [];
                     tempstore = bfestore.jsonld2store(data);
                     callback();
                     },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + l.source.location);
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
                     bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
                 }
             });
         }
 
-        function deleteId(id, bfelog){
+        function deleteId(id, csrf, bfelog){
             var url = "http://bibframe.org:8283/api/" + id;
+
+            //$.ajaxSetup({
+            //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
+            //});
+
             $.ajax({
                 type: "DELETE",                
                 url: url,
                 dataType: "json",
+                csrf: csrf,
                 success: function (data) {
                     bfelog.addMsg(new Error(), "INFO", "Deleted " + id);
                     },
@@ -104,27 +139,24 @@
                 "static/profiles/bibframe/WEI-serial.json",
                 "static/profiles/bibframe/WEI-cartographic.json",
                 "static/profiles/bibframe/WEI-BluRayDVD.json",
-                "static/profiles/bibframe/WEI-Audio\ CD.json",
-                "static/profiles/bibframe/dc-simple.json",
-                "static/profiles/bibframe/lcsh-lcnaf.json"
+                "static/profiles/bibframe/WEI-Audio\ CD.json"
             ],
             "startingPoints": [
                         {"menuGroup": "Monograph",
                         "menuItems": [
                             {
-                                label: "Instance", 
+                                label: "Instance",
+                                type: ["http://bibframe.org/vocab/Monograph"],
                                 useResourceTemplates: [ "profile:bf:Instance:Monograph" ]
                             },
                             {
                                 label: "Work", 
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work"],
                                 useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph" ]
                             },
                             {
-                                label: "Work, Instance", 
-                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph", "profile:bf:Instance:Monograph" ]
-                            },
-                            {
-                                label: "Work, Instance w/AdminMetadata",
+                                label: "Work, Instance",
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Monograph"],
                                 useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta" ]
                             }
 
@@ -133,46 +165,59 @@
                         "menuItems": [
                             {
                                 label: "Instance",
+                                type: ["http://bibframe.org/vocab/Instance"],
                                 useResourceTemplates: [ "profile:bf:Instance:NotatedMusic" ]
                             },
                             {
                                 label: "Work",
+                                type: ["http://bibframe.org/vocab/NotatedMusic","http://bibframe.org/vocab/Work"],
                                 useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic" ]
                             },
                             {
                                 label: "Work, Instance",
-                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic" ]
+                                type: ["http://bibframe.org/vocab/NotatedMusic","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Instance"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
                             }
+
+
                         ]},
                         {"menuGroup": "Serial",
                         "menuItems": [
                             {
                                 label: "Instance",
+                                type: ["http://bibframe.org/vocab/Serial"],
                                 useResourceTemplates: [ "profile:bf:Instance:Serial" ]
                             },
                             {
                                 label: "Work",
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work"],
                                 useResourceTemplates: [ "profile:bf:Work:Serial", "profile:bf:RDAExpression:Serial" ]
                             },
                             {
-                                label: "Work, Instance",
-                                useResourceTemplates: [ "profile:bf:Work:Serial", "profile:bf:RDAExpression:Serial", "profile:bf:Instance:Serial" ]
+                                label: "Work, Instance w/AdminMetadata",
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Serial"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
                             }
+
                         ]},
                         {"menuGroup": "Cartographic",
                         "menuItems": [
                             {
                                 label: "Instance",
+                                type: ["http://bibframe.org/vocab/Monograph"],
                                 useResourceTemplates: [ "profile:bf:Instance:Cartography" ]
                             },
                             {
                                 label: "Work",
+                                type: ["http://bibframe.org/vocab/Cartography","http://bibframe.org/vocab/Work"],
                                 useResourceTemplates: [ "profile:bf:Work:Cartography", "profile:bf:RDAExpression:Cartography" ]
                             },
                             {
-                                label: "Work, Instance",
-                                useResourceTemplates: [ "profile:bf:Work:Cartography", "profile:bf:RDAExpression:Cartography", "profile:bf:Instance:Cartography" ]
+                                label: "Work, Instance w/AdminMetadata",
+                                type: ["http://bibframe.org/vocab/Cartography","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Monograph"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
                             }
+
                         ]},
                         {"menuGroup": "BluRay DVD",
                         "menuItems": [
@@ -203,36 +248,19 @@
                                 label: "Work, Instance",
                                 useResourceTemplates: [ "profile:bf:Work:AudioCD", "profile:bf:RDAExpression:AudioCD", "profile:bf:Instance:AudioCD" ]
                             }
-                        ]},
-                        {"menuGroup": "Dublin Core",
-                        "menuItems": [
-                            {
-                                label: "Simple, all literals", 
-                                useResourceTemplates: [ "profile:dc:simple1" ]
-                            },
-                            {
-                                label: "Simple, uses lookups", 
-                                useResourceTemplates: [ "profile:dc:simple2" ]
-                            }
-                        ]},
-                        {
-                        "menuGroup": "SKOS",
-                        "menuItems": [
-                            {
-                                label: "SKOS Concept Profile, for LCSH", 
-                                useResourceTemplates: [ "profile:skos:concept:lcsh:base" ]
-                            }
                         ]}
-
             ],
             "save": {
-                //"callback": save
+                "callback": save
             },
             "retrieve": {
                 "callback": retrieve
             },
             "deleteId": {
                 "callback": deleteId
+            },            
+            "getCSRF":{
+                "callback": getCSRF
             },
 /*            "load": [
                 {

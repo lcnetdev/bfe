@@ -1642,7 +1642,7 @@
           {
             "mandatory": "false",
             "propertyLabel": "Subtitle Value",
-            "propertyURI": "http://bibframe.org/vocab/subtitle.html",
+            "propertyURI": "http://bibframe.org/vocab/subtitle",
             "repeatable": "true",
             "resourceTemplates": [],
             "type": "literal",

@@ -654,7 +654,7 @@
             },
             "propertyLabel": "Other Title Information (RDA 2.3.4)",
             "remark": "http://access.rdatoolkit.org/2.3.4.html",
-            "propertyURI": "http://bibframe.org/vocab/instanceTitle"
+            "propertyURI": "http://bibframe.org/vocab2/otherInstanceTitle"
           },
           {
             "propertyLabel": "Variant Title (RDA 2.3.6)",
@@ -1756,7 +1756,7 @@
           }
         ],
         "id": "profile:bf:identifier:Monograph",
-        "resourceURI": "http://bibframe.org/vocab/identifier.html",
+        "resourceURI": "http://bibframe.org/vocab/identifier",
         "resourceLabel": "ISBN"
       },
       {

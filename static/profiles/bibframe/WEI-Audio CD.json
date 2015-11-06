@@ -1498,7 +1498,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/subtitle.html",
+            "propertyURI": "http://bibframe.org/vocab/subtitle",
             "propertyLabel": "Subtitle"
           }
         ],
@@ -1607,7 +1607,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Enter LCSH",
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint.html"
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint"
           }
         ],
         "id": "profile:bf:Topic:AudioCD",
@@ -1845,7 +1845,7 @@
           }
         ],
         "id": "profile:bf:mediumofperformance:AudioCD",
-        "resourceURI": "http://bibframe.org/vocab/musicMedium.html",
+        "resourceURI": "http://bibframe.org/vocab/musicMedium",
         "resourceLabel": "Medium of Performance"
       },
       {
