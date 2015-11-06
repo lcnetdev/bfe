@@ -1446,7 +1446,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/subtitle.html",
+            "propertyURI": "http://bibframe.org/vocab/subtitle",
             "propertyLabel": "Subtitle"
           }
         ],
