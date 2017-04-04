@@ -46,38 +46,32 @@
         }
 
         function save(data, csrf, bfelog){
+            var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
-            $.post("/tools/bibframe/save",{
-                json: JSON.stringify(data),
-                    csrf: csrf
-                }).done(function (data) {
-                $.ajax({
-                   url: "/api/",
-                   type: "POST",
-                   data:JSON.stringify(data),
-                   csrf: csrf,
-                   dataType: "json",
-                   contentType: "application/json; charset=utf-8"
-                }).done(function (data) {
-                    document.body.scrollTop = document.documentElement.scrollTop = 0;
-                    bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-                }).fail(function (data){
-                    bfelog.addMsg(new Error(), "ERROR", "FAILED to save: " + url);
-                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown + "; Text: " + responseText);
-                }).always(function(){                       
-                    $('#bfeditor-formdiv').empty();
-                    $('[href=#browse]').tab('show');
-                    bfeditor.bfestore.store = [];
-                    $('#table_id').DataTable().ajax.reload();
-
-                    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                    $messagediv.append('<span class="str"><h3>Record Created</h3><a href='+data.url+'>'+data.name+'</a></span>');
-                    $('#bfeditor-formdiv').append($messagediv);
-                 });
-            }).fail(function(data){
-                    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                    $messagediv.append('<span class="str"><h3>Save Failed</h3>'+data.responseText+'</span>');
-                    $('#bfeditor-formdiv').prepend($messagediv);
+            $.ajax({
+               url: "/api/",
+               type: "POST",
+               data:JSON.stringify(data),
+               csrf: csrf,
+               dataType: "json",
+               contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
+                bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
+                var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+                $messagediv.append('<div class="alert alert-success"><strong>Record Created:</strong><a href='+data.url+'>'+data.name+'</a></div>');
+                $('#bfeditor-formdiv').empty();
+                $('#save-btn').remove();
+                $messagediv.insertBefore('#bfeditor-previewPanel');
+                $('#bfeditor-previewPanel').remove();
+                bfeditor.bfestore.store = [];
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+                bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
+                bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
+                $messagediv.insertBefore('#bfeditor-previewPanel');
+            }).always(function(){                       
+                $('#table_id').DataTable().ajax.reload();
             });
         }
 

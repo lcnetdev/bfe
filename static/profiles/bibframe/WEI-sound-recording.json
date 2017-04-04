@@ -406,6 +406,20 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/expressionDate",
+            "propertyLabel": "Date of Expression (RDA 6.10)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {

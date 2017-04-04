@@ -186,7 +186,7 @@ exportAce(ACE_NAMESPACE);
 
 })();
 
-bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.min', 'src/lib/json', 'src/lib/lodash.min', 'src/lib/bootstrap.min', 'src/lib/typeahead.jquery.min', 'src/bfestore', 'src/bfelogging', 'src/lookups/lcnames', 'src/lookups/lcsubjects', 'src/lookups/lcgenreforms', 'src/lookups/lcworks', 'src/lookups/lcinstances', 'src/lookups/lcorganizations', 'src/lookups/lccountries', 'src/lookups/lcgacs', 'src/lookups/lclanguages', 'src/lookups/lcidentifiers', 'src/lookups/lctargetaudiences', 'src/lookups/iso6391', 'src/lookups/iso6392', 'src/lookups/iso6395', 'src/lookups/rdacontenttypes', 'src/lookups/rdamediatypes', 'src/lookups/rdacarriers','src/lookups/rdamodeissue', 'src/lookups/lcrelators','src/lookups/lcperformanceMediums','src/lookups/rdamusnotation','src/lookups/rdaformatnotemus', 'src/lib/aceconfig'], function(require, exports, module) {
+bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.min', 'src/lib/json', 'src/lib/lodash.min', 'src/lib/bootstrap.min', 'src/lib/typeahead.jquery.min', 'src/bfestore', 'src/bfelogging', 'src/lookups/lcnames', 'src/lookups/lcsubjects', 'src/lookups/lcgenreforms', 'src/lookups/lcworks', 'src/lookups/lcinstances', 'src/lookups/lcorganizations', 'src/lookups/lccountries', 'src/lookups/lcgacs', 'src/lookups/lclanguages', 'src/lookups/lcidentifiers', 'src/lookups/lctargetaudiences', 'src/lookups/iso6391', 'src/lookups/iso6392', 'src/lookups/iso6395', 'src/lookups/rdacontenttypes', 'src/lookups/rdamediatypes', 'src/lookups/rdacarriers','src/lookups/rdamodeissue', 'src/lookups/lcrelators','src/lookups/lcperformanceMediums','src/lookups/rdamusnotation','src/lookups/rdaformatnotemus','src/lookups/rdaaspectratio', 'src/lookups/rdagenmopic', 'src/lib/aceconfig'], function(require, exports, module) {
     require("src/lib/jquery-2.1.0.min");
     require("src/lib/json");
     require("src/lib/lodash.min"); // collection/object/array manipulation
@@ -314,8 +314,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         "http://rdaregistry.info/termList/FormatNoteMus": {
             "name": "RDA-Format-Musical-Notation",
             "load": require("src/lookups/rdaformatnotemus")
+        },
+        "http://id.loc.gov/ml38281/vocabulary/rda/AspectRatio":{
+            "name": "RDA-Aspect-Ratio",
+            "load": require("src/lookups/rdaaspectratio")
+        },
+        "http://id.loc.gov/ml38281/vocabulary/rda/genMoPic":{
+            "name": "RDA-Generation-of-Motion-Picture",
+            "load": require("src/lookups/rdagenmopic")
+        },
+        "http://id.loc.gov/vocabulary/classSchemes":{
+            "name": "Class-Schemes",
+            "load": require("src/loookups/classschemes")
         }
-
     };
     
     /*
@@ -1226,6 +1237,64 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             }
                         }
                         
+                    } else if(_.has(property.valueConstraint, "defaultLiteral") && _.isEmpty(property.valueConstraint.defaultURI)) {
+
+                        bfelog.addMsg(new Error(), "DEBUG", "Setting default data for " + property.propertyURI);
+                        var data = property.valueConstraint.defaultLiteral;
+                        // set the triples
+                        var triple = {}
+                        triple.guid = guid();
+                        triple.s = rt.defaulturi;
+                        triple.p = property.propertyURI;
+                        triple.o = data;
+                        triple.otype = "literal";
+                        fobject.store.push(triple);
+                        bfestore.store.push(triple);
+                        
+                        //set the label
+                        var label = {}
+                        label.s = triple.s //http://id.loc.gov/vocabulary/mediaTypes/n
+                        label.otype = "literal";
+                        label.p = triple.p;
+                        label.o =  data;
+                        
+                        fobject.store.push(label);
+                        bfestore.store.push(label);
+
+                        // set the form
+                        var $formgroup = $("#" + property.guid, form).closest(".form-group");
+                        var $save = $formgroup.find(".btn-toolbar").eq(0);
+                        
+                        displaydata = data;
+                        var editable = true;
+                        if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === "false") {
+                            editable = false;
+                        }
+                        var bgvars = {
+                            "tguid": triple.guid , 
+                            "tlabelhover": displaydata,
+                            "tlabel": displaydata,
+                            "fobjectid": fobject.id,
+                            "inputid": property.guid,
+                            "editable": editable,
+                            "triples": [label]
+                        };
+                        var $buttongroup = editDeleteButtonGroup(bgvars);
+                        $save.append($buttongroup);
+                        
+                        if (property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                            var $el = $("#" + property.guid, form);
+                            if ($el.is("input")) {
+                                $el.prop("disabled", true);
+                            } else {
+                                //console.log(property.propertyLabel);
+                                var $buttons = $("div.btn-group", $el).find("button");
+                                $buttons.each(function() {
+                                    $( this ).prop("disabled", true);
+                                });
+                            }
+                        }
+
                     }
                 }
             });
@@ -1341,7 +1410,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         });
                     
         $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
-        $("#bfeditor-modal-" + form.formobject.id + " input:not('.tt-hint'):first").focus()
+
+        $('#bfeditor-modal-' + form.formobject.id).on('shown.bs.modal', function () {
+            $("#bfeditor-form-" + form.formobject.id + " input:not('.tt-hint'):first").focus()
+        })
     }
    
     function setResourceFromModal(formobjectID, modalformid, resourceID, propertyguid, data) {
@@ -2477,10 +2549,11 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
 
     exports.processJSONLDSuggestions = function (suggestions,query,scheme) {
         var typeahead_source = [];
+        var schemewithslash = scheme + "/";
         if (suggestions['@graph'] !== undefined) {
             for (var s = 0; s < suggestions['@graph'].length; s++) {
                 if(suggestions['@graph'][s]['skos:inScheme'] !==undefined){
-                    if (suggestions['@graph'][s]['@type'] === 'skos:Concept' && suggestions['@graph'][s]['skos:inScheme']['@id'] === scheme){
+                    if (suggestions['@graph'][s]['@type'] === 'skos:Concept' && (suggestions['@graph'][s]['skos:inScheme']['@id'] === scheme || suggestions['@graph'][s]['skos:inScheme']['@id'] === schemewithslash)){
                         if (suggestions['@graph'][s]['skos:prefLabel'].length !== undefined){
                             for (var i = 0; i < suggestions['@graph'][s]['skos:prefLabel'].length; i++) {
                                 if (suggestions['@graph'][s]['skos:prefLabel'][i]['@language'] === "en") {
@@ -3466,6 +3539,57 @@ bfe.define('src/lookups/lcperformanceMediums', ['require', 'exports', 'module' ,
     exports.getResource = lcshared.getResource;
 
 });
+bfe.define('src/lookups/rdaaspectratio', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
+    var lcshared = require("src/lookups/lcshared");
+
+    var cache = [];
+
+    exports.scheme = "http://id.loc.gov/ml38281/vocabulary/rda/AspectRatio";
+
+    exports.source = function(query, process){
+        return lcshared.simpleQuery(query, cache, exports.scheme, process);
+    }
+
+    exports.getResource = function(subjecturi, propertyuri, selected, process) {
+        selected.uri = selected.uri.replace("gov/", "gov/ml38281/");
+        return lcshared.getResource(subjecturi, propertyuri, selected, process);
+    }
+
+});
+bfe.define('src/lookups/rdagenmopic', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
+    var lcshared = require("src/lookups/lcshared");
+
+    var cache = [];
+
+    exports.scheme = "http://id.loc.gov/ml38281/vocabulary/rda/genMoPic";
+
+    exports.source = function(query, process){
+        return lcshared.simpleQuery(query, cache, exports.scheme, process);
+    }
+
+    exports.getResource = function(subjecturi, propertyuri, selected, process) {
+        selected.uri = selected.uri.replace("gov/", "gov/ml38281/");
+        return lcshared.getResource(subjecturi, propertyuri, selected, process);
+    }
+
+});
+
+bfe.define('src/lookups/classschemes', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
+    var lcshared = require("src/lookups/lcshared");
+    var cache = [];
+
+    exports.scheme = "http://id.loc.gov/vocabulary/classSchemes";
+
+    exports.source = function(query, process){
+        return lcshared.simpleQuery(query, cache, exports.scheme, process);
+    }
+
+    exports.getResource = lcshared.getResource;
+
+});
+
+
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Distributed under the BSD license:
  *
