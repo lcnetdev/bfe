@@ -143,7 +143,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:mediumofperformance:NotatedMusic"
+                "profile:bf:mediumofperformanceIndividual:NotatedMusic",
+                "profile:bf:mediumofperformanceCombining:NotatedMusic"
               ],
               "useValuesFrom": [
                 ""
@@ -152,7 +153,7 @@
               "editable": "false"
             },
             "propertyLabel": "Medium of Performance (RDA 6.15)",
-            "remark": "http://acccess.rdatoolkit.org/6.15.html",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-4350.html",
             "propertyURI": "http://bibframe.org/vocab/musicMedium"
           },
           {
@@ -328,7 +329,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -336,9 +337,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Authorized Access Point for the Musical Work (RDA 6.28.1)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7295.html"
+            "propertyLabel": "Authorized Access Point Representing the Musical Work (RDA 6.28.1)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7295.html",
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint"
           },
           {
             "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
@@ -370,7 +371,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Work Elements - Notated Music",
+        "resourceLabel": "RDA Work",
         "resourceURI": "http://bibframe.org/vocab/NotatedMusic",
         "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
@@ -391,6 +392,24 @@
             "propertyURI": "http://bibframe.org/vocab/expressionOf",
             "propertyLabel": "Expression of",
             "remark": "Expression has a related work. For use to connect Works under FRBR/RDA rules."
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:mediumofperformanceIndividual:NotatedMusic",
+                "profile:bf:mediumofperformanceCombining:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "editable": "false"
+            },
+            "propertyURI": "http://bibframe.org/vocab/musicMedium",
+            "propertyLabel": "Medium of Performance of the Musical Expression -- 6JSC/MusicWG/Discussion/3",
+            "remark": "http://www.rda-jsc.org/sites/all/files/6JSC-MusicWG-Discussion-3.pdf"
           },
           {
             "mandatory": "false",
@@ -480,16 +499,15 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Language:NotatedMusic",
-                ""
+                "profile:bf:Language:NotatedMusic"
               ],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/vocabulary/languages"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://bibframe.org/vocab/language",
@@ -525,6 +543,34 @@
             "propertyURI": "http://bibframe.org/vocab/formOfMusicalNotation",
             "propertyLabel": "Form of Musical Notation (RDA 7.13.3)",
             "remark": "http://access.rdatoolkit.org/7.13.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/formOfMusicalNotationDetails",
+            "propertyLabel": "Details of Form of Musical Notation (RDA 7.13.3.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-991.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/illustrativeContent",
+            "propertyLabel": "Illustrative Content (RDA 7.15)",
+            "remark": "http://access.rdatoolkit.org/7.15.html"
           },
           {
             "mandatory": "false",
@@ -587,12 +633,10 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:mediumofperformance:NotatedMusic"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -646,7 +690,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -654,8 +698,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Authorized Access Point for the Musical Expression (RDA 6.28.3)",
             "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point Representing the Musical Expression (RDA 6.28.3)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7972.html"
           },
           {
@@ -677,7 +721,7 @@
         ],
         "id": "profile:bf:RDAExpression:NotatedMusic",
         "resourceURI": "http://bibframe.org/vocab/Work",
-        "resourceLabel": "RDA Expression Elements - Notated Music"
+        "resourceLabel": "RDA Expression"
       },
       {
         "id": "profile:bf:Instance:NotatedMusic",
@@ -747,12 +791,10 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:subtitle:NotatedMusic"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1213,7 +1255,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "Instance/Manifestation - NotatedMusic",
+        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - NotatedMusic",
         "resourceURI": "http://bibframe.org/vocab/Instance"
       },
       {
@@ -1727,7 +1769,7 @@
               ],
               "valueDataType": {}
             },
-            "propertyLabel": "Search Medium of Performance",
+            "propertyLabel": "Search Individual Instrument or Ensemble in LCMPT ... OR ...",
             "propertyURI": "http://bibframe.org/vocab/musicMedium"
           },
           {
@@ -1740,12 +1782,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Record Medium of Performance",
+            "propertyLabel": "Record Individual Instrument or Ensemble",
             "propertyURI": "http://bibframe.org/vocab/musicMedium"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1753,8 +1795,60 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Number of Parts",
+            "propertyLabel": "Number of Parts: Individual Instrument ... AND/OR ...",
             "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfParts"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Number of Performers: Individual Instrument ... AND/OR ...",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPerformers"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Number of Players: Percussion ... AND/OR ...",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPlayersPercussion"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Number of Hands: Individual instrument ... AND/OR ...",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfHands"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Number of Ensembles",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfEnsembles"
           },
           {
             "mandatory": "false",
@@ -1768,7 +1862,7 @@
               ],
               "valueDataType": {}
             },
-            "propertyLabel": "Search Doubling Medium of Performance",
+            "propertyLabel": "Search Doubling Medium of Performance ... OR ...",
             "propertyURI": "http://bibframe.org/vocab2/musicMediumDoubling"
           },
           {
@@ -1787,6 +1881,21 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/performanceMediums"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumAlternateInstrumentation",
+            "propertyLabel": "Search Alternative Instrumentation Medium of Performance ... OR ..."
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1794,13 +1903,386 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Note on Medium of Performance",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumAlternateInstrumentation",
+            "propertyLabel": "Record Alternative Instrumentation Medium of Performance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on Instrumentation",
             "propertyURI": "http://bibframe.org/vocab2/musicMediumNote"
           }
         ],
-        "id": "profile:bf:mediumofperformance:NotatedMusic",
+        "id": "profile:bf:mediumofperformanceIndividual:NotatedMusic",
         "resourceURI": "http://bibframe.org/vocab/musicMedium",
-        "resourceLabel": "Medium of Performance"
+        "resourceLabel": "Medium of Performance: Individual Facets"
+      },
+      {
+        "id": "profile:bf:Work:NotatedMusic",
+        "propertyTemplates": [
+          {
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://bibframe.org/vocab/sameWork",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "repeatable": "false",
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/works"
+              ],
+              "valueTemplateRefs": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:relator:NotatedMusic",
+                "profile:bf:relator:NotatedMusic2"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Creator of Work (RDA 19.2)",
+            "propertyURI": "http://bibframe.org/vocab/relator",
+            "remark": "http://access.rdatoolkit.org/19.2.html"
+          },
+          {
+            "propertyLabel": "Preferred Title for a Musical Work (RDA 6.14.2)",
+            "propertyURI": "http://bibframe.org/vocab/workTitle",
+            "remark": "http://access.rdatoolkit.org/6.14.2.html",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Title:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Title:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/titleVariation",
+            "propertyLabel": "Variant Title for a Musical Work (RDA 6.14.3)",
+            "remark": "http://access.rdatoolkit.org/6.14.3.html"
+          },
+          {
+            "propertyLabel": "Form of Work (RDA 6.3)",
+            "propertyURI": "http://bibframe.org/vocab/genre",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Form:NotatedMusic"
+              ],
+              "useValuesFrom": [
+                ""
+              ],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/6.3.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Date of Work (RDA 6.4)",
+            "propertyURI": "http://bibframe.org/vocab/originDate",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
+                "dataTypeLabel": "EDTF",
+                "dataTypeLabelHint": "ISO",
+                "remark": ""
+              }
+            },
+            "remark": "http://access.rdatoolkit.org/6.4.html",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
+            "propertyURI": "http://bibframe.org/vocab/originPlace",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Place:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/6.5.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharWork",
+            "propertyLabel": "Other Distinguishing Characteristics of the Work (RDA 6.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3205.html",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:mediumofperformanceIndividual:NotatedMusic",
+                "profile:bf:mediumofperformanceCombining:NotatedMusic"
+              ],
+              "useValuesFrom": [
+                ""
+              ],
+              "valueDataType": {},
+              "editable": "false"
+            },
+            "propertyLabel": "Medium of Performance (RDA 6.15)",
+            "remark": "http://acccess.rdatoolkit.org/6.15.html",
+            "propertyURI": "http://bibframe.org/vocab/musicMedium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Numerical Designation of a Musical Work (RDA 6.16)",
+            "remark": "http://access.rdatoolkit.org/6.16.html",
+            "propertyURI": "http://bibframe.org/vocab/musicNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Key (RDA 6.17)",
+            "propertyURI": "http://bibframe.org/vocab/musicKey",
+            "remark": "http://access.rdatoolkit.org/6.17.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/contentNature",
+            "propertyLabel": "Nature of the Content (RDA 7.2)",
+            "remark": "http://access.rdatoolkit.org/7.2.html"
+          },
+          {
+            "propertyLabel": "Coverage of the Content (RDA 7.3)",
+            "propertyURI": "http://bibframe.org/vocab/geographicCoverageNote",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-440.html",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "Intended Audience (RDA 7.7)",
+            "propertyURI": "http://bibframe.org/vocab/intendedAudience",
+            "resourceTemplates": [],
+            "type": "literal",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                ""
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-634.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:otherpfc:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Person, Family, or Corporate Body Associated With a Work (RDA 19.3)",
+            "remark": "http://access.rdatoolkit.org/19.3.html",
+            "propertyURI": "http://bibframe.org/vocab2/otherPerson"
+          },
+          {
+            "propertyLabel": "Subject of the Work (RDA Chapter 23)",
+            "propertyURI": "http://bibframe.org/vocab/subject",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Topic:NotatedMusic",
+                "profile:bf:Place:NotatedMusic",
+                "profile:bf:Meeting:Monograph",
+                "profile:bf:Person:Monograph",
+                "profile:bf:Organization:Monograph",
+                "profile:bf:Family:MonographLCSH"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "DDC Classification (RDA Chapter 23)",
+            "propertyURI": "http://bibframe.org/vocab/classificationDdc",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Classification"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
+            "propertyURI": "http://bibframe.org/vocab/relatedWork",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:RelatedWork:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Contents Note (LC-PCC PS 25.1)",
+            "propertyURI": "http://bibframe.org/vocab/note",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "remark": "http://access.rdatoolkit.org/lcpschp25_lcps25-357.html"
+          },
+          {
+            "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
+            "propertyURI": "http://bibframe.org/vocab/translation",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:RelatedExpression:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
+            "propertyURI": "http://bibframe.org/vocab/lccn",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:lccn:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "false",
+            "remark": "http://access.rdatoolkit.org/6.8.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/comment",
+            "propertyLabel": "Your Cataloger Code and Comments"
+          }
+        ],
+        "resourceLabel": "RDA Work Elements - Notated Music",
+        "resourceURI": "http://bibframe.org/vocab/NotatedMusic",
+        "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
       {
         "propertyTemplates": [
@@ -1949,7 +2431,7 @@
           }
         ],
         "id": "profile:bf:otherpfc:NotatedMusic",
-        "resourceLabel": "Other Person, Family, Corporate Body Associated With a Work",
+        "resourceLabel": "Other Person, Family, Corporate Body Associated With a Work, Expression, Manifestation",
         "resourceURI": "http://bibframe.org/vocab2/otherRelator"
       },
       {
@@ -2071,7 +2553,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Work:NotatedMusic"
+                "profile:bf:RelatedWorkCreate:NotatedMusic"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -2264,7 +2746,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/identifierAssigner",
-            "propertyLabel": "Assigner"
+            "propertyLabel": "Publisher Name (for example, Edward B. Marks Music Corporation)"
           },
           {
             "mandatory": "false",
@@ -2294,7 +2776,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/identifierValue",
-            "propertyLabel": "Value"
+            "propertyLabel": "Plate Number (for example, 12670-14)"
           },
           {
             "mandatory": "false",
@@ -2307,12 +2789,336 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/label",
-            "propertyLabel": "Label"
+            "propertyLabel": "Plate Number and Publisher Name (recorded as in MARC 028 20 field, for example, 12670-14 Edward B. Marks Music Corporation)"
           }
         ],
         "id": "profile:bf:MusicPlate:NotatedMusic",
         "resourceURI": "http://bibframe.org/vocab/Identifier",
         "resourceLabel": "Music Plate Number"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/works"
+              ],
+              "valueDataType": {},
+              "repeatable": "false"
+            },
+            "propertyURI": "http://bibframe.org/vocab/sameWork",
+            "propertyLabel": "Lookup"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:relator:NotatedMusic",
+                "profile:bf:relator:NotatedMusic2"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/relator",
+            "propertyLabel": "Creator of Work (RDA 19.2)",
+            "remark": "http://access.rdatoolkit.org/19.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Title:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/workTitle",
+            "propertyLabel": "Preferred Title for a Musical Work (RDA 6.14.2)",
+            "remark": "http://access.rdatoolkit.org/6.14.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Title:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/titleVariation",
+            "propertyLabel": "Variant Title for a Musical Work (RDA 6.14.3)",
+            "remark": "http://access.rdatoolkit.org/6.14.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Form:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/genre",
+            "propertyLabel": "Form of Work (RDA 6.3)",
+            "remark": "http://access.rdatoolkit.org/6.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
+                "dataTypeLabel": "EDTF",
+                "dataTypeLabelHint": "ISO"
+              }
+            },
+            "propertyURI": "http://bibframe.org/vocab/originDate",
+            "propertyLabel": "Date of Work (RDA 6.4)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Place:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/originPlace",
+            "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
+            "remark": "http://access.rdatoolkit.org/6.5.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharWork",
+            "propertyLabel": "Other Distinguishing Characteristics of the Work (RDA 6.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3205.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:mediumofperformance:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "editable": "false"
+            },
+            "propertyURI": "http://bibframe.org/vocab/musicMedium",
+            "propertyLabel": "Medium of Performance (RDA 6.15)",
+            "remark": "http://acccess.rdatoolkit.org/6.15.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/musicNumber",
+            "propertyLabel": "Numerical Designation of a Musical Work",
+            "remark": "http://access.rdatoolkit.org/6.16.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/musicKey",
+            "propertyLabel": "Key (RDA 6.17)",
+            "remark": "http://access.rdatoolkit.org/6.17.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/contentNature",
+            "propertyLabel": "Nature of the Content (RDA 7.2)",
+            "remark": "http://access.rdatoolkit.org/7.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/geographicCoverageNote",
+            "propertyLabel": "Coverage of the Content (RDA 7.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-440.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/intendedAudience",
+            "propertyLabel": "Intended Audience (RDA 7.7)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-634.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:otherpfc:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/otherPerson",
+            "propertyLabel": "Other Person, Family, or Corporate Body Associated With a Work (RDA 19.3)",
+            "remark": "http://access.rdatoolkit.org/19.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Musical Work (RDA 6.28.1)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7295.html"
+          }
+        ],
+        "id": "profile:bf:RelatedWorkCreate:NotatedMusic",
+        "resourceLabel": "Search Related Work",
+        "resourceURI": "http://bibframe.org/vocab/NotatedMusic"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Total Number of Performers: Individual Instruments (no ensemble present)",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPerformersIndividual"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPerformersInstrumentation",
+            "propertyLabel": "Record complete instrumentation as text field"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPerformersIndividualEnsemble",
+            "propertyLabel": "Total Number of Performers: Individual Instruments (ensemble present)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record complete instrumentation as text field",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfPerformersInstrumentation"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Total Number of Ensembles",
+            "propertyURI": "http://bibframe.org/vocab2/musicMediumNumberOfEnsemblesTotal"
+          }
+        ],
+        "id": "profile:bf:mediumofperformanceCombining:NotatedMusic",
+        "resourceURI": "http://bibframe.org/vocab/musicMedium",
+        "resourceLabel": "Medium of Performance: Combining Facets"
       }
     ],
     "contact": "NDMSO",

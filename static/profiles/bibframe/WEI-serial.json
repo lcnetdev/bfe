@@ -277,20 +277,6 @@
             "repeatable": "true"
           },
           {
-            "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-6415.html"
-          },
-          {
             "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
             "propertyURI": "http://bibframe.org/vocab/lccn",
             "resourceTemplates": [],
@@ -317,11 +303,25 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-6415.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://bibframe.org/vocab2/comment",
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Work Elements - Serial",
+        "resourceLabel": "RDA Work",
         "resourceURI": "http://bibframe.org/vocab/Text"
       },
       {
@@ -360,6 +360,20 @@
             "propertyURI": "http://bibframe.org/vocab/contentCategory",
             "propertyLabel": "Content Type (RDA 6.9)",
             "remark": "http://access.rdatoolkit.org/6.9.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/expressionDate",
+            "propertyLabel": "Date of Expression (RDA 6.10)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html"
           },
           {
             "mandatory": "false",
@@ -533,8 +547,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Authorized Access Point for the Expression (RDA 6.27.3)",
             "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Expression (RDA 6.27.3)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7056.html"
           },
           {
@@ -556,26 +570,11 @@
         ],
         "id": "profile:bf:RDAExpression:Serial",
         "resourceURI": "http://bibframe.org/vocab/Work",
-        "resourceLabel": "RDA Expression Elements - Serial"
+        "resourceLabel": "RDA Expression"
       },
       {
         "id": "profile:bf:Instance:Serial",
         "propertyTemplates": [
-          {
-            "propertyLabel": "Lookup",
-            "propertyURI": "http://bibframe.org/vocab/sameInstance",
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/resources/instances"
-              ],
-              "valueDataType": {}
-            },
-            "resourceTemplates": [],
-            "mandatory": "false",
-            "repeatable": "true"
-          },
           {
             "propertyLabel": "Instance of",
             "propertyURI": "http://bibframe.org/vocab/instanceOf",
@@ -588,6 +587,21 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://bibframe.org/vocab/sameInstance",
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/instances"
+              ],
+              "valueDataType": {}
+            },
+            "resourceTemplates": [],
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -622,6 +636,22 @@
             "propertyURI": "http://bibframe.org/vocab2/otherFormTitle"
           },
           {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:subtitle:Serial"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Title Information (RDA 2.3.4)",
+            "remark": "http://access.rdatoolkit.org/2.3.4.html",
+            "propertyURI": "http://bibframe.org/vocab/instanceTitle"
+          },
+          {
             "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
             "propertyURI": "http://bibframe.org/vocab/titleVariation",
             "resourceTemplates": [],
@@ -644,14 +674,14 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:subtitle:Serial"
+                "profile:bf:Title:NotatedMusic"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Other Title Information (RDA 2.3.4)",
-            "remark": "http://access.rdatoolkit.org/2.3.4.html",
-            "propertyURI": "http://bibframe.org/vocab/instanceTitle"
+            "propertyLabel": "Earlier Title Proper (RDA 2.3.7)",
+            "propertyURI": "http://bibframe.org/vocab/precededBy",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4102.html"
           },
           {
             "propertyLabel": "Variant Title (RDA 2.3.6)",
@@ -668,22 +698,6 @@
             "mandatory": "false",
             "repeatable": "true",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Title:NotatedMusic"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Earlier Title Proper (RDA 2.3.7)",
-            "propertyURI": "http://bibframe.org/vocab/precededBy",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4102.html"
           },
           {
             "mandatory": "false",
@@ -716,6 +730,22 @@
             "propertyLabel": "Key Title (RDA 2.3.9)",
             "remark": "http://access.rdatoolkit.org/2.3.9.html",
             "propertyURI": "http://bibframe.org/vocab/keyTitle"
+          },
+          {
+            "propertyLabel": "Identifier for the Manifestation (RDA 2.15)",
+            "propertyURI": "http://bibframe.org/vocab/identifier",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:identifier:Serial"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "remark": "http://access.rdatoolkit.org/2.15.html"
           },
           {
             "mandatory": "false",
@@ -815,9 +845,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Numeric and/or Alphabetic Designation of Last Issue or Part of Sequence (RDA 2.6.4)",
-            "remark": "http://access.rdatoolkit.org/2.6.4.html",
-            "propertyURI": "http://bibframe.org/vocab/serialLastIssue"
+            "propertyURI": "http://bibframe.org/vocab2/serialLastIssueDate",
+            "remark": "http://access.rdatoolkit.org/2.6.5.html",
+            "propertyLabel": "Chronological Designation of Last Issue or Part of Sequence (RDA 2.6.5)"
           },
           {
             "mandatory": "false",
@@ -829,9 +859,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/serialLastIssueDate",
-            "remark": "http://access.rdatoolkit.org/2.6.5.html",
-            "propertyLabel": "Chronological Designation of Last Issue or Part of Sequence (RDA 2.6.5)"
+            "propertyLabel": "Numeric and/or Alphabetic Designation of Last Issue or Part of Sequence (RDA 2.6.4)",
+            "remark": "http://access.rdatoolkit.org/2.6.4.html",
+            "propertyURI": "http://bibframe.org/vocab/serialLastIssue"
           },
           {
             "propertyLabel": "Publication Statement (RDA 2.8)",
@@ -840,7 +870,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Publisher:Provider"
+                "profile:bf:Serial:Publisher:Provider"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -856,7 +886,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Distributor:Provider"
+                "profile:bf:Serial:Distributor:Provider"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -872,7 +902,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Manufacturer:Provider"
+                "profile:bf:Serial:Manufacturer:Provider"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -947,9 +977,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/subSeriesISSN",
-            "propertyLabel": "ISSN of Subseries (RDA 2.12.16)",
-            "remark": "http://access.rdatoolkit.org/2.12.16.html"
+            "propertyURI": "http://bibframe.org/vocab2/subSeriesStatement",
+            "remark": "http://access.rdatoolkit.org/2.12.10.html",
+            "propertyLabel": "Subseries (RDA 2.12.10)"
           },
           {
             "mandatory": "false",
@@ -961,9 +991,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/subSeriesStatement",
-            "remark": "http://access.rdatoolkit.org/2.12.10.html",
-            "propertyLabel": "Subseries (RDA 2.12.10)"
+            "propertyURI": "http://bibframe.org/vocab2/subSeriesISSN",
+            "propertyLabel": "ISSN of Subseries (RDA 2.12.16)",
+            "remark": "http://access.rdatoolkit.org/2.12.16.html"
           },
           {
             "mandatory": "false",
@@ -989,7 +1019,10 @@
               "useValuesFrom": [
                 "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultURI": "http://id.loc.gov/vocabulary/rda/ModeIssue/1003",
+              "editable": "false",
+              "defaultLiteral": "serial"
             },
             "propertyURI": "http://bibframe.org/vocab/modeOfIssuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -1008,22 +1041,6 @@
             "propertyLabel": "Frequency (RDA 2.14)",
             "remark": "http://access.rdatoolkit.org/2.14.html",
             "propertyURI": "http://bibframe.org/vocab/frequency"
-          },
-          {
-            "propertyLabel": "Identifier for the Manifestation (RDA 2.15)",
-            "propertyURI": "http://bibframe.org/vocab/identifier",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Identifier"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "remark": "http://access.rdatoolkit.org/2.15.html"
           },
           {
             "propertyLabel": "Note on Title (RDA 2.17.2)",
@@ -1079,31 +1096,12 @@
                 "http://id.loc.gov/vocabulary/mediaTypes"
               ],
               "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
-              "defaultLiteral": "unmediated",
+              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/c",
+              "defaultLiteral": "computer",
               "editable": "false"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2027.html"
-          },
-          {
-            "propertyLabel": "Carrier Type (RDA 3.3)",
-            "propertyURI": "http://bibframe.org/vocab/carrierCategory",
-            "repeatable": "false",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/carriers"
-              ],
-              "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
-              "defaultLiteral": "volume",
-              "editable": "false"
-            },
-            "mandatory": "false",
-            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2051.html"
           },
           {
             "propertyLabel": "Extent (RDA 3.4)",
@@ -1120,6 +1118,25 @@
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2080.html"
           },
           {
+            "propertyLabel": "Carrier Type (RDA 3.3)",
+            "propertyURI": "http://bibframe.org/vocab/carrierCategory",
+            "repeatable": "false",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/carriers"
+              ],
+              "valueDataType": {},
+              "defaultURI": "http://id.loc.gov/vocabulary/carriers/cr",
+              "defaultLiteral": "online resource",
+              "editable": "false"
+            },
+            "mandatory": "false",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2051.html"
+          },
+          {
             "propertyLabel": "Dimensions (RDA 3.5)",
             "propertyURI": "http://bibframe.org/vocab/dimensions",
             "resourceTemplates": [],
@@ -1134,6 +1151,20 @@
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-3150.html"
           },
           {
+            "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
+            "propertyURI": "http://bibframe.org/vocab/identifier",
+            "resourceTemplates": [],
+            "type": "literal",
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "remark": "http://access.rdatoolkit.org/4.6.html"
+          },
+          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
@@ -1146,22 +1177,6 @@
             "propertyLabel": "Note on Changes in Carrier Characteristics (RDA 3.21.4)",
             "remark": "http://accesss.rdatoolkit.org/3.21.4.html",
             "propertyURI": "http://bibframe.org/vocab/note"
-          },
-          {
-            "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
-            "propertyURI": "http://bibframe.org/vocab/identifier",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Identifier"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "remark": "http://access.rdatoolkit.org/4.6.html"
           },
           {
             "mandatory": "false",
@@ -1208,7 +1223,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "Instance/Manifestation - Serial",
+        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - Serial",
         "resourceURI": "http://bibframe.org/vocab/Serial"
       },
       {
@@ -1583,6 +1598,264 @@
         "id": "profile:bf:lccn:Serial",
         "resourceURI": "http://bibframe.org/vocab/Identifier",
         "resourceLabel": "LCCN"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Valid ISSN",
+            "propertyURI": "http://bibframe.org/vocab/issn"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/issnInvalid",
+            "propertyLabel": "Invalid/Incorrect ISSN"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/issnCancelled",
+            "propertyLabel": "Cancelled ISSN"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Linking ISSN",
+            "propertyURI": "http://bibframe.org/vocab/issnL"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/issnLCancelled",
+            "propertyLabel": "Cancelled Linking ISSN"
+          }
+        ],
+        "id": "profile:bf:identifier:Serial",
+        "resourceURI": "http://bibframe.org/vocab/identifier",
+        "resourceLabel": "ISSN"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerPlace",
+            "propertyLabel": "Place of Publication (RDA 2.8.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-6454.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerName",
+            "propertyLabel": "Publisher's Name (RDA 2.8.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-6639.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerDate",
+            "propertyLabel": "Date of Publication (RDA 2.8.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-6793.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/providerDateDuration",
+            "propertyLabel": "Duration (For Multiple Publishers Over Time)"
+          }
+        ],
+        "id": "profile:bf:Serial:Publisher:Provider",
+        "resourceURI": "http://bibframe.org/vocab/Provider",
+        "resourceLabel": "Enter Publication Information"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerPlace",
+            "propertyLabel": "Place of Distribution (RDA 2.9.2)",
+            "remark": "http://access.rdatoolkit.org/2.9.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerName",
+            "propertyLabel": "Distributor’s Name (RDA 2.9.4)",
+            "remark": "http://access.rdatoolkit.org/2.9.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerDate",
+            "propertyLabel": "Date of Distribution (RDA 2.9.6)",
+            "remark": "http://access.rdatoolkit.org/2.9.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/providerDateDuration",
+            "propertyLabel": "Duration (For Multiple Distributors Over Time)"
+          }
+        ],
+        "id": "profile:bf:Serial:Distributor:Provider",
+        "resourceURI": "http://bibframe.org/vocab/Provider",
+        "resourceLabel": "Enter Distribution Information"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerPlace",
+            "propertyLabel": "Place of Manufacture (RDA 2.10.2)",
+            "remark": "http://access.rdatoolkit.org/2.10.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerName",
+            "propertyLabel": "Manufacturer’s Name (RDA 2.10.4)",
+            "remark": "http://access.rdatoolkit.org/2.10.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/providerDate",
+            "propertyLabel": "Date of Manufacture (RDA 2.10.6)",
+            "remark": "http://access.rdatoolkit.org/2.10.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/providerDateDuration",
+            "propertyLabel": "Duration (For Multiple Manufacturers Over Time)"
+          }
+        ],
+        "id": "profile:bf:Serial:Manufacturer:Provider",
+        "resourceURI": "http://bibframe.org/vocab/Provider",
+        "resourceLabel": "Enter Manufacturer Information"
       }
     ],
     "contact": "NDMSO",

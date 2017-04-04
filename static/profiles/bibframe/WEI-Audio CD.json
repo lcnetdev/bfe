@@ -143,16 +143,15 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:mediumofperformance:NotatedMusic"
+                "profile:bf:mediumofperformanceIndividual:NotatedMusic",
+                "profile:bf:mediumofperformanceCombining:NotatedMusic"
               ],
-              "useValuesFrom": [
-                ""
-              ],
+              "useValuesFrom": [],
               "valueDataType": {},
               "editable": "false"
             },
             "propertyLabel": "Medium of Performance (RDA 6.15)",
-            "remark": "http://acccess.rdatoolkit.org/6.15.html",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-4350.html",
             "propertyURI": "http://bibframe.org/vocab/musicMedium"
           },
           {
@@ -250,12 +249,8 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Topic:NotatedMusic",
-                "profile:bf:Place:NotatedMusic",
-                "profile:bf:Temporal:NotatedMusic",
-                "profile:bf:Person:Monograph",
-                "profile:bf:Organization:Monograph",
-                "profile:bf:Family:MonographLCSH"
+                "profile:bf:Topic:Monograph",
+                "profile:bf:Work:Monograph"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -327,20 +322,6 @@
             "repeatable": "true"
           },
           {
-            "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Authorized Access Point for the Musical Work (RDA 6.28.1)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7295.html"
-          },
-          {
             "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
             "propertyURI": "http://bibframe.org/vocab/lccn",
             "resourceTemplates": [],
@@ -366,11 +347,25 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Musical Work (RDA 6.28.1)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7295.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://bibframe.org/vocab2/comment",
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Work Elements - Audio CD",
+        "resourceLabel": "RDA Work",
         "resourceURI": "http://bibframe.org/vocab/Work",
         "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
@@ -407,13 +402,27 @@
                 "dataTypeLabel": ""
               },
               "editable": "false",
-              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/ntm",
-              "defaultLiteral": "notated music",
+              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/prm",
+              "defaultLiteral": "performed music",
               "remark": ""
             },
             "propertyURI": "http://bibframe.org/vocab/contentCategory",
             "propertyLabel": "Content Type (RDA 6.9)",
             "remark": "http://access.rdatoolkit.org/6.9.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharExp",
+            "propertyLabel": "Other Distinguishing Characteristic of the Expression of a Musical Work (RDA 6.18)",
+            "remark": "http://access.rdatoolkit.org/6.18.html"
           },
           {
             "mandatory": "false",
@@ -441,9 +450,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharExp",
-            "propertyLabel": "Other Distinguishing Characteristic of the Expression of a Musical Work (RDA 6.18)",
-            "remark": "http://access.rdatoolkit.org/6.18.html"
+            "propertyLabel": "Date of Expression (RDA 6.10)",
+            "propertyURI": "http://bibframe.org/vocab/expressionDate",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html"
           },
           {
             "mandatory": "false",
@@ -458,6 +467,34 @@
             "propertyURI": "http://bibframe.org/vocab/Summary",
             "propertyLabel": "Summary of Content (RDA 7.10)",
             "remark": "http://access.rdatoolkit.org/7.10.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Place of Capture (RDA 7.11.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-806.html",
+            "propertyURI": "http://bibframe.org/vocab2/placeOfCapture"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Date of Capture (RDA 7.11.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-825.html",
+            "propertyURI": "http://bibframe.org/vocab2/dateOfCapture"
           },
           {
             "mandatory": "false",
@@ -488,38 +525,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/supplementaryContent",
-            "propertyLabel": "Supplementary Content (RDA 7.16)",
-            "remark": "http://access.rdatoolkit.org/7.16.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
             "propertyURI": "http://bibframe.org/vocab/duration",
             "propertyLabel": "Duration (RDA 7.22)",
             "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1572.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:mediumofperformance:NotatedMusic"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Medium of Performance of the Expression",
-            "propertyURI": "http://bibframe.org/vocab/musicMedium"
           },
           {
             "mandatory": "false",
@@ -540,20 +548,6 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Authorized Access Point for the Musical Expression (RDA 6.28.3)",
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7972.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -566,11 +560,68 @@
             "propertyURI": "http://bibframe.org/vocab/lccn",
             "propertyLabel": "LC Control Number for the Expression (RDA 6.13)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/supplementaryContent",
+            "propertyLabel": "Supplementary Content (RDA 7.16)",
+            "remark": "http://access.rdatoolkit.org/7.16.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on Expression (RDA 7.29) -- For example, Editions Recorded note",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-8838.html",
+            "propertyURI": "http://bibframe.org/vocab/note"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:mediumofperformance:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Medium of Performance of the Expression",
+            "propertyURI": "http://bibframe.org/vocab/musicMedium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Musical Expression (RDA 6.28.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7972.html"
           }
         ],
         "id": "profile:bf:RDAExpression:AudioCD",
         "resourceURI": "http://bibframe.org/vocab/Work",
-        "resourceLabel": "RDA Expression Elements - Audio CD"
+        "resourceLabel": "RDA Expression"
       },
       {
         "id": "profile:bf:Instance:AudioCD",
@@ -1024,10 +1075,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeLabel": "",
+                "dataTypeLabelHint": "",
+                "remark": ""
+              },
+              "defaultLiteral": "4 3/4 in.",
+              "editable": "false",
+              "repeatable": "false",
+              "defaultURI": ""
             },
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-3150.html"
           },
@@ -1039,7 +1098,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "plastic ; metal",
+              "repeatable": "true"
             },
             "propertyLabel": "Base Material (RDA 3.6)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-3755.html",
@@ -1075,13 +1137,15 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "digital"
             },
             "propertyLabel": "Type of Recording (RDA 3.16.2)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4743.html",
@@ -1089,13 +1153,15 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "optical"
             },
             "propertyLabel": "Recording Medium (RDA 3.16.3)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4772.html",
@@ -1103,13 +1169,15 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "1.4 m/s"
             },
             "propertyLabel": "Playing Speed (RDA 3.16.4)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4788.html",
@@ -1145,13 +1213,15 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "audio file"
             },
             "propertyLabel": "File Type (RDA 3.19)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-5231.html",
@@ -1159,13 +1229,15 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultLiteral": "CD audio"
             },
             "propertyLabel": "Encoding Format (RDA 3.19.3)",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-5265.html",
@@ -1200,7 +1272,7 @@
             "propertyURI": "http://bibframe.org/vocab2/availabilityTermsSize"
           },
           {
-            "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
+            "propertyLabel": "Uniform Resource Locator (RDA 4.6) -- For example, URI for Cover Art",
             "propertyURI": "http://bibframe.org/vocab/identifier",
             "resourceTemplates": [],
             "type": "resource",
@@ -1260,7 +1332,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "Instance/Manifestation - Audio CD",
+        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - Audio CD",
         "resourceURI": "http://bibframe.org/vocab/Instance"
       },
       {
@@ -1853,10 +1925,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf:identifier:Monograph"
+              ],
               "useValuesFrom": [
                 ""
               ],
@@ -1868,13 +1942,28 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                ""
+              "valueTemplateRefs": [
+                "profile:bf:publishernumber:AudioCD"
               ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Publisher Number",
+            "propertyURI": "http://bibframe.org/vocab/publisherNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:EAN:AudioCD"
+              ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/ean",
@@ -1883,35 +1972,24 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf:UPC:AudioCD"
+              ],
               "useValuesFrom": [
                 ""
               ],
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/upc",
-            "propertyLabel": "UPC"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Publisher Number",
-            "propertyURI": "http://bibframe.org/vocab/publisherNumber"
+            "propertyLabel": "Universal Product Code (UPC)"
           }
         ],
         "id": "profile:bf:identifier:AudioCD",
         "resourceURI": "http://bibframe.org/vocab/identifier",
-        "resourceLabel": "ISBN, EAN, UPC, Publisher Number"
+        "resourceLabel": "ISBN, Publisher Number, EAN, UPC"
       },
       {
         "propertyTemplates": [
@@ -2257,6 +2335,307 @@
         "id": "profile:bf:lccn:AudioCD",
         "resourceURI": "http://bibframe.org/vocab/Identifier",
         "resourceLabel": "LCCN"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/issueNumber",
+            "propertyLabel": "Issue Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/issueQualification",
+            "propertyLabel": "Qualifying Information for Issue Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/provider",
+            "propertyLabel": "Publisher Name for Issue Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Matrix Number",
+            "propertyURI": "http://bibframe.org/vocab2/matrixNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/matrixQualification",
+            "propertyLabel": "Qualifying Information for Matrix Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/provider",
+            "propertyLabel": "Publisher Name for Matrix Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Number",
+            "propertyURI": "http://bibframe.org/vocab2/otherNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/noteQualification",
+            "propertyLabel": "Qualifying Information for Other Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/provider",
+            "propertyLabel": "Publisher Name for Other Number"
+          }
+        ],
+        "resourceLabel": "Publisher Number",
+        "resourceURI": "http://bibframe.org/vocab/publisherNumber",
+        "id": "profile:bf:publishernumber:AudioCD"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/upcNumber",
+            "propertyLabel": "UPC"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/upcQualification",
+            "propertyLabel": "UPC Qualification"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/upcNote",
+            "propertyLabel": "UPC Note"
+          }
+        ],
+        "id": "profile:bf:UPC:AudioCD",
+        "resourceURI": "http://bibframe.org/vocab2/universalProductCode",
+        "resourceLabel": "Universal Product Code (UPC)"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/eanNumber",
+            "propertyLabel": "EAN"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/eanQualification",
+            "propertyLabel": "EAN Qualification"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "EAN Note",
+            "propertyURI": "http://bibframe.org/vocab2/eanNote"
+          }
+        ],
+        "resourceLabel": "International Article Number (EAN)",
+        "id": "profile:bf:EAN:AudioCD",
+        "resourceURI": "http://bibframe.org/vocab2/internationalArticleNumber"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Valid ISMN 10",
+            "propertyURI": "http://bibframe.org/vocab2/ismn10"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/ismnInvalid",
+            "propertyLabel": "Invalid/Canceled ISMN 10"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Qualifier",
+            "propertyURI": "http://bibframe.org/vocab2/ismnQualifier"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Valid ISMN 13",
+            "propertyURI": "http://bibframe.org/vocab2/ismn13"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Invalid/Canceled ISBN 13",
+            "propertyURI": "http://bibframe.org/vocab2/ismnInvalid"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Qualifier",
+            "propertyURI": "http://bibframe.org/vocab2/ismnQualifier"
+          }
+        ],
+        "resourceLabel": "ISMN",
+        "resourceURI": "http://bibframe.org/vocab/ismn",
+        "id": "profile:bf:ISMN:AudioCD"
       }
     ],
     "contact": "NDMSO",

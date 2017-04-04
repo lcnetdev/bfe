@@ -70,7 +70,7 @@
             "remark": "http://access.rdatoolkit.org/6.2.3.html"
           },
           {
-            "propertyLabel": "Form of Work (RDA 6.3)",
+            "propertyLabel": "Form of Work (RDA 6.3) -- Searches LCGFT terms (SHM H 1913: Moving Image/Genre/Form Terms)",
             "propertyURI": "http://bibframe.org/vocab/genre",
             "resourceTemplates": [],
             "type": "resource",
@@ -82,6 +82,37 @@
               "valueDataType": {}
             },
             "remark": "http://access.rdatoolkit.org/6.3.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharWork",
+            "propertyLabel": "Other Distinguishing Characteristics of the Work (RDA 6.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3205.html",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
+            "propertyURI": "http://bibframe.org/vocab/originPlace",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Place:BluRayDVD",
+                ""
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/6.5.html",
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -105,35 +136,32 @@
             "type": "literal"
           },
           {
-            "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
-            "propertyURI": "http://bibframe.org/vocab/originPlace",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Place:BluRayDVD",
-                ""
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "remark": "http://access.rdatoolkit.org/6.5.html",
             "mandatory": "false",
-            "repeatable": "true"
-          },
-          {
+            "repeatable": "true",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/OtherDistCharWork",
-            "propertyLabel": "Other Distinguishing Characteristics of the Work (RDA 6.6)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3205.html",
+            "propertyLabel": "History of the Work (RDA 6.7)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3332.html",
+            "propertyURI": "http://bibframe.org/vocab2/workHistory"
+          },
+          {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Source Consulted (RDA 5.8.1.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp5_rda5-461.html",
+            "propertyURI": "http://bibframe.org/vocab2/sourceConsulted"
           },
           {
             "mandatory": "false",
@@ -164,22 +192,6 @@
             "type": "literal"
           },
           {
-            "propertyLabel": "Intended Audience (RDA 7.7)",
-            "propertyURI": "http://bibframe.org/vocab/intendedAudience",
-            "resourceTemplates": [],
-            "type": "literal",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-634.html",
-            "mandatory": "false",
-            "repeatable": "true"
-          },
-          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "resource",
@@ -202,28 +214,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Topic:NotatedMusic",
-                "profile:bf:Place:NotatedMusic",
-                "profile:bf:Meeting:Monograph",
-                "profile:bf:Person:Monograph",
-                "profile:bf:Organization:Monograph",
-                "profile:bf:Work:Monograph"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
-            "mandatory": "false",
-            "repeatable": "true"
-          },
-          {
-            "propertyLabel": "DDC Classification (RDA Chapter 23)",
-            "propertyURI": "http://bibframe.org/vocab/classificationDdc",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Classification"
+                "profile:bf:Topic:Monograph"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -249,6 +240,38 @@
             "repeatable": "true"
           },
           {
+            "propertyLabel": "DDC Classification (RDA Chapter 23)",
+            "propertyURI": "http://bibframe.org/vocab/classificationDdc",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Classification"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Intended Audience (RDA 7.7)",
+            "propertyURI": "http://bibframe.org/vocab/intendedAudience",
+            "resourceTemplates": [],
+            "type": "literal",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                ""
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-634.html",
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
             "propertyLabel": "Contents Note (LC-PCC PS 25.1)",
             "propertyURI": "http://bibframe.org/vocab/note",
             "resourceTemplates": [],
@@ -261,6 +284,33 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/lcpschp25_lcps25-357.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Geographic Area Code",
+            "propertyURI": "http://bibframe.org/vocab/geographicCoverageNote"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/relatedWorkNote",
+            "propertyLabel": "Unstructured Description of Related Work (RDA 24.4.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp24_rda24-199.html"
           },
           {
             "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
@@ -280,7 +330,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -322,7 +372,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Work Elements - BluRayDVD",
+        "resourceLabel": "RDA Work",
         "resourceURI": "http://bibframe.org/vocab/Work",
         "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
@@ -362,6 +412,20 @@
             "propertyURI": "http://bibframe.org/vocab/contentCategory",
             "propertyLabel": "Content Type (RDA 6.9)",
             "remark": "http://access.rdatoolkit.org/6.9.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Date of Expression (RDA 6.10)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html",
+            "propertyURI": "http://bibframe.org/vocab/expressionDate"
           },
           {
             "mandatory": "false",
@@ -410,6 +474,49 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Place of Capture (RDA 7.11.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-806.html",
+            "propertyURI": "http://bibframe.org/vocab/eventPlace"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Date of Capture (RDA 7.11.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-825.html",
+            "propertyURI": "http://bibframe.org/vocab/eventDate"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                ""
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/eventDate",
+            "propertyLabel": "Formatted Date of Event (MARC 033 Field)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -441,6 +548,122 @@
             "propertyURI": "http://bibframe.org/vocab/notation",
             "propertyLabel": "Script (RDA 7.13.2)",
             "remark": "http://access.rdatoolkit.org/rdachp7_rda7-929.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Accessibility Content (RDA 7.14)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1068.html",
+            "propertyURI": "http://bibframe.org/vocab2/accessibilityContent"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/supplementaryContent",
+            "propertyLabel": "Supplementary Content (RDA 7.16)",
+            "remark": "http://access.rdatoolkit.org/7.16.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1231.html",
+            "propertyLabel": "Colour Content (RDA 7.17)",
+            "propertyURI": "http://bibframe.org/vocab/colorContent"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Details of Colour Content (RDA 7.17.1.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1288.html",
+            "propertyURI": "http://bibframe.org/vocab/colorContent"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                ""
+              ],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1451.html",
+            "propertyLabel": "Sound Content (RDA 7.18)",
+            "propertyURI": "http://bibframe.org/vocab/soundContent"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/ml38281/vocabulary/rda/AspectRatio"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Aspect Ratio (RDA 7.19)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1486.html",
+            "propertyURI": "http://bibframe.org/vocab2/aspectRatio"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Numerical Values of Aspect Ratio (RDA 7.19.1.3) -- Record the numerical ratio in standard format with a denominator of 1, if known.",
+            "propertyURI": "http://bibframe.org/vocab2/aspectRatioFormat",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1498.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Details of Aspect Ratio (RDA 7.19.1.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-1510.html",
+            "propertyURI": "http://bibframe.org/vocab2/aspectRatioDetails"
           },
           {
             "mandatory": "false",
@@ -488,20 +711,6 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Authorized Access Point for the Expression (RDA 6.27.3)",
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7056.html"
-          },
-          {
-            "mandatory": "false",
             "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
@@ -515,30 +724,29 @@
             "propertyLabel": "LC Control Number for the Expression (RDA 6.13)",
             "propertyURI": "http://bibframe.org/vocab/lccn",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Expression (RDA 6.27.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7056.html"
           }
         ],
         "id": "profile:bf:RDAExpression:BluRayDVD",
         "resourceURI": "http://bibframe.org/vocab/Work",
-        "resourceLabel": "RDA Expression Elements - BluRayDVD"
+        "resourceLabel": "RDA Expression"
       },
       {
         "id": "profile:bf:Instance:BluRayDVD",
         "propertyTemplates": [
-          {
-            "propertyLabel": "Lookup",
-            "propertyURI": "http://bibframe.org/vocab/sameInstance",
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/resources/instances"
-              ],
-              "valueDataType": {}
-            },
-            "resourceTemplates": [],
-            "mandatory": "false",
-            "repeatable": "true"
-          },
           {
             "propertyLabel": "Instance of",
             "propertyURI": "http://bibframe.org/vocab/instanceOf",
@@ -551,6 +759,21 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "mandatory": "false",
+            "repeatable": "true"
+          },
+          {
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://bibframe.org/vocab/sameInstance",
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/instances"
+              ],
+              "valueDataType": {}
+            },
+            "resourceTemplates": [],
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -609,7 +832,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Title:NotatedMusic"
+                "profile:bf:TitleVariant:BluRayDVD"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -617,6 +840,20 @@
             "mandatory": "false",
             "repeatable": "true",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
+            "remark": "http://access.rdatoolkit.org/2.4.2.html",
+            "propertyURI": "http://bibframe.org/vocab/responsibilityStatement"
           },
           {
             "propertyLabel": "Designation of Edition (RDA 2.5.2)",
@@ -633,20 +870,6 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5017.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
-            "remark": "http://access.rdatoolkit.org/2.4.2.html",
-            "propertyURI": "http://bibframe.org/vocab/responsibilityStatement"
           },
           {
             "propertyLabel": "Statement of Responsibility Relating to the Edition (RDA 2.5.4)",
@@ -681,6 +904,20 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Series Numbering (RDA 2.12.9)",
+            "remark": "http://access.rdatoolkit.org/2.12.9.html",
+            "propertyURI": "http://bibframe.org/vocab2/seriesNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -693,22 +930,6 @@
             "propertyURI": "http://bibframe.org/vocab/distribution",
             "propertyLabel": "Distribution Statement (RDA 2.9)",
             "remark": "http://access.rdatoolkit.org/2.9.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Manufacturer:Provider"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab/manufacture",
-            "propertyLabel": "Manufacturer Statement (RDA 2.10)",
-            "remark": "http://access.rdatoolkit.org/2.10.html"
           },
           {
             "mandatory": "false",
@@ -737,38 +958,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab/issn",
-            "propertyLabel": "ISSN of Series (2.12.8)",
+            "propertyLabel": "ISSN of Series (RDA 2.12.8)",
             "remark": "http://access.rdatoolkit.org/2.12.8.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Series Numbering (RDA 2.12.9)",
-            "remark": "http://access.rdatoolkit.org/2.12.9.html",
-            "propertyURI": "http://bibframe.org/vocab2/seriesNumber"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:Identifier:ISSN:NotatedMusic"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/subSeriesISSN",
-            "propertyLabel": "ISSN of Subseries (RDA 2.12.16)",
-            "remark": "http://access.rdatoolkit.org/2.12.16.html"
           },
           {
             "mandatory": "false",
@@ -794,9 +985,71 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyURI": "http://bibframe.org/vocab/copyrightDate",
+            "propertyLabel": "Copyright Date (RDA 2.11)",
+            "remark": "http://access.rdatoolkit.org/2.11.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Manufacturer:Provider"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/manufacture",
+            "propertyLabel": "Manufacturer Statement (RDA 2.10)",
+            "remark": "http://access.rdatoolkit.org/2.10.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "remark": "http://access.rdatoolkit.org/2.12.17.html",
             "propertyLabel": "Subseries Numbering (RDA 2.12.17)",
             "propertyURI": "http://bibframe.org/vocab2/subSeriesNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Identifier:ISSN:NotatedMusic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/subSeriesISSN",
+            "propertyLabel": "ISSN of Subseries (RDA 2.12.16)",
+            "remark": "http://access.rdatoolkit.org/2.12.16.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:identifier:BluRayDVD"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Copyright Registration Number, UPC, ISBN, Publisher Number, Label Name (RDA 2.15)",
+            "propertyURI": "http://bibframe.org/vocab/identifier",
+            "remark": "http://access.rdatoolkit.org/2.15.html"
           },
           {
             "mandatory": "false",
@@ -813,36 +1066,6 @@
             "propertyURI": "http://bibframe.org/vocab/modeOfIssuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
             "remark": "http://access.rdatoolkit.org/2.13.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:identifier:BluRayDVD"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Copyright Registration Number, UPC, Publisher Number (RDA 2.15)",
-            "propertyURI": "http://bibframe.org/vocab/identifier",
-            "remark": "http://access.rdatoolkit.org/2.15.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Other Note on Manifestation(RDA 2.17)",
-            "remark": "http://access.rdatoolkit.org/2.17.html",
-            "propertyURI": "http://bibframe.org/vocab/note"
           },
           {
             "propertyLabel": "Note on Title (RDA 2.17.2)",
@@ -868,9 +1091,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Other Information Relating to a Statement of Responsibility (RDA 2.17.3.5)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-8911.html",
-            "propertyURI": "http://bibframe.org/vocab/responsibilityStatement"
+            "propertyLabel": "Other Note on Manifestation(RDA 2.17)",
+            "remark": "http://access.rdatoolkit.org/2.17.html",
+            "propertyURI": "http://bibframe.org/vocab/note"
           },
           {
             "mandatory": "false",
@@ -885,6 +1108,20 @@
             "propertyLabel": "Note on Production Statement (RDA 2.17.6)",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-9066.html",
             "propertyURI": "http://bibframe.org/vocab2/productionNote"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Information Relating to a Statement of Responsibility (RDA 2.17.3.5)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-8911.html",
+            "propertyURI": "http://bibframe.org/vocab/responsibilityStatement"
           },
           {
             "propertyLabel": "Media type (RDA 3.2)",
@@ -925,6 +1162,20 @@
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2051.html"
           },
           {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Details of Production Method (RDA 3.9.1.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-60000.html",
+            "propertyURI": "http://bibframe.org/vocab2/productionMethod"
+          },
+          {
             "propertyLabel": "Extent (RDA 3.4)",
             "propertyURI": "http://bibframe.org/vocab/extent",
             "resourceTemplates": [],
@@ -937,6 +1188,38 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2080.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/ml38281/vocabulary/rda/genMoPic"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/generationMotionPictureistic",
+            "propertyLabel": "Generation of Motion Picture Film (RDA 3.10.5)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4253.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:sound:BluRayDVD"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Sound Characteristic (RDA 3.16)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4680.html",
+            "propertyURI": "http://bibframe.org/vocab2/soundCharacteristic"
           },
           {
             "propertyLabel": "Dimensions (RDA 3.5)",
@@ -962,9 +1245,48 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Sound Characteristic (RDA 3.16)",
-            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4680.html",
-            "propertyURI": "http://bibframe.org/vocab2/soundCharacteristic"
+            "propertyLabel": "Optional Language Tracks (MARC 546 Field)",
+            "propertyURI": "http://bibframe.org/vocab2/languageTracks"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "Optional Subtitles",
+            "propertyURI": "http://bibframe.org/vocab2/subtitleTrack",
+            "propertyLabel": "Optional Subtitles"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Accessibility Content (Closed captions/ English subtitles for the deaf and hard of hearing)",
+            "propertyURI": "http://bibframe.org/vocab2/closedCaption"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "LCGFT Accessibility Term (Video recordings for ... )",
+            "propertyURI": "http://bibframe.org/vocab2/Format"
           },
           {
             "mandatory": "false",
@@ -995,7 +1317,65 @@
             "propertyURI": "http://bibframe.org/vocab2/digitalCharacteristic"
           },
           {
-            "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Recording Equipment or System Requirements (RDA 3.20.1.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-5483.html",
+            "propertyURI": "http://bibframe.org/vocab2/systemRequirements"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "valueLanguage": ""
+            },
+            "propertyLabel": "Note on Supplementary Content",
+            "propertyURI": "http://bibframe.org/vocab/supplementaryContentNote"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on Change in Aspect Ratio (RDA 7.19)",
+            "propertyURI": "http://bibframe.org/vocab2/aspectRatio"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:otherpfc:NotatedMusic",
+                ""
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Persons, Families, Corproate Bodies Associated with the Manifestation (RDA 21.1.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp21_rda21-74.html",
+            "propertyURI": "http://bibframe.org/vocab2/otherPerson"
+          },
+          {
+            "propertyLabel": "Uniform Resource Locator (RDA 4.6) -- For example, URI for Cover Art",
             "propertyURI": "http://bibframe.org/vocab/identifier",
             "resourceTemplates": [],
             "type": "resource",
@@ -1020,8 +1400,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Call Number",
-            "propertyURI": "http://bibframe.org/vocab/classificationLcc"
+            "propertyURI": "http://bibframe.org/vocab2/comment",
+            "propertyLabel": "Your Cataloger Code and Comments"
           },
           {
             "mandatory": "false",
@@ -1049,11 +1429,11 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/comment",
-            "propertyLabel": "Your Cataloger Code and Comments"
+            "propertyLabel": "Call Number",
+            "propertyURI": "http://bibframe.org/vocab/classificationLcc"
           }
         ],
-        "resourceLabel": "Instance/Manifestation - BluRayDVD",
+        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - BluRayDVD",
         "resourceURI": "http://bibframe.org/vocab/Instance"
       },
       {
@@ -1273,6 +1653,20 @@
             "propertyLabel": "Title",
             "propertyURI": "http://bibframe.org/vocab/titleValue",
             "remark": ""
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Source Consulted (RDA 5.8.1.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp5_rda5-461.html",
+            "propertyURI": "http://bibframe.org/vocab/titleSource"
           }
         ],
         "id": "profile:bf:Title:BluRayDVD",
@@ -1663,13 +2057,11 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/identifiers/upc"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyLabel": "Universal Product Code (UPC)",
@@ -1687,6 +2079,32 @@
             },
             "propertyLabel": "Note on Universal Product Code (UPC)",
             "propertyURI": "http://bibframe.org/vocab2/upcNote"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "ISBN",
+            "propertyURI": "http://bibframe.org/vocab/isbn"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on ISBN",
+            "propertyURI": "http://bibframe.org/vocab2/isbnNote"
           },
           {
             "mandatory": "false",
@@ -1715,11 +2133,24 @@
             },
             "propertyLabel": "Note on Publisher Number",
             "propertyURI": "http://bibframe.org/vocab2/publisherNumberNote"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Label Name",
+            "propertyURI": "http://bibframe.org/vocab/label"
           }
         ],
         "id": "profile:bf:identifier:BluRayDVD",
         "resourceURI": "http://bibframe.org/vocab/identifier",
-        "resourceLabel": "Copyright Registration Number, UPC, Publisher Number"
+        "resourceLabel": "Copyright Registration Number, UPC, ISBN, Publisher Number, Label Name"
       },
       {
         "propertyTemplates": [
@@ -1757,6 +2188,126 @@
         "id": "profile:bf:lccn:BluRayDVD",
         "resourceURI": "http://bibframe.org/vocab/Identifier",
         "resourceLabel": "LCCN"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant1",
+            "propertyLabel": "Variant Title 1"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantNote1",
+            "propertyLabel": "Note"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant2",
+            "propertyLabel": "Variant Title 2"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantNote2",
+            "propertyLabel": "Note"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant3",
+            "propertyLabel": "Variant Title 3"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantNote3",
+            "propertyLabel": "Note"
+          }
+        ],
+        "id": "profile:bf:TitleVariant:BluRayDVD",
+        "resourceURI": "http://bibframe.org/vocab2/TitleVariant",
+        "resourceLabel": "Variant Title"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/soundCharacteristic",
+            "propertyLabel": "Sound Characteristic (RDA 3.16)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4680.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/soundCharacteristicPlayback",
+            "propertyLabel": "Configuration of Playback Channels (RDA 3.16.8)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4918.html"
+          }
+        ],
+        "id": "profile:bf:sound:BluRayDVD",
+        "resourceURI": "http://bibframe.org/vocab/soundContent",
+        "resourceLabel": "Sound Characteristics"
       }
     ],
     "contact": "NDMSO",

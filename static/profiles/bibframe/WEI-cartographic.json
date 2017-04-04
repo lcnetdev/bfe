@@ -65,7 +65,7 @@
               "useValuesFrom": [],
               "valueDataType": {},
               "valueTemplateRefs": [
-                "profile:bf:Title:Cartography"
+                "profile:bf:TitleVariant:Cartography"
               ]
             }
           },
@@ -280,35 +280,21 @@
             "mandatory": "false",
             "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
             "propertyURI": "http://bibframe.org/vocab/translation",
-            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html",
+            "remark": "http://access.rdatoolkit.org/rdachp26_rda26-24.html",
             "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
-              "valueTemplateRefs": []
+              "valueTemplateRefs": [
+                "profile:bf:Work:Cartography"
+              ]
             }
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf:RelatedManifestation:Cartographic"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/relatedManifestation",
-            "propertyLabel": "Related Manifestations (RDA Chapter 27 and Appendix J)",
-            "remark": "http://access.rdatoolkit.org/rdachp27_rda27-46.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -316,9 +302,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Authorized Access Point Representing the Work (RDA 6.27.1)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-6415.html"
+            "propertyURI": "http://bibframe.org/vocab2/relatedManifestation",
+            "propertyLabel": "Related Manifestations (RDA Chapter 27 and Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp27_rda27-40.html"
           },
           {
             "mandatory": "false",
@@ -338,6 +324,20 @@
           },
           {
             "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
+            "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-6415.html"
+          },
+          {
+            "mandatory": "false",
             "propertyLabel": "Your Cataloger Code and Comments",
             "propertyURI": "http://bibframe.org/vocab2/comment",
             "repeatable": "true",
@@ -350,7 +350,7 @@
             }
           }
         ],
-        "resourceLabel": "RDA Work Elements - Cartography",
+        "resourceLabel": "RDA Work",
         "resourceURI": "http://bibframe.org/vocab/Cartography"
       },
       {
@@ -386,6 +386,20 @@
               "valueTemplateRefs": [],
               "editable": "false"
             }
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html",
+            "propertyLabel": "Date oF Expression (RDA 6.10)",
+            "propertyURI": "http://bibframe.org/vocab/expressionDate"
           },
           {
             "mandatory": "false",
@@ -585,6 +599,33 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-2014.html",
+            "propertyLabel": "Other Details of Cartographic Content (RDA 7.27)",
+            "propertyURI": "http://bibframe.org/vocab/note"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Time Period of Content (MARC 045 field)",
+            "propertyURI": "http://bibframe.org/vocab2/contentTime"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "remark": "http://access.rdatoolkit.org/rdachp7_rda7-8838.html",
             "propertyLabel": "Note on Expression (RDA 7.29)",
             "propertyURI": "http://bibframe.org/vocab/note"
@@ -608,20 +649,6 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Authorized Access Point Representing the Expression (RDA 6.27.3)",
-            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7056.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -634,9 +661,23 @@
             "propertyURI": "http://bibframe.org/vocab/lccn",
             "propertyLabel": "LC Control Number for the Expression (RDA 6.13)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Authorized Access Point for the Expression (RDA 6.27.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-7056.html",
+            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint"
           }
         ],
-        "resourceLabel": "RDA Expression Elements - Cartography",
+        "resourceLabel": "RDA Expression",
         "resourceURI": "http://bibframe.org/vocab/Work"
       },
       {
@@ -668,7 +709,7 @@
               "useValuesFrom": [],
               "valueDataType": {},
               "valueTemplateRefs": [
-                "profile:bf:Work:Monograph"
+                "profile:bf:Work:Cartography"
               ]
             }
           },
@@ -711,13 +752,11 @@
             "remark": "http://access.rdatoolkit.org/2.3.4.html",
             "repeatable": "true",
             "resourceTemplates": [],
-            "type": "resource",
+            "type": "literal",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
-              "valueTemplateRefs": [
-                "profile:bf:subtitle:Cartography"
-              ]
+              "valueTemplateRefs": []
             }
           },
           {
@@ -1225,7 +1264,7 @@
             }
           }
         ],
-        "resourceLabel": "Instance/Manifestation - Cartography",
+        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - Cartography",
         "resourceURI": "http://bibframe.org/vocab/Monograph"
       },
       {
@@ -1616,13 +1655,12 @@
         "resourceURI": "http://bibframe.org/vocab/Provider"
       },
       {
-        "id": "profile:bf:Title:Cartography",
+        "id": "profile:bf:TitleVariant:Cartography",
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "propertyLabel": "Title Value",
-            "propertyURI": "http://bibframe.org/vocab/titleValue",
-            "remark": "",
+            "propertyLabel": "Variant Title 1",
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant1",
             "repeatable": "true",
             "resourceTemplates": [],
             "type": "literal",
@@ -1631,30 +1669,75 @@
               "valueDataType": {},
               "valueTemplateRefs": []
             }
-          }
-        ],
-        "resourceLabel": "Title",
-        "resourceURI": "http://bibframe.org/vocab/Title"
-      },
-      {
-        "id": "profile:bf:subtitle:Cartography",
-        "propertyTemplates": [
+          },
           {
             "mandatory": "false",
-            "propertyLabel": "Subtitle Value",
-            "propertyURI": "http://bibframe.org/vocab/subtitle",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation1",
+            "propertyLabel": "Location"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant2",
+            "propertyLabel": "Variant Title 2"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation2",
+            "propertyLabel": "Location"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariant3",
+            "propertyLabel": "Variant Title 3"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation3",
+            "propertyLabel": "Location"
           }
         ],
-        "resourceLabel": "Subtitle",
-        "resourceURI": "http://bibframe.org/vocab/Title"
+        "resourceLabel": "Variant Title",
+        "resourceURI": "http://bibframe.org/vocab2/TitleVariant"
       },
       {
         "id": "profile:bf:Place:Cartography",
@@ -1891,6 +1974,112 @@
         "id": "profile:bf:Cartography:Coordinates",
         "resourceURI": "http://bibframe.org/vocab2/Coordinates",
         "resourceLabel": "Cartographic Coordinates"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [
+              {
+                "propertyTemplates": [
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
+                    "propertyLabel": "Variant Title 1"
+                  },
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation",
+                    "propertyLabel": "Location"
+                  },
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
+                    "propertyLabel": "Variant Title 2"
+                  },
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation",
+                    "propertyLabel": "Location"
+                  },
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
+                    "propertyLabel": "Variant Title 3"
+                  },
+                  {
+                    "mandatory": "false",
+                    "repeatable": "true",
+                    "type": "literal",
+                    "resourceTemplates": [],
+                    "valueConstraint": {
+                      "valueTemplateRefs": [],
+                      "useValuesFrom": [],
+                      "valueDataType": {}
+                    },
+                    "propertyLabel": "Location",
+                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation"
+                  }
+                ],
+                "id": "profile:bf:TitleVariant:Cartography",
+                "resourceURI": "http://bibframe.org/vocab2/TitleVariant",
+                "resourceLabel": "Variant Title"
+              }
+            ],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://bibframe.org/vocab/titleValue",
+            "propertyLabel": "Title"
+          }
+        ],
+        "id": "profile:bf:Title:Cartography",
+        "resourceURI": "http://bibframe.org/vocab/Title",
+        "resourceLabel": "Title"
       }
     ],
     "contact": "NDMSO",
