@@ -385,7 +385,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             $('#table_id').DataTable({
              "processing": true,
              "ajax": {
-                "url":"http://bibframe.org:8283/api/?format=json",
+                "url":"http://bfidvlt03.loctest.gov:3000/api/list",
                 "dataSrc":""
              },
              "columns": [
@@ -752,7 +752,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             var dirhash = guid();
                             var save_json = {};
                             save_json.name = dirhash;
-                            save_json.dir = '/opt/bibframe-8283/bibframe-model/bfweb/data/generated-sets/'+dirhash;
+                            save_json.dir = '/opt/Bibliomata/data/'+dirhash;
                             save_json.url = 'http://bibframe.org/resources/'+dirhash+'bibframe.json';
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
     
