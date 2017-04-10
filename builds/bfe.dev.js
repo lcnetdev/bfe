@@ -385,7 +385,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             $('#table_id').DataTable({
              "processing": true,
              "ajax": {
-                "url":"http://bfidvlt03.loctest.gov:3000/api/list",
+                "url":"http://mlvlp04.loc.gov:3000/api/list",
                 "dataSrc":""
              },
              "columns": [

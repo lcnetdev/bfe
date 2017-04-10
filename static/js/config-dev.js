@@ -94,7 +94,7 @@
         }
 
         function deleteId(id, csrf, bfelog){
-            var url = "http://bfidvlt03.loctest.gov:3000/api/" + id;
+            var url = "http://mlvlp04.loctest.gov:3000/api/" + id;
 
             //$.ajaxSetup({
             //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
