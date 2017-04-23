@@ -611,7 +611,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:Title:Serial"
+                "profile:bf:Title:Serial",
+                ""
               ],
               "useValuesFrom": [],
               "valueDataType": {}

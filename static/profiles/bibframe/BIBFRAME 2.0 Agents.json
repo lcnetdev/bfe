@@ -2,34 +2,12 @@
   "Profile": {
     "resourceTemplates": [
       {
-        "resourceURI": "http://bibframe.org/vocab/Agent",
-        "id": "profile:bf:Agent:Monograph",
-        "resourceLabel": "Agent",
-        "propertyTemplates": [
-          {
-            "propertyLabel": "hasAuthority",
-            "valueConstraint": {
-              "repeatable": "false",
-              "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
-              ],
-              "valueTemplateRefs": []
-            },
-            "propertyURI": "http://bibframe.org/vocab/hasAuthority",
-            "type": "resource",
-            "mandatory": "false",
-            "repeatable": "true",
-            "resourceTemplates": []
-          }
-        ]
-      },
-      {
-        "resourceURI": "http://bibframe.org/vocab/Person",
-        "id": "profile:bf:Person:Monograph",
+        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName",
+        "id": "profile:bf2:Agent:Person",
         "resourceLabel": "Person",
         "propertyTemplates": [
           {
-            "propertyLabel": "Search LCNAF in id.loc.gov for Authorized Access Point ... OR ...",
+            "propertyLabel": "Lookup",
             "valueConstraint": {
               "repeatable": "true",
               "useValuesFrom": [
@@ -37,7 +15,7 @@
               ],
               "valueTemplateRefs": []
             },
-            "propertyURI": "http://bibframe.org/vocab/hasAuthority",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel",
             "type": "resource",
             "mandatory": "false",
             "repeatable": "true",
@@ -53,10 +31,298 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/authorizedAccessPoint",
-            "propertyLabel": "Record Authorized Access Point (if added to LCNAF but does not yet appear in id.loc.gov)"
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel",
+            "propertyLabel": "Preferred Name for Person (RDA 9.2.2) CORE ELEMENT",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-822.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Date of Birth (RDA 9.3.2) CORE ELEMENT",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-4490.html",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#birthDate"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Date of Death (RDA 9.3.3) CORE ELEMENT",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-4542.html",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#deathDate"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Period of Activity of Person (RDA 9.3.4) CORE IF...",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-4588.html",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#DateNameElement"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Title of Person (RDA 9.4) CORE IF ...",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-4631.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#TermsOfAddressNameElement"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#FullNameElement",
+            "propertyLabel": "Fuller Form of Name (RDA 9.5) CORE IF ...",
+            "remark": "http://www.loc.gov/mads/rdf/v1#"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Designation Associated with Person (RDA 9.6) CORE IF ...",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-4980.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#TermsOfAddressNameElement"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/demographicTerms"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Gender (RDA 9.7)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5004.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#gender"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Agents:AssociatedPlaces"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Associated Places for Persons",
+            "remark": "",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Agents:Addresses"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Address of Person (RDA 9.12)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5161.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Affilation (RDA 9.13)",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-5022.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Organization"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/languages"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Language of Person (RDA 9.14)",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Language"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#fieldOfActivity",
+            "propertyLabel": "Field of Activity of Person (RDA 9.15)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5242.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/subjects",
+                "http://id.loc.gov/authorities/demographicTerms"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Occupation",
+            "propertyLabel": "Profession or Occupation (RDA 9.16)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5315.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-note",
+            "propertyLabel": "Biographical Information (RDA 9.17)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5392.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Identifier for the Person (RDA 9.18)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5421.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#idValue"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Authorized Access Point for the Person (RDA 9.19)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5464.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Authority"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Agents:VariantAgents"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasVariant",
+            "propertyLabel": "Variant Access Point Representing a Person (RDA 9.19.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5726.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Agents:RelatedAgents"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Related Agents",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasRelatedAuthority"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf:Agents:SourcesConsulted"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Source Consulted (RDA 8.12)",
+            "remark": "",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source"
           }
-        ]
+        ],
+        "contact": "",
+        "remark": ""
       },
       {
         "resourceURI": "http://bibframe.org/vocab/Family",
@@ -233,9 +499,302 @@
         "id": "profile:bf:Family:MonographRDA",
         "resourceURI": "http://bibframe.org/vocab/Family",
         "resourceLabel": "Family (NAR)"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "propertyLabel": "Place of Birth (RDA 9.8)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5029.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "propertyLabel": "Place of Death (RDA 9.9)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5062.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "propertyLabel": "Country Associated with Person (RDA 9.10)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5089.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names",
+                "http://id.loc.gov/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "propertyLabel": "Place of Residence, Etc. (RDA 9.11)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5121.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names",
+                "http://id.loc.gov/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "propertyLabel": "Place Associated with Corporate Body (RDA 11.3)",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4146.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names",
+                "http://id.loc.gov/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Location of Conference (RDA 11.3.2) CORE",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4164.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names",
+                "http://id.loc.gov/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other Place Associated with Corporate Body (RDA 11.3.3)",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#associatedLocale",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4260.html"
+          }
+        ],
+        "id": "profile:bf:Agents:AssociatedPlaces",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#Geographic",
+        "resourceLabel": "Agents: Associated Places"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Address of Person (RDA 9.12)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5161.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Email Address of Person",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Address of Corporate BOdy (RDA 11.9)",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-5022.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Email Address of Corporate Body",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress"
+          }
+        ],
+        "id": "profile:bf:Agents:Addresses",
+        "resourceLabel": "Agents: Addresses",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#Address"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Search id.loc.gov",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/relators"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Relationship Designator (RDA Appendix K)",
+            "remark": "http://access.rdatoolkit.org/rdaappk_rdak-15.html",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#NameElement"
+          }
+        ],
+        "resourceLabel": "Agents: Related Agents",
+        "id": "profile:bf:Agents:RelatedAgents",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#hasRelatedAuthority"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source",
+            "propertyLabel": "Source Consulted (RDA 8.12)",
+            "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Cataloger's Note (RDA 8.13)",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#editorialNote"
+          }
+        ],
+        "resourceLabel": "Agents: Sources Consulted and Cataloger's Notes",
+        "id": "profile:bf:Agents:SourcesConsulted",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#citation-source"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasVariant",
+            "propertyLabel": "Variant Access Point Representing a Person (RDA 9.19.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5726.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Variant Access Point Representing a Corporate Body (RDA 11.13.2)",
+            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-5591.html",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasVariant"
+          }
+        ],
+        "id": "profile:bf:Agents:VariantAgents",
+        "resourceLabel": "Agents: Variant Access Points Representing Agents",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#hasVariant"
       }
     ],
-    "id": "profile:bf:Agents",
+    "id": "profile:bf2:Agents",
     "title": "BIBFRAME 2.0 Agents",
     "date": "2017-04-05",
     "description": "Agents are people, organizations, jurisdictions, etc., associated with a Work or Instance through roles such as author, editor, artist, photographer, composer, illustrator, etc."

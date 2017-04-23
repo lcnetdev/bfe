@@ -20,6 +20,7 @@
         var config = {
             "baseURI": "http://bibframe.org/",
             "profiles": [
+		"static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
                 "static/profiles/bibframe/BIBFRAME Agents.json",
                 "static/profiles/bibframe/BIBFRAME Annotations.json",
                 "static/profiles/bibframe/BIBFRAME Authorities.json",
@@ -33,6 +34,13 @@
                 "static/profiles/bibframe/WEI-Audio\ CD.json"
             ],
             "startingPoints": [
+                        {"menuGroup": "Agents",
+                        "menuItems": [
+                            {
+                                label: "Person",
+                                useResourceTemplates: [ "profile:bf2:Agent:Person" ]
+                            }
+                        ]},
                         {"menuGroup": "Monograph",
                         "menuItems": [
                             {
