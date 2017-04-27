@@ -49,7 +49,7 @@
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
             $.ajax({
-               url: "/verso/api/bfs",
+               url: "/api/",
                type: "POST",
                data:JSON.stringify(data),
                csrf: csrf,
@@ -94,7 +94,7 @@
         }
 
         function deleteId(id, csrf, bfelog){
-            var url = "http://localhost:3000/verso/api/bfs/" + id;
+            var url = "http://localhost:3000/api/" + id;
 
             //$.ajaxSetup({
             //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
@@ -123,8 +123,7 @@
             },*/
             "baseURI": "http://bibframe.org/",
             "profiles": [
-		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
+		"static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
                 "static/profiles/bibframe/BIBFRAME Agents.json",
                 "static/profiles/bibframe/BIBFRAME Annotations.json",
                 "static/profiles/bibframe/BIBFRAME Authorities.json",
@@ -138,6 +137,25 @@
                 "static/profiles/bibframe/WEI-Audio\ CD.json"
             ],
             "startingPoints": [
+                        {"menuGroup": "Agents",
+                        "menuItems": [
+			                {
+				                label: "Serial",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
+                                useResourceTemplates: [ "profile:bf2:Serial" ]
+                            },
+                           {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Person"],
+                                useResourceTemplates: [ "profile:bf2:Instance:Serial" ]
+                            },
+                           {
+                                label: "Work, Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Person"],
+                                useResourceTemplates: [ "profile:bf2:Agent:Person" ]
+                            }
+			
+                        ]},
                         {"menuGroup": "Monograph",
                         "menuItems": [
                             {
@@ -147,14 +165,34 @@
                             },
                             {
                                 label: "Work", 
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial", "profile:bf:Annotation:AdminMeta" ]
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work"],
+                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph" ]
                             },
                             {
                                 label: "Work, Instance",
                                 type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Monograph"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial", "profile:bf2:Instance:Serial", "profile:bf:Annotation:AdminMeta" ]
+                                useResourceTemplates: [ "profile:bf:Work:Monograph", "profile:bf:RDAExpression:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta" ]
                             }
+
+                        ]},
+                        {"menuGroup": "Notated Music",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://bibframe.org/vocab/Instance"],
+                                useResourceTemplates: [ "profile:bf:Instance:NotatedMusic" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://bibframe.org/vocab/NotatedMusic","http://bibframe.org/vocab/Work"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic" ]
+                            },
+                            {
+                                label: "Work, Instance",
+                                type: ["http://bibframe.org/vocab/NotatedMusic","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Instance"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
+                            }
+
 
                         ]},
                         {"menuGroup": "Serial",
@@ -166,15 +204,64 @@
                             },
                             {
                                 label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial" ]
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work"],
+                                useResourceTemplates: [ "profile:bf:Work:Serial", "profile:bf:RDAExpression:Serial" ]
                             },
                             {
                                 label: "Work, Instance w/AdminMetadata",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://bibframe.org/vocab/Serial"],
+                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Serial"],
                                 useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
                             }
 
+                        ]},
+                        {"menuGroup": "Cartographic",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://bibframe.org/vocab/Monograph"],
+                                useResourceTemplates: [ "profile:bf:Instance:Cartography" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://bibframe.org/vocab/Cartography","http://bibframe.org/vocab/Work"],
+                                useResourceTemplates: [ "profile:bf:Work:Cartography", "profile:bf:RDAExpression:Cartography" ]
+                            },
+                            {
+                                label: "Work, Instance w/AdminMetadata",
+                                type: ["http://bibframe.org/vocab/Cartography","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Monograph"],
+                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
+                            }
+
+                        ]},
+                        {"menuGroup": "BluRay DVD",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                useResourceTemplates: [ "profile:bf:Instance:BluRayDVD" ]
+                            },
+                            {
+                                label: "Work",
+                                useResourceTemplates: [ "profile:bf:Work:BluRayDVD", "profile:bf:RDAExpression:BluRayDVD" ]
+                            },
+                            {
+                                label: "Work, Instance",
+                                useResourceTemplates: [ "profile:bf:Work:BluRayDVD", "profile:bf:RDAExpression:BluRayDVD", "profile:bf:Instance:BluRayDVD" ]
+                            }
+                        ]},
+                        {"menuGroup": "Audio CD",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                useResourceTemplates: [ "profile:bf:Instance:AudioCD" ]
+                            },
+                            {
+                                label: "Work",
+                                useResourceTemplates: [ "profile:bf:Work:AudioCD", "profile:bf:RDAExpression:AudioCD" ]
+                            },
+                            {
+                                label: "Work, Instance",
+                                useResourceTemplates: [ "profile:bf:Work:AudioCD", "profile:bf:RDAExpression:AudioCD", "profile:bf:Instance:AudioCD" ]
+                            }
                         ]}
             ],
             "save": {
