@@ -389,7 +389,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             $('#table_id').DataTable({
              "processing": true,
              "ajax": {
-                "url":"http://localhost:3000/verso/api/bfs",
+                "url":"http://mlvlp04.loc.gov:3000/verso/api/bfs",
                 "dataSrc":""
              },
              "columns": [
@@ -756,8 +756,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             var dirhash = guid();
                             var save_json = {};
                             save_json.name = dirhash;
-                            save_json.profile = "http://localhost:3000/bf/static/profiles/bibframe/BIBFRAME 2.0 Serial.json";
-                            save_json.url = "http://localhost:3000/bf/data/" + dirhash;
+                            save_json.profile = "http://mlvlp04.loc.gov:3000/bf/static/profiles/bibframe/BIBFRAME 2.0 Serial.json";
+                            save_json.url = "http://mlvlp04.loc.gov:3000/bf/data/" + dirhash;
                             createDate = new Date().toUTCString();
                             save_json.created = createDate;
                             save_json.modified = createDate;
@@ -2620,7 +2620,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
                                 label.s = selected.uri;
                                 label.otype = "literal";
                                 label.p = "http://www.w3.org/2000/01/rdf-schema#label";
-                                label.o = resource["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"];
+                                label.o = resource["http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel"][0]["@value"];
                                 triples.push(label);
                                 return process(triples);
                     }
