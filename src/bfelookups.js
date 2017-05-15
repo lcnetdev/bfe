@@ -195,7 +195,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module' ], function(r
                                 label.s = selected.uri;
                                 label.otype = "literal";
                                 label.p = "http://bibframe.org/vocab/label";
-                                label.o = resource["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"];
+                                label.o = resource["http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel"][0]["@value"];
                                 triples.push(label);
                                 return process(triples);
                     }

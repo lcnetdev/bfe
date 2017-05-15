@@ -94,7 +94,7 @@
         }
 
         function deleteId(id, csrf, bfelog){
-            var url = "http://localhost:3000/verso/api/bfs/" + id;
+            var url = "http://mlvlp04.loc.gov:3000/verso/api/bfs/" + id;
 
             //$.ajaxSetup({
             //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
@@ -121,39 +121,39 @@
                 "level": "DEBUG",
                 "toConsole": true
             },*/
-            "baseURI": "http://bibframe.org/",
+            "baseURI": "http://id.loc.gov/",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
-                "static/profiles/bibframe/BIBFRAME Agents.json",
-                "static/profiles/bibframe/BIBFRAME Annotations.json",
-                "static/profiles/bibframe/BIBFRAME Authorities.json",
-                "static/profiles/bibframe/BIBFRAME AgentsMono.json",
-                "static/profiles/bibframe/BIBFRAME Entities.json",
-                "static/profiles/bibframe/WEI-monograph.json",
-                "static/profiles/bibframe/WEI-notated-music.json",
-                "static/profiles/bibframe/WEI-serial.json",
-                "static/profiles/bibframe/WEI-cartographic.json",
-                "static/profiles/bibframe/WEI-BluRayDVD.json",
-                "static/profiles/bibframe/WEI-Audio\ CD.json"
+			"static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Form.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Language.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 LCC.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Notated Music.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Place.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Related Works and Expressions.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
+	                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
+        	        "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json"			
+
             ],
             "startingPoints": [
-                        {"menuGroup": "Monograph",
+                        {"menuGroup": "Notated Music",
                         "menuItems": [
                             {
                                 label: "Instance",
-                                type: ["http://bibframe.org/vocab/Monograph"],
-                                useResourceTemplates: [ "profile:bf:Instance:Monograph" ]
+                                type: ["http://id.loc.gov/ontologies/Instance"],
+                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
                             },
                             {
                                 label: "Work", 
                                 type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial", "profile:bf:Annotation:AdminMeta" ]
+                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
                             },
                             {
                                 label: "Work, Instance",
-                                type: ["http://bibframe.org/vocab/Text","http://bibframe.org/vocab/Work","http://bibframe.org/vocab/Monograph"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial", "profile:bf2:Instance:Serial", "profile:bf:Annotation:AdminMeta" ]
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Work", "profile:bf2:NotatedMusic:Instance"]
                             }
 
                         ]},
@@ -161,18 +161,18 @@
                         "menuItems": [
                             {
                                 label: "Instance",
-                                type: ["http://bibframe.org/vocab/Serial"],
-                                useResourceTemplates: [ "profile:bf:Instance:Serial" ]
+                                type: ["http://id.loc.gov/ontologies/Serial"],
+                                useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
                             },
                             {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Work:Serial" ]
+                                label: "Work, Expression",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work", "http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:Serial:Work", "profile:bf2:Serial:RDAExpression" ]
                             },
                             {
-                                label: "Work, Instance w/AdminMetadata",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://bibframe.org/vocab/Serial"],
-                                useResourceTemplates: [ "profile:bf:Work:NotatedMusic", "profile:bf:RDAExpression:NotatedMusic", "profile:bf:Instance:NotatedMusic", "profile:bf:Annotation:AdminMeta" ]
+                                label: "Work, Instance, Holding",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Serial", "http://id.loc.gov/ontologies/bibframe/Item"],
+                                useResourceTemplates: [ "profile:bf2:Serial:Work", "profile:bf2:Serial:RDAExpression", "profile:bf2:Serial:Instance", "profile:bf2:Serial:Item"]
                             }
 
                         ]}
