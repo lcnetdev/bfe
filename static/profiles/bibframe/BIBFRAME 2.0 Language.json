@@ -1,0 +1,49 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/languages"
+              ],
+              "valueDataType": {},
+              "defaultURI": "http://id.loc.gov/vocabulary/languages"
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
+            "propertyLabel": "Language of the Content (RDA 7.12)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-844.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on Language of the Content (RDA 7.12)",
+            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-844.html",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/language",
+        "id": "profile:bf2:Language",
+        "resourceLabel": "Language",
+        "remark": ""
+      }
+    ],
+    "id": "profile:bf2:Language",
+    "title": "BIBFRAME 2.0 Language",
+    "date": "2017-05-13",
+    "description": "Language of Expression and Content"
+  }
+}

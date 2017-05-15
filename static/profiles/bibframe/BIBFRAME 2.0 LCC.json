@@ -1,0 +1,57 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
+            "propertyLabel": "LC Classification Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
+            "propertyLabel": "LC Classification Book Number (Cutter)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "LC Call Number",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc"
+          }
+        ],
+        "id": "profile:bf2:LCC",
+        "resourceLabel": "Library of Congress Classification",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc"
+      }
+    ],
+    "id": "profile:bf2:LCC",
+    "title": "BIBFRAME 2.0 LCC",
+    "description": "Library of Congress Classification and Call Number",
+    "date": "2017-05-13",
+    "contact": "NDMSO"
+  }
+}

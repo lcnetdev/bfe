@@ -1,0 +1,223 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects",
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/resources/works"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://www.loc.gov/ontologies/bibframe/Topic"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
+            "propertyLabel": "Input Subject + Subdivision"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/subjectSchemes"
+              ],
+              "valueDataType": {},
+              "defaultURI": ""
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
+            "propertyLabel": "source"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Topic:madsTopic",
+                "profile:bf2:Topic:madsTemporal",
+                "profile:bf2:Topic:madsGenreForm",
+                "profile:bf2:Topic:madsGeographic"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#componentList",
+            "propertyLabel": "componentList"
+          }
+        ],
+        "id": "profile:bf2:Topic",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Topic",
+        "resourceLabel": "Subject of Work"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Topic"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
+            "propertyLabel": "Label"
+          }
+        ],
+        "id": "profile:bf2:Topic:madsTopic",
+        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Topic",
+        "resourceLabel": "MADS - Topic"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
+            "propertyLabel": "Label"
+          }
+        ],
+        "id": "profile:bf2:Topic:madsGenreForm",
+        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm",
+        "resourceLabel": "MADS - GenreForm"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Temporal"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
+            "propertyLabel": "Label"
+          }
+        ],
+        "id": "profile:bf2:Topic:madsTemporal",
+        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Temporal",
+        "resourceLabel": "MADS - Temporal"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/subjects"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
+            "propertyLabel": "Label"
+          }
+        ],
+        "id": "profile:bf2:Topic:madsGeographic",
+        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
+        "resourceLabel": "MADS - Geographic"
+      }
+
+    ],
+    "id": "profile:bf2:Topic",
+    "title": "BIBFRAME 2.0 Topic",
+    "description": "Subject of Work",
+    "date": "2017-05-13",
+    "contact": "NDMSO"
+  }
+}
