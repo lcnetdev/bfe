@@ -1,0 +1,171 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/works"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record Related Work Authorized Access Point",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record Relationship Designator for Related Work (RDA Appendix J)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Continuation of (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continues"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Continued by (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continuedBy"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Continued in part by (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continuedInPartBy"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Absorbed by (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/absorbedBy"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Merged to form (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergedToForm"
+          }
+        ],
+        "id": "profile:bf2:RelatedWork",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+        "resourceLabel": "Related Work"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/resources/works"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record Related Expression Authorized Access Point",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record Relationship Designator for Related Expression (RDA Appendix J)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+          }
+        ],
+        "resourceLabel": "Related Expression",
+        "id": "profile:bf2:RelatedExpression",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+      }
+    ],
+    "id": "profile:bf2:RelatedWorkorExpression",
+    "title": "BIBFRAME 2.0 Related Works and Expressions",
+    "date": "2017-05-13",
+    "description": "Related Work or Expression"
+  }
+}

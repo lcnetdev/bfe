@@ -1,0 +1,52 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Contribution",
+        "id": "profile:bf2:Agents:Contribution",
+        "resourceLabel": "Agents Contribution",
+        "propertyTemplates": [
+          {
+            "propertyLabel": "Agent",
+            "valueConstraint": {
+              "repeatable": "true",
+              "useValuesFrom": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agent:Person",
+                "profile:bf2:Agent:Family",
+                "profile:bf2:Agent:Corporate Body",
+                "profile:bf2:Agent:Conference",
+                "profile:bf2:Agent:Conference"
+              ]
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "type": "resource",
+            "mandatory": "false",
+            "repeatable": "true",
+            "resourceTemplates": []
+          },
+          {
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
+            "propertyLabel": "Relationship Designator (RDA Appendix I)",
+            "type": "resource",
+            "mandatory": "false",
+            "repeatable": "true",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Agent:Role"
+              ],
+              "useValuesFrom": []
+            },
+            "remark": "http://access.rdatoolkit.org/rdaappi_rdai-34.html"
+          }
+        ]
+      }
+    ],
+    "id": "profile:bf2:AgentsContribution",
+    "title": "BIBFRAME 2.0 Agents Contribution",
+    "date": "2017-05-13",
+    "description": "Creators and Contributors",
+    "contact": "NDMSO"
+  }
+}

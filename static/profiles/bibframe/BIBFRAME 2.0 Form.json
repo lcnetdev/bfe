@@ -1,0 +1,60 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/genreForms"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Lookup",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
+            "propertyLabel": "Input LCGFT"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Record Form of Work (if an LCGFT term is not being used)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
+          }
+        ],
+        "id": "profile:bf2:Form",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/GenreForm",
+        "resourceLabel": "Form of Work",
+        "contact": "NDMSO"
+      }
+    ],
+    "id": "profile:bf2:Form",
+    "title": "BIBFRAME 2.0 Form",
+    "description": "Form of Work",
+    "date": "2017-05-13",
+    "contact": "NDMSO"
+  }
+}

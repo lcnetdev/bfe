@@ -1,0 +1,158 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place of Publication (RDA 2.8.2)",
+            "remark": "http://access.rdatoolkit.org/2.8.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Publisher's Name (RDA 2.8.4)",
+            "remark": "http://access.rdatoolkit.org/2.8.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
+            "propertyLabel": "Date of Publication (RDA 2.8.6)",
+            "remark": "http://access.rdatoolkit.org/2.8.6.html"
+          }
+        ],
+        "id": "profile:bf2:PublicationInformation",
+        "contact": "",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity",
+        "resourceLabel": "Publication Activity"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place of Distribution (RDA 2.9.2)",
+            "remark": "http://access.rdatoolkit.org/2.9.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Distributor’s Name (RDA 2.9.4)",
+            "remark": "http://access.rdatoolkit.org/2.9.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
+            "propertyLabel": "Date of Distribution (RDA 2.9.6)"
+          }
+        ],
+        "resourceLabel": "Distribution Activity",
+        "id": "profile:bf2:DistributionInformation",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place of Manufacture (RDA 2.10.2)",
+            "remark": "http://access.rdatoolkit.org/2.10.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Manufacturer’s Name (RDA 2.10.4)",
+            "remark": "http://access.rdatoolkit.org/2.10.4.html/"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
+            "propertyLabel": "Date of Manufacture (RDA 2.10.6)",
+            "remark": "http://access.rdatoolkit.org/2.10.6.html"
+          }
+        ],
+        "id": "profile:bf2:ManufactureInformation",
+        "resourceLabel": "Manufacture Activity",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity"
+      }
+    ],
+    "id": "profile:bf2:PublicationDistributionManufactureInformation",
+    "title": "BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity",
+    "description": "Publication, Distribution, Manufacture Activity",
+    "date": "2017-05-13",
+    "contact": "NDMSO"
+  }
+}
