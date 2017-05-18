@@ -11,7 +11,8 @@
             "valueConstraint": {
               "repeatable": "true",
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/ml38281/authorities/names"
               ],
               "valueTemplateRefs": [],
               "valueDataType": {}
@@ -25,10 +26,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:IdentifiedbyAuthority"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -42,11 +45,10 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/subjects",
-                "http://id.loc.gov/authorities/demographicTerms"
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Occupation"
               ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Occupation",
@@ -74,7 +76,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:skosConcept"
+                "profile:bf2:Agents:RWO:Dates"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -89,7 +91,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -103,7 +107,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -114,10 +120,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:HonoraryTitle"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -142,10 +150,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:EntityDescriptor"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -159,7 +169,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Gender"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -173,7 +185,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLocale"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -187,7 +201,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLanguage"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -200,7 +216,10 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Addresses",
+                "profile:bf2:Agents:Addresses:Extended"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -214,7 +233,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Affiliation"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -228,7 +249,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:FieldofActivity"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -256,7 +279,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:VariantAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -284,7 +309,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -298,7 +325,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RelatedAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -319,7 +348,10 @@
             "propertyLabel": "Lookup",
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/ml38281/authorities/names",
+                "http://id.loc.gov/authorities/names"
+              ],
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel",
@@ -362,7 +394,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -376,7 +410,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLocale"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -387,10 +423,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:ProminentFamilyMember"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -418,7 +456,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLanguage"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -457,10 +497,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:IdentifiedbyAuthority"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -474,7 +516,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:VariantAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -488,7 +532,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RelatedAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -502,7 +548,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -521,7 +569,10 @@
             "propertyLabel": "Lookup",
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/ml38281/authorities/names"
+              ],
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel",
@@ -550,7 +601,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLocale"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -564,7 +617,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -578,7 +633,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Affiliation"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -606,7 +663,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLanguage"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -619,7 +678,10 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Addresses",
+                "profile:bf2:Agents:Addresses:Extended"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -633,7 +695,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:FieldofActivity"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -672,10 +736,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:IdentifiedbyAuthority"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -689,7 +755,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:VariantAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -703,7 +771,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RelatedAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -717,7 +787,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -736,7 +808,10 @@
             "propertyLabel": "Lookup",
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/ml38281/authorities/names"
+              ],
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel",
@@ -765,7 +840,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLocale"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -776,10 +853,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -793,7 +872,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Affiliation"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -835,7 +916,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:AssociatedLanguage"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -849,7 +932,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:FieldofActivity"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -888,10 +973,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:IdentifiedbyAuthority"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -905,7 +992,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:VariantAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -919,7 +1008,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RelatedAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -933,7 +1024,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -957,7 +1050,10 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/ml38281/authorities/names"
+              ],
               "valueDataType": {}
             }
           },
@@ -992,10 +1088,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:IdentifiedbyAuthority"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1009,7 +1107,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:VariantAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1023,7 +1123,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RelatedAgents"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1037,7 +1139,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1262,226 +1366,13 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/ml38281/authorities/names"
+              ],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "propertyLabel": "Place of Birth (RDA 9.8)",
-            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5029.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "propertyLabel": "Place of Death (RDA 9.9)",
-            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5062.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "propertyLabel": "Country Associated with Person (RDA 9.10)",
-            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5089.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "propertyLabel": "Place of Residence, Etc. (RDA 9.11)",
-            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5121.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "propertyLabel": "Place Associated with Corporate Body (RDA 11.3)",
-            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4146.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Location of Conference (RDA 11.3.2) CORE",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4164.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Other Place Associated with Corporate Body (RDA 11.3.3)",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#associatedLocale",
-            "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4260.html"
-          }
-        ],
-        "id": "profile:bf2:Agents:AssociatedPlaces",
-        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "Agents: Associated Places"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Establish Date",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#establishDate"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Terminate Date",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#terminateDate"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#activityStartDate",
-            "propertyLabel": "(Period of) Activity Start Date"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#activityEndDate",
-            "propertyLabel": "(Period of) Activity End Date"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#affiliationStart",
-            "propertyLabel": "Affiliation Started Date"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Affiliation Ended Date",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#affiliationEnd"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Work Begun Date",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#creationDateStart"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#creationDateEnd",
-            "propertyLabel": "Work Ended Date"
-          }
-        ],
-        "id": "profile:bf2:Agents:Dates",
-        "resourceLabel": "Agents: Dates",
-        "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#DateNameElement"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Search id.loc.gov",
+            "propertyLabel": "Lookup",
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1.html#authoritativeLabel"
           },
           {
@@ -1490,7 +1381,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agent:Role"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1634,26 +1527,6 @@
         "id": "profile:bf2:Agent:Role",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Role",
         "resourceLabel": "Agent Role"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "https://www.w3.org/TR/rdf-schema/#label",
-            "propertyLabel": "label"
-          }
-        ],
-        "id": "profile:bf2:Agents:skosConcept",
-        "resourceURI": "http://www.w3.org/2004/02/skos/core#Concept",
-        "resourceLabel": "Concept"
       }
     ],
     "id": "profile:bf2:Agents:Attributes",

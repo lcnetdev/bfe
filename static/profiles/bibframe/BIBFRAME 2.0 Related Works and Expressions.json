@@ -11,7 +11,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://id.loc.gov/resources/works",
+                "http://id.loc.gov/ml38281/resources/works"
               ],
               "valueDataType": {}
             },
@@ -124,7 +125,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://id.loc.gov/resources/works",
+                "http://id.loc.gov/ml38281/resources/works"
               ],
               "valueDataType": {}
             },

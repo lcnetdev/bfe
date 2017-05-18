@@ -12,7 +12,8 @@
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://id.loc.gov/resources/works",
+                "http://id.loc.gov/ml38281/resources/works"
               ],
               "valueTemplateRefs": [],
               "valueDataType": {}
@@ -94,7 +95,9 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/originDate",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
@@ -106,7 +109,7 @@
             "remark": "http://access.rdatoolkit.org/6.4.html",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
@@ -350,7 +353,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "BIBFRAME Work",
+        "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Work",
         "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
@@ -698,7 +701,7 @@
         ],
         "id": "profile:bf2:RDAExpression:NotatedMusic",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-        "resourceLabel": "RDA Expression"
+        "resourceLabel": "BIBFRAME Work (RDA Expression Elements)"
       },
       {
         "id": "profile:bf2:NotatedMusic:Instance",
@@ -1175,7 +1178,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Manifestation / BIBFRAME Instance - NotatedMusic",
+        "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
       },
       {
@@ -1377,7 +1380,7 @@
             "type": "literal"
           }
         ],
-        "resourceLabel": "Holding - NotatedMusic",
+        "resourceLabel": "BIBFRAME Item (RDA Item)",
         "resourceURI": "http://bibframe.org/vocab/HeldItem"
       },
       {
@@ -2130,7 +2133,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "resourceLabel": "RDA Work Elements - NotatedMusic",
+        "resourceLabel": "BIBFRAME Work (RDA Work) - Notated Music",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Work",
         "remark": "Graphic, non-realized representations of musical works intended to be perceived visually."
       },
@@ -2464,7 +2467,7 @@
           }
         ],
         "id": "profile:bf2:Expression:NotatedMusic",
-        "resourceLabel": "RDA Expression Elements - NotatedMusic",
+        "resourceLabel": "BIBFRAME Work (RDA Expression) - Notated Music",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
       },
       {
@@ -2475,10 +2478,10 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Work"
               ],
+              "useValuesFrom": [],
               "valueDataType": {},
               "repeatable": "false"
             },
@@ -2548,10 +2551,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Agents:RWO:Dates"
+              ],
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
@@ -2801,7 +2806,7 @@
           }
         ],
         "id": "profile:bf2:RelatedWorkCreate:NotatedMusic",
-        "resourceLabel": "Related Work",
+        "resourceLabel": "Related BIBFRAME Work (RDA Work)",
         "resourceURI": "http://bibframe.org/vocab/NotatedMusic"
       },
       {
@@ -2851,7 +2856,7 @@
         ],
         "id": "profile:bf2:RelatedExpression:NotatedMusic",
         "resourceURI": "http://bibframe.org/vocab2/relatedExpression",
-        "resourceLabel": "Related Expression"
+        "resourceLabel": "Related BIBFRAME Work (RDA Expression)"
       }
     ],
     "contact": "NDMSO",

@@ -134,9 +134,10 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Related Works and Expressions.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
 	                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
-        	        "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json"			
+        	        "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json"			
 
-            ],
+            		],
             "startingPoints": [
                         {"menuGroup": "Notated Music",
                         "menuItems": [
