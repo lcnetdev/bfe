@@ -143,18 +143,13 @@
                         "menuItems": [
                             {
                                 label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/Instance"],
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                                 useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
                             },
                             {
                                 label: "Work", 
                                 type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                                 useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
-                            },
-                            {
-                                label: "Work, Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Work", "profile:bf2:NotatedMusic:Instance"]
                             }
 
                         ]},
@@ -162,21 +157,25 @@
                         "menuItems": [
                             {
                                 label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/Serial"],
+                                type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
                                 useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
                             },
                             {
-                                label: "Work, Expression",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work", "http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Serial:Work", "profile:bf2:Serial:RDAExpression" ]
-                            },
-                            {
-                                label: "Work, Instance, Holding",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Work","http://id.loc.gov/ontologies/bibframe/Serial", "http://id.loc.gov/ontologies/bibframe/Item"],
-                                useResourceTemplates: [ "profile:bf2:Serial:Work", "profile:bf2:Serial:RDAExpression", "profile:bf2:Serial:Instance", "profile:bf2:Serial:Item"]
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Text"],
+                                useResourceTemplates: [ "profile:bf2:Serial:Work" ]
                             }
 
+                        ]},
+                        {"menuGroup": "Authorities",
+                        "menuItems": [
+                            {
+                                label: "Person",
+                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
+                                useResourceTemplates: [ "profile:bf2:Agent:Person" ]
+                            }
                         ]}
+
             ],
             "save": {
                 "callback": save
