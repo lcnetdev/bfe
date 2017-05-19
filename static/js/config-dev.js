@@ -94,7 +94,7 @@
         }
 
         function deleteId(id, csrf, bfelog){
-            var url = "http://mlvlp04.loc.gov:3000/verso/api/bfs/" + id;
+            var url = config.url + "/verso/api/bfs/" + id;
 
             //$.ajaxSetup({
             //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
@@ -121,6 +121,7 @@
                 "level": "DEBUG",
                 "toConsole": true
             },*/
+            "url" : "http://localhost:3000",
             "baseURI": "http://id.loc.gov/",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",

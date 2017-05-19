@@ -58,7 +58,7 @@ var _define = function(module, deps, payload) {
         return;
     }
 
-    if (arguments.length == 2)
+    if (arguments.length === 2)
         payload = deps;
 
     if (!_define.modules) {
@@ -110,11 +110,11 @@ var normalizeModule = function(parentId, moduleName) {
         return normalizeModule(parentId, chunks[0]) + "!" + normalizeModule(parentId, chunks[1]);
     }
     // normalize relative requires
-    if (moduleName.charAt(0) == ".") {
+    if (moduleName.charAt(0) === ".") {
         var base = parentId.split("/").slice(0, -1).join("/");
         moduleName = base + "/" + moduleName;
 
-        while(moduleName.indexOf(".") !== -1 && previous != moduleName) {
+        while(moduleName.indexOf(".") !== -1 && previous !== moduleName) {
             var previous = moduleName;
             moduleName = moduleName.replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
         }
@@ -196,6 +196,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     
     var editorconfig = {};
     var bfestore = require("src/bfestore");
+    var n3 = require("static/js/n3-browser.min.js");
+    var n3store = n3.Store();
     var bfelog = require("src/bfelogging");
     //var store = new rdfstore.Store();
     var profiles = [];
@@ -332,6 +334,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                         success: function (data) {
                             bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + l.source.location);
                             bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                            var n3parser = n3.Parser();
+                            var jsonldparser = jsonld.
+
                             tempstore = bfestore.jsonld2store(data);
                             tempstore.forEach(function(t){
                                 if (t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.otype == "uri" && t.s == l.defaulturi.replace('ml38281/', '')) {
@@ -358,7 +363,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     exports.fulleditor = function (config, id) {
         
         editordiv = document.getElementById(id);
-
         var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
         var $tabul = $('<ul class="nav nav-tabs"></ul>');
         $tabul.append('<li class="active"><a data-toggle="tab" href="#browse">Browse</a></li>');
@@ -389,7 +393,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             $('#table_id').DataTable({
              "processing": true,
              "ajax": {
-                "url":"http://mlvlp04.loc.gov:3000/verso/api/bfs",
+                "url": config.url+ "/verso/api/bfs",
                 "dataSrc":""
              },
              "columns": [
@@ -757,7 +761,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             var save_json = {};
                             save_json.name = dirhash;
                             save_json.profile = "http://mlvlp04.loc.gov:3000/bf/static/profiles/bibframe/BIBFRAME 2.0 Serial.json";
-                            save_json.url = "http://mlvlp04.loc.gov:3000/bf/data/" + dirhash;
+                            save_json.url = config.url + "/bf/data/" + dirhash;
                             createDate = new Date().toUTCString();
                             save_json.created = createDate;
                             save_json.modified = createDate;
