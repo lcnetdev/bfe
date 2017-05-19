@@ -400,7 +400,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                        var text = "";
                        if (_.filter(data, function(el){return el["http://id.loc.gov/ontologies/bibframe/title"]}).length > 0)
                             text = _.filter(data, function(el){return el["http://id.loc.gov/ontologies/bibframe/title"]})[1];
-                       return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
+		       if (text === undefined)
+			  return "No title";
+		       else
+		          return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
                     }
                  },
                  { "data": "rdf",
@@ -438,7 +441,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                         bfestore.store = [];
                         loadtemplates = [];
                         //default
-                        var spoints = editorconfig.startingPoints[0].menuItems[2];
+                        var spoints = editorconfig.startingPoints[0].menuItems[0];
                         var bTypes = [];                        
                         rowData.rdf.forEach(function(t){
                             if(t["@type"] !== undefined && t["@type"].length > 0 && t["@id"].indexOf("_:b")){
@@ -451,7 +454,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 
                         findRt = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })
                         if (findRt[0] !== undefined){
-                            spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[2];
+                            spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[0];
                         }
                         var temptemplates = [];                        
                         spoints.useResourceTemplates.forEach(function(l){

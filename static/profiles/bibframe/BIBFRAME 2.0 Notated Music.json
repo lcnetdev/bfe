@@ -95,9 +95,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/originDate",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:RWO:Dates"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
@@ -109,7 +107,7 @@
             "remark": "http://access.rdatoolkit.org/6.4.html",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource"
+            "type": "literal"
           },
           {
             "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
@@ -148,8 +146,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:MediumOfPerformanceIndividual",
-                "profile:bf2:MediumOfPerformanceCombining"
+                "profile:bf2:NotatedMusic:MediumOfPerformanceIndividual",
+                "profile:bf2:NotatedMusic:MediumOfPerformanceCombining"
               ],
               "useValuesFrom": [
                 ""
@@ -314,6 +312,21 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Expression"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Related Expression (BIBFRAME)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -351,6 +364,21 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Your Cataloger Code and Comments"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Instance"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyLabel": "Has BIBFRAME Instance"
           }
         ],
         "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
@@ -382,8 +410,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:MediumOfPerformanceIndividual",
-                "profile:bf2:MediumOfPerformanceCombining"
+                "profile:bf2:NotatedMusic:MediumOfPerformanceIndividual",
+                "profile:bf2:NotatedMusic:MediumOfPerformanceCombining"
               ],
               "useValuesFrom": [],
               "valueDataType": {},
@@ -699,22 +727,22 @@
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
           }
         ],
-        "id": "profile:bf2:RDAExpression:NotatedMusic",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
+        "id": "profile:bf2:NotatedMusic:Expression",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Work",
         "resourceLabel": "BIBFRAME Work (RDA Expression Elements)"
       },
       {
         "id": "profile:bf2:NotatedMusic:Instance",
         "propertyTemplates": [
           {
-            "propertyLabel": "Lookup",
+            "propertyLabel": "Instance Of",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/instanceOf",
             "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/resources/instances"
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Work"
               ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "resourceTemplates": [],
@@ -960,7 +988,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:identifier:NotatedMusic"
+                "profile:bf2:NotatedMusic:Identifier"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1182,7 +1210,7 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
       },
       {
-        "id": "profile:bf2:HeldItem:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:Item",
         "propertyTemplates": [
           {
             "propertyLabel": "Holding for",
@@ -1474,7 +1502,7 @@
             "propertyLabel": "Music Distributor Number"
           }
         ],
-        "id": "profile:bf2:identifier:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:Identifier",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Identifier",
         "resourceLabel": "ISBN, ISMN, UPC, Music Publisher/Plate, Distributor  Numbers"
       },
@@ -1546,7 +1574,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium"
           }
         ],
-        "id": "profile:bf2:MediumOfPerformanceCombining",
+        "id": "profile:bf2:NotatedMusic:MediumOfPerformanceCombining",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
         "resourceLabel": "Medium of Performance: Combining Facets"
       },
@@ -1715,7 +1743,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium"
           }
         ],
-        "id": "profile:bf2:MediumOfPerformanceIndividual",
+        "id": "profile:bf2:NotatedMusic:MediumOfPerformanceIndividual",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
         "resourceLabel": "Medium of Performance: Individual Facets"
       },
@@ -1778,7 +1806,7 @@
             "propertyLabel": "Plate Number and Publisher Name (recorded as in MARC 028 20 field, for example, 12670-14 Edward B. Marks Music Corporation)"
           }
         ],
-        "id": "profile:bf2:MusicPlate:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:PlateNumber",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicPlate",
         "resourceLabel": "Music Plate Number"
       },
@@ -2466,7 +2494,7 @@
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
           }
         ],
-        "id": "profile:bf2:Expression:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:Expression",
         "resourceLabel": "BIBFRAME Work (RDA Expression) - Notated Music",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
       },
@@ -2805,7 +2833,7 @@
             "propertyLabel": "Your Cataloger Code and Comments"
           }
         ],
-        "id": "profile:bf2:RelatedWorkCreate:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:RelatedWorkCreate",
         "resourceLabel": "Related BIBFRAME Work (RDA Work)",
         "resourceURI": "http://bibframe.org/vocab/NotatedMusic"
       },
@@ -2854,7 +2882,7 @@
             "propertyURI": "http://bibframe.org/vocab/relator"
           }
         ],
-        "id": "profile:bf2:RelatedExpression:NotatedMusic",
+        "id": "profile:bf2:NotatedMusic:RelatedExpression",
         "resourceURI": "http://bibframe.org/vocab2/relatedExpression",
         "resourceLabel": "Related BIBFRAME Work (RDA Expression)"
       }
