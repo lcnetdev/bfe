@@ -592,11 +592,11 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:Lccn"
+                ""
               ],
               "useValuesFrom": [],
               "valueDataType": {}
