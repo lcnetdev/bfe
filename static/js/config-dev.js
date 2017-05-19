@@ -121,7 +121,7 @@
                 "level": "DEBUG",
                 "toConsole": true
             },*/
-            "url" : "http://localhost:3000",
+            "url" : "http://mlvlp04.loc.gov:3000",
             "baseURI": "http://id.loc.gov/",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
