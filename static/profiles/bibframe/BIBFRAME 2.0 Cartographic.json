@@ -341,14 +341,16 @@
           {
             "mandatory": "false",
             "propertyLabel": "Your Cataloger Code and Comments",
-            "propertyURI": "http://bibframe.org/vocab2/comment",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "repeatable": "true",
             "resourceTemplates": [],
             "type": "literal",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
-              "valueTemplateRefs": []
+              "valueTemplateRefs": [
+                ""
+              ]
             }
           }
         ],
@@ -761,7 +763,7 @@
           {
             "mandatory": "false",
             "propertyLabel": "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsib",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
             "remark": "http://access.rdatoolkit.org/2.4.2.html",
             "repeatable": "true",
             "resourceTemplates": [],
@@ -1209,297 +1211,227 @@
               "valueDataType": {},
               "valueTemplateRefs": []
             }
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:AdminMetadata"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
+            "propertyLabel": "Administrative Metadata for Instance"
           }
         ],
         "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance"
       },
       {
-        "id": "profile:bf:HeldItem:Monograph",
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "propertyLabel": "Holding for",
-            "propertyURI": "http://bibframe.org/vocab/holdingFor",
             "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
-          },
-          {
-            "mandatory": "false",
-            "propertyLabel": "Held by",
-            "propertyURI": "http://bibframe.org/vocab/heldBy",
-            "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
-          },
-          {
-            "mandatory": "false",
-            "propertyLabel": "Electronic location",
-            "propertyURI": "http://bibframe.org/vocab/electronicLocator",
-            "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/itemOf",
+            "propertyLabel": "Holding for"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Held in sublocation",
-            "propertyURI": "http://bibframe.org/vocab/subLocation",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/heldBy",
+            "propertyLabel": "Held by"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Barcode",
-            "propertyURI": "http://bibframe.org/vocab/barcode",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
+            "propertyLabel": "LC call number"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Circulation status",
-            "propertyURI": "http://bibframe.org/vocab/circulationStatus",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyLabel": "Barcode"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Copy note",
-            "propertyURI": "http://bibframe.org/vocab/copyNote",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/electronicLocator",
+            "propertyLabel": "Electronic location"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "System item identifier",
-            "propertyURI": "http://bibframe.org/vocab/itemId",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/sublocation",
+            "propertyLabel": "Held in sublocation"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Shelf Location",
-            "propertyURI": "http://bibframe.org/vocab/shelfMark",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/shelfMark",
+            "propertyLabel": "Shelf Location"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Lending policy",
-            "propertyURI": "http://bibframe.org/vocab/lendingPolicy",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
+            "propertyLabel": "Circulation status"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Reproduction policy",
-            "propertyURI": "http://bibframe.org/vocab/reproductionPolicy",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Copy note"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Retention policy",
-            "propertyURI": "http://bibframe.org/vocab/retentionPolicy",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyLabel": "System item identifier"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "LCC call number",
-            "propertyURI": "http://bibframe.org/vocab/shelfMarkLcc",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
+            "propertyLabel": "Lending policy"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "DDC call number",
-            "propertyURI": "http://bibframe.org/vocab/shelfMarkDdc",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
+            "propertyLabel": "Reproduction policy"
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Access condition",
-            "propertyURI": "http://bibframe.org/vocab/accessCondition",
             "repeatable": "true",
-            "resourceTemplates": [],
             "type": "literal",
+            "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
+            "propertyLabel": "Retention policy"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
+            "propertyLabel": "DDC call number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
+            "propertyLabel": "Access condition"
           }
         ],
-        "resourceLabel": "Holding - Monograph",
-        "resourceURI": "http://bibframe.org/vocab/HeldItem"
-      },
-      {
-        "id": "profile:bf:TitleVariant:Cartography",
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "propertyLabel": "Variant Title 1",
-            "propertyURI": "http://bibframe.org/vocab2/titleVariant1",
-            "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "literal",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation1",
-            "propertyLabel": "Location"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/titleVariant2",
-            "propertyLabel": "Variant Title 2"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation2",
-            "propertyLabel": "Location"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/titleVariant3",
-            "propertyLabel": "Variant Title 3"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation3",
-            "propertyLabel": "Location"
-          }
-        ],
-        "resourceLabel": "Variant Title",
-        "resourceURI": "http://bibframe.org/vocab2/TitleVariant"
+        "id": "profile:bf2:Cartography:Item",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Item",
+        "resourceLabel": "BIBFRAME Item (RDA Item)"
       },
       {
         "propertyTemplates": [
@@ -1542,14 +1474,14 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/relator",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
             "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)",
             "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-389.html"
           }
         ],
         "id": "profile:bf2:Cartographic:RelatedInstance",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
-        "resourceLabel": "Related Manifestation"
+        "resourceLabel": "Related Instance"
       },
       {
         "propertyTemplates": [
@@ -1609,112 +1541,6 @@
         "id": "profile:bf2:Cartography:Coordinates",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
         "resourceLabel": "Cartographic Coordinates"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [
-              {
-                "propertyTemplates": [
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
-                    "propertyLabel": "Variant Title 1"
-                  },
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation",
-                    "propertyLabel": "Location"
-                  },
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
-                    "propertyLabel": "Variant Title 2"
-                  },
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation",
-                    "propertyLabel": "Location"
-                  },
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantValue",
-                    "propertyLabel": "Variant Title 3"
-                  },
-                  {
-                    "mandatory": "false",
-                    "repeatable": "true",
-                    "type": "literal",
-                    "resourceTemplates": [],
-                    "valueConstraint": {
-                      "valueTemplateRefs": [],
-                      "useValuesFrom": [],
-                      "valueDataType": {}
-                    },
-                    "propertyLabel": "Location",
-                    "propertyURI": "http://bibframe.org/vocab2/titleVariantLocation"
-                  }
-                ],
-                "id": "profile:bf:TitleVariant:Cartography",
-                "resourceURI": "http://bibframe.org/vocab2/TitleVariant",
-                "resourceLabel": "Variant Title"
-              }
-            ],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://bibframe.org/vocab/titleValue",
-            "propertyLabel": "Title"
-          }
-        ],
-        "id": "profile:bf:Title:Cartography",
-        "resourceURI": "http://bibframe.org/vocab/Title",
-        "resourceLabel": "Title"
       }
     ],
     "contact": "NDMSO",
