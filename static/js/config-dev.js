@@ -136,6 +136,11 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
 	                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
         	        "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json"			
 
             		],
@@ -165,6 +170,62 @@
                                 label: "Work",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Text"],
                                 useResourceTemplates: [ "profile:bf2:Serial:Work" ]
+                            }
+
+                        ]},
+			{"menuGroup": "Cartographic",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:Cartography:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:Cartography:Work" ]
+                            }
+
+                        ]},
+			{"menuGroup": "Sound Recording: Audio CD",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
+                            }
+
+                        ]},
+                        {"menuGroup": "Moving Image: BluRay DVD",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
+                            }
+
+                        ]},
+                        {"menuGroup": "Moving Image: 35mm Feature Film",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:35mmFilm:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:35mmFilm:Work" ]
                             }
 
                         ]},

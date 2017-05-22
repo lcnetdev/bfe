@@ -45,7 +45,9 @@
             "remark": "http://access.rdatoolkit.org/6.14.2.html",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                ""
+              ],
               "useValuesFrom": [
                 ""
               ],
@@ -76,12 +78,10 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Form",
-                "",
-                "",
-                ""
+                "profile:bf2:Form"
               ],
               "useValuesFrom": [
+                "",
                 ""
               ],
               "valueDataType": {}
@@ -1197,6 +1197,21 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:AdminMetadata"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Administrative Metadata for Instance",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1216,12 +1231,14 @@
         "propertyTemplates": [
           {
             "propertyLabel": "Holding for",
-            "propertyURI": "http://bibframe.org/vocab/holdingFor",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/itemOf",
             "resourceTemplates": [],
-            "type": "resource",
+            "type": "literal",
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                ""
+              ],
               "valueDataType": {}
             },
             "mandatory": "false",
@@ -1229,9 +1246,9 @@
           },
           {
             "propertyLabel": "Held by",
-            "propertyURI": "http://bibframe.org/vocab/heldBy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/heldBy",
             "resourceTemplates": [],
-            "type": "resource",
+            "type": "literal",
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
@@ -1241,21 +1258,8 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "Electronic location",
-            "propertyURI": "http://bibframe.org/vocab/electronicLocator",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Held in sublocation",
-            "propertyURI": "http://bibframe.org/vocab/subLocation",
+            "propertyLabel": "LC call number",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1268,7 +1272,7 @@
           },
           {
             "propertyLabel": "Barcode",
-            "propertyURI": "http://bibframe.org/vocab/barcode",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1280,8 +1284,8 @@
             "type": "literal"
           },
           {
-            "propertyLabel": "Circulation status",
-            "propertyURI": "http://bibframe.org/vocab/circulationStatus",
+            "propertyLabel": "Electronic location",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/electronicLocator",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1293,21 +1297,8 @@
             "type": "literal"
           },
           {
-            "propertyLabel": "Copy note",
-            "propertyURI": "http://bibframe.org/vocab/copyNote",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "System item identifier",
-            "propertyURI": "http://bibframe.org/vocab/itemId",
+            "propertyLabel": "Held in sublocation",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/sublocation",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1320,7 +1311,46 @@
           },
           {
             "propertyLabel": "Shelf Location",
-            "propertyURI": "http://bibframe.org/vocab/shelfMark",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/shelfMark",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "Circulation status",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "Copy note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal"
+          },
+          {
+            "propertyLabel": "System item identifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1333,7 +1363,7 @@
           },
           {
             "propertyLabel": "Lending policy",
-            "propertyURI": "http://bibframe.org/vocab/lendingPolicy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1346,7 +1376,7 @@
           },
           {
             "propertyLabel": "Reproduction policy",
-            "propertyURI": "http://bibframe.org/vocab/reproductionPolicy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1359,20 +1389,7 @@
           },
           {
             "propertyLabel": "Retention policy",
-            "propertyURI": "http://bibframe.org/vocab/retentionPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "LCC call number",
-            "propertyURI": "http://bibframe.org/vocab/shelfMarkLcc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1385,7 +1402,7 @@
           },
           {
             "propertyLabel": "DDC call number",
-            "propertyURI": "http://bibframe.org/vocab/shelfMarkDdc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1398,7 +1415,7 @@
           },
           {
             "propertyLabel": "Access condition",
-            "propertyURI": "http://bibframe.org/vocab/accessCondition",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1411,7 +1428,7 @@
           }
         ],
         "resourceLabel": "BIBFRAME Item (RDA Item)",
-        "resourceURI": "http://bibframe.org/vocab/HeldItem"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Item"
       },
       {
         "propertyTemplates": [

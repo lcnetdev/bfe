@@ -308,6 +308,21 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:Expression"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
+            "propertyLabel": "Related Expression (BIBFRAME)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -361,6 +376,21 @@
             },
             "propertyURI": "http://bibframe.org/vocab2/comment",
             "propertyLabel": "Your Cataloger Code and Comments"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:Instance"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyLabel": "Related Instance (BIBFRAME)"
           }
         ],
         "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
@@ -420,11 +450,10 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/languages",
-                ""
+              "valueTemplateRefs": [
+                "profile:bf2:Language"
               ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
@@ -606,7 +635,7 @@
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3698.html"
           }
         ],
-        "id": "profile:bf2:Serial:RDAExpression",
+        "id": "profile:bf2:Serial:Expression",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Work",
         "resourceLabel": "BIBFRAME Work (RDA Expression Elements)"
       },
@@ -660,20 +689,20 @@
             "remark": "http://access.rdatoolkit.org/2.3.2.html"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
+            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
+            "propertyURI": "http://bibframe.org/vocab/titleVariation",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:VariantTitle"
+                "profile:bf2:ParallelTitleProper"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/2.3.2.5.html",
-            "propertyLabel": "Title in More Than One Form (RDA 2.3.2.5) (form not chosen as title proper)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title"
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "remark": "http://access.rdatoolkit.org/2.3.3.html"
           },
           {
             "mandatory": "false",
@@ -690,22 +719,6 @@
             "propertyLabel": "Other Title Information (RDA 2.3.4)",
             "remark": "http://access.rdatoolkit.org/2.3.4.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle"
-          },
-          {
-            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
-            "propertyURI": "http://bibframe.org/vocab/titleVariation",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:ParallelTitleProper"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "remark": "http://access.rdatoolkit.org/2.3.3.html"
           },
           {
             "propertyLabel": "Variant Title (RDA 2.3.6)",
@@ -756,7 +769,7 @@
             "remark": "http://access.rdatoolkit.org/2.3.8.html"
           },
           {
-            "propertyLabel": "Identifier for the Manifestation (RDA 2.15)",
+            "propertyLabel": "ISSN - Identifier for the Manifestation (RDA 2.15)",
             "propertyURI": "http://bibframe.org/vocab/identifiedBy",
             "resourceTemplates": [],
             "type": "resource",
@@ -914,22 +927,6 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/lastIssue",
             "remark": "http://access.rdatoolkit.org/2.6.5.html",
             "propertyLabel": "Chronological Designation of Last Issue or Part of Sequence (RDA 2.6.5)"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Serial:NoteOnIssuePartIteration"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Issue, Part, or Iteration Note (RDA 2.17.13)",
-            "remark": "http://access.rdatoolkit.org/2.17.13.html"
           },
           {
             "propertyLabel": "Publication Statement (RDA 2.8)",
@@ -1122,6 +1119,22 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/2.17.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:NoteOnIssuePartIteration"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Issue, Part, or Iteration Note (RDA 2.17.13)",
+            "remark": "http://access.rdatoolkit.org/2.17.13.html"
           },
           {
             "propertyLabel": "Media type (RDA 3.2)",
@@ -1523,8 +1536,22 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/partNumber",
+            "propertyLabel": "Designation of Part, Section or Supplement (RDA 2.3.1.7)",
+            "remark": "http://access.rdatoolkit.org/2.3.1.7.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/partName",
-            "propertyLabel": "Titles of Parts, Sections, and Supplements (RDA 2.3.1.7)",
+            "propertyLabel": "Title of Part, Section or Supplement (RDA 2.3.1.7)",
             "remark": "http://access.rdatoolkit.org/2.3.1.7.html"
           }
         ],
@@ -2373,7 +2400,7 @@
       }
     ],
     "contact": "NDMSO",
-    "date": "2017-05-16",
+    "date": "2017-05-20",
     "description": "Work, Expression, Instance for Serials",
     "id": "profile:bf2:Serial",
     "title": "BIBFRAME 2.0 Serial",
