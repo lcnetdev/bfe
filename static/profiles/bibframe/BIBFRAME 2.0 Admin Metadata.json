@@ -151,7 +151,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/profile",
             "propertyLabel": "Profile",
