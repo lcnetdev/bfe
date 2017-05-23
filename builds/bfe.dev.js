@@ -1518,9 +1518,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 displaydata = "";
                             } 
                             displaydata += data[i].o + " ";
+			    displayuri = data[i].s;
                         }
                     }
-                    displayuri = data[0].s;
+                    //displayuri = data[0].s;
                     if (displaydata === undefined){
                         displaydata = data[0].s;
                     } else {
@@ -1643,7 +1644,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     if (t.defaulturi !== undefined && t.defaulturi !== "") {
                         triple.s = t.defaulturi;
                     } else {
-                        triple.s = editorconfig.baseURI + resourceID;
+                        //triple.s = editorconfig.baseURI + resourceID;
+  			triple.s = t.resouceURI;
                     }
                     triple.p = properties[0].propertyURI;
                     triple.o = data;
@@ -2104,33 +2106,40 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
     function whichrt(rt, baseURI){
         //for resource templates, determine if they are works, instances, or other
         var returnval = "_:bnode";
-        
+
+	if (rt.resourceURI.startsWith("http://www.loc.gov/standards/mads/rdf/v1#PersonalName")) {
+		returnval = baseURI + "resources/agents/";
+        } else {
+	       uri = rt.resourceURI.replace("id.loc.gov", "id.loc.gov/ml38281");	
         $.ajax({
             type: "GET",
             async: false,
             cache: true,
-            dataType: "jsonp",
-            contentType: "application/json",
-            url: rt.resourceURI + ".json",
-            success: function(data) {
-                data.some(function(resource){
-                    if(resource["@id"] === rt.resourceURI){
-                        if(resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Work" || resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Work"){
-                            returnval = baseURI + "resources/works/";
-                            return returnval;
-                        } else if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance" || resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance") {
-                            returnval = baseURI + "resources/instances/";
-                            return returnval;
-                        }
-                    }
-                });
-            },
+            url: uri + ".json",
+	    success: function(data) {
+	        data.some(function(resource) {
+            	    if (resource["@id"] === rt.resourceURI) {
+                	if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"] !== undefined) {
+                		if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Work")
+                        		returnval = baseURI + "resources/works/";
+	                	else if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance")
+        		        	returnval = baseURI + "resources/instances/";			
+	        	} else if (resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance") {
+        	        	returnval = baseURI + "resources/instances/";
+        		} else if (resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Work") {
+                		returnval = baseURI + "resources/works/";
+			}
+        	    }
+           	});
+            }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
             }
         });
 
-        return returnval;
+        }
+
+	return returnval;
 
     }
 
