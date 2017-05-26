@@ -554,7 +554,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#isIdentifiedByAuthority",
-            "propertyLabel": "Identified by Authority"
+            "propertyLabel": "Identified by Authority",
+            "remark": "http://www.loc.gov/standards/mads/rdf/v1.html#Authority"
           },
           {
             "mandatory": "false",

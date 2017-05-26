@@ -143,9 +143,23 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json"			
-
+			
             		],
             "startingPoints": [
+                        {"menuGroup": "Monograph",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
+                            }
+
+                        ]},
                         {"menuGroup": "Notated Music",
                         "menuItems": [
                             {
@@ -250,6 +264,26 @@
                                 label: "Person",
                                 type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
                                 useResourceTemplates: [ "profile:bf2:Agent:Person" ]
+                            },
+                            {
+                                label: "Family",
+                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
+                                useResourceTemplates: [ "profile:bf2:Agent:Family" ]
+                            },
+                            {
+                                label: "Corporate Body",
+                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
+                                useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
+                            },
+                            {
+                                label: "Conference",
+                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
+                                useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
+                            },                            
+			    {
+                                label: "Jurisdiction",
+                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
+                                useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
                             }
                         ]}
 

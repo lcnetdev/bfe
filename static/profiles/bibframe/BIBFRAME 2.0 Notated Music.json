@@ -67,6 +67,19 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyLabel": "Transcribed Preferred Title for the Musical Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "propertyLabel": "Variant Title for a Musical Work (RDA 6.14.3)",
             "remark": "http://access.rdatoolkit.org/6.14.3.html"
@@ -792,7 +805,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle"
           },
           {
-            "propertyLabel": "Variant Title (RDA 2.3.6)",
+            "propertyLabel": "Variant Title (RDA 2.3.6), XXX",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "resourceTemplates": [],
             "type": "literal",
@@ -803,7 +816,7 @@
             },
             "mandatory": "false",
             "repeatable": "true",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html, http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
           },
           {
             "mandatory": "false",
@@ -973,7 +986,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue"
+                "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue",
+                ""
               ],
               "valueDataType": {}
             },
@@ -1499,7 +1513,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MusicPlate"
+                "profile:bf2:NotatedMusic:PlateNumber"
               ],
               "useValuesFrom": [],
               "valueDataType": {}

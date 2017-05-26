@@ -14,8 +14,8 @@
               "valueTemplateRefs": [
                 "profile:bf2:Agent:Person",
                 "profile:bf2:Agent:Family",
-                "profile:bf2:Agent:Corporate Body",
-                "profile:bf2:Agent:Conference",
+                "profile:bf2:Agent:CorporateBody",
+                "profile:bf2:Agent:Jurisdiction",
                 "profile:bf2:Agent:Conference"
               ]
             },

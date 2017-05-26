@@ -62,6 +62,19 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyLabel": "Transcribed Preferred Title for the Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "propertyLabel": "Variant Title for the Work (RDA 6.2.3)",
             "remark": "http://access.rdatoolkit.org/6.2.3.html"
@@ -89,11 +102,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": "http://www.loc.gov/standards/datetime/pre-submission.html",
-                "dataTypeLabelHint": "ISO",
-                "dataTypeLabel": "EDTF"
-              }
+              "valueDataType": {}
             },
             "remark": "http://access.rdatoolkit.org/6.4.html",
             "mandatory": "false",
