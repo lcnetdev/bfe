@@ -53,6 +53,20 @@
           },
           {
             "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
+            "propertyLabel": "Transcribed Preferred Title for the Work",
+            "remark": ""
+          },
+          {
+            "mandatory": "false",
             "propertyLabel": "Variant Title for the Work (RDA 6.2.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "remark": "http://access.rdatoolkit.org/6.2.3.html",

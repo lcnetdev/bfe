@@ -30,6 +30,49 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/metadataAssigner",
+            "propertyLabel": "Your cataloger ID (Windows ID)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeLabelHint": "Date or date and time on which the original metadata first created."
+              }
+            },
+            "propertyLabel": "Creation date",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/creationDate"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeLabelHint": "Date or date and time on which the metadata was modified."
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/changeDate",
+            "propertyLabel": "Change date"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyLabel": "Description authentication",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#c_DescriptionAuthentication",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionAuthentication"

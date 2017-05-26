@@ -63,6 +63,19 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyLabel": "Transcribed Preferred Title for the Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "propertyLabel": "Variant Title for a Musical Work (RDA 6.14.3)",
             "remark": "http://access.rdatoolkit.org/6.14.3.html"
