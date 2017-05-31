@@ -395,16 +395,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                  { "data": "name" },
                  { "data": "rdf",
                    "render": function(data,type,full,meta){
-                       var text = "";
-                       if (_.filter(data, function(el){return el["http://id.loc.gov/ontologies/bibframe/title"]}).length > 0)
-                            text = _.filter(data, function(el){return el["http://id.loc.gov/ontologies/bibframe/title"]})[1];
-		       if (text === undefined)
-			  return "No title";
-		       else if (text["http://id.loc.gov/ontologies/bibframe/title"] === undefined)
-			  return "No title";
-		       else		 
-		          return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
-                    }
+   	                var retval = "No Title";
+		        if (_.some(data, "http://id.loc.gov/ontologies/bibframe/title")){
+                            text = _.find(data, "http://id.loc.gov/ontologies/bibframe/title")["http://id.loc.gov/ontologies/bibframe/title"];
+                          //return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
+			  if (text !== undefined)
+			  if (text[0] !== undefined)
+                          if (text[0]["@id"] !== undefined){
+                                id = text[0]["@id"]
+                                title = _.where(data, {"@id": id});
+                                retval = title[0]["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
+                          }
+                       } else if  (_.some(data,"http://www.loc.gov/mads/rdf/v1#authoritativeLabel")) {
+                            retval= _.find(data,"http://www.loc.gov/mads/rdf/v1#authoritativeLabel")["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"]
+                       } else {
+                            retval= "No Title";
+                       }
+			return retval;
+		   }
                  },
                  { "data": "rdf",
                    "render" : function(data,type,full,meta){
@@ -441,9 +449,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                         bfestore.store = [];
                         loadtemplates = [];
                         //default
-                        var spoints = editorconfig.startingPoints[0].menuItems[0];
+                        //var spoints = editorconfig.startingPoints[0].menuItems[0];
+			var spoints = _.find(_.find(_.find(editorconfig.startingPoints, {menuItems: [{useResourceTemplates: [rowData.profile]}]}), [{useResourceTemplates: [rowData.profile]}]), {useResourceTemplates: [rowData.profile]})
                         var bTypes = [];                        
-                        rowData.rdf.forEach(function(t){
+                        /*rowData.rdf.forEach(function(t){
                             if(t["@type"] !== undefined && t["@type"].length > 0 && t["@id"].indexOf("_:b")){
                                 //console.log(t["@id"] + " " +t["@type"][0]);
                                 bTypes.push(t["@type"][0]);
@@ -456,11 +465,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                         if (findRt[0] !== undefined){
                             spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[0];
                         }
+			*/
                         var temptemplates = [];                        
                         spoints.useResourceTemplates.forEach(function(l){
                             var useguid = guid();
                             var loadtemplate = {};
-                            loadtemplate.templateGUID = useguid;
+                            loadtemplate.templateGUID = rowData.name;
                             loadtemplate.resourceTemplateID = l;
                             //loadtemplate.resourceURI = cellData;
                             //loadtemplate.resourceURI = whichrt(loadtemplate, editorconfig.baseURI) + loadTemplate.templateGUID;//editorconfig.baseURI + useguid;
@@ -482,6 +492,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                                 //editorconfig.retrieve.callback(cellData,bfestore, bfelog, cbLoadTemplates);
                                 bfestore.store = [];
                                 tempstore = bfestore.jsonld2store(rowData.rdf);
+				bfestore.name = rowData.name;
+				bfestore.created = rowData.created;
+				bfestore.url = rowData.url;
+				bfestore.profile = rowData.profile;				
                                 $('[href=#create]').tab('show');
                                 cbLoadTemplates();
                             } else {
@@ -705,6 +719,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 </div>');
                 form.form.append($exitButtonGroup);
                 
+		$('<input>', {type: 'hidden',id: 'profile-id', value: loadtemplates[0].resourceTemplateID}).appendTo(form.form);
+
                 $("#bfeditor-cancel", form.form).click(function(){
                     $('#bfeditor-formdiv').empty();                    
                     $('[href=#browse]').tab('show');
@@ -769,14 +785,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 
                         if (editorconfig.save.callback !== undefined) {
                             //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
-                            var dirhash = guid();
+                            //var dirhash = guid();
                             var save_json = {};
-                            save_json.name = dirhash;
-                            save_json.profile = "http://mlvlp04.loc.gov:3000/bf/static/profiles/bibframe/BIBFRAME 2.0 Serial.json";
-                            save_json.url = config.url + "/bf/data/" + dirhash;
-                            createDate = new Date().toUTCString();
-                            save_json.created = createDate;
-                            save_json.modified = createDate;
+                            save_json.name = bfeditor.bfestore.name;
+			    save_json.profile = loadtemplates[0].resourceTemplateID;
+                            save_json.url = bfeditor.bfestore.url;
+                            save_json.created = bfeditor.bfestore.created;
+                            save_json.modified = new Date().toUTCString();
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
     
                             editorconfig.save.callback(save_json,editorconfig.getCSRF.callback(),bfelog);
@@ -813,6 +828,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         
         bfeditor.bfestore.store = [];
+	bfeditor.bfestore.name = guid();
+	bfeditor.bfestore.created = new Date().toUTCString();
+	bfeditor.bfestore.url = config.url + "/verso/bfs?filter={'name':'"+bfeditor.bfestore.name+"'}"
         loadtemplatesCounter = 0;
         loadtemplatesCount = spoints.useResourceTemplates.length;
         loadtemplates = [];
@@ -829,6 +847,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
             loadtemplates.push(loadtemplate);
             //cbLoadTemplates();
         });
+
         cbLoadTemplates();
     }
     

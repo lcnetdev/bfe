@@ -48,8 +48,10 @@
         function save(data, csrf, bfelog){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
+	    var url = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
+
             $.ajax({
-               url: "/verso/api/bfs",
+               url: url,
                type: "POST",
                data:JSON.stringify(data),
                csrf: csrf,

@@ -42,15 +42,13 @@
             "remark": "http://access.rdatoolkit.org/6.2.2.html",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Title"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource"
+            "type": "literal"
           },
           {
             "mandatory": "false",
@@ -71,9 +69,7 @@
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -304,22 +300,6 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/lcpschp25_lcps25-357.html"
-          },
-          {
-            "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:RelatedExpression"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html",
-            "mandatory": "false",
-            "repeatable": "true"
           },
           {
             "mandatory": "false",
@@ -674,12 +654,12 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "Title Proper (RDA 2.3.2)",
+            "propertyLabel": "Title Information",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Monograph:Title"
+                "profile:bf2:Title"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -690,45 +670,13 @@
             "remark": "http://access.rdatoolkit.org/2.3.2.html"
           },
           {
-            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
-            "propertyURI": "http://bibframe.org/vocab/titleVariation",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:ParallelTitleProper"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "remark": "http://access.rdatoolkit.org/2.3.3.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Other Title Information (RDA 2.3.4)",
-            "remark": "http://access.rdatoolkit.org/2.3.4.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle"
-          },
-          {
-            "propertyLabel": "Variant Title (RDA 2.3.6)",
+            "propertyLabel": "Variant Title Information",
             "propertyURI": "http://bibframe.org/vocab/titleVariation",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Monograph:VariantTitle"
+                "profile:bf2:VariantTitle"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -736,22 +684,6 @@
             "mandatory": "false",
             "repeatable": "true",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Monograph:VariantTitle"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
-            "propertyLabel": "Later Title Proper (RDA 2.3.8)",
-            "remark": "http://access.rdatoolkit.org/2.3.8.html"
           },
           {
             "mandatory": "false",
@@ -1124,10 +1056,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Mongraph:Item"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1198,7 +1132,7 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance"
       },
       {
-        "id": "profile:bf2:Serial:Item",
+        "id": "profile:bf2:Mongraph:Item",
         "propertyTemplates": [
           {
             "propertyLabel": "Holding for",

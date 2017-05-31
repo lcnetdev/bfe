@@ -131,6 +131,19 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/CollectiveTitle",
             "propertyLabel": "Collective title"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Other type of Variant Title",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType"
           }
         ],
         "contact": "Title variation",
