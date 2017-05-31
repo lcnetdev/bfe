@@ -763,60 +763,20 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "Title Proper (RDA 2.3.2)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
+            "propertyLabel": "Title (RDA 2.3)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Title"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/2.3.2.html"
-          },
-          {
-            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/2.3.3.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Other Title Information (RDA 2.3.4)",
-            "remark": "http://access.rdatoolkit.org/2.3.4.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle"
-          },
-          {
-            "propertyLabel": "Variant Title (RDA 2.3.6), XXX",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
-            "resourceTemplates": [],
-            "type": "literal",
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html, http://access.rdatoolkit.org/rdachp2_rda2-4005.html"
+            "type": "resource",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3075.html"
           },
           {
             "mandatory": "false",

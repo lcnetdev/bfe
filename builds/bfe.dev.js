@@ -400,7 +400,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             text = _.filter(data, function(el){return el["http://id.loc.gov/ontologies/bibframe/title"]})[1];
 		       if (text === undefined)
 			  return "No title";
-		       else
+		       else if (text["http://id.loc.gov/ontologies/bibframe/title"] === undefined)
+			  return "No title";
+		       else		 
 		          return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
                     }
                  },
@@ -1545,29 +1547,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     displaydata = tlabel.o;
                     var displayuri = tlabel.s;
                 } else {
+		    var displaydata = "";
+		    var displayuri;
                     for (var i in data) {
-                        var displaydata;
-                        if (data[i].p === "http://www.w3.org/2000/01/rdf-schema#label"){
-                            if (displaydata === undefined) {
-                                displaydata = "";
-                            } 
-                            displaydata += data[i].o + " ";
+                        //if (data[i].p === "http://www.w3.org/2000/01/rdf-schema#label"){
+			if (data[i].otype === "literal"){
+			    displaydata += data[i].o + " ";
 			    displayuri = data[i].s;
                         }
                     }
                     //displayuri = data[0].s;
-                    if (displaydata === undefined){
-                        //displaydata = data[0].s;
-                    //} else {
-                        //create label
-                        //displaydata.trim();
-			guid = guid();
+                    if (displaydata !== undefined){
+			//create label
                         var triple = {
-                            "guid":guid,
-                            "o": guid,
+                            "guid":guid(),
+                            "o": displayuri,
                             "otype": "literal",
                             "p": "http://www.w3.org/2000/01/rdf-schema#label",
-                            "s": displayuri
+                            "s": displaydata.trim()
                         }
                         data.push(triple);
                     }                                

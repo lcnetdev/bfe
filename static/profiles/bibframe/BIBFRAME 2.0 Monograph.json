@@ -43,14 +43,14 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                ""
+                "profile:bf2:Title"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
@@ -282,7 +282,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Monograph:RelatedWork"
+                "profile:bf2:RelatedWork"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -2348,7 +2348,7 @@
       }
     ],
     "contact": "NDMSO",
-    "date": "2017-05-20",
+    "date": "2017-05-26",
     "description": "Work, Expression, Instance for Monographs",
     "id": "profile:bf2:Monograph",
     "title": "BIBFRAME 2.0 Monograph",

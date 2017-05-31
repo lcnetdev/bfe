@@ -251,7 +251,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:RWO:AssociatedLocale"
+                "profile:bf2:Agents:RWO:OtherPlace"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -457,7 +457,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:RWO:AssociatedLocale"
+                "profile:bf2:Agents:RWO:OtherPlace"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -712,7 +712,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:RWO:AssociatedLocale"
+                "profile:bf2:Agents:RWO:LocationOfConference",
+                "profile:bf2:Agents:RWO:OtherPlace"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1057,14 +1058,17 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
+            "repeatable": "true",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/organizations"
+              ],
               "valueDataType": {},
-              "defaultLiteral": "DLC"
+              "defaultLiteral": "DLC",
+              "defaultURI": "http://id.loc.gov/vocabulary/organizations/dlc"
             },
             "propertyLabel": "Record Content Source",
             "propertyURI": "http://www.loc.gov/standards/mods/v3/mods-3-6#recordContentSource",
