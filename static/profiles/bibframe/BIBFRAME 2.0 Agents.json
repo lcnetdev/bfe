@@ -64,8 +64,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#identifiesRWO",
-            "propertyLabel": "Real World Object (RDA 9.6-9.11)",
-            "remark": "http://www.loc.gov/mads/rdf/v1#"
+            "propertyLabel": "Other Identifying Attributes (RDA 9.6-9.11)",
+            "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5161.html"
           },
           {
             "mandatory": "false",
@@ -159,21 +159,6 @@
             "propertyLabel": "Source Consulted (RDA 8.12)",
             "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasSource"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:AdminMetadata"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Admin Metadata",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#adminMetadata"
           }
         ],
         "contact": "",
@@ -266,10 +251,11 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:RWO:ProminentFamilyMember"
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/ml38281/authorities/names",
+                "http://id.loc.gov/authorities/names"
               ],
-              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyLabel": "Prominent Member of Family (RDA 10.6)",
@@ -397,21 +383,6 @@
             "propertyLabel": "Source Consulted (RDA 8.12)",
             "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:AdminMetadata"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Admin Metadata",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#adminMetadata"
           }
         ]
       },
@@ -652,21 +623,6 @@
             "propertyLabel": "Source Consulted (RDA 8.12)",
             "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:AdminMetadata"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Admin Metadata",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#adminMetadata"
           }
         ]
       },
@@ -905,21 +861,6 @@
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source",
             "propertyLabel": "Source Consulted (RDA 8.12)",
             "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:AdminMetadata"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Admin Metadata",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#adminMetadata"
           }
         ]
       },
@@ -1035,21 +976,6 @@
             "propertyLabel": "Source Consulted (RDA 8.12)",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#citation-source",
             "remark": "http://access.rdatoolkit.org/rdachp8_rda8-479.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agents:AdminMetadata"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Admin Metadata",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#adminMetadata"
           }
         ],
         "contact": ""

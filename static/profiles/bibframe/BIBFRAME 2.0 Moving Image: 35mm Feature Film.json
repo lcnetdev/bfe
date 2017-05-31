@@ -285,13 +285,13 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage"
           },
           {
-            "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
+            "propertyLabel": "Related Expression (BIBFRAME)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:RelatedExpression"
+                "profile:bf2:35mmFeatureFilm:Expression"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -357,6 +357,21 @@
             },
             "propertyURI": "http://bibframe.org/vocab2/comment",
             "propertyLabel": "Your Cataloger Code and Comments"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:35mmFeatureFilm:Instance"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Has BIBFRAME Instance",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
           }
         ],
         "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
@@ -1289,6 +1304,21 @@
             },
             "propertyLabel": "Administrative Metadata for Instance",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:35mmFeatureFilm:Item"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Has Item",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasItem"
           },
           {
             "mandatory": "false",

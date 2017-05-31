@@ -336,18 +336,18 @@
             "remark": "http://access.rdatoolkit.org/rdachp24_rda24-199.html"
           },
           {
-            "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
+            "propertyLabel": "Related Expression (BIBFRAME)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:RelatedExpression"
+                "profile:bf2:MIBluRayDVD:Expression"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -406,6 +406,21 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Your Cataloger Code and Comments"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:MIBluRayDVD:Instance"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Has BIBFRAME Instance",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
           }
         ],
         "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
@@ -800,54 +815,30 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "Title Proper (RDA 2.3.2)",
+            "propertyLabel": "Title Information",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Title"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "remark": "http://access.rdatoolkit.org/2.3.2.html"
           },
           {
-            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/2.3.3.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Other Title Information (RDA 2.3.4)",
-            "remark": "http://access.rdatoolkit.org/2.3.4.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle"
-          },
-          {
-            "propertyLabel": "Variant Title (RDA 2.3.6)",
+            "propertyLabel": "Variant Title Information",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:VariantTitle"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1412,6 +1403,21 @@
             },
             "propertyLabel": "Administrative Metadata for Instance",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:MIBluRayDVD:Item"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Has Item",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasItem"
           },
           {
             "mandatory": "false",
