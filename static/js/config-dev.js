@@ -142,7 +142,8 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json"			
+			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Title Information.json"
 			
             		],
             "startingPoints": [

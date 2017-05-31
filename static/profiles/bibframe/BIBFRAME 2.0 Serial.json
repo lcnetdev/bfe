@@ -58,6 +58,19 @@
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
+            "propertyLabel": "Transcribed Preferred Title for the Work"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
               "valueTemplateRefs": [
                 ""
               ],
@@ -247,7 +260,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:RelatedWork"
+                "profile:bf2:RelatedWork"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -452,6 +465,22 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Other Distinguishing Characteristic of the Expression (RDA 6.12)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3585.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:IssnL"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyLabel": "ISSN-L Identifier for Expression (RDA 6.13)",
+            "remark": "http://access.rdatoolkit.org/6.13.html"
           },
           {
             "mandatory": "false",
@@ -1596,8 +1625,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "ISSN-L Recording Identifier for Manifestation (RDA 2.15.1.4)",
-            "remark": "http://access.rdatoolkit.org/2.15.1.4.html"
+            "propertyLabel": "ISSN-L Identifier for Expression (RDA 6.13)",
+            "remark": "http://access.rdatoolkit.org/6.13.html"
           },
           {
             "mandatory": "false",
@@ -1609,9 +1638,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Cancelled Linking ISSN Incorrect Identifiers (RDA 2.15.1.6)",
+            "propertyLabel": "Cancelled Linking ISSN Incorrect Identifiers (RDA 6.13)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
+            "remark": "http://access.rdatoolkit.org/6.13.html"
           }
         ],
         "id": "profile:bf2:Serial:IssnL",
