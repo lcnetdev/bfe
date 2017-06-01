@@ -733,7 +733,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                      var humanized = bfeditor.bfestore.store2text();
 
                      var jsonstr = bfeditor.bfestore.store2jsonldExpanded()
-		     
+
 		     //bfeditor.bfestore.store2turtle(jsonstr, humanizedPanel);
 		     bfeditor.bfestore.store2jsonldcompacted(jsonstr, jsonPanel);
 
@@ -744,7 +744,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 		     function jsonPanel(data){
 			bfeditor.bfestore.store2turtle(data, humanizedPanel);
 			$("#jsonld .panel-body pre").text( JSON.stringify(data, undefined, " "));
-		     }
+			d3.jsonldVis(data, '#jsonld-vis .panel-body', {w:800, h:600, maxLabelWidth:250});
+		     }			
 
                      document.body.scrollTop = document.documentElement.scrollTop = 0;
                      var $saveButtonGroup = $('<div class="btn-group" id="save-btn"> \
@@ -759,7 +760,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                          <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#humanized">Preview</a></h3></div>\
                          <div class="panel-collapse collapse in" id="humanized"><div class="panel-body"><pre>' + humanized + '</pre></div></div>\
                          <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld">JSONLD</a></h3></div>\
-                         <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, " ") + '</pre></div></div></div>\
+                         <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, " ") + '</pre></div></div>\
+			 <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
+			 <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
                          </div>');
 
                      $bfeditor.append($saveButtonGroup);

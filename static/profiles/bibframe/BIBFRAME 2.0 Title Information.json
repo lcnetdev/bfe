@@ -142,7 +142,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Other type of Variant Title",
+            "propertyLabel": "Type of Variant Title",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType"
           }
         ],

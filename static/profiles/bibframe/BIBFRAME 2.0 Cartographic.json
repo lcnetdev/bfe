@@ -354,7 +354,7 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Your Cataloger Code and Comments",
+            "propertyLabel": "Your Windows ID and Comments",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "repeatable": "true",
             "resourceTemplates": [],
@@ -1221,7 +1221,7 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Your Cataloger Code and Comments",
+            "propertyLabel": "Your Windows ID and Comments",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "repeatable": "true",
             "resourceTemplates": [],
