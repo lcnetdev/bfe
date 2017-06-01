@@ -384,7 +384,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab2/comment",
-            "propertyLabel": "Your Cataloger Code and Comments"
+            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "resourceLabel": "BIBFRAME Work (RDA Work Elements)",
@@ -1272,7 +1272,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://bibframe.org/vocab2/comment",
-            "propertyLabel": "Your Cataloger Code and Comments"
+            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
@@ -1834,7 +1834,7 @@
           }
         ],
         "id": "profile:bf2:Serial:Manufacture",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Distributionhttp://id.loc.gov/ontologies/bibframe/Manufacture",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Manufacture",
         "resourceLabel": "Enter Manufacturer Information"
       },
       {

@@ -360,7 +360,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Your Cataloger Code and Comments"
+            "propertyLabel": "Your Windows ID and Comments"
           },
           {
             "mandatory": "false",
@@ -1209,7 +1209,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Your Cataloger Code and Comments"
+            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
