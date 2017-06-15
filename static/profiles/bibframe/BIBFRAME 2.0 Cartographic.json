@@ -14,8 +14,7 @@
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works",
-                "http://id.loc.gov/ml38281/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueDataType": {},
               "valueTemplateRefs": []
@@ -39,44 +38,20 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Preferred Title for the Work (RDA 6.2.2)",
+            "propertyLabel": "Title Information",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
-            "remark": "http://access.rdatoolkit.org/6.2.2.html",
+            "remark": "",
             "repeatable": "true",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
-              "valueTemplateRefs": []
-            }
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
-            "propertyLabel": "Transcribed Preferred Title for the Work",
-            "remark": ""
-          },
-          {
-            "mandatory": "false",
-            "propertyLabel": "Variant Title for the Work (RDA 6.2.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
-            "remark": "http://access.rdatoolkit.org/6.2.3.html",
-            "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "literal",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
+              "valueTemplateRefs": [
+                "profile:bf2:WorkTitle",
+                "profile:bf2:WorkVariantTitle",
+                "profile:bflc:TranscribedTitle"
+              ]
             }
           },
           {
@@ -721,7 +696,7 @@
           {
             "mandatory": "false",
             "propertyLabel": "Title Information",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
             "remark": "http://access.rdatoolkit.org/2.3.2.html",
             "repeatable": "true",
             "resourceTemplates": [],
@@ -730,23 +705,9 @@
               "useValuesFrom": [],
               "valueDataType": {},
               "valueTemplateRefs": [
-                "profile:bf2:Title"
-              ]
-            }
-          },
-          {
-            "mandatory": "false",
-            "propertyLabel": "Variant Title Information",
-            "propertyURI": "http://bibframe.org/vocab/titleVariation",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html",
-            "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": [
-                "profile:bf2:VariantTitle"
+                "profile:bf2:Title",
+                "profile:bf2:VariantTitle",
+                "profile:bflc:TranscribedTitle"
               ]
             }
           },

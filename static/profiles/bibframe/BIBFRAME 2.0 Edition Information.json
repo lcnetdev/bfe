@@ -1,0 +1,47 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
+            "propertyLabel": "Edition Statement",
+            "remark": "http://id.loc.gov/ontologies/bibframe/Instance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Designation of Edition (RDA 2.5.2)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5019.html"
+          }
+        ],
+        "id": "profile:bf2:InstanceEdition",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
+        "resourceLabel": "Edition Statement (RDA 2.5)",
+        "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4891.html"
+      }
+    ],
+    "id": "profile:bf2:EditionInformation",
+    "title": "BIBFRAME 2.0 Edition Information",
+    "description": "Edition Statement, Designation of Edition",
+    "contact": "NDMSO",
+    "date": "2017-06-08"
+  }
+}

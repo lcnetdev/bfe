@@ -12,8 +12,7 @@
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works",
-                "http://id.loc.gov/ml38281/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueTemplateRefs": [],
               "valueDataType": {}
@@ -404,7 +403,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
             "propertyLabel": "Your Windows ID and Comments"
           },
           {
@@ -1429,7 +1428,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
             "propertyLabel": "Your Windows ID and Comments"
           }
         ],
