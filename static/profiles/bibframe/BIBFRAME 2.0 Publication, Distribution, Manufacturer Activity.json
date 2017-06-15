@@ -48,7 +48,7 @@
         ],
         "id": "profile:bf2:PublicationInformation",
         "contact": "",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Publication",
         "resourceLabel": "Publication Activity"
       },
       {
@@ -97,7 +97,7 @@
         ],
         "resourceLabel": "Distribution Activity",
         "id": "profile:bf2:DistributionInformation",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Distribution"
       },
       {
         "propertyTemplates": [
@@ -146,13 +146,13 @@
         ],
         "id": "profile:bf2:ManufactureInformation",
         "resourceLabel": "Manufacture Activity",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Manufacture"
       }
     ],
     "id": "profile:bf2:PublicationDistributionManufactureInformation",
     "title": "BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity",
     "description": "Publication, Distribution, Manufacture Activity",
-    "date": "2017-05-13",
+    "date": "2017-06-02",
     "contact": "NDMSO"
   }
 }

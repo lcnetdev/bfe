@@ -77,16 +77,48 @@
             });
         }
 
-        function retrieve(url, bfestore, bfelog, callback){
+	function publish(rdfxml, data, bfelog){
+            var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
+
+            var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
+
+            $.ajax({
+               url: url,
+               type: "POST",
+               data: rdfxml,
+               dataType: "text",
+               contentType: "text/xml; charset=utf-8"
+            }).done(function (data) {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
+                bfelog.addMsg(new Error(), "INFO", "Published " + data);
+                var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+                $messagediv.append('<div class="alert alert-success"><strong>Record Published:</strong><a href='+data.url+'>'+data.name+'</a></div>');
+                $('#bfeditor-formdiv').empty();
+                $('#save-btn').remove();
+                $messagediv.insertBefore('#bfeditor-previewPanel');
+                $('#bfeditor-previewPanel').remove();
+                bfeditor.bfestore.store = [];
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+                bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
+                bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
+                $messagediv.insertBefore('#bfeditor-previewPanel');
+            }).always(function(){
+                $('#table_id').DataTable().ajax.reload();
+            });
+        }
+
+
+        function retrieve(url, bfestore, tempstore, bfelog, callback){
             $.ajax({
                 url: url,
-                dataType: "json",
+		//accepts: {turtle: 'text/turtle'},
+                dataType: "text",
                 success: function (data) {
                     bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
                     bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
                     bfestore.store = [];
-                    tempstore = bfestore.jsonld2store(data);
-                    callback();
+		    bfestore.n32store(data, url, tempstore, callback);
                     },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
@@ -145,7 +177,9 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Title Information.json"
+			"static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json"
 			
             		],
             "startingPoints": [
@@ -294,6 +328,9 @@
             "save": {
                 "callback": save
             },
+	    "publish": {
+		"callback": publish
+	    },
             "retrieve": {
                 "callback": retrieve
             },

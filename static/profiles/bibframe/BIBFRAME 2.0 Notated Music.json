@@ -12,8 +12,8 @@
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works",
-                "http://id.loc.gov/ml38281/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works",
+                ""
               ],
               "valueTemplateRefs": [],
               "valueDataType": {}
@@ -40,13 +40,15 @@
             "remark": "http://access.rdatoolkit.org/19.2.html"
           },
           {
-            "propertyLabel": "Preferred Title for a Musical Work (RDA 6.14.2)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
-            "remark": "http://access.rdatoolkit.org/6.14.2.html",
+            "propertyLabel": "Title Information (RDA 6.14.2, RDA 6.14.3)",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
+            "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3731.html",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                ""
+                "profile:bf2:Title",
+                "profile:bf2:VariantTitle",
+                "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [
                 ""
@@ -55,34 +57,7 @@
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Transcribed Preferred Title for the Musical Work",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
-            "propertyLabel": "Variant Title for a Musical Work (RDA 6.14.3)",
-            "remark": "http://access.rdatoolkit.org/6.14.3.html"
+            "type": "resource"
           },
           {
             "propertyLabel": "Form of Work (RDA 6.3)",
@@ -747,12 +722,14 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "Title Information",
+            "propertyLabel": "Title Information (RDA 2.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Title"
+                "profile:bf2:Title",
+                "profile:bf2:VariantTitle",
+                "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -760,23 +737,7 @@
             "mandatory": "false",
             "repeatable": "true",
             "type": "resource",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3075.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:VariantTitle"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Variant Title Information",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4005.html",
-            "propertyURI": "http://bibframe.org/vocab/titleVariation"
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3076.html"
           },
           {
             "mandatory": "false",
