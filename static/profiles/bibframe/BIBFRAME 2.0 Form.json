@@ -11,8 +11,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/genreForms",
-                "http://id.loc.gov/ml38281/authorities/genreForms"
+                "http://id.loc.gov/authorities/genreForms"
               ],
               "valueDataType": {}
             },

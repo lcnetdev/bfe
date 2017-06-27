@@ -632,20 +632,6 @@
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4895.html"
           },
           {
-            "propertyLabel": "Statement of Responsibility Relating to the Edition (RDA 2.5.4)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5177.html"
-          },
-          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "resource",
