@@ -1642,8 +1642,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/resources/instances",
-                "http://id.loc.gov/ml38281/instances"
+                "http://id.loc.gov/resources/instances"
               ],
               "valueDataType": {}
             },

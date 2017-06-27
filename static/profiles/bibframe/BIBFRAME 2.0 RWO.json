@@ -614,8 +614,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/ml38281/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },
@@ -881,8 +880,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/ml38281/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },

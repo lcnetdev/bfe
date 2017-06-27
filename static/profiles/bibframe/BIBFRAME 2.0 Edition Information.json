@@ -30,6 +30,20 @@
             "propertyLabel": "Designation of Edition (RDA 2.5.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5019.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
+            "propertyLabel": "Statement of Responsibility Relating to the Edition (RDA 2.5.4)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5178.html"
           }
         ],
         "id": "profile:bf2:InstanceEdition",
