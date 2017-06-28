@@ -387,8 +387,13 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://rdaregistry.info/termList/RDAContentType"
+              ],
+              "valueDataType": {},
+              "defaultURI": "http://rdaregistry.info/termList/RDAContentType/1020",
+              "editable": "false",
+              "defaultLiteral": "text"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
             "propertyLabel": "Content Type (RDA 6.9)",
@@ -785,9 +790,13 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue"
+                "http://rdaregistry.info/termList/ModeIssue"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultURI": "http://rdaregistry.info/termList/ModeIssue/1003",
+              "defaultLiteral": "serial",
+              "repeatable": "true",
+              "editable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -796,11 +805,13 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://rdaregistry.info/termList/frequency"
+              ],
               "valueDataType": {}
             },
             "propertyLabel": "Frequency (RDA 2.14)",
@@ -860,9 +871,13 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/mediaTypes"
+                "http://rdaregistry.info/termList/RDAMediaType"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultURI": "http://rdaregistry.info/termList/RDAMediaType/1007",
+              "defaultLiteral": "unmediated",
+              "repeatable": "true",
+              "editable": "false"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2027.html"
@@ -904,9 +919,13 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/carriers"
+                "http://rdaregistry.info/termList/RDACarrierType"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultURI": "http://rdaregistry.info/termList/RDACarrierType/1049",
+              "repeatable": "true",
+              "defaultLiteral": "volume",
+              "editable": "false"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2051.html"

@@ -422,14 +422,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/contentTypes"
+                "http://rdaregistry.info/termList/RDAContentType"
               ],
               "valueDataType": {
                 "dataTypeURI": "",
                 "dataTypeLabel": ""
               },
               "editable": "false",
-              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/prm",
+              "defaultURI": "http://rdaregistry.info/termList/RDAContentType/1011",
               "defaultLiteral": "performed music",
               "remark": ""
             },
@@ -844,9 +844,12 @@
                 ""
               ],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue"
+                "http://rdaregistry.info/termList/ModeIssue"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "false",
+              "defaultURI": "http://rdaregistry.info/termList/ModeIssue/1001",
+              "defaultLiteral": "single unit"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -949,10 +952,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/mediaTypes"
+                "http://rdaregistry.info/termList/RDAMediaType"
               ],
               "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
+              "defaultURI": "http://rdaregistry.info/termList/RDAMediaType/1001",
               "defaultLiteral": "audio",
               "editable": "false"
             },
@@ -968,10 +971,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/carriers"
+                "http://rdaregistry.info/termList/RDACarrierType"
               ],
               "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
+              "defaultURI": "http://rdaregistry.info/termList/RDACarrierType/1004",
               "defaultLiteral": "audio disc",
               "editable": "false"
             },

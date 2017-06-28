@@ -401,14 +401,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/contentTypes"
+                "http://rdaregistry.info/termList/RDAContentType"
               ],
               "valueDataType": {
                 "dataTypeURI": "",
                 "dataTypeLabel": ""
               },
               "editable": "false",
-              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/ntm",
+              "defaultURI": "http://rdaregistry.info/termList/RDAContentType/1010",
               "defaultLiteral": "notated music",
               "remark": ""
             },
@@ -907,10 +907,12 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/ModeIssue",
-                ""
+                "http://rdaregistry.info/termList/ModeIssue"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultLiteral": "single unit",
+              "defaultURI": "http://rdaregistry.info/termList/ModeIssue/1001",
+              "editable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -983,10 +985,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/mediaTypes"
+                "http://rdaregistry.info/termList/RDAMediaType"
               ],
               "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
+              "defaultURI": "http://rdaregistry.info/termList/RDAMediaType/1007",
               "defaultLiteral": "unmediated",
               "editable": "false"
             },
@@ -1002,10 +1004,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/carriers"
+                "http://rdaregistry.info/termList/RDACarrierType"
               ],
               "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
+              "defaultURI": "http://rdaregistry.info/termList/RDACarrierType/1049",
               "defaultLiteral": "volume",
               "editable": "false"
             },
