@@ -393,7 +393,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },
