@@ -14,7 +14,7 @@
               "valueDataType": {},
               "defaultLiteral": "DLC",
               "editable": "false",
-              "defaultURI": ""
+              "defaultURI": "https://www.loc.gov/marc/organizations"
             },
             "propertyLabel": "Assigner",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#p_assigner",
@@ -71,7 +71,9 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultLiteral": "pcc",
+              "defaultURI": "http://www.loc.gov/standards/valuelist/marcauthen"
             },
             "propertyLabel": "Description authentication",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#c_DescriptionAuthentication",
@@ -95,20 +97,6 @@
             "propertyLabel": "Description conventions",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionConventions",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionConventions"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Description generation",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#c_GenerationProcess",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/generationProcess"
           },
           {
             "mandatory": "false",
@@ -138,7 +126,8 @@
               "useValuesFrom": [],
               "valueDataType": {},
               "editable": "false",
-              "defaultLiteral": "DLC"
+              "defaultLiteral": "DLC",
+              "defaultURI": "https://www.loc.gov/marc/organizations"
             },
             "propertyLabel": "Description modifier",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionModifier",
@@ -157,20 +146,6 @@
             "propertyLabel": "Encoding level",
             "remark": "http://id.loc.gov/ontologies/bflc.html#c_EncodingLevel",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/encodingLevel"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Metadata licensor",
-            "remark": "http://id.loc.gov/ontologies/bflc.html#p_metadataLicensor",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/metadataLicensor"
           },
           {
             "mandatory": "false",

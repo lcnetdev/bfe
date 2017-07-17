@@ -32,7 +32,8 @@
               "useValuesFrom": [],
               "valueDataType": {},
               "valueTemplateRefs": [
-                "profile:bf2:Agents:Contribution"
+                "profile:bf2:Agents:Contribution",
+                "profile:bflc:Agents:PrimaryContributor"
               ]
             }
           },
@@ -359,7 +360,7 @@
             "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueDataType": {},
               "valueTemplateRefs": []
@@ -395,7 +396,7 @@
               "valueDataType": {}
             },
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-3436.html",
-            "propertyLabel": "Date oF Expression (RDA 6.10)",
+            "propertyLabel": "Date of Expression (RDA 6.10)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/originDate"
           },
           {

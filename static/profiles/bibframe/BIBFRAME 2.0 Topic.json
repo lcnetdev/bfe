@@ -12,8 +12,7 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [
                 "http://id.loc.gov/authorities/subjects",
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/resources/works"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },
@@ -105,7 +104,7 @@
         ],
         "id": "profile:bf2:Topic:madsTopic",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Topic",
-        "resourceLabel": "MADS - Topic"
+        "resourceLabel": "Topic"
       },
       {
         "propertyTemplates": [
@@ -140,7 +139,7 @@
         ],
         "id": "profile:bf2:Topic:madsGenreForm",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm",
-        "resourceLabel": "MADS - GenreForm"
+        "resourceLabel": "GenreForm"
       },
       {
         "propertyTemplates": [
@@ -175,7 +174,7 @@
         ],
         "id": "profile:bf2:Topic:madsTemporal",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Temporal",
-        "resourceLabel": "MADS - Temporal"
+        "resourceLabel": "Temporal"
       },
       {
         "propertyTemplates": [
@@ -187,6 +186,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
+                "http://id.loc.gov/authorities/names",
                 "http://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {}
@@ -210,9 +210,8 @@
         ],
         "id": "profile:bf2:Topic:madsGeographic",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "MADS - Geographic"
+        "resourceLabel": "Geographic"
       }
-
     ],
     "id": "profile:bf2:Topic",
     "title": "BIBFRAME 2.0 Topic",

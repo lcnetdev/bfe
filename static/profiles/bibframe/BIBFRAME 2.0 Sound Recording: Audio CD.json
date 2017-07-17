@@ -43,8 +43,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
+                "profile:bf2:WorkTitle",
+                "profile:bf2:WorkVariantTitle",
                 "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [],
@@ -390,7 +390,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueDataType": {}
             },
