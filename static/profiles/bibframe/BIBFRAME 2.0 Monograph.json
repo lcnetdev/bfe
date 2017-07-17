@@ -26,7 +26,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:Contribution"
+                "profile:bf2:Agents:Contribution",
+                ""
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -129,7 +130,7 @@
           },
           {
             "propertyLabel": "Coverage of the Content (RDA 7.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Note",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
@@ -152,8 +153,14 @@
               "valueTemplateRefs": [
                 ""
               ],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                ""
+              ],
+              "valueDataType": {},
+              "defaultURI": "",
+              "defaultLiteral": "",
+              "editable": "false",
+              "repeatable": "true"
             },
             "remark": "http://access.rdatoolkit.org/rdachp7_rda7-634.html",
             "mandatory": "false",
@@ -174,7 +181,7 @@
               ],
               "valueDataType": {}
             },
-            "propertyLabel": "Other Person, Family, or Corporate Body Associated With a Work (RDA 19.3)",
+            "propertyLabel": "Other Agent Associated with Work (RDA 19.3)",
             "remark": "http://access.rdatoolkit.org/19.3.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution"
           },
@@ -708,7 +715,8 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Monograph:ISBN"
+                "profile:bf2:Monograph:ISBN",
+                "profile:bf2:Monograph:Status"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1261,8 +1269,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Valid ISBN 10 (RDA 2.15.1.4)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyLabel": "Valid ISBN RDA (2.15.1.4)",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns/value",
             "remark": "http://access.rdatoolkit.org/2.15.1.4.html"
           },
           {
@@ -1276,67 +1284,12 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
-            "propertyLabel": "Qualifier for ISBN 10"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "Invalid / Cancelled ISBN 10 RDA 2.15.1.6)",
-            "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "Valid ISBN 13 (RDA 2.15.1.4)",
-            "remark": "http://access.rdatoolkit.org/2.15.1.4.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
-            "propertyLabel": "Qualifier for ISBN 13"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "Invalid / Cancelled ISBN 13 (RDA 2.15.1.6)",
-            "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
+            "propertyLabel": "Qualifier for Valid ISBN"
           }
         ],
         "id": "profile:bf2:Monograph:ISBN",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isbn",
-        "resourceLabel": "ISBN"
+        "resourceLabel": "Valid ISBN"
       },
       {
         "propertyTemplates": [
@@ -1654,7 +1607,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
-            "propertyLabel": "Record Related Work Authorized Access Point"
+            "propertyLabel": "Related Work Authorized Access Point"
           },
           {
             "mandatory": "false",
@@ -1663,10 +1616,12 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://rdaregistry.info/Elements/w/"
+              ],
               "valueDataType": {}
             },
-            "propertyLabel": "Record Relationship Designator for Related Work (RDA Appendix J)",
+            "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
           },
           {
@@ -1970,9 +1925,11 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                ""
+              ],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/frequency"
+                "http://rdaregistry.info/termList/frequency"
               ],
               "valueDataType": {}
             },
@@ -1995,7 +1952,7 @@
         ],
         "id": "profile:bf2:Serial:Frequency",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Frequency",
-        "resourceLabel": "Frenquency"
+        "resourceLabel": "Frequency"
       },
       {
         "propertyTemplates": [
@@ -2131,6 +2088,41 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/subseriesStatement",
         "resourceLabel": "ISSN of Subseries",
         "contact": ""
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "defaultLiteral": ""
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns/value",
+            "propertyLabel": "Invalid / Cancelled ISBN Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema/label",
+            "propertyLabel": "Indicate that the number is incorrect, cancelled, etc."
+          }
+        ],
+        "id": "profile:bf2:Monograph:Status",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Status",
+        "resourceLabel": "Invalid ISBN",
+        "remark": ""
       }
     ],
     "contact": "NDMSO",

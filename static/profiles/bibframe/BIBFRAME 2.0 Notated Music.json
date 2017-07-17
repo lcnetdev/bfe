@@ -12,7 +12,7 @@
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works",
+                "http://mlvlp04.loc.gov:8231/resources/works",
                 ""
               ],
               "valueTemplateRefs": [],
@@ -28,7 +28,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Agents:Contribution"
+                "profile:bf2:Agents:Contribution",
+                "profile:bflc:Agents:PrimaryContributor"
               ],
               "useValuesFrom": [
                 ""
@@ -46,8 +47,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
+                "profile:bf2:WorkTitle",
+                "profile:bf2:WorkVariantTitle",
                 "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [
@@ -518,7 +519,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/MusNotation"
+                "http://rdaregistry.info/termList/FormatNoteMus"
               ],
               "valueDataType": {}
             },
@@ -1029,6 +1030,20 @@
             "remark": "http://access.rdatoolkit.org/rdachp3_rda3-2080.html"
           },
           {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Note on Extent (RDA 3.21.2.5)",
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-5616.html",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
+          },
+          {
             "propertyLabel": "Dimensions (RDA 3.5)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/dimensions",
             "resourceTemplates": [],
@@ -1083,8 +1098,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/productionMethod",
-            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4132.html",
-            "propertyLabel": "Production Method for Manuscript (RDA 3.9.2)"
+            "remark": "http://access.rdatoolkit.org/rdachp3_rda3-4030.html",
+            "propertyLabel": "Recording Production Method (RDA 3.9.1.3)"
           },
           {
             "propertyLabel": "Uniform Resource Locator (RDA 4.6)",

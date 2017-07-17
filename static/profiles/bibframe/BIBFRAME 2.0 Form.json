@@ -15,7 +15,7 @@
               ],
               "valueDataType": {}
             },
-            "propertyLabel": "Lookup",
+            "propertyLabel": "Lookup LCGFT",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
           },
           {
@@ -29,19 +29,23 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
-            "propertyLabel": "Input LCGFT"
+            "propertyLabel": "Input Term"
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/genreFormSchemes"
+              ],
+              "valueDataType": {},
+              "editable": "false",
+              "repeatable": "true"
             },
-            "propertyLabel": "Record Form of Work (if an LCGFT term is not being used)",
+            "propertyLabel": "Source of term",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
           }
         ],

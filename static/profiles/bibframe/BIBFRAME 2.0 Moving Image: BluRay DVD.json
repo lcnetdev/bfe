@@ -436,7 +436,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/resources/works"
+                "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueDataType": {}
             },
@@ -680,7 +680,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/AspectRatio"
+                "http://www.rdaregistry.info/termList/AspectRatio"
               ],
               "valueDataType": {}
             },
@@ -1172,7 +1172,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ml38281/vocabulary/rda/genMoPic"
+                "http://www.rdaregistry.info/termList/RDAGeneration"
               ],
               "valueDataType": {}
             },

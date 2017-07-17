@@ -224,7 +224,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 },
                 "http://id.loc.gov/authorities/subjects": {
                     "name": "LCSH",
-                    "load": require("src/mlookups/lcsubjects")
+                    "load": require("src/lookups/lcsubjects")
                 },
                 "http://id.loc.gov/authorities/genreForms": {
                     "name": "LCGFT",
@@ -269,6 +269,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                 "http://rdaregistry.info/termList/frequency": {
                     "name": "RDA-Frequency",
                     "load": require("src/lookups/rdafrequency")
+                },
+                "http://www.rdaregistry.info/termList/AspectRatio": {
+                    "name": "RDA-Aspect-Ratio",
+                    "load": require("src/lookups/rdaaspectration")
+                },
+                "http://www.rdaregistry.info/termList/RDAGeneration": {
+                    "name": "RDA-Generation",
+                    "load": require("src/lookups/rdageneration")
                 }
             };
     
@@ -352,11 +360,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                             bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
 
                             tempstore = bfestore.jsonld2store(data);
-                            tempstore.forEach(function(t){
-                                if (t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.otype == "uri" && t.s == l.defaulturi.replace('ml38281/', '')) {
-                                  //No idea what to do here...t.rtID = l;
-                                }
-                            });
                             //loadtemplate.data = tempstore;
                             cbLoadTemplates();
                         },
@@ -978,7 +981,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 
 		var $formgroup = $('<div>', {class: "form-group row"});
                 var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-                var $label = $('<label for="' + rt.useguid + '" class="col-sm-3 control-label" title="'+ rt.defaulturi + '">Set label?</label>');
+                //var $label = $('<label for="' + rt.useguid + '" class="col-sm-3 control-label" title="'+ rt.defaulturi + '">Set label?</label>');
                 var $resourceinput = $('<div class="col-sm-6"><input type="text" class="form-control" id="' + rt.useguid + '" placeholder="' + rt.defaulturi + '" tabindex="' + tabIndices++ + '"></div>');
 		var $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
                 var $linkbutton = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#x1f517;</button></div>');
@@ -1012,11 +1015,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
                     };
 
                     $resourceinput.keyup(enterHandler);
-                    $formgroup.append($label);
+                    //$formgroup.append($label);
                     $resourceinput.append($saves);
-                    $formgroup.append($resourceinput);
-		    $button.append($linkbutton);
-                    $formgroup.append($button);
+                    //$formgroup.append($resourceinput);
+		    //$button.append($linkbutton);
+                    //$formgroup.append($button);
 		    $resourcediv.append($formgroup);
 
 
@@ -2128,9 +2131,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
         }
     
         var getResource = function(subjecturi, propertyuri, selected, process) {
-            if(scheme.indexOf("ml38281") > 0){
-                selected.uri = selected.uri.replace("gov/", "gov/ml38281/");
-            }
             return lcshared.getResource(subjecturi,propertyuri,selected,process);
         }
         lu.load = {scheme,source,getResource};
@@ -2281,12 +2281,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 	if (rt.resourceURI.startsWith("http://www.loc.gov/mads/rdf/v1#")) {
 		uri = rt.resourceURI.replace("http://www.loc.gov/mads/rdf/v1#", "http://mlvlp04.loc.gov:3000/bfe/static/v1.json#");
         } else {
-		uri = rt.resourceURI;
+		uri = rt.resourceURI + ".json";
 	}
         $.ajax({
             type: "GET",
             async: false,
             cache: true,
+	    dataType: "jsonp",
             url: uri,
 	    success: function(data) {
 	        data.some(function(resource) {
@@ -3293,7 +3294,6 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module' ], function(re
         
         this.searching = setTimeout(function(formobject) {
             if ( query.length > 2 ) {
-                //u = "http://id.loc.gov/ml38281/search/?format=jsonp&start="+page+"&count=50&q=" + q;
                 u = "http://id.loc.gov/ml38281/search/?format=jsonp&start=1&count=50&q="+q;
                 $.ajax({
                     url: u,
@@ -3859,6 +3859,106 @@ bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'module' , 'src/lo
     var lcshared = require("src/lookups/lcshared");
     var cache = [];
     exports.scheme = "http://rdaregistry.info/termList/frequency";
+
+    exports.source = function(query, process) {
+
+        console.log('q is ' + query);
+        q = encodeURI(query);
+        if(cache[q]){
+            process(cache[q]);
+            return;
+        }
+        if( typeof this.searching != "undefined") {
+            clearTimeout(this.searching);
+            process([]);
+        }
+
+        this.searching = setTimeout(function() {
+           if ( query === '' || query === ' ') {
+                u = exports.scheme + ".json-ld";
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        return process(parsedlist);
+                    }
+                });
+             } else if (query.length > 1) {
+                u = exports.scheme + ".json-ld";
+                console.log(u);
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        cache[q] = parsedlist;
+                        return process(parsedlist);
+                    }
+                });
+            } else {
+                return [];
+            }
+        }, 300); // 300 ms
+    };
+
+    exports.getResource = lcshared.getResource;
+
+});
+bfe.define('src/lookups/rdaaspectratio', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
+    var lcshared = require("src/lookups/lcshared");
+    var cache = [];
+    exports.scheme = "http://rdaregistry.info/termList/AspectRatio";
+
+    exports.source = function(query, process) {
+
+        console.log('q is ' + query);
+        q = encodeURI(query);
+        if(cache[q]){
+            process(cache[q]);
+            return;
+        }
+        if( typeof this.searching != "undefined") {
+            clearTimeout(this.searching);
+            process([]);
+        }
+
+        this.searching = setTimeout(function() {
+           if ( query === '' || query === ' ') {
+                u = exports.scheme + ".json-ld";
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        return process(parsedlist);
+                    }
+                });
+             } else if (query.length > 1) {
+                u = exports.scheme + ".json-ld";
+                console.log(u);
+                $.ajax({
+                    url: u,
+                    dataType: "json",
+                    success: function (data) {
+                        parsedlist = lcshared.processJSONLDSuggestions(data,query,exports.scheme);
+                        cache[q] = parsedlist;
+                        return process(parsedlist);
+                    }
+                });
+            } else {
+                return [];
+            }
+        }, 300); // 300 ms
+    };
+
+    exports.getResource = lcshared.getResource;
+
+});
+bfe.define('src/lookups/rdageneration', ['require', 'exports', 'module' , 'src/lookups/lcshared'], function(require, exports, module) {
+    var lcshared = require("src/lookups/lcshared");
+    var cache = [];
+    exports.scheme = "http://rdaregistry.info/termList/RDAGeneration";
 
     exports.source = function(query, process) {
 

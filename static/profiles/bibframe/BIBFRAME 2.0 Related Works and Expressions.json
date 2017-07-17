@@ -28,7 +28,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Record Related Work Authorized Access Point",
+            "propertyLabel": "Related Work Authorized Access Point",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
           },
           {
@@ -38,10 +38,12 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://rdaregistry.info/Elements/w/"
+              ],
               "valueDataType": {}
             },
-            "propertyLabel": "Record Relationship Designator for Related Work (RDA Appendix J)",
+            "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
           },
           {
