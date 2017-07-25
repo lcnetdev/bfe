@@ -14,7 +14,8 @@
                 "http://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {},
-              "defaultURI": ""
+              "defaultURI": "http://id.loc.gov/vocabulary/languages/eng",
+              "defaultLiteral": "English"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of the Content (RDA 7.12)",

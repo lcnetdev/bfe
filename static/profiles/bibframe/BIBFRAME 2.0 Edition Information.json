@@ -15,7 +15,7 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "propertyLabel": "Edition Statement",
-            "remark": "http://id.loc.gov/ontologies/bibframe/Instance"
+            "remark": "http://access.rdatoolkit.org/2.5.1.html"
           },
           {
             "mandatory": "false",
@@ -29,7 +29,7 @@
             },
             "propertyLabel": "Designation of Edition (RDA 2.5.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5019.html"
+            "remark": "http://access.rdatoolkit.org/2.5.2.html"
           },
           {
             "mandatory": "false",
@@ -43,18 +43,18 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
             "propertyLabel": "Statement of Responsibility Relating to the Edition (RDA 2.5.4)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5178.html"
+            "remark": "http://access.rdatoolkit.org/2.5.4.html"
           }
         ],
         "id": "profile:bf2:InstanceEdition",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
         "resourceLabel": "Edition Statement (RDA 2.5)",
-        "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4891.html"
+        "remark": "http://access.rdatoolkit.org/2.5.html"
       }
     ],
     "id": "profile:bf2:EditionInformation",
     "title": "BIBFRAME 2.0 Edition Information",
-    "description": "Edition Statement, Designation of Edition",
+    "description": "Edition Statement",
     "contact": "NDMSO",
     "date": "2017-06-08"
   }

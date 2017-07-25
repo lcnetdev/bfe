@@ -296,7 +296,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/titleValue",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
             "propertyLabel": "1B. Transcribed title proper",
             "remark": "http://desktop.loc.gov/search?view=document&id=Infobasedcrmg0Dash0Dash0Dash247&hl=true&fq=allresources|true#"
           },
@@ -310,7 +310,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/Resource",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/StillImage",
             "propertyLabel": "1C. General material designation",
             "remark": "http://desktop.loc.gov/saved/GeneralMaterialDesignation"
           },
@@ -324,7 +324,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/titleVariation",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
             "propertyLabel": "1D. Parallel titles",
             "remark": "http://desktop.loc.gov/saved/ParallelTitles"
           },
@@ -340,7 +340,7 @@
               ],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab2/titleOther",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
             "propertyLabel": "1E. Other title information",
             "remark": "http://desktop.loc.gov/saved/OtherTitleInformation"
           },
@@ -355,7 +355,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "1F. Supplied and devised titles",
-            "propertyURI": "http://bibframe.org/vocab2/titleSupplied",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
             "remark": "http://desktop.loc.gov/saved/SuppliedDevisedTitles"
           },
           {
@@ -368,7 +368,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://bibframe.org/vocab/responsibilityStatement",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
             "propertyLabel": "1G. Statements of responsibility",
             "remark": "http://desktop.loc.gov/saved/StatementsOfResponsibility"
           },
@@ -383,7 +383,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "1H. Material without a collective title",
-            "propertyURI": "http://bibframe.org/vocab/titleStatement",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
             "remark": "http://desktop.loc.gov/saved/1H._Material_without_a_collective_title"
           },
           {
@@ -551,7 +551,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "5D. Dimensions and format",
-            "propertyURI": "http://bibframe.org/vocab/dimensions",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/dimensions",
             "remark": "http://desktop.loc.gov/saved/5D._Dimensions_and_format"
           },
           {
@@ -565,7 +565,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "5E. Accompanying material",
-            "propertyURI": "http://bibframe.org/vocab/accompaniedBy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/accompaniedBy",
             "remark": "http://desktop.loc.gov/saved/5E._Accompanying_material"
           }
         ],

@@ -30,7 +30,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel",
-            "propertyLabel": "Input Subject + Subdivision"
+            "propertyLabel": "Subject + Subdivision string"
           },
           {
             "mandatory": "false",
@@ -46,7 +46,7 @@
               "defaultURI": ""
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
-            "propertyLabel": "source"
+            "propertyLabel": "Subject source"
           },
           {
             "mandatory": "false",
@@ -64,7 +64,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#componentList",
-            "propertyLabel": "componentList"
+            "propertyLabel": "Components"
           }
         ],
         "id": "profile:bf2:Topic",
@@ -139,7 +139,7 @@
         ],
         "id": "profile:bf2:Topic:madsGenreForm",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm",
-        "resourceLabel": "GenreForm"
+        "resourceLabel": "Genre/Form"
       },
       {
         "propertyTemplates": [

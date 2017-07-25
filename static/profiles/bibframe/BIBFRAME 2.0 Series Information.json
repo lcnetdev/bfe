@@ -13,9 +13,9 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Series Statement and ISSN of Series (to RDA 2.12 and 2.12.8)",
+            "propertyLabel": "Series Statement and ISSN of Series (RDA 2.12.1-2.12.8)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-7632.html"
+            "remark": "http://access.rdatoolkit.org/2.12.html"
           },
           {
             "mandatory": "false",
@@ -29,7 +29,7 @@
             },
             "propertyURI": "http://www.loc.gov/ontologies/bibframe/seriesEnumeration",
             "propertyLabel": "Series Numbering (RDA 2.12.9)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-8007.html"
+            "remark": "http://access.rdatoolkit.org/2.19.html"
           },
           {
             "mandatory": "false",
@@ -42,8 +42,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.loc.gov/ontologies/bibframe/subseriesStatement",
-            "propertyLabel": "Subseries Title Proper, ISSN of Subseries (RDA 2.12.10, RDA 2.12.16)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-8149.html"
+            "propertyLabel": "Subseries Title Proper, ISSN of Subseries (RDA 2.12.10-2.12.16)",
+            "remark": "http://access.rdatoolkit.org/2.12.10.html"
           },
           {
             "mandatory": "false",
@@ -57,7 +57,7 @@
             },
             "propertyURI": "http://www.loc.gov/ontologies/bibframe/subseriesEnumeration",
             "propertyLabel": "Numbering within Subseries (RDA 2.12.17)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-8354.html"
+            "remark": "http://access.rdatoolkit.org/2.12.17.html"
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",

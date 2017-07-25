@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -35,7 +35,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -50,7 +50,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -66,14 +66,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/marcauthen"
+              ],
               "valueDataType": {},
               "defaultLiteral": "pcc",
-              "defaultURI": "http://www.loc.gov/standards/valuelist/marcauthen"
+              "defaultURI": "http://id.loc.gov/vocabulary/marcauthen/pcc"
             },
             "propertyLabel": "Description authentication",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#c_DescriptionAuthentication",
@@ -81,7 +83,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -100,7 +102,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -134,13 +136,15 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionModifier"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
+            "mandatory": "true",
+            "repeatable": "false",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/menclvl"
+              ],
               "valueDataType": {}
             },
             "propertyLabel": "Encoding level",
@@ -149,7 +153,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -163,7 +167,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
