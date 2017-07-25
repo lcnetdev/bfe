@@ -29,7 +29,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
-            "propertyLabel": "Input Term"
+            "propertyLabel": "Input Term",
+            "remark": "http://access.rdatoolkit.org/6.3.html"
           },
           {
             "mandatory": "false",

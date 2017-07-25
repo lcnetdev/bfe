@@ -14,7 +14,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
-            "propertyLabel": "Place of Publication (RDA 2.8.2)",
+            "propertyLabel": "Place (RDA 2.8.2)",
             "remark": "http://access.rdatoolkit.org/2.8.2.html"
           },
           {
@@ -28,7 +28,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
-            "propertyLabel": "Publisher's Name (RDA 2.8.4)",
+            "propertyLabel": "Name (RDA 2.8.4)",
             "remark": "http://access.rdatoolkit.org/2.8.4.html"
           },
           {
@@ -42,7 +42,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
-            "propertyLabel": "Date of Publication (RDA 2.8.6)",
+            "propertyLabel": "Date (RDA 2.8.6)",
             "remark": "http://access.rdatoolkit.org/2.8.6.html"
           }
         ],
@@ -64,7 +64,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
-            "propertyLabel": "Place of Distribution (RDA 2.9.2)",
+            "propertyLabel": "Place (RDA 2.9.2)",
             "remark": "http://access.rdatoolkit.org/2.9.2.html"
           },
           {
@@ -78,7 +78,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
-            "propertyLabel": "Distributor’s Name (RDA 2.9.4)",
+            "propertyLabel": "Name (RDA 2.9.4)",
             "remark": "http://access.rdatoolkit.org/2.9.4.html"
           },
           {
@@ -92,7 +92,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
-            "propertyLabel": "Date of Distribution (RDA 2.9.6)"
+            "propertyLabel": "Date (RDA 2.9.6)",
+            "remark": "http://access.rdatoolkit.org/2.9.6.html"
           }
         ],
         "resourceLabel": "Distribution Activity",
@@ -112,7 +113,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
-            "propertyLabel": "Place of Manufacture (RDA 2.10.2)",
+            "propertyLabel": "Place (RDA 2.10.2)",
             "remark": "http://access.rdatoolkit.org/2.10.2.html"
           },
           {
@@ -126,7 +127,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
-            "propertyLabel": "Manufacturer’s Name (RDA 2.10.4)",
+            "propertyLabel": "Name (RDA 2.10.4)",
             "remark": "http://access.rdatoolkit.org/2.10.4.html/"
           },
           {
@@ -140,7 +141,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
-            "propertyLabel": "Date of Manufacture (RDA 2.10.6)",
+            "propertyLabel": "Date (RDA 2.10.6)",
             "remark": "http://access.rdatoolkit.org/2.10.6.html"
           }
         ],

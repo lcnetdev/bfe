@@ -30,7 +30,8 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Authorized Access Point for Place Associated with a Resource",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
+            "remark": "http://http://access.rdatoolkit.org/6.5.html"
           },
           {
             "mandatory": "false",
@@ -43,12 +44,14 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
-            "propertyLabel": "Record Place Associated with a Resource"
+            "propertyLabel": "Record Place Associated with a Resource",
+            "remark": "http://http://access.rdatoolkit.org/6.5.html"
           }
         ],
         "id": "profile:bf2:Place",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
-        "resourceLabel": "Place Associated with a Resource"
+        "resourceLabel": "Place Associated with a Resource",
+        "contact": ""
       }
     ],
     "id": "profile:bf2:Place",

@@ -864,7 +864,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module' , 'src/lib/jquery-2.1.0.mi
 	                            save_json.created = bfeditor.bfestore.created;
         	                    save_json.modified = new Date().toUTCString();
                 	            save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-	                            editorconfig.publish.callback(rdfxml, save_json,bfelog);
+	                            editorconfig.publish.callback(save_json, rdfxml, bfelog);
 			    });
                         } else {
                             //save disabled

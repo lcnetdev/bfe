@@ -77,22 +77,24 @@
             });
         }
 
-	function publish(rdfxml, data, bfelog){
+	function publish(data, rdfxml, bfelog){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
-            var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
-
+            //var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
+	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/publish";
+	    data.rdfxml = JSON.stringify(rdfxml);
+	
             $.ajax({
                url: url,
                type: "POST",
-               data: rdfxml,
-               dataType: "text",
-               contentType: "text/xml; charset=utf-8"
+               data: JSON.stringify(data),
+	       dataType: "json",
+               contentType: "application/json; charset=utf-8"
             }).done(function (data) {
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
                 bfelog.addMsg(new Error(), "INFO", "Published " + data);
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                $messagediv.append('<div class="alert alert-success"><strong>Record Published:</strong><a href='+data.url+'>'+data.name+'</a></div>');
+                $messagediv.append('<div class="alert alert-success"><strong>Description Published:</strong><a href='+data.url+'>'+data.name+'</a></div>');
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
                 $messagediv.insertBefore('#bfeditor-previewPanel');
@@ -160,6 +162,7 @@
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 Agents Primary Contribution.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Form.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Language.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 LCC.json",
