@@ -14,7 +14,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
-            "propertyLabel": "Edition Statement",
+            "propertyLabel": "Edition Statement (RDA 2.5)",
             "remark": "http://access.rdatoolkit.org/2.5.1.html"
           },
           {

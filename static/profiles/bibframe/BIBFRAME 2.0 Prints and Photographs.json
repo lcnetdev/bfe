@@ -226,9 +226,7 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/carriers"
               ],
@@ -397,7 +395,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Translation of title by cataloging agency",
-            "propertyURI": "http://bibframe.org/vocab2/titleTranslation"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title"
           }
         ],
         "resourceLabel": "Title and Statement of Responsibility",
@@ -537,7 +535,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "5C. Other physical details",
-            "propertyURI": "http://bibframe.org/vocab2/otherPhysicalDetails",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/otherPhysicalDetails",
             "remark": "http://desktop.loc.gov/saved/5C._Other_physical_details"
           },
           {
@@ -571,7 +569,7 @@
         ],
         "resourceLabel": "Physical Description",
         "id": "profile:bf2:Graphics:Description",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/physicalDescription"
       },
       {
         "propertyTemplates": [

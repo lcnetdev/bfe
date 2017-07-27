@@ -219,13 +219,13 @@
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [
-                ""
+                "http://id.loc.gov/vocabulary/maudience"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "true",
+              "repeatable": "true"
             },
             "remark": "http://access.rdatoolkit.org/7.7.html",
             "mandatory": "false",
@@ -317,7 +317,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/geographicAreas"
               ],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "true",
+              "repeatable": "true"
             },
             "propertyLabel": "Geographic Area Code (MARC 043 Field)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage"
@@ -684,7 +686,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://www.rdaregistry.info/termList/AspectRatio"
+                ""
               ],
               "valueDataType": {}
             },
@@ -864,7 +866,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement"
           },
           {
-            "propertyLabel": "Edition Statement (RDA 2.5)",
+            "propertyLabel": "Edition Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -882,14 +884,14 @@
             "remark": ""
           },
           {
-            "propertyLabel": "Publication, Distribution, Manufacture Statements (RDA 2.8 - 2.10)",
+            "propertyLabel": "Publication, Distribution, Manufacture Statements",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:PublicationInformation",
-                "profile:bf2:ManufactureInformation",
+                "profile:bf2:DistributionInformation",
                 "profile:bf2:ManufactureInformation"
               ],
               "useValuesFrom": [],
@@ -927,7 +929,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Series Statement (RDA 2.12)",
+            "propertyLabel": "Series Statement",
             "remark": "http://access.rdatoolkit.org/2.12.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
           },
@@ -1087,22 +1089,6 @@
             "repeatable": "true",
             "type": "literal",
             "remark": "http://access.rdatoolkit.org/3.4.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://www.rdaregistry.info/termList/RDAGeneration"
-              ],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/generation",
-            "propertyLabel": "Generation of Motion Picture Film (RDA 3.10.5)",
-            "remark": "http://access.rdatoolkit.org/3.10.5.html"
           },
           {
             "mandatory": "false",
@@ -1678,6 +1664,32 @@
             },
             "propertyLabel": "Note on Publisher Number",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ean",
+            "propertyLabel": "International Article Number (EAN)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on EAN"
           },
           {
             "mandatory": "false",

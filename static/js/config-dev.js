@@ -111,8 +111,12 @@
         }
 
 
-        function retrieve(url, bfestore, tempstore, bfelog, callback){
+        function retrieve(uri, bfestore, tempstore, bfelog, callback){
+	    
+	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/whichrt";
+	
             $.ajax({
+		data: { uri: uri},
                 url: url,
 		//accepts: {turtle: 'text/turtle'},
                 dataType: "text",

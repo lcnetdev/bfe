@@ -148,12 +148,12 @@
             "propertyLabel": "Intended Audience (RDA 7.7)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/intendedAudience",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/maudience"
               ],
-              "useValuesFrom": [],
               "valueDataType": {}
             },
             "remark": "http://access.rdatoolkit.org/7.7.html",
@@ -688,7 +688,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement"
           },
           {
-            "propertyLabel": "Edition Statement (RDA 2.5)",
+            "propertyLabel": "Edition Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -720,15 +720,15 @@
             "remark": "http://access.rdatoolkit.org/2.6.html"
           },
           {
-            "propertyLabel": "Publication, Distribution, Manufacture Statements (RDA 2.8 - 2.10)",
+            "propertyLabel": "Publication, Distribution, Manufacture Statements",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Publication",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:Publication",
-                "profile:bf2:Serial:Distribution",
-                "profile:bf2:Serial:Manufacture"
+                "profile:bf2:PublicationInformation",
+                "profile:bf2:DistributionInformation",
+                "profile:bf2:ManufactureInformation"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -763,7 +763,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Series Statement (RDA 2.12)",
+            "propertyLabel": "Series Statement",
             "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
           },
@@ -1333,7 +1333,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Valid ISSN Recording Identifier for Manifestation (RDA 2.15.1.4)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifies",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "remark": "http://access.rdatoolkit.org/2.15.1.4.html"
           },
           {
@@ -1357,9 +1357,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "defaultLiteral": "invalid"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifies",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Incorrect ISSN Incorrect Identifiers (RDA 2.15.1.6)",
             "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
           },
@@ -1373,13 +1374,13 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifies",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Cancelled ISSN Incorrect Identifiers (RDA 2.15.1.6)",
             "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
           }
         ],
         "id": "profile:bf2:Serial:ISSN",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Issn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Status",
         "resourceLabel": "ISSN"
       },
       {
@@ -1676,40 +1677,6 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
         "contact": "NDMSO",
         "resourceLabel": "Dewey Classification"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Lookup",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "label",
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label"
-          }
-        ],
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience",
-        "resourceLabel": "Intended audience information",
-        "remark": "",
-        "id": "profile:bf:Serial:Audience"
       },
       {
         "propertyTemplates": [

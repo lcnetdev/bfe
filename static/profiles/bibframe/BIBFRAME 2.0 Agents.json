@@ -9,7 +9,7 @@
           {
             "propertyLabel": "Lookup",
             "valueConstraint": {
-              "repeatable": "true",
+              "repeatable": "false",
               "useValuesFrom": [
                 "http://id.loc.gov/authorities/names"
               ],
@@ -1414,7 +1414,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#abel",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Record Relationship Designator (if Relationship Designator does not appear in Search)"
           }
         ],
