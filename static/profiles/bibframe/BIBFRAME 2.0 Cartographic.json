@@ -185,9 +185,11 @@
             "remark": "http://access.rdatoolkit.org/7.7.html",
             "repeatable": "true",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/maudience"
+              ],
               "valueDataType": {},
               "valueTemplateRefs": []
             }
@@ -728,7 +730,7 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Edition Statement (RDA 2.5)",
+            "propertyLabel": "Edition Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "remark": "",
             "repeatable": "true",
@@ -746,7 +748,7 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Publication, Distribution, Manufacture Statements (RDA 2.8 - 2.10)",
+            "propertyLabel": "Publication, Distribution, Manufacture Statements",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity",
             "remark": "",
             "repeatable": "true",
@@ -778,7 +780,7 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Series Statement (RDA 2.12)",
+            "propertyLabel": "Series Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatementment",
             "remark": "",
             "repeatable": "true",

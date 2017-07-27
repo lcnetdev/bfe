@@ -16,7 +16,8 @@
               "valueDataType": {}
             },
             "propertyLabel": "Lookup LCGFT",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
+            "remark": ""
           },
           {
             "mandatory": "false",

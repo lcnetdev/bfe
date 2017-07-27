@@ -194,12 +194,12 @@
             "propertyLabel": "Intended Audience (RDA 7.7)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/intendedAudience",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [
-                ""
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/maudience"
               ],
-              "useValuesFrom": [],
               "valueDataType": {}
             },
             "remark": "http://access.rdatoolkit.org/7.7.html",
@@ -755,7 +755,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement"
           },
           {
-            "propertyLabel": "Edition Statement (RDA 2.5)",
+            "propertyLabel": "Edition Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -773,7 +773,7 @@
             "remark": ""
           },
           {
-            "propertyLabel": "Publication, Distribution, Manufacture Statements (RDA 2.8 - 2.10)",
+            "propertyLabel": "Publication, Distribution, Manufacture Statements",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity",
             "resourceTemplates": [],
             "type": "resource",
@@ -816,7 +816,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Series Statement (RDA 2.12)",
+            "propertyLabel": "Series Statement",
             "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
           },

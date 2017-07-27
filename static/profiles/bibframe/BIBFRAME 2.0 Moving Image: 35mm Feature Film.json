@@ -775,7 +775,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
           },
           {
-            "propertyLabel": "Edition Statement (RDA 2.5)",
+            "propertyLabel": "Edition Statement",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -807,7 +807,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity",
-            "propertyLabel": "Publication, Distribution, Manufacture Statements (RDA 2.8 - 2.10)",
+            "propertyLabel": "Publication, Distribution, Manufacture Statements",
             "remark": ""
           },
           {
