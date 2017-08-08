@@ -186,8 +186,9 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json"
-			
+			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
+			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json"
             		],
             "startingPoints": [
                         {"menuGroup": "Monograph",
@@ -279,12 +280,12 @@
                             {
                                 label: "Instance",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:35mmFilm:Instance" ]
+                                useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
                             },
                             {
                                 label: "Work",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:35mmFilm:Work" ]
+                                useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
                             }
 
                         ]},

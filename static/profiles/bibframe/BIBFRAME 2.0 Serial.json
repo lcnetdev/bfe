@@ -26,8 +26,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bflc:Agents:PrimaryContribution",
-                "profile:bf2:Agents:Contribution"
+                "profile:bflc:Agents:PrimaryContribution"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -211,18 +210,18 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/classification"
           },
           {
-            "propertyLabel": "DDC Classification (RDA Chapter 23)",
+            "propertyLabel": "DDC Classification",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/classification",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:Dewey"
+                "profile:bf2:DDC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -373,10 +372,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDAContentType"
+                "http://id.loc.gov/vocabulary/contentTypes"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/RDAContentType/1020",
+              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
               "editable": "false",
               "defaultLiteral": "text"
             },
@@ -491,11 +490,13 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/millus"
+              ],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/illustrativeContent",
@@ -591,11 +592,11 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                ""
+                "profile:bf2:LCCN"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -775,10 +776,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/ModeIssue"
+                "http://id.loc.gov/vocabulary/issuance"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/ModeIssue/1003",
+              "defaultURI": "http://id.loc.gov/vocabulary/issuance/serl",
               "defaultLiteral": "serial",
               "repeatable": "true",
               "editable": "false"
@@ -795,7 +796,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/frequency"
+                "http://id.loc.gov/vocabulary/frequencies"
               ],
               "valueDataType": {}
             },
@@ -870,10 +871,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDAMediaType"
+                "http://id.loc.gov/vocabulary/mediaTypes"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/RDAMediaType/1007",
+              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
               "defaultLiteral": "unmediated",
               "repeatable": "true",
               "editable": "false"
@@ -918,10 +919,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDACarrierType"
+                "http://id.loc.gov/vocabulary/carriers"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/RDACarrierType/1049",
+              "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
               "repeatable": "true",
               "defaultLiteral": "volume",
               "editable": "false"
@@ -1007,7 +1008,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Serial:Lccn"
+                "profile:bf2:LCCN"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1030,6 +1031,20 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
             "propertyLabel": "Administrative Metadata for Instance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "false",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/projectedProvisionDate",
+            "remark": "http://id.loc.gov/ontologies/bflc.html#p_projectedProvisionDate",
+            "propertyLabel": "Projected publication date (YYMM)"
           },
           {
             "mandatory": "false",
@@ -1304,26 +1319,6 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
-            "propertyLabel": "LCCN"
-          }
-        ],
-        "id": "profile:bf2:Serial:Lccn",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
-        "resourceLabel": "LCCN"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
@@ -1357,10 +1352,13 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
-              "defaultLiteral": "invalid"
+              "valueDataType": {
+                "dataTypeURI": "http://www.w3.org/2000/01/rdf-schema#label",
+                "dataTypeLabel": "\"incorrect\""
+              },
+              "defaultLiteral": ""
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Incorrect ISSN Incorrect Identifiers (RDA 2.15.1.6)",
             "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
           },
@@ -1372,15 +1370,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#label",
+                "dataTypeLabel": "\"cancelled\""
+              }
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Cancelled ISSN Incorrect Identifiers (RDA 2.15.1.6)",
             "remark": "http://access.rdatoolkit.org/2.15.1.6.html"
           }
         ],
         "id": "profile:bf2:Serial:ISSN",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Status",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Issn",
         "resourceLabel": "ISSN"
       },
       {
@@ -1643,40 +1644,6 @@
         "contact": "NDMSO",
         "resourceLabel": "Variant Title",
         "remark": "Title associated with the resource that is different from the Work or Instance title."
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classification",
-            "propertyLabel": "Dewey Classification"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/edition",
-            "propertyLabel": "Dewey Edition"
-          }
-        ],
-        "id": "profile:bf2:Serial:Dewey",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
-        "contact": "NDMSO",
-        "resourceLabel": "Dewey Classification"
       },
       {
         "propertyTemplates": [
@@ -2065,7 +2032,7 @@
                 ""
               ],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/frequency"
+                "http://id.loc.gov/vocabulary/frequencies"
               ],
               "valueDataType": {}
             },

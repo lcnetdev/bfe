@@ -5,3 +5,6 @@ static/js/config-jodi.js
 jodi.html
 static/profiles/bibframe/Test profile (jodiw).json
 
+builds/bfe.dev.bak
+builds/bfe.jodi.js
+static/profiles/bibframe/Test All (jodiw).json
