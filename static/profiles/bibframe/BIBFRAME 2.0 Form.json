@@ -15,9 +15,9 @@
               ],
               "valueDataType": {}
             },
-            "propertyLabel": "Lookup LCGFT",
+            "propertyLabel": "Lookup LCGFT (RDA 6.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
-            "remark": ""
+            "remark": "http://access.rdatoolkit.org/6.3.html"
           },
           {
             "mandatory": "false",

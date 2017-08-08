@@ -5,23 +5,6 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "defaultLiteral": "DLC",
-              "editable": "false",
-              "defaultURI": "https://www.loc.gov/marc/organizations"
-            },
-            "propertyLabel": "Assigner",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_assigner",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/assigner"
-          },
-          {
-            "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
@@ -45,7 +28,7 @@
                 "dataTypeLabelHint": "Date or date and time on which the original metadata first created."
               }
             },
-            "propertyLabel": "Creation date",
+            "propertyLabel": "Creation date (YYYY-MM-DD)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/creationDate"
           },
           {
@@ -62,6 +45,23 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/changeDate",
             "propertyLabel": "Change date"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "false",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "defaultLiteral": "DLC",
+              "editable": "false",
+              "defaultURI": "https://www.loc.gov/marc/organizations"
+            },
+            "propertyLabel": "Assigner",
+            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_assigner",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/assigner"
           },
           {
             "mandatory": "false",
@@ -94,7 +94,8 @@
               "valueDataType": {},
               "defaultURI": "http://id.loc.gov/vocabulary/descriptionConventions/rda",
               "editable": "false",
-              "defaultLiteral": "rda"
+              "defaultLiteral": "rda",
+              "repeatable": "false"
             },
             "propertyLabel": "Description conventions",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionConventions",
@@ -112,7 +113,9 @@
               ],
               "valueDataType": {},
               "defaultLiteral": "eng",
-              "defaultURI": "http://id.loc.gov/vocabulary/languages/eng"
+              "defaultURI": "http://id.loc.gov/vocabulary/languages/eng",
+              "editable": "false",
+              "repeatable": "false"
             },
             "propertyLabel": "Description language",
             "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionLanguage",
@@ -150,20 +153,6 @@
             "propertyLabel": "Encoding level",
             "remark": "http://id.loc.gov/ontologies/bflc.html#c_EncodingLevel",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/encodingLevel"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Projected publication date",
-            "remark": "http://id.loc.gov/ontologies/bflc.html#p_projectedProvisionDate",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/projectedProvisionDate"
           },
           {
             "mandatory": "false",

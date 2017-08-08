@@ -47,8 +47,8 @@
           }
         ],
         "id": "profile:bf2:InstanceEdition",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
-        "resourceLabel": "Edition Statement (RDA 2.5)",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
+        "resourceLabel": "Edition Statement",
         "remark": "http://access.rdatoolkit.org/2.5.html"
       }
     ],

@@ -27,8 +27,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bflc:Agents:PrimaryContribution",
-                "profile:bf2:Agents:Contribution"
+                "profile:bflc:Agents:PrimaryContribution"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -56,7 +55,7 @@
             "type": "resource"
           },
           {
-            "propertyLabel": "Form of Work (RDA 6.3)",
+            "propertyLabel": "Form of Work",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
             "resourceTemplates": [],
             "type": "resource",
@@ -69,7 +68,7 @@
               ],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/6.3.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -261,16 +260,33 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "DDC Classification (RDA Chapter 23)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationDdc",
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
             "resourceTemplates": [],
-            "type": "literal",
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:LCC"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
+            "propertyLabel": "LC Classification"
+          },
+          {
+            "propertyLabel": "DDC Classification",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationDdc",
+            "resourceTemplates": [],
+            "type": "resource",
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:DDC"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true"
           },
@@ -338,9 +354,11 @@
             "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:LCCN"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -423,14 +441,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDAContentType"
+                "http://id.loc.gov/vocabulary/contentTypes"
               ],
               "valueDataType": {
                 "dataTypeURI": "",
                 "dataTypeLabel": ""
               },
               "editable": "false",
-              "defaultURI": "http://rdaregistry.info/termList/RDAContentType/1011",
+              "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/prm",
               "defaultLiteral": "performed music",
               "remark": ""
             },
@@ -623,7 +641,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf:lccn:AudioCD"
+                "profile:bf2:LCCN"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -872,10 +890,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDAMediaType"
+                "http://id.loc.gov/vocabulary/mediaTypes"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/RDAMediaType/1001",
+              "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
               "defaultLiteral": "audio",
               "editable": "false"
             },
@@ -891,10 +909,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://rdaregistry.info/termList/RDACarrierType"
+                "http://id.loc.gov/vocabulary/carriers"
               ],
               "valueDataType": {},
-              "defaultURI": "http://rdaregistry.info/termList/RDACarrierType/1004",
+              "defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
               "defaultLiteral": "audio disc",
               "editable": "false"
             },
@@ -975,15 +993,17 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://www.rdaregistry.info/termList/RDAGeneration"
+              ],
               "valueDataType": {}
             },
-            "propertyLabel": "Recording Generation of Audio Recordings (RDA 3.10.2.3)",
-            "remark": "http://access.rdatoolkit.org/3.10.2.3.html",
+            "propertyLabel": "Recording Generation (RDA 3.10)",
+            "remark": "http://access.rdatoolkit.org/3.10.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/generation"
           },
           {
@@ -1037,11 +1057,13 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mplayback"
+              ],
               "valueDataType": {}
             },
             "propertyLabel": "Configuration of Playback Channels (RDA 3.16.8)",
@@ -1123,7 +1145,7 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/acquisitionTerms"
           },
           {
-            "propertyLabel": "Uniform Resource Locator (RDA 4.6) -- For example, URI for Cover Art",
+            "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/electronicLocator",
             "resourceTemplates": [],
             "type": "literal",
@@ -1139,10 +1161,12 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:LCCN"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },

@@ -17,9 +17,9 @@
               "defaultURI": "",
               "defaultLiteral": ""
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
-            "propertyLabel": "Language of the Content (RDA 7.12)",
-            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-844.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Language",
+            "propertyLabel": "Language",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -31,12 +31,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Note on Language of the Content (RDA 7.12)",
-            "remark": "http://access.rdatoolkit.org/rdachp7_rda7-844.html",
+            "propertyLabel": "Note on Language",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
           }
         ],
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/language",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
         "id": "profile:bf2:Language",
         "resourceLabel": "Language",
         "remark": ""

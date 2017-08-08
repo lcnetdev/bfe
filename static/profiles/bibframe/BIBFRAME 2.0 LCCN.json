@@ -1,0 +1,44 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "LCCN"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Status",
+            "propertyLabel": "Invalid or Cancelled LCCN"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
+        "id": "profile:bf2:LCCN",
+        "resourceLabel": "LCCN"
+      }
+    ],
+    "id": "profile:bf2:LCCN",
+    "title": "BIBFRAME 2.0 LCCN",
+    "description": "LC Control Number",
+    "date": "2017-07-27",
+    "contact": "NDMSO"
+  }
+}
