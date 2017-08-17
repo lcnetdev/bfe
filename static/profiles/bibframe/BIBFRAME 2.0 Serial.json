@@ -374,7 +374,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/contentTypes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
               "editable": "false",
               "defaultLiteral": "text"
@@ -464,7 +466,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Language"
+                "profile:bf2:Language:Note"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -497,7 +499,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/millus"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Illustration"
+              }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/illustrativeContent",
             "propertyLabel": "Illustrative Content (RDA 7.15)",
@@ -693,15 +697,13 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:InstanceEdition"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "remark": ""
           },
           {
@@ -759,7 +761,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Instance:SeriesStatement"
+                "profile:bf2:SeriesInformation"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -778,7 +780,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/issuance"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Issuance"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/serl",
               "defaultLiteral": "serial",
               "repeatable": "true",
@@ -835,20 +839,6 @@
             "remark": "http://access.rdatoolkit.org/2.15.html"
           },
           {
-            "propertyLabel": "Note on Title (RDA 2.17.2)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/2.17.2.html"
-          },
-          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
@@ -873,7 +863,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/mediaTypes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Media"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
               "defaultLiteral": "unmediated",
               "repeatable": "true",
@@ -921,7 +913,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/carriers"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
               "repeatable": "true",
               "defaultLiteral": "volume",
@@ -976,10 +970,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:Item"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1260,6 +1256,20 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/immediateAcquisition",
             "propertyLabel": "Immediate Acquisition"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/acquisitionSource",
+            "remark": "http://access.rdatoolkit.org/rdachp4_rda4-93.html",
+            "propertyLabel": "Contact information (RDA 4.3)"
           }
         ],
         "resourceLabel": "BIBFRAME Item (RDA Item)",

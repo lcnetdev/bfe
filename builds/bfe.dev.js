@@ -1370,6 +1370,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 } else {
                     uri = editorconfig.baseURI + rt.useguid;
                 }
+                
+                if (bfestore.state === "retrieve" && _.some(bfestore.store, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o":rt.resourceURI})) {
+                    //match the rt to the type triple
+                    var triple = _.find(bfestore.store, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o":rt.resourceURI});
+                    rt.defaulturi = triple.o;
+                    rt.guid = triple.guid;
+                    triple.rtID = rt.id;
+                } else {
+                
                 var triple = {};
                 triple.guid = rt.useguid;
                 triple.rtID = rt.id;
@@ -1382,6 +1391,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 //bfestore.store.push(triple);
                 rt.guid = rt.useguid;
 
+                }
                 rt.propertyTemplates.forEach(function(property) {
                     if (_.has(property, "valueConstraint")) {
                         if (_.has(property.valueConstraint, "valueTemplateRefs") && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
@@ -1422,6 +1432,20 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     }
                 });
             } else {
+                //the rt needs a type
+                if (bfestore.state = "create"){
+                    var triple = {};
+                    triple.guid = rt.useguid;
+                    triple.rtID = rt.id;
+                    triple.s = rt.defaulturi;
+                    triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                    triple.o = rt.resourceURI;
+                    triple.otype = "uri";
+                    fobject.store.push(triple);
+                    bfestore.addTriple(triple);
+                    rt.guid = rt.useguid;
+                }
+
                 // This will likely be insufficient - we'll need the entire 
                 // pre-loaded store in this 'first' form.
                 rt.data.forEach(function(t) {
@@ -1457,11 +1481,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
             "p": property.propertyURI
         });
 
-	if (bfestore.state === "retrieve"){
-	
-		propsdata = _.where(bfestore.store, {"p":property.propertyURI});
-
-	}
+        if (bfestore.state === "retrieve"){
+            propsdata = _.where(bfestore.store, {"p":property.propertyURI});
+        }
 
         if (propsdata.length > 1) {
             //find the right one
@@ -1495,11 +1517,31 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 loadPropsdata(pd, property, form, fobject)
             });
 
-        } else if (_.has(property, "valueConstraint")) {
+        } else if (_.has(property, "valueConstraint") && (!_.isEmpty(property.valueConstraint.defaultURI) || !_.isEmpty(property.valueConstraint.defaultLiteral))) {
             // Otherwise - if the property is not found in the pre-loaded data
             // then do we have a default value?
             if (_.has(property.valueConstraint, "defaultURI") && !_.isEmpty(property.valueConstraint.defaultURI)) {
+                var data = property.valueConstraint.defaultURI;
+            } else {
+                var data = undefined;
+            }
+
+            if (data){
+	    
                 bfelog.addMsg(new Error(), "DEBUG", "Setting default data for " + property.propertyURI);
+            
+                //is there a type?
+                if (_.has(property.valueConstraint.valueDataType, "dataTypeURI")){
+                    var typeTriple = {};
+                    typeTriple.guid = guid();
+                    typeTriple.s = data;
+                    typeTriple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"; //rdf:type
+                    typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
+                    typeTriple.otype = "uri";
+                    fobject.store.push(typeTriple);
+                    bfestore.addTriple(typeTriple);
+                }
+
                 var data = property.valueConstraint.defaultURI;
                 // set the triples
                 var triple = {};
@@ -1514,18 +1556,23 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 triple.otype = "uri";
                 fobject.store.push(triple);
                 bfestore.addTriple(triple);
-                //bfestore.store.push(triple);
-
+            }
                 //set the label
                 var label = {};
-                label.s = triple.o; //http://id.loc.gov/vocabulary/mediaTypes/n
+                if(triple){
+                   label.s = triple.o;
+                   displayguid = triple.guid;
+                } else {
+                   label.s = rt.defaulturi;
+                   displayguid = guid();
+                }
+
                 label.otype = "literal";
                 label.p = "http://www.w3.org/2000/01/rdf-schema#label";
                 label.o = property.valueConstraint.defaultLiteral;
 
                 fobject.store.push(label);
-                bfestore.addTriple(label);
-                //bfestore.store.push(label);
+                bfestore.addTriple(label);           
 
                 // set the form
                 var $formgroup = $("#" + property.guid, form).closest(".form-group");
@@ -1541,7 +1588,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     editable = false;
                 }
                 var bgvars = {
-                    "tguid": triple.guid,
+                    "tguid": displayguid,
                     "tlabelhover": displaydata,
                     "tlabel": displaydata,
                     "fobjectid": fobject.id,
@@ -1564,8 +1611,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                         });
                     }
                 }
-
-            }
+            
         }
     }
 
@@ -1576,7 +1622,30 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
         var displaydata = "";
         var triples = [];
         //console.log("pd.otype is " + pd.otype);
-        if (pd.otype == "uri") {
+        var hasTemplate = true;
+
+        if (_.find(bfestore.store, {s:pd.o, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})){        
+            var propsTemplateIds = _.where(resourceTemplates, {resourceURI: _.find(bfestore.store, {s:pd.o, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).o})
+        }
+
+        if (propsTemplateIds !== undefined && bfestore.state !== "edit") {            
+            //if (_.indexOf(property.valueConstraint.valueTemplateRefs, propsTemplateId) < 0)
+            var found = false;
+            property.valueConstraint.valueTemplateRefs.forEach(function(valueTemplateId){
+                if(_.some(propsTemplateIds, {id:valueTemplateId})) {
+                    console.log(property.propertyLabel + " accepts " + valueTemplateId)
+                    found = true;
+                }
+            });
+            if (!found){
+               console.log(property.propertyLabel + " did not match" + pd.o);
+               hasTemplate = false;
+            }
+        }
+
+        if (pd.otype == "uri" && hasTemplate) {
+            //_.find(resourceTemplates, {resourceURI: _.find(bfestore.store, {s:pd.o, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).o}).id
+
             var triples = _.where(bfestore.store, {
                 "s": pd.o
             });
@@ -1616,6 +1685,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     var labeldata = _.where(bfestore.store, {
                         "s": pd.o
                     });
+
                     if (t.p.match(/label/i)) {
                         displaydata = t.o;
                     } else if (labeldata.length > 0) {
@@ -1656,12 +1726,20 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                             }), {
                                 p: "http://id.loc.gov/ontologies/bibframe/mainTitle"
                             });
+                            //nested titles
+                            if (_.has(bfestore.store, {"s": labeldata[0].s, p: "http://id.loc.gov/ontologies/bibframe/title"})){
+                            var workTitle = _.find(bfestore.store, {
+                                "s": _.where(bfestore.store, {"s": labeldata[0].s, p: "http://id.loc.gov/ontologies/bibframe/title"})[0].o, 
+                                "p": "http://id.loc.gov/ontologies/bibframe/mainTitle"})
+                            }
                             if (tlabel !== undefined) {
                                 displaydata = tlabel.o
                             } else if (tmainTitle !== undefined) {
                                 displaydata = tmainTitle.o
                             } else if (tvalue !== undefined) {
                                 displaydata = tvalue.o
+                            } else if (tmainTitle === undefined && tlabel === undefined && tvalue === undefined && workTitle !==undefined) {
+                                displaydata = workTitle.o
                             }
 
                         }
@@ -1685,14 +1763,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     displaydata.trim();
                 });
             }
-        } else {
-            displaydata = pd.o;
+        } else if (hasTemplate) {
+           displaydata = pd.o;
         }
-        if (displaydata == "") {
-            displaydata = pd.s;
-        }
+
+//        if (displaydata == "") {
+//            displaydata = pd.s;
+//        }
+
         triples.push(pd);
 
+        if (hasTemplate){
         var bgvars = {
             "tguid": pd.guid,
             "tlabelhover": displaydata,
@@ -1714,8 +1795,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 $buttons.each(function() {
                     $(this).prop("disabled", true);
                 });
-            }
-        }
+            }        
+        }}
     }
 
 
@@ -1828,12 +1909,18 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 removeTriple(callingformobjectid, inputID, null, triple);
             });
 
-            form.formobject.store[0].o = form.formobject.store[2].o;
-            form.formobject.store[1].s = form.formobject.store[2].o;
-            form.formobject.store[3].s = form.formobject.store[2].o;
-            form.formobject.store.splice(2, 1);
+//            form.formobject.store[0].o = form.formobject.store[2].o;
+//            form.formobject.store[1].s = form.formobject.store[2].o;
+//            form.formobject.store[3].s = form.formobject.store[2].o;
+//            form.formobject.store.splice(2, 1);
 
-            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, form.formobject.store);
+              var tlabel = _.find(form.formobject.store, {p: "http://www.w3.org/2000/01/rdf-schema#label"});
+              var ttype = _.find(form.formobject.store, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", s: tlabel.s});
+              var tprop = _.find(form.formobject.store, {o: resourceURI });
+              tprop.s = ttype.s;
+              var data = [tlabel, ttype, tprop];
+  
+            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, data);
         });
         $('#bfeditor-modal-' + form.formobject.id).on("hide.bs.modal", function() {
             $(this).empty();
@@ -1927,7 +2014,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                         data.push(triple);
                     }
                 }
-
+                
                 data.forEach(function(t) {
                     callingformobject.store.push(t);
                     bfestore.addTriple(t);
@@ -2369,6 +2456,22 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                             if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === "false") {
                                 editable = false;
                             }
+
+                            //is there a type?
+                            if (_.has(property.valueConstraint.valueDataType, "dataTypeURI")){
+                                var typeTriple = {};
+
+                                typeTriple.s = _.find(returntriples, {
+                                    p: "http://www.w3.org/2000/01/rdf-schema#label"
+                                }).s
+                                typeTriple.guid = guid();
+                                typeTriple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"; //rdf:type
+                                typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
+                                typeTriple.otype = "uri";
+                                formobject.store.push(typeTriple);
+                                bfeditor.bfestore.store.push(typeTriple);
+                            }
+
                             var bgvars = {
                                 "editable": editable,
                                 "tguid": guid(),
@@ -2548,6 +2651,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
         bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
             guid: t.guid
         }));
+
+        //remove any types
+        formobject.store = _.without(formobject.store, _.find(formobject.store, {s: t.s, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}));
+        bfestore.store = _.without(bfestore.store, _.find(bfestore.store, {s: t.s, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}));
+
         $("#bfeditor-debug").html(JSON.stringify(bfestore.store, undefined, " "));
     }
 
@@ -4877,40 +4985,51 @@ bfe.define('src/bfestore', ['require', 'exports', 'module', 'src/lib/lodash.min'
         jsonld.forEach(function(resource) {
             var s = typeof resource["@id"] !== 'undefined' ? resource["@id"] : '_:b' + guid();
             for (var p in resource) {
-                if (p !== "@id") {
-                    resource[p].forEach(function(o) {
+                if (p !== "@id") {                    
+                    if (p === "@type" && !_.isArray(resource[p])) {
                         var tguid = guid();
                         var triple = {};
                         triple.guid = tguid;
-                        if (p === "@type") {
-                            triple.s = s;
-                            triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-                            if (o.indexOf(".html") > -1) {
-                                triple.o = o.replace(".html", "");
-                            } else {
-                                triple.o = o;
-                            }
-                            triple.otype = "uri";
-                        } else {
-                            triple.s = s;
-                            if (p.indexOf(".html") > -1) {
-                                triple.p = p.replace(".html", "");
-                            } else {
-                                triple.p = p;
-                            }
-                            if (o["@id"] !== undefined) {
-                                triple.o = o["@id"];
+                        triple.s = s;
+                        triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                        triple.o = resource["@type"];
+                        triple.otype = "uri";
+                        exports.store.push(triple);
+                    } else {
+                        resource[p].forEach(function(o) {
+                            var tguid = guid();
+                            var triple = {};
+                            triple.guid = tguid;
+                            if (p === "@type") {
+                                triple.s = s;
+                                triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                                if (o.indexOf(".html") > -1) {
+                                    triple.o = o.replace(".html", "");
+                                } else {
+                                    triple.o = o;
+                                }
                                 triple.otype = "uri";
-                            } else if (o["@value"] !== undefined) {
-                                triple.o = o["@value"];
-                                triple.otype = "literal";
-                                if (o["@language"] !== undefined) {
-                                    triple.olang = o["@language"];
+                            } else {
+                                triple.s = s;
+                                if (p.indexOf(".html") > -1) {
+                                    triple.p = p.replace(".html", "");
+                                } else {
+                                    triple.p = p;
+                                }
+                                if (o["@id"] !== undefined) {
+                                    triple.o = o["@id"];
+                                    triple.otype = "uri";
+                                } else if (o["@value"] !== undefined) {
+                                    triple.o = o["@value"];
+                                    triple.otype = "literal";
+                                    if (o["@language"] !== undefined) {
+                                        triple.olang = o["@language"];
+                                    }
                                 }
                             }
-                        }
-                        exports.store.push(triple);
-                    });
+                            exports.store.push(triple);
+                        });
+                    }
                 }
             }
             // If a resource does not have a defined type, do we care?

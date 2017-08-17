@@ -60,8 +60,8 @@
             "remark": "http://access.rdatoolkit.org/2.12.17.html"
           }
         ],
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
-        "id": "profile:bf2:Instance:SeriesStatement",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement",
+        "id": "profile:bf2:SeriesInformation",
         "resourceLabel": "Series Statement",
         "remark": "http://access.rdatoolkit.org/rdachp2_rda2-7632.html"
       }

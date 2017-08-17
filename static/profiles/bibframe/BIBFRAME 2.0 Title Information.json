@@ -56,6 +56,21 @@
             },
             "propertyLabel": "Part number",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/partNumber"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on title"
           }
         ],
         "id": "profile:bf2:Title",
@@ -158,6 +173,21 @@
             },
             "propertyLabel": "Type of Variant Title",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on title"
           }
         ],
         "contact": "Title variation",
@@ -330,6 +360,21 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
             "propertyLabel": "Title"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on title"
           }
         ],
         "id": "profile:bflc:TranscribedTitle",
@@ -351,6 +396,21 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
             "propertyLabel": "Preferred Title for Work (RDA 6.2.2, RDA 6.14.2) (BIBFRAME: Main title)",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-2036.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on title"
           }
         ],
         "resourceLabel": "Work Title",
@@ -372,11 +432,46 @@
             "propertyLabel": "Variant Title for Work (RDA 6.2.3, 6.14.3 (Music))",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-2658.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on title"
           }
         ],
         "resourceLabel": "Work Title Variation",
         "id": "profile:bf2:WorkVariantTitle",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Note Text"
+          }
+        ],
+        "id": "profile:bf2:Title:Note",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
+        "resourceLabel": "Title note"
       }
     ],
     "title": "BIBFRAME 2.0 Title Information",

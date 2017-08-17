@@ -175,8 +175,8 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Related Works and Expressions.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
-	                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
-        	        "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
@@ -188,7 +188,9 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json"
+			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json"
             		],
             "startingPoints": [
                         {"menuGroup": "Monograph",

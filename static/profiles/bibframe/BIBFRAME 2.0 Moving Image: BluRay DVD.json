@@ -476,7 +476,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/contentTypes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
+              },
               "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/tdi",
               "defaultLiteral": "two-dimensional moving image"
@@ -597,7 +599,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Language"
+                "profile:bf2:Language:Note"
               ],
               "useValuesFrom": [],
               "valueDataType": {
@@ -884,13 +886,11 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement"
           },
           {
-            "propertyLabel": "Edition Statement",
+            "propertyLabel": "Edition Statement (RDA 2.5)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:InstanceEdition"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [
                 ""
               ],
@@ -898,8 +898,8 @@
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
-            "remark": ""
+            "type": "literal",
+            "remark": "http://access.rdatoolkit.org/2.5.html"
           },
           {
             "propertyLabel": "Publication, Distribution, Manufacture Statements",
@@ -942,7 +942,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Instance:SeriesStatement"
+                "profile:bf2:SeriesInformation"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -961,12 +961,14 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/issuance"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Issuance"
+              },
               "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/mono",
               "defaultLiteral": "single unit"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Issuance",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
             "remark": "http://access.rdatoolkit.org/2.13.html"
           },
@@ -987,20 +989,6 @@
             "remark": "http://access.rdatoolkit.org/2.15.html"
           },
           {
-            "propertyLabel": "Note on Title (RDA 2.17.2)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/2.17.2.html"
-          },
-          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
@@ -1010,7 +998,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Other Note on Manifestation(RDA 2.17)",
+            "propertyLabel": "Note on Manifestation(RDA 2.17)",
             "remark": "http://access.rdatoolkit.org/2.17.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note"
           },
@@ -1053,7 +1041,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/mediaTypes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Media"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/v",
               "defaultLiteral": "video",
               "editable": "false"
@@ -1072,7 +1062,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/carriers"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/vd",
               "defaultLiteral": "videodisc",
               "editable": "false"
