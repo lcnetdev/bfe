@@ -15,37 +15,11 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
             "propertyLabel": "LC Classification Number"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
-            "propertyLabel": "LC Classification Book Number (Cutter)"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "LC Call Number",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc"
           }
         ],
         "id": "profile:bf2:LCC",
         "resourceLabel": "Library of Congress Classification",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Classification"
       }
     ],
     "id": "profile:bf2:LCC",

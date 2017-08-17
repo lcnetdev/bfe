@@ -15,7 +15,7 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "propertyLabel": "Edition Statement (RDA 2.5)",
-            "remark": "http://access.rdatoolkit.org/2.5.1.html"
+            "remark": "http://access.rdatoolkit.org/2.5.html"
           },
           {
             "mandatory": "false",
@@ -46,15 +46,15 @@
             "remark": "http://access.rdatoolkit.org/2.5.4.html"
           }
         ],
-        "id": "profile:bf2:InstanceEdition",
+        "id": "profile:bf2:EditionInformation",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
-        "resourceLabel": "Edition Statement",
+        "resourceLabel": "Edition (unused)",
         "remark": "http://access.rdatoolkit.org/2.5.html"
       }
     ],
     "id": "profile:bf2:EditionInformation",
     "title": "BIBFRAME 2.0 Edition Information",
-    "description": "Edition Statement",
+    "description": "Edition (unused)",
     "contact": "NDMSO",
     "date": "2017-06-08"
   }

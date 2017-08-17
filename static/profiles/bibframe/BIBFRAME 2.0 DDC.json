@@ -35,7 +35,7 @@
         ],
         "id": "profile:bf2:DDC",
         "resourceLabel": "Dewey Decimal Classification",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Classification"
       }
     ],
     "id": "profile:bf2:DDC",

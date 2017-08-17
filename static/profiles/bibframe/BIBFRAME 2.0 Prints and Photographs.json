@@ -165,7 +165,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/contentTypes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
+              },
               "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/sti",
               "defaultLiteral": "still image"
@@ -196,8 +198,12 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {},
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mediaTypes"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Media"
+              },
               "editable": "false",
               "defaultLiteral": "unmediated",
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n"
@@ -230,7 +236,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/carriers"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
+              },
               "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/nb",
               "defaultLiteral": "sheet"
@@ -1008,7 +1016,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "8B. Standard number (ISBN)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Isbn"
           },
           {
             "mandatory": "false",
@@ -1039,7 +1047,7 @@
         ],
         "id": "profile:bf2:Graphics:Identifier",
         "resourceLabel": "Standard Number and Terms of Availability",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isbnifier"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isbn"
       }
     ],
     "id": "profile:bf2:Graphics",

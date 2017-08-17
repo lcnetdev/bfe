@@ -13,13 +13,13 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/languages"
               ],
-              "valueDataType": {},
-              "defaultURI": "",
-              "defaultLiteral": ""
+              "valueDataType": {
+                "dataTypeURI": ""
+              },
+              "valueLanguage": ""
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Language",
-            "propertyLabel": "Language",
-            "remark": ""
+            "propertyLabel": "Lookup"
           },
           {
             "mandatory": "false",
@@ -28,6 +28,24 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "defaultURI": "",
+              "defaultLiteral": ""
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Language",
+            "remark": ""
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Language:Note"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -40,11 +58,31 @@
         "id": "profile:bf2:Language",
         "resourceLabel": "Language",
         "remark": ""
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Note Text"
+          }
+        ],
+        "id": "profile:bf2:Language:Note",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
+        "resourceLabel": "Language Note"
       }
     ],
     "id": "profile:bf2:Language",
     "title": "BIBFRAME 2.0 Language",
     "date": "2017-05-13",
-    "description": "Language of Expression and Content"
+    "description": "Language of Expression"
   }
 }
