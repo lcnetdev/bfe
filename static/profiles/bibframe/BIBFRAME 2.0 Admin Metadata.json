@@ -49,7 +49,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -174,21 +174,6 @@
             "propertyURI": "http://id.loc.gov/ontologies/bflc/profile",
             "propertyLabel": "Profile",
             "remark": "The profile code for the resource"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:AdminMetadata:Source"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Source (testing)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent"
           }
         ],
         "id": "profile:bf2:AdminMetadata",

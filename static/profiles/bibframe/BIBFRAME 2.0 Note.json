@@ -1,0 +1,31 @@
+{
+  "Profile": {
+    "resourceTemplates": [
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "false",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Note"
+          }
+        ],
+        "id": "profile:bf2:Note",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
+        "resourceLabel": "Note"
+      }
+    ],
+    "id": "profile:bf2:Note",
+    "title": "BIBFRAME 2.0 Note",
+    "description": "Notes for BIBFRAME resources",
+    "date": "2017-08-21",
+    "contact": "NDMSO"
+  }
+}

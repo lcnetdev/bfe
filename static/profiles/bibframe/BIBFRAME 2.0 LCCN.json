@@ -19,6 +19,28 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:LCCN:Status"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
+            "propertyLabel": "Invalid or Canceled?"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
+        "id": "profile:bf2:LCCN",
+        "resourceLabel": "LCCN"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -26,13 +48,13 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Status",
-            "propertyLabel": "Invalid or Cancelled LCCN"
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#label",
+            "propertyLabel": "Invalid/Canceled?"
           }
         ],
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
-        "id": "profile:bf2:LCCN",
-        "resourceLabel": "LCCN"
+        "id": "profile:bf2:LCCN:Status",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Status",
+        "resourceLabel": "Status"
       }
     ],
     "id": "profile:bf2:LCCN",

@@ -190,7 +190,8 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json"
+            "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Note.json"
             		],
             "startingPoints": [
                         {"menuGroup": "Monograph",

@@ -23,10 +23,14 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/vocabulary/classSchemes/ddc23",
-              "defaultLiteral": "23",
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/classSchemes"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/edition"
+              },
+              "defaultURI": "",
+              "defaultLiteral": "",
               "editable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/edition",

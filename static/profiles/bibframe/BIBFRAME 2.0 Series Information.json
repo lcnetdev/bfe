@@ -64,6 +64,76 @@
         "id": "profile:bf2:SeriesInformation",
         "resourceLabel": "Series Statement",
         "remark": "http://access.rdatoolkit.org/rdachp2_rda2-7632.html"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement",
+            "propertyLabel": "Series and ISSN",
+            "remark": "http://access.rdatoolkit.org/2.12.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesEnumeration",
+            "propertyLabel": "Series Numbering",
+            "remark": "http://access.rdatoolkit.org/2.19.html"
+          }
+        ],
+        "id": "profile:bf2:Series",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
+        "resourceLabel": "Series Instance"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subseriesStatement",
+            "propertyLabel": "Subseries and ISSN",
+            "remark": "http://access.rdatoolkit.org/2.12.10.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subseriesEnumeration",
+            "propertyLabel": "Subseries Numbering",
+            "remark": "http://access.rdatoolkit.org/2.12.17.html"
+          }
+        ],
+        "id": "profile:bf2:SubSeries",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance",
+        "resourceLabel": "Subseries Instance"
       }
     ],
     "id": "profile:bf2:SeriesInformation",
