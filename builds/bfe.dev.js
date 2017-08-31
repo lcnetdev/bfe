@@ -1433,7 +1433,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 });
             } else {
                 //the rt needs a type
-                if (bfestore.state = "create"){
+                if (bfestore.state === "create"){
                     var triple = {};
                     triple.guid = rt.useguid;
                     triple.rtID = rt.id;
@@ -1481,7 +1481,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
             "p": property.propertyURI
         });
 
-        if (bfestore.state === "retrieve"){
+        if (_.isEmpty(propsdata) || bfestore.state === "retrieve"){
             propsdata = _.where(bfestore.store, {"p":property.propertyURI});
         }
 
@@ -1495,10 +1495,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                 if (parent !== undefined) {
                     var parent_node = _.find(bfestore.store, {
                         o: parent.Profile.resourceTemplates[0].resourceURI
-                    }).s
+                    })
                     if (parent_node !== undefined) {
                         propsdata = _.where(bfestore.store, {
-                            o: parent_node
+                            o: parent_node.s
                         })
                     }
                 }
@@ -1628,7 +1628,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
             var propsTemplateIds = _.where(resourceTemplates, {resourceURI: _.find(bfestore.store, {s:pd.o, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).o})
         }
 
-        if (propsTemplateIds !== undefined && bfestore.state !== "edit") {            
+        if (propsTemplateIds !== undefined && !_.isEmpty(propsTemplateIds) && bfestore.state !== "edit") {            
             //if (_.indexOf(property.valueConstraint.valueTemplateRefs, propsTemplateId) < 0)
             var found = false;
             property.valueConstraint.valueTemplateRefs.forEach(function(valueTemplateId){
@@ -1914,11 +1914,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
 //            form.formobject.store[3].s = form.formobject.store[2].o;
 //            form.formobject.store.splice(2, 1);
 
+              
               var tlabel = _.find(form.formobject.store, {p: "http://www.w3.org/2000/01/rdf-schema#label"});
-              var ttype = _.find(form.formobject.store, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", s: tlabel.s});
-              var tprop = _.find(form.formobject.store, {o: resourceURI });
-              tprop.s = ttype.s;
-              var data = [tlabel, ttype, tprop];
+              var ttype = _.find(form.formobject.store, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
+              var tprop = _.find(form.formobject.store, {o: tlabel.s });
+
+              //ttype.s = tprop.o;
+
+              var data = form.formobject.store;
   
             setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, inputID, data);
         });
@@ -1982,9 +1985,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
                 });
                 //if there's a label, use it. Otherwise, create a label from the literals, and if no literals, use the uri.
-                var displayuri = _.find(data, {
-                    p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-                }).s
+//                var displayuri = _.find(data, {
+//                    p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+//                })
+
                 if (tlabel !== undefined) {
                     displaydata = tlabel.o;
                     displayuri = tlabel.s;
@@ -2406,6 +2410,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
 
             lu.getResource(resourceURI, p.propertyURI, suggestionobject, function(returntriples) {
                 bfelog.addMsg(new Error(), "DEBUG", "Triples returned from lookup's getResource func:", returntriples);
+                
+                var resourceTriple = "";
 
                 returntriples.forEach(function(t) {
                     if (t.guid === undefined) {
@@ -2416,16 +2422,31 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                     //if this is the resource, replace the blank node; otherwise push the label
 
                     if (_.some(formobject.store, {
-                            s: t.o
-                        }) && _.find(formobject.store, {
-                            o: t.s
-                        }).o === t.s && t.p !== "http://www.w3.org/2000/01/rdf-schema#label") {
-                        var resourceTriple = _.find(formobject.store, {
+                            s: t.s
+                        }) && t.p !== "http://www.w3.org/2000/01/rdf-schema#label") {
+
+                        resourceTriple = _.find(formobject.store, {
                             o: t.s
                         })
-                        resourceTriple.o = t.o;
-                        bfestore.addTriple(resourceTriple);
+    
+                        if (_.isEmpty(resourceTriple)){
+                            //push the triples
+                            formobject.store.push(t);
+                            bfestore.addTriple(t);
+
+                        } else {
+                            resourceTriple.o = t.o;
+                        
+        
+                            var resourceType = _.find(formobject.store, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
+    
+                            resourceType.s = resourceTriple.o;
+    
+                            bfestore.addTriple(resourceTriple);
+                            bfestore.addTriple(resourceType);
+                        }
                     } else {
+                        //I don't think this workst.s = resourceTriple.o;
                         formobject.store.push(t);
                         bfestore.addTriple(t);
                     }
@@ -5322,20 +5343,20 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
         //console.log("scheme is " + scheme);
 
         var rdftype = "";
-        if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName") {
+        if (type == "http://www.loc.gov/standards/mads/rdf/v1#PersonalName") {
             rdftype = "rdftype:PersonalName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#place") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#place") {
             rdftype = "rdftype:Geographic";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#organization") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#organization") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#family") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#family") {
             //rdftype = "rdftype:FamilyName";
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#meeting") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#meeting") {
             rdftype = "rdftype:ConferenceName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#jurisdiction") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#jurisdiction") {
             rdftype = "rdftype:CorporateName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/genreForm") {
             rdftype = "rdftype:GenreForm";
@@ -5654,20 +5675,20 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
         //console.log("scheme is " + scheme);
 
         var rdftype = "";
-        if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Person") {
+        if (type == "http://www.loc.gov/standards/mads/rdf/v1#Person") {
             rdftype = "rdftype:PersonalName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Place") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Place") {
             rdftype = "rdftype:Geographic";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Organization") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Organization") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Family") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Family") {
             //rdftype = "rdftype:FamilyName";
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Meeting") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Meeting") {
             rdftype = "rdftype:ConferenceName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1.html#Jurisdiction") {
+        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Jurisdiction") {
             rdftype = "rdftype:CorporateName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/GenreForm") {
             rdftype = "rdftype:GenreForm";

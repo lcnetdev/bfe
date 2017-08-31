@@ -43,12 +43,14 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/genreFormSchemes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": ""
+              },
               "editable": "false",
               "repeatable": "true"
             },
             "propertyLabel": "Source of term",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source"
           }
         ],
         "id": "profile:bf2:Form",

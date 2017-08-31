@@ -70,7 +70,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Note on title"
+            "propertyLabel": "Note on title",
+            "remark": "http://access.rdatoolkit.org/2.17.2.html"
           }
         ],
         "id": "profile:bf2:Title",
@@ -187,7 +188,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Note on title"
+            "propertyLabel": "Note on title",
+            "remark": "http://access.rdatoolkit.org/2.17.2.html"
           }
         ],
         "contact": "Title variation",
@@ -374,7 +376,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Note on title"
+            "propertyLabel": "Note on title",
+            "remark": "http://access.rdatoolkit.org/2.17.2.html"
           }
         ],
         "id": "profile:bflc:TranscribedTitle",
