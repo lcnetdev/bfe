@@ -13,13 +13,13 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationPortion",
             "propertyLabel": "LC Classification Number"
           }
         ],
         "id": "profile:bf2:LCC",
         "resourceLabel": "Library of Congress Classification",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Classification"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc"
       }
     ],
     "id": "profile:bf2:LCC",

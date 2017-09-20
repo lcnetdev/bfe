@@ -6,7 +6,7 @@
         "propertyTemplates": [
           {
             "propertyLabel": "Lookup",
-            "propertyURI": "http://www.loc.gov/ontologies/bibframe/Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Work",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -15,7 +15,9 @@
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueTemplateRefs": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "mandatory": "false",
             "repeatable": "true"
@@ -128,6 +130,23 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:SoundRecording:MedPerfInst",
+                "profile:bf2:SoundRecording:MedPerfVoice",
+                "profile:bf2:SoundRecording:MedPerfEnsemble"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
+            "propertyLabel": "Medium of Performance (New)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -233,7 +252,7 @@
           },
           {
             "propertyLabel": "Subject of the Work (RDA Chapter 23)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/topic",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subject",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -270,29 +289,14 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:LCC"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
-            "propertyLabel": "LC Classification"
-          },
-          {
-            "propertyLabel": "DDC Classification",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationDdc",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
+                "profile:bf2:LCC",
                 "profile:bf2:DDC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "",
-            "mandatory": "false",
-            "repeatable": "true"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classification",
+            "propertyLabel": "Classification numbers"
           },
           {
             "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
@@ -417,7 +421,9 @@
               "useValuesFrom": [
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/expressionOf",
             "propertyLabel": "Lookup",
@@ -438,6 +444,23 @@
             },
             "propertyLabel": "Medium of Performance of the Expression",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:SoundRecording:MedPerfInst",
+                "profile:bf2:SoundRecording:MedPerfVoice",
+                "profile:bf2:SoundRecording:MedPerfEnsemble"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
+            "propertyLabel": "Medium of Performance (New)"
           },
           {
             "mandatory": "false",
@@ -513,29 +536,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:SoundRecording:Capture"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Place of Capture (RDA 7.11.2)",
-            "remark": "http://access.rdatoolkit.org/7.11.2.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/capture"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Date of Capture (RDA 7.11.3)",
-            "remark": "http://access.rdatoolkit.org/7.11.3.html",
+            "propertyLabel": "Capture information",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/capture"
           },
           {
@@ -767,7 +777,7 @@
             },
             "propertyLabel": "Series Statement",
             "remark": "",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasSeries"
           },
           {
             "mandatory": "false",
@@ -798,10 +808,12 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:Identifiers:ISBN",
                 "profile:bf2:Identifiers:ISMN",
                 "profile:bf2:Identifiers:PubNumber",
                 "profile:bf2:Identifiers:EAN",
-                "profile:bf2:Identifiers:UPC"
+                "profile:bf2:Identifiers:UPC",
+                "profile:bf2:TestProfile:ISRC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1250,17 +1262,19 @@
             "repeatable": "true"
           },
           {
-            "propertyLabel": "LC call number",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
+            "propertyLabel": "Call numbers",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Shelfmarks"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "propertyLabel": "Barcode",
@@ -1345,19 +1359,6 @@
             "type": "resource"
           },
           {
-            "propertyLabel": "System item identifier",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
             "propertyLabel": "Lending policy",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
             "resourceTemplates": [],
@@ -1386,19 +1387,6 @@
           {
             "propertyLabel": "Retention policy",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "DDC call number",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1612,6 +1600,257 @@
         "id": "profile:bf2:SoundRecording:Credits",
         "resourceLabel": "Credits note",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Credits"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/performanceMediums"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicInstrument"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/instrument",
+            "propertyLabel": "LCMPT for Instrument"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
+            "propertyLabel": "Number of instruments"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicInstrument"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/instrumentalType",
+            "propertyLabel": "Type of instrument"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note"
+          }
+        ],
+        "id": "profile:bf2:SoundRecording:MedPerfInst",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
+        "resourceLabel": "Instrument"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/performanceMediums"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicVoice"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/voice",
+            "propertyLabel": "LCMPT for Voice"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
+            "propertyLabel": "Number of voices"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicVoice"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/voiceType",
+            "propertyLabel": "Type of voice"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note"
+          }
+        ],
+        "id": "profile:bf2:SoundRecording:MedPerfVoice",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
+        "resourceLabel": "Voice"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/performanceMediums"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicEnsemble"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensemble",
+            "propertyLabel": "LCMPT for Ensemble"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
+            "propertyLabel": "Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicEnsemble"
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensembleType",
+            "propertyLabel": "Type of Ensemble"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note"
+          }
+        ],
+        "id": "profile:bf2:SoundRecording:MedPerfEnsemble",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
+        "resourceLabel": "Ensemble"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Place of Capture (RDA 7.11.2)",
+            "remark": "http://access.rdatoolkit.org/7.11.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Date of Capture (RDA 7.11.3)",
+            "remark": "http://access.rdatoolkit.org/7.11.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Capture note"
+          }
+        ],
+        "id": "profile:bf2:SoundRecording:Capture",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Capture",
+        "resourceLabel": "Capture information"
       }
     ],
     "contact": "NDMSO",

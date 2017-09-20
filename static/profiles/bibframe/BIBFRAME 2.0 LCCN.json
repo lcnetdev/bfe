@@ -34,7 +34,7 @@
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
         "id": "profile:bf2:LCCN",
-        "resourceLabel": "LCCN"
+        "resourceLabel": "LCCN (unused)"
       },
       {
         "propertyTemplates": [

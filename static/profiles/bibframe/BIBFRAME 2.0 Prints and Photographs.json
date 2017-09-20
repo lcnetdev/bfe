@@ -13,9 +13,11 @@
               "useValuesFrom": [
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
-            "propertyURI": "http://www.loc.gov/ontologies/bibframe/Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Work",
             "propertyLabel": "Lookup"
           },
           {
@@ -224,7 +226,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Subject Access",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Topic"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subject"
           },
           {
             "mandatory": "false",
@@ -302,7 +304,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
             "propertyLabel": "1B. Transcribed title proper",
             "remark": "http://desktop.loc.gov/search?view=document&id=Infobasedcrmg0Dash0Dash0Dash247&hl=true&fq=allresources|true#"
           },
@@ -327,7 +329,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                ""
+              ],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
@@ -408,7 +412,7 @@
         ],
         "resourceLabel": "Title and Statement of Responsibility",
         "id": "profile:bf2:Graphics:StatemenetOfResponsibility",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/title"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Title"
       },
       {
         "propertyTemplates": [
@@ -423,7 +427,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "4B. Place of publication, distribution, production, etc.",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
             "remark": "http://desktop.loc.gov/saved/PlacePublicationDistributionProduction"
           },
           {
@@ -437,7 +441,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "4C. Name of publisher, distributor, etc.",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent",
             "remark": "http://desktop.loc.gov/saved/NamePublisherDistributor"
           },
           {
@@ -466,7 +470,7 @@
             },
             "propertyLabel": "4E. Place of manufacture",
             "remark": "http://desktop.loc.gov/saved/PlaceManufacture",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place"
           },
           {
             "mandatory": "false",
@@ -480,7 +484,7 @@
             },
             "propertyLabel": "4F. Name of manufacturer",
             "remark": "http://desktop.loc.gov/saved/NameManufacturer",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent"
           },
           {
             "mandatory": "false",
@@ -668,7 +672,7 @@
         ],
         "id": "profile:bf2:Graphics:Series",
         "resourceLabel": "Series and Multipart Resource",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance"
       },
       {
         "propertyTemplates": [

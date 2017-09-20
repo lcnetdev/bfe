@@ -10,6 +10,21 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Barcode"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Barcode",
+            "propertyLabel": "Barcode"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:Identifiers:Copyright"
               ],
               "useValuesFrom": [],
@@ -32,6 +47,21 @@
             },
             "propertyLabel": "EAN",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ean"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Eidr"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/Eidr",
+            "propertyLabel": "EIDR"
           },
           {
             "mandatory": "false",
@@ -107,6 +137,66 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/IssnL",
             "propertyLabel": "ISSN-L"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:LCCN"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "LCCN",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Lccn"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Distributor"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/StockNumber",
+            "propertyLabel": "Music Distributor Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:MusicPlate"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/MusicPlate",
+            "propertyLabel": "Music Plate Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:MusicPub"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/MusicPublisherNumber",
+            "propertyLabel": "Music Publisher Number"
           },
           {
             "mandatory": "false",
@@ -288,8 +378,43 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "EIDR"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on EIDR"
+          }
+        ],
+        "id": "profile:bf2:Identifiers:Eidr",
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Eidr",
+        "resourceLabel": "EIDR"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
               "valueDataType": {},
-              "repeatable": "false"
+              "repeatable": "true"
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "ISBN (RDA 2.15)",
@@ -1010,6 +1135,73 @@
         "id": "profile:bf2:Identifiers:Source",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Source",
         "resourceLabel": "Source"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
+            "propertyLabel": "LC call number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkDcc",
+            "propertyLabel": "Dewey call number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
+            "propertyLabel": "Accession number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
+            "propertyLabel": "Copy number"
+          }
+        ],
+        "id": "profile:bf2:Identifiers:Shelfmarks",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/shelfMark",
+        "resourceLabel": "Shelfmarks"
       }
     ],
     "id": "profile:bf2:Identifiers",
