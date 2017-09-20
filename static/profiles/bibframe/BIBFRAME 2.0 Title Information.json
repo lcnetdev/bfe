@@ -91,7 +91,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Parallel Title Proper (RDA 2.3.3) (BIBFRAME: Parallel title proper)",
+            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3695.html"
           },
@@ -106,7 +106,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle",
-            "propertyLabel": "Parallel Other Title Information (RDA 2.3.5) (BIBFRAME: Subtitle)",
+            "propertyLabel": "Parallel Other Title Information (RDA 2.3.5)",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3939.html"
           },
           {
@@ -158,7 +158,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4013.html",
             "propertyLabel": "Variant Title (RDA 2.3.6)"
           },
@@ -434,7 +434,7 @@
             },
             "propertyLabel": "Variant Title for Work (RDA 6.2.3, 6.14.3 (Music))",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-2658.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle"
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label"
           },
           {
             "mandatory": "false",

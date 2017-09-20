@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -13,7 +13,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Note"
           }
         ],

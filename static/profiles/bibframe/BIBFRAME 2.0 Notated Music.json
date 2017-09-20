@@ -6,7 +6,7 @@
         "propertyTemplates": [
           {
             "propertyLabel": "Lookup BIBFRAME works",
-            "propertyURI": "http://www.loc.gov/ontologies/bibframe/Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Work",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -15,7 +15,9 @@
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
               "valueTemplateRefs": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "mandatory": "false",
             "repeatable": "true"
@@ -40,7 +42,7 @@
           },
           {
             "propertyLabel": "Title Information (RDA 6.14.2, RDA 6.14.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
             "remark": "",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -219,7 +221,7 @@
           },
           {
             "propertyLabel": "Subject of the Work (RDA Chapter 23)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/topic",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subject",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -256,29 +258,14 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:LCC"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationLcc",
-            "propertyLabel": "LC Classification"
-          },
-          {
-            "propertyLabel": "DDC Classification",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationDdc",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
+                "profile:bf2:LCC",
                 "profile:bf2:DDC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "",
-            "mandatory": "false",
-            "repeatable": "true"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classification",
+            "propertyLabel": "Classification numbers"
           },
           {
             "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
@@ -376,7 +363,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Instance"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -397,8 +386,12 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://mlvlp04.loc.gov:8230/resources/works"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/expressionOf",
             "propertyLabel": "Lookup",
@@ -604,31 +597,17 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/mcolor"
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Color"
               ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/colorContent",
-            "propertyLabel": "Colour Content (RDA 7.17)",
-            "remark": "http://access.rdatoolkit.org/7.17.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Details of Colour Content (RDA 7.17.1.4)",
-            "remark": "http://access.rdatoolkit.org/7.17.1.4.html"
+            "propertyLabel": "Color Content",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -759,7 +738,7 @@
           },
           {
             "propertyLabel": "Title Information (RDA 2.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Title",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
@@ -805,7 +784,7 @@
           },
           {
             "propertyLabel": "Publication, Distribution, Manufacture Statements",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/provisionActivity",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -849,7 +828,7 @@
             },
             "propertyLabel": "Series Statement",
             "remark": "",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/seriesStatement"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasSeries"
           },
           {
             "mandatory": "false",
@@ -1115,7 +1094,7 @@
           }
         ],
         "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance"
       },
       {
         "id": "profile:bf2:NotatedMusic:Item",
@@ -1240,19 +1219,6 @@
             "mandatory": "false",
             "repeatable": "true",
             "type": "resource"
-          },
-          {
-            "propertyLabel": "System item identifier",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
           },
           {
             "propertyLabel": "Lending policy",
@@ -1797,7 +1763,9 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1903,6 +1871,19 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
+            "propertyLabel": "Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicEnsemble"
               }
@@ -1929,6 +1910,47 @@
         "id": "profile:bf2:NotatedMusic:MedPerfEnsemble",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
         "resourceLabel": "Ensemble"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mcolor"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+              }
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Color Content (RDA 7.17)",
+            "remark": "http://access.rdatoolkit.org/7.17.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Details of Color Content (RDA 7.17.1.4)",
+            "remark": "http://access.rdatoolkit.org/7.17.1.4.html"
+          }
+        ],
+        "id": "profile:bf2:NotatedMusic:Color",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ColorContent",
+        "resourceLabel": "Color content"
       }
     ],
     "contact": "NDMSO",

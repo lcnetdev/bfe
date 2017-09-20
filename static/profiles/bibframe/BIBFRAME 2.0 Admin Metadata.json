@@ -154,7 +154,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/menclvl"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/encodingLevel"
+              }
             },
             "propertyLabel": "Encoding level",
             "remark": "http://id.loc.gov/ontologies/bflc.html#c_EncodingLevel",
@@ -177,7 +179,7 @@
           }
         ],
         "id": "profile:bf2:AdminMetadata",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/AdminMetadata",
         "resourceLabel": "BIBFRAME 2.0 Admin Metadata"
       },
       {

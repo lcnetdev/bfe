@@ -14,10 +14,13 @@
                 "http://id.loc.gov/authorities/names",
                 "http://id.loc.gov/authorities/subjects"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": "",
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/originPlace"
+              }
             },
             "propertyLabel": "Lookup",
-            "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place"
           },
           {
             "mandatory": "false",
@@ -30,7 +33,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Authorized Access Point for Place Associated with a Resource",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "remark": "http://http://access.rdatoolkit.org/6.5.html"
           },
           {
@@ -43,7 +46,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Record Place Associated with a Resource",
             "remark": "http://http://access.rdatoolkit.org/6.5.html"
           }

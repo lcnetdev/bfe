@@ -13,7 +13,9 @@
               "useValuesFrom": [
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
@@ -128,7 +130,9 @@
               "useValuesFrom": [
                 "http://mlvlp04.loc.gov:8230/resources/works"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"

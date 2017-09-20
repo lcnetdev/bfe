@@ -14,10 +14,12 @@
                 "http://id.loc.gov/authorities/subjects",
                 "http://id.loc.gov/authorities/names"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Topic"
+              }
             },
             "propertyLabel": "Lookup",
-            "propertyURI": "http://www.loc.gov/ontologies/bibframe/Topic"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Topic"
           },
           {
             "mandatory": "false",
@@ -42,7 +44,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/subjectSchemes"
               ],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Source"
+              },
               "defaultURI": ""
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
@@ -84,7 +88,9 @@
                 "http://id.loc.gov/authorities/subjects",
                 "http://id.loc.gov/authorities/names"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/mads/rdf/v1#Topic"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Topic"
@@ -119,7 +125,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/authorities/subjects"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#GenreForm"
@@ -154,7 +162,9 @@
               "useValuesFrom": [
                 "http://id.loc.gov/authorities/subjects"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/mads/rdf/v1#Temporal"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Temporal"
@@ -190,7 +200,9 @@
                 "http://id.loc.gov/authorities/names",
                 "http://id.loc.gov/authorities/subjects"
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic"
+              }
             },
             "propertyLabel": "Lookup",
             "propertyURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic"

@@ -13,7 +13,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationPortion",
             "propertyLabel": "DDC Classification number"
           },
           {
@@ -39,7 +39,7 @@
         ],
         "id": "profile:bf2:DDC",
         "resourceLabel": "Dewey Decimal Classification",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Classification"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc"
       }
     ],
     "id": "profile:bf2:DDC",

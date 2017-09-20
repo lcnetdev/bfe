@@ -46,7 +46,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#FullerName",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#fullerName",
             "propertyLabel": "Fuller Form of Name (RDA 9.5) CORE IF ...",
             "remark": "http://www.loc.gov/mads/rdf/v1#"
           },
@@ -81,7 +81,7 @@
             },
             "propertyLabel": "Address of Person (RDA 9.12)",
             "remark": "http://access.rdatoolkit.org/rdachp9_rda9-5161.html",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#AffiliationAddress"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#hasAffiliationAddress"
           },
           {
             "mandatory": "false",
