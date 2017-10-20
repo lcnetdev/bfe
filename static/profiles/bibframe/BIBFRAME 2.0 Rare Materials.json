@@ -176,7 +176,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Related Expression (BIBFRAME)"
+            "propertyLabel": "Expression elements"
           },
           {
             "mandatory": "false",
@@ -192,6 +192,36 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
             "propertyLabel": "Related Instance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:RelatedWork"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Authorized Access Point Representing the Work (RDA 6.27.1)",
+            "remark": "http://access.rdatoolkit.org/6.27.1.html"
           }
         ],
         "id": "profile:bf2:RareMat:Work",
@@ -275,17 +305,17 @@
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/millus"
+              "valueTemplateRefs": [
+                "profile:bf2:RareMat:Illus"
               ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Illustration"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/illustrativeContent",
-            "propertyLabel": "Illustrative Content (RDA 7.15)",
-            "remark": "http://access.rdatoolkit.org/7.15.html"
+            "propertyLabel": "Illustrative Content",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -297,8 +327,10 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/mcolor"
               ],
-              "valueDataType": {},
-              "defaultURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+              },
+              "defaultURI": ""
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/colorContent",
             "propertyLabel": "Colour Content (RDA 7.17)",
@@ -353,17 +385,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Identifiers:LCCN"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "LC Control Number for the Expression(RDA 6.8)"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/supplementaryContent",
+            "propertyLabel": "Supplementary Content (RDA 7.16)",
+            "remark": "http://access.rdatoolkit.org/7.16.html"
           }
         ],
         "id": "profile:bf2:RareMat:Expression",
@@ -467,6 +498,20 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/copyrightDate",
+            "propertyLabel": "Copyright Date (RDA 2.11)",
+            "remark": "http://access.rdatoolkit.org/2.11.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -486,6 +531,39 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:Form",
+                "profile:bf2:RareMat:RBMS"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
+            "propertyLabel": "Form of Instance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:ISBN",
+                "profile:bf2:Identifiers:Other",
+                "profile:bf2:Identifiers:Local"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyLabel": "Identifier for the Manifestation"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:Note"
               ],
               "useValuesFrom": [],
@@ -494,19 +572,6 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Notes about the Instance",
             "remark": "http://access.rdatoolkit.org/2.17.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/custodialHistory",
-            "propertyLabel": "Provenance"
           },
           {
             "mandatory": "false",
@@ -618,6 +683,21 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:RareMat:RelatedInstance"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyLabel": "Related Manifestation"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:RareMat:Item"
               ],
               "useValuesFrom": [],
@@ -656,7 +736,9 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Agent"
+              },
               "defaultURI": "http://id.loc.gov/vocabulary/organizations/dlc",
               "defaultLiteral": "DLC"
             },
@@ -741,6 +823,22 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:Form",
+                "profile:bf2:RareMat:RBMS"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/genreForm",
+            "propertyLabel": "Form of Item"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:Identifiers:Barcode"
               ],
               "useValuesFrom": [],
@@ -776,6 +874,19 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
             "propertyLabel": "Usage and access policy"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/collection",
+            "propertyLabel": "Collection"
           }
         ],
         "id": "profile:bf2:RareMat:Item",
@@ -829,7 +940,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Contents note",
             "remark": "http://access.rdatoolkit.org/lcpschp25_lcps25-354.html"
           }
@@ -850,7 +961,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Summary note",
             "remark": "http://access.rdatoolkit.org/7.10.html"
           }
@@ -858,6 +969,138 @@
         "id": "profile:bf2:RareMat:Summary",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Summary",
         "resourceLabel": "Summary note"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/millus"
+              ],
+              "valueDataType": {
+                "dataTypeURI": ""
+              },
+              "valueLanguage": "http://id.loc.gov/ontologies/bibframe/Illustration"
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Illustrative Content (RDA 7.15)",
+            "remark": "http://access.rdatoolkit.org/7.15.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note about Illustrative Content"
+          }
+        ],
+        "id": "profile:bf2:RareMat:Illus",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Illustration",
+        "resourceLabel": "Illustrative content"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyLabel": "Related Manifestations (RDA 27)",
+            "remark": "http://access.rdatoolkit.org/27.1.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasEquivalent",
+            "propertyLabel": "Also issued in another format as:",
+            "remark": "http://access.rdatoolkit.org/J.4.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/accompaniedBy",
+            "propertyLabel": "Accompanied by (manifestation):",
+            "remark": "http://access.rdatoolkit.org/J.4.5.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasEquivalent",
+            "propertyLabel": "Reprinted as (manifestation):",
+            "remark": "http://access.rdatoolkit.org/J.4.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasEquivalent",
+            "propertyLabel": "Reprint of (manifestation):",
+            "remark": "http://access.rdatoolkit.org/J.4.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyLabel": "Relationship Designator for Related Manifestation (RDA Appendix J)",
+            "remark": "http://access.rdatoolkit.org/J.4.html"
+          }
+        ],
+        "id": "profile:bf2:RareMat:RelatedInstance",
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
+        "resourceLabel": "Related Manifestation"
       }
     ],
     "id": "profile:bf2:RareMat",

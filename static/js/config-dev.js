@@ -111,20 +111,25 @@
         }
 
 
-        function retrieve(uri, bfestore, tempstore, bfelog, callback){
+        function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
 	    
 	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/whichrt";
 	
             $.ajax({
-		data: { uri: uri},
+                dataType: "json",
+                type: "GET",
+                async: false,
+        		data: { uri: uri},
                 url: url,
-		//accepts: {turtle: 'text/turtle'},
-                dataType: "text",
                 success: function (data) {
                     bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
                     bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
-                    bfestore.store = [];
-		    bfestore.n32store(data, url, tempstore, callback);
+                    bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+                       bfestore.store = [];
+                       tempstore = bfestore.jsonld2store(expanded);
+                       callback(loadtemplates);
+                    });
+		            //bfestore.n32store(data, url, tempstore, callback);
                     },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
@@ -180,6 +185,7 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
@@ -191,7 +197,9 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Note.json"
+            "static/profiles/bibframe/BIBFRAME 2.0 Note.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json"
             		],
             "startingPoints": [
                         {"menuGroup": "Monograph",
@@ -250,7 +258,7 @@
                             }
 
                         ]},
-			{"menuGroup": "Sound Recording: Audio CD",
+			            {"menuGroup": "Sound Recording: Audio CD",
                         "menuItems": [
                             {
                                 label: "Instance",
@@ -264,6 +272,21 @@
                             }
 
                         ]},
+                        {"menuGroup": "Sound Recording: Audio CD-R",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
+                            }
+
+                        ]},
+
                         {"menuGroup": "Moving Image: BluRay DVD",
                         "menuItems": [
                             {
@@ -303,6 +326,20 @@
                                 label: "Work",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                                 useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
+                            }
+
+                        ]},
+                        {"menuGroup": "Rare Materials",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
                             }
 
                         ]},

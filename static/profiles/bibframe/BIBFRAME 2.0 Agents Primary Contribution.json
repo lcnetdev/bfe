@@ -41,7 +41,7 @@
         ],
         "id": "profile:bflc:Agents:PrimaryContribution",
         "resourceLabel": "Primary Contribution",
-        "resourceURI": "http://id.loc.gov/ontologies/bflc/PrimaryContributon"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
       }
     ],
     "contact": "NDMSO",
