@@ -141,7 +141,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "8. Standard Number and Terms of Availability",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "remark": "http://desktop.loc.gov/saved/8._Standard_Number_and_Terms_of_Availability_Area"
           },
           {

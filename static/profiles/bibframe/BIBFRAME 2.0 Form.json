@@ -14,17 +14,17 @@
                 "http://id.loc.gov/authorities/genreForms"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/genreForm"
+                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#GenreForm"
               }
             },
             "propertyLabel": "Search LCGFT (RDA 6.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/GenreForm",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel",
             "remark": "http://access.rdatoolkit.org/6.3.html"
           }
         ],
         "id": "profile:bf2:Form",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/GenreForm",
-        "resourceLabel": "Form of Work",
+        "resourceURI": "http://www.loc.gov/mads/rdf/v1#GenreForm",
+        "resourceLabel": "Form/Genre",
         "contact": "NDMSO"
       }
     ],

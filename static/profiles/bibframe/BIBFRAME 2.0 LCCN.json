@@ -35,31 +35,11 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
         "id": "profile:bf2:LCCN",
         "resourceLabel": "LCCN (unused)"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#label",
-            "propertyLabel": "Invalid/Canceled?"
-          }
-        ],
-        "id": "profile:bf2:LCCN:Status",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Status",
-        "resourceLabel": "Status"
       }
     ],
     "id": "profile:bf2:LCCN",
     "title": "BIBFRAME 2.0 LCCN",
-    "description": "LC Control Number",
+    "description": "LC Control Number (unused)",
     "date": "2017-07-27",
     "contact": "NDMSO"
   }

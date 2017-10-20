@@ -16,11 +16,11 @@
               ],
               "valueDataType": {
                 "remark": "",
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/originPlace"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Place"
               }
             },
-            "propertyLabel": "Lookup",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place"
+            "propertyLabel": "Search LCNAF/LCSH",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label"
           },
           {
             "mandatory": "false",
@@ -30,24 +30,12 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Place"
+              }
             },
-            "propertyLabel": "Record Authorized Access Point for Place Associated with a Resource",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
-            "remark": "http://http://access.rdatoolkit.org/6.5.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
-            "propertyLabel": "Record Place Associated with a Resource",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Record Place (if it does not appear above)",
             "remark": "http://http://access.rdatoolkit.org/6.5.html"
           }
         ],

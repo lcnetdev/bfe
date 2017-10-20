@@ -8,33 +8,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="/static/images/favicon.ico"/>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
 
-    <script src="//cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>	
+    <script src="https://cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>	
 
     <script src="static/js/short-uuid.min.js"></script>
 
     <script type="text/javascript" src="static/js/n3-browser.min.js"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
 
     <script type="text/javascript" src="static/js/jsonld-vis.js"></script>
     <link rel="stylesheet" href="static/css/jsonld-vis.css">
@@ -90,6 +90,13 @@
     <div id="iealert"></div>
 </div>    
 
+<script type="text/javascript">
+    function reloadJs(src) {
+        src = $('script[src$="' + src + '"]').attr("src");
+        $('script[src$="' + src + '"]').remove();
+        $('<script/>').attr('src', src).appendTo('body');
+    }
+</script>
 <script type="text/javascript" src="static/js/config-dev.js"></script>
 
 <br/><br/><br/>
