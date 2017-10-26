@@ -6,7 +6,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -14,11 +14,11 @@
                 "http://id.loc.gov/authorities/genreForms"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#GenreForm"
+                "dataTypeURI": ""
               }
             },
             "propertyLabel": "Search LCGFT (RDA 6.3)",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#GenreForm",
             "remark": "http://access.rdatoolkit.org/6.3.html"
           }
         ],

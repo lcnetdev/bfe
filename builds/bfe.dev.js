@@ -474,7 +474,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/lib/jquery-2.1.0.min
                             "render": function(data, type, row) {
                                 var d = new Date(data);
                                 //Month first
-                                return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
+
+                                var hr = d.getHours();
+                                var min = d.getMinutes();
+                                var ampm = "a";
+                                if (min<10)
+                                    min = "0"+min;
+                                if (hr>12){
+                                    hr-=12;
+                                    ampm = "p";
+                                }    
+                                return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + hr + ':' + min + ampm;
                             }
                         },
                         {

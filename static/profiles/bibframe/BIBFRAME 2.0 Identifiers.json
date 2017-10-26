@@ -1245,62 +1245,55 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
+              "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
-            "propertyLabel": "LC call number"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkDcc",
-            "propertyLabel": "Dewey call number"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
-            "propertyLabel": "Accession number"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
-            "propertyLabel": "Copy number"
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "LC shelfmark"
           }
         ],
-        "id": "profile:bf2:Identifiers:Shelfmarks",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/shelfMark",
-        "resourceLabel": "Shelfmarks"
+        "id": "profile:bf2:Identifiers:LC",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
+        "resourceLabel": "LC shelfmark"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "DDC shelfmark"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkDcc",
+        "resourceLabel": "DDC shelfmark",
+        "id": "profile:bf2:Identifiers:DDC"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Accession or copy number"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
+        "id": "profile:bf2:Identifiers:Shelfmark",
+        "resourceLabel": "Accession or copy number"
       }
     ],
     "id": "profile:bf2:Identifiers",
