@@ -66,7 +66,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:Affiliation",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Affiliation",
-        "resourceLabel": "Agents: Affiliation"
+        "resourceLabel": "Affiliation"
       },
       {
         "propertyTemplates": [
@@ -89,7 +89,7 @@
           }
         ],
         "id": "profile:bf2:Agents:RWO:AssociatedLanguage",
-        "resourceLabel": "Agents: Associated Language",
+        "resourceLabel": "Associated Language",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Language"
       },
       {
@@ -128,7 +128,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:PlaceofBirth",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "Agents: Associated Locale: Place of Birth"
+        "resourceLabel": "Associated Locale: Place of Birth"
       },
       {
         "propertyTemplates": [
@@ -166,7 +166,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:PlaceofDeath",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "Agents: Associated Locale: Place of Death"
+        "resourceLabel": "Associated Locale: Place of Death"
       },
       {
         "propertyTemplates": [
@@ -229,7 +229,7 @@
           }
         ],
         "id": "profile:bf2:Agents:RWO:Country",
-        "resourceLabel": "Agents: Associated Locale: Country",
+        "resourceLabel": "Associated Locale: Country",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic"
       },
       {
@@ -295,7 +295,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:PlaceOfResidence",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "Agents: Associated Locale: Place of Residence"
+        "resourceLabel": "Associated Locale: Place of Residence"
       },
       {
         "propertyTemplates": [
@@ -334,7 +334,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:LocationOfConference",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic",
-        "resourceLabel": "Agents: Associated Locale: Location of Conference"
+        "resourceLabel": "Associated Locale: Location of Conference"
       },
       {
         "propertyTemplates": [
@@ -398,7 +398,7 @@
           }
         ],
         "id": "profile:bf2:Agents:RWO:OtherPlace",
-        "resourceLabel": "Agents: Associated Locale: Other Associated Place",
+        "resourceLabel": "Associated Locale: Other Associated Place",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Geographic"
       },
       {
@@ -458,7 +458,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:Dates",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#RWO",
-        "resourceLabel": "Agents: Dates"
+        "resourceLabel": "Dates"
       },
       {
         "propertyTemplates": [
@@ -523,7 +523,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:FieldofActivity",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#RWO",
-        "resourceLabel": "Agents: Field of Activity"
+        "resourceLabel": "Field of Activity"
       },
       {
         "propertyTemplates": [
@@ -563,7 +563,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:Gender",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#RWO",
-        "resourceLabel": "Agents: Gender"
+        "resourceLabel": "Gender"
       },
       {
         "propertyTemplates": [
@@ -629,7 +629,7 @@
           }
         ],
         "id": "profile:bf2:Agents:RWO:Occupation",
-        "resourceLabel": "Agents: Occupation",
+        "resourceLabel": "Occupation",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#Occupation"
       },
       {
@@ -655,7 +655,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:ProminentFamilyMember",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#prominentFamilyMember",
-        "resourceLabel": "Agents: Prominent Family Member"
+        "resourceLabel": "Prominent Family Member"
       },
       {
         "propertyTemplates": [
@@ -676,7 +676,7 @@
         ],
         "id": "profile:bf2:Agents:RWO:HonoraryTitle",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#honoraryTitle",
-        "resourceLabel": "Agents: Title"
+        "resourceLabel": "Honorary Title"
       },
       {
         "propertyTemplates": [
@@ -919,7 +919,7 @@
         ],
         "id": "profile:bf2:Agent:RWO",
         "resourceURI": "http://www.loc.gov/standards/mads/rdf/v1#RWO",
-        "resourceLabel": "Agents: Other Identifying Attributes",
+        "resourceLabel": "Other Identifying Attributes",
         "contact": "NDMSO"
       }
     ],

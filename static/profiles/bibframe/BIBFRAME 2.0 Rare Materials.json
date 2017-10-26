@@ -636,16 +636,18 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:RareMat:Extent"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/extent",
-            "propertyLabel": "Extent (RDA 3.4)",
-            "remark": "http://access.rdatoolkit.org/3.4.html"
+            "propertyLabel": "Extent",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -854,7 +856,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:Shelfmarks"
+                "profile:bf2:Identifiers:LC",
+                "profile:bf2:Identifiers:DDC",
+                "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1101,6 +1105,42 @@
         "id": "profile:bf2:RareMat:RelatedInstance",
         "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
         "resourceLabel": "Related Manifestation"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Extent (RDA 3.4)",
+            "remark": "http://access.rdatoolkit.org/3.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on extent"
+          }
+        ],
+        "id": "profile:bf2:RareMat:Extent",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Extent",
+        "resourceLabel": "Extent"
       }
     ],
     "id": "profile:bf2:RareMat",

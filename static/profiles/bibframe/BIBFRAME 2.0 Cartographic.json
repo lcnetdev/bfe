@@ -456,44 +456,17 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Cartographic:Scale"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/scale",
-            "propertyLabel": "Horizontal Scale of Cartographic Content (RDA 7.25.3)",
-            "remark": "http://access.rdatoolkit.org/7.25.3.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/scale",
-            "propertyLabel": "Vertical Scale of Cartographic Content (RDA 7.25.4)",
-            "remark": "http://access.rdatoolkit.org/7.25.4.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/scale",
-            "propertyLabel": "Additional Scale Information (RDA 7.25.5)",
-            "remark": "http://access.rdatoolkit.org/7.25.5.html"
+            "propertyLabel": "Scale information"
           },
           {
             "mandatory": "false",
@@ -800,16 +773,18 @@
           },
           {
             "mandatory": "false",
-            "propertyLabel": "Extent (RDA 3.4)",
+            "propertyLabel": "Extent",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/extent",
-            "remark": "http://access.rdatoolkit.org/3.4.html",
+            "remark": "",
             "repeatable": "true",
             "resourceTemplates": [],
-            "type": "literal",
+            "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [],
               "valueDataType": {},
-              "valueTemplateRefs": []
+              "valueTemplateRefs": [
+                "profile:bf2:Cartographic:Extent"
+              ]
             }
           },
           {
@@ -1054,7 +1029,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:Shelfmarks"
+                "profile:bf2:Identifiers:LC",
+                "profile:bf2:Identifiers:Shelfmark",
+                "profile:bf2:Identifiers:DDC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1393,6 +1370,80 @@
         "id": "profile:bf2:Cartographic:Color",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ColorContent",
         "resourceLabel": "Color content"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Scale"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Scale (RDA 7.25)",
+            "remark": "http://access.rdatoolkit.org/7.25.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note about Scale"
+          }
+        ],
+        "id": "profile:bf2:Cartographic:Scale",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Scale",
+        "resourceLabel": "Scale"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Extent (RDA 3.4)",
+            "remark": "http://access.rdatoolkit.org/3.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on extent"
+          }
+        ],
+        "id": "profile:bf2:Cartographic:Extent",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Extent",
+        "resourceLabel": "Extent"
       }
     ],
     "contact": "NDMSO",

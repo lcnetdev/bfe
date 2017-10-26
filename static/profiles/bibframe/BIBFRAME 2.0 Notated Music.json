@@ -947,18 +947,20 @@
             "remark": "http://access.rdatoolkit.org/3.3.html"
           },
           {
-            "propertyLabel": "Extent (RDA 3.4)",
+            "propertyLabel": "Extent",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/extent",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:NotatedMusic:Extent"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
-            "remark": "http://access.rdatoolkit.org/3.4.html"
+            "type": "resource",
+            "remark": ""
           },
           {
             "propertyLabel": "Dimensions (RDA 3.5)",
@@ -1131,7 +1133,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:Shelfmarks"
+                "profile:bf2:Identifiers:LC",
+                "profile:bf2:Identifiers:DDC",
+                "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1781,7 +1785,7 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicVoice"
+                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Medium"
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/voice",
@@ -1848,7 +1852,7 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicEnsemble"
+                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Medium"
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensemble",
@@ -1983,6 +1987,42 @@
         "id": "profile:bf2:NotatedMusic:Notation",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Notation",
         "resourceLabel": "Form of Musical Notation"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Extent (RDA 3.4)",
+            "remark": "http://access.rdatoolkit.org/3.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on extent"
+          }
+        ],
+        "id": "profile:bf2:NotatedMusic:Extent",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Extent",
+        "resourceLabel": "Extent"
       }
     ],
     "contact": "NDMSO",

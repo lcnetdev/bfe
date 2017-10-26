@@ -1123,7 +1123,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:Shelfmarks"
+                "profile:bf2:Identifiers:LC",
+                "profile:bf2:Identifiers:DDC",
+                "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1468,7 +1470,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Note about the summary"
+            "propertyLabel": "Details of Summary note"
           }
         ],
         "id": "profile:bf2:35mmFeatureFilm:Summary",
