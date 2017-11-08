@@ -31,7 +31,9 @@
                 "profile:bflc:Agents:PrimaryContribution"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
+              }
             },
             "propertyLabel": "Creator of Work (RDA 19.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
@@ -335,7 +337,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
-            "propertyLabel": "Related Instance (BIBFRAME)"
+            "propertyLabel": "Has BIBFRAME Instance"
           },
           {
             "mandatory": "false",

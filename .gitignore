@@ -2,6 +2,7 @@ tmp
 examples
 node_modules
 static/js/config-jodi.js
+builds/bfe.dev.js.typeahead
 jodi.html
 static/profiles/bibframe/Test profile (jodiw).json
 

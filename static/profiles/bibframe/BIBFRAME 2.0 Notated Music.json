@@ -34,7 +34,9 @@
               "useValuesFrom": [
                 ""
               ],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
+              }
             },
             "propertyLabel": "Creator of Work (RDA 19.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
@@ -645,12 +647,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mmusicformat"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicFormat"
+              }
             },
             "propertyLabel": "Format of Notated Music (RDA 7.20)",
             "remark": "http://access.rdatoolkit.org/7.20.html",

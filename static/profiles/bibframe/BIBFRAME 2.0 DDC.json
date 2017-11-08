@@ -38,12 +38,12 @@
           }
         ],
         "id": "profile:bf2:DDC",
-        "resourceLabel": "Dewey Decimal Classification (unused)",
+        "resourceLabel": "Dewey Decimal Classification",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc"
       }
     ],
     "id": "profile:bf2:DDC",
-    "description": "Dewey Decimal Classification (unused)",
+    "description": "Dewey Decimal Classification",
     "title": "BIBFRAME 2.0 DDC",
     "date": "2017-07-28",
     "contact": "NDMSO"

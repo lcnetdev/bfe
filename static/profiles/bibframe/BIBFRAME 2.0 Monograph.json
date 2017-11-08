@@ -321,7 +321,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
-            "propertyLabel": "Related Instance (BIBFRAME)"
+            "propertyLabel": "Has BIBFRAME Instance"
           },
           {
             "propertyLabel": "Contents (LC-PCC PS 25.1)",
@@ -1427,8 +1427,10 @@
               "useValuesFrom": [
                 "http://id.loc.gov/vocabulary/mcolor"
               ],
-              "valueDataType": {},
-              "valueLanguage": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
+              },
+              "valueLanguage": ""
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Color Content (RDA 7.17)",
