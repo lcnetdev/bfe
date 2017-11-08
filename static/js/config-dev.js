@@ -77,7 +77,7 @@
             });
         }
 
-	function publish(data, rdfxml, bfelog){
+	function publish(data, rdfxml, bfelog, callback){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
             //var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
@@ -100,6 +100,8 @@
                 $messagediv.insertBefore('#bfeditor-previewPanel');
                 $('#bfeditor-previewPanel').remove();
                 bfeditor.bfestore.store = [];
+                callback(true, data.name);
+                
             }).fail(function (XMLHttpRequest, textStatus, errorThrown){
                 bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
                 bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
@@ -194,7 +196,6 @@
 			"static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 LCCN.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Note.json",

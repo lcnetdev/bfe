@@ -1635,11 +1635,13 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/msoundcontent"
+              ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/SoundContent"
               }
@@ -1739,20 +1741,6 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Details of Sound Characteristic (RDA 3.16.1.4)",
             "remark": "http://access.rdatoolkit.org/3.16.1.4.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic",
-            "propertyLabel": "Special Playback Characteristic (RDA 3.16.9)",
-            "remark": "http://access.rdatoolkit.org/3.16.9.html"
           }
         ],
         "id": "profile:bf2:16mmFeatureFilm:Sound",

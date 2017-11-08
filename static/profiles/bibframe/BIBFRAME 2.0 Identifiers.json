@@ -563,7 +563,7 @@
           }
         ],
         "id": "profile:bf2:TestProfile:ISRC",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Is",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isrc",
         "resourceLabel": "ISRC"
       },
       {
@@ -1200,12 +1200,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mstatus"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Status"
+              }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Invalid/Incorrect/ Canceled?"
@@ -1288,7 +1292,20 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
-            "propertyLabel": "Accession or copy number"
+            "propertyLabel": "Accession number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Copy number"
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",

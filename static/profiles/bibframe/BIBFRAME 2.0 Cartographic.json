@@ -32,7 +32,9 @@
             "type": "resource",
             "valueConstraint": {
               "useValuesFrom": [],
-              "valueDataType": {},
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
+              },
               "valueTemplateRefs": [
                 "profile:bflc:Agents:PrimaryContribution"
               ]
@@ -245,7 +247,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
-            "propertyLabel": "Related Instance (BIBFRAME)",
+            "propertyLabel": "Has BIBFRAME Instance",
             "remark": ""
           },
           {
@@ -809,7 +811,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8080/vocabulary/mmaterial"
+                "http://id.loc.gov/vocabulary/mmaterial"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/BaseMaterial"
@@ -822,12 +824,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mlayout"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Layout"
+              }
             },
             "propertyLabel": "Layout (RDA 3.11)",
             "remark": "http://access.rdatoolkit.org/3.11.html",
@@ -841,7 +847,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8080/vocabulary/mpolarity"
+                "http://id.loc.gov/vocabulary/mpolarity"
               ],
               "valueDataType": {
                 "dataTypeLabel": "Polarity",

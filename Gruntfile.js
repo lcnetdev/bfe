@@ -8,7 +8,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                'builds/bfe.js' : ['build_support/mini_require.js','src/bfe.js','src/lib/lodash.min.js','src/lib/typeahead.jquery.min.js','src/bfestore.js','src/bfelogging.js','src/bfelookups.js','src/lib/aceconfig.js'], 
+                'builds/bfe.js' : ['build_support/mini_require.js','src/bfe.js','src/bfestore.js','src/bfelogging.js','src/bfelookups.js','src/lib/aceconfig.js'], 
                 'builds/bfe.css' : ['src/css/bootstrap.css', 'src/css/typeahead.css'],
                 }
             },
