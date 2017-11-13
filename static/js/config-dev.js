@@ -170,6 +170,7 @@
             },*/
             "url" : "http://mlvlp04.loc.gov:3000",
             "baseURI": "http://id.loc.gov/",
+            "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
