@@ -2898,12 +2898,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     }
 
     function whichrt(rt, baseURI, callback) {
-        //for resource templates, determine if they are works, instances, or other
+        //for resource templates, determine if they are works, instances, or other        
 
         if (rt.resourceURI.startsWith("http://www.loc.gov/mads/rdf/v1#")) {
-            uri = rt.resourceURI.replace("http://www.loc.gov/mads/rdf/v1#", "http://mlvlp04.loc.gov:3000/bfe/static/v1.json#");
+            uri = rt.resourceURI.replace("http://www.loc.gov/mads/rdf/v1#", config.url + "/bfe/static/v1.json#");
         } else if (rt.resourceURI.startsWith("http://id.loc.gov/resources")) {
-            uri = rt.resourceURI.replace("http://id.loc.gov/resources", "http://mlvlp04.loc.gov:8230/resources") + ".json";
+            uri = rt.resourceURI.replace("http://id.loc.gov/resources", config.resourceURI) + ".json";
         } else {
             uri = rt.resourceURI + ".json";
         }
@@ -2913,7 +2913,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             data: {
                 uri: uri
             },
-            url: "http://mlvlp04.loc.gov:3000/profile-edit/server/whichrt",
+            url: config.url + "/profile-edit/server/whichrt",
             success: function(data) {
                 var returnval = "_:bnode";
                 var truthy = false;
@@ -2957,7 +2957,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
         //normalize
         if (uri.startsWith("http://id.loc.gov/resources")) {
-            uri = uri.replace("http://id.loc.gov/resources", "http://mlvlp04.loc.gov:8230/resources");
+            uri = uri.replace("http://id.loc.gov/resources", config.resourceURI);
         }
 
         $.ajax({
@@ -2966,7 +2966,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             data: {
                 uri: uri + ".json"
             },
-            url: "http://mlvlp04.loc.gov:3000/profile-edit/server/whichrt",
+            url: config.uri + "/profile-edit/server/whichrt",
             success: function(data) {
                 var returnval;
                 var labelelements = _.where(data, "http://www.loc.gov/mads/rdf/v1#authoritativeLabel");                
@@ -3031,7 +3031,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
     exports.store2rdfxml = function(jsonld, callback) {
         exports.store2jsonldnormalized(jsonld, function(expanded) {
             $.ajax({
-                url: "http://mlvlp04.loc.gov:3000/profile-edit/server/rdfxml",
+                url: config.uri + "/profile-edit/server/rdfxml",
                 type: "POST",
                 data: JSON.stringify(expanded),
                 processData: false,
