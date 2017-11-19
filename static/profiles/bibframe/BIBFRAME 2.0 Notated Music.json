@@ -1723,11 +1723,11 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Medium",
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
                 "remark": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/instrument",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "LCMPT for Instrument"
           },
           {
@@ -1791,10 +1791,10 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Medium"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/voice",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "LCMPT for Voice"
           },
           {
@@ -1858,10 +1858,10 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Medium"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensemble",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "LCMPT for Ensemble"
           },
           {

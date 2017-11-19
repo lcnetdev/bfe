@@ -477,7 +477,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     text = _.filter(data, function(el) {
                                         return el["http://id.loc.gov/ontologies/bflc/comment"]
                                     })[0]["http://id.loc.gov/ontologies/bflc/comment"][0]["@value"];
-                                return text.length > 40 ? text.substr(0, 38) + "..." : text;
+                                return text.length > 60 ? text.substr(0, 58) + "..." : text;
                             }
                         },
                         {
@@ -1006,7 +1006,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfeditor.bfestore.store = [];
         bfeditor.bfestore.name = guid();
         bfeditor.bfestore.created = new Date().toUTCString();
-        bfeditor.bfestore.url = config.url + "/verso/bfs?filter={'name':'" + bfeditor.bfestore.name + "'}";
+        bfeditor.bfestore.url = config.url + "/verso/api/bfs?filter={'name':'" + bfeditor.bfestore.name + "'}";
         bfeditor.bfestore.state = "create";
         loadtemplatesCounter = 0;
         loadtemplatesCount = spoints.useResourceTemplates.length;
@@ -1820,6 +1820,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             }
                         }
                         
+                        if (tpreflabel !== undefined) {
+                            displaydata = tpreflabel;
+
+                        } else {
+
                         var tlabel = _.find(labeldata, {
                             p: "http://www.w3.org/2000/01/rdf-schema#label"
                         });
@@ -1837,15 +1842,25 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         } else if (tmainTitle !== undefined) {
                             displaydata = tmainTitle.o;
                         } else if (tvalue !== undefined) {
-                            displaydata = tvalue.o;
+                            if (tvalue.o.startsWith("http")){
+                                whichLabel(tvalue.o, function(label) { 
+                                    console.log(label);
+                                    displaydata = label;
+                                });
+                            } else {
+                                var qualifier = _.find(labeldata, {s: tvalue.s, p: "http://id.loc.gov/ontologies/bibframe/qualifier"});
+                                if (!_.isEmpty(qualifier) && !_.isEmpty(qualifier.o)){
+                                    displaydata = tvalue.o + " " + qualifier.o;
+                                } else {                                
+                                    displaydata = tvalue.o;
+                                }
+                            }
                         } else {
                             displaydata = _.last(property.propertyURI.split("/"))
                         }
+                        
 
-
-                        //});
-
-                        if (displaydata === undefined || displaydata === "") {
+                        if (displaydata === undefined || _.isEmpty(displaydata)) {
                             var tlabel = _.find(_.where(bfestore.store, {
                                 "s": labeldata[0].o
                             }), {
@@ -1881,6 +1896,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                         if (displaydata === undefined && data !== undefined && data.o !== undefined) {
                             displaydata = data.o;
+                        }
                         }
 
                     }
@@ -2225,8 +2241,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             class: "btn-group btn-group-xs"
         });
         if (!_.isUndefined(bgvars.tlabel)) {
-            if (bgvars.tlabel.length > 40) {
-                display = bgvars.tlabel.substr(0, 40) + "...";
+            if (bgvars.tlabel.length > 60) {
+                display = bgvars.tlabel.substr(0, 58) + "...";
             } else {
                 display = bgvars.tlabel;
             }
@@ -2966,7 +2982,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             data: {
                 uri: uri + ".json"
             },
-            url: config.uri + "/profile-edit/server/whichrt",
+            url: config.url + "/profile-edit/server/whichrt",
             success: function(data) {
                 var returnval;
                 var labelelements = _.where(data, "http://www.loc.gov/mads/rdf/v1#authoritativeLabel");                
@@ -3031,7 +3047,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
     exports.store2rdfxml = function(jsonld, callback) {
         exports.store2jsonldnormalized(jsonld, function(expanded) {
             $.ajax({
-                url: config.uri + "/profile-edit/server/rdfxml",
+                url: config.url + "/profile-edit/server/rdfxml",
                 type: "POST",
                 data: JSON.stringify(expanded),
                 processData: false,
