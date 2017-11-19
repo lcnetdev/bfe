@@ -61,7 +61,9 @@
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
                 bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                $messagediv.append('<div class="alert alert-success"><strong>Record Created:</strong><a href='+data.url+'>'+data.name+'</a></div>');
+                var decimaltranslator = window.ShortUUID("0123456789");
+                var resourceName = "e" + decimaltranslator.fromUUID(data.name);
+                $messagediv.append('<div class="alert alert-success"><strong>Record Created:</strong><a href='+data.url+'>'+resourceName+'</a></div>');
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
                 $messagediv.insertBefore('#bfeditor-previewPanel');

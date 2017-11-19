@@ -40,9 +40,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://rdaregistry.info/Elements/w/"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
