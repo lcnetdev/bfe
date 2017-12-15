@@ -405,7 +405,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         if ($.fn.dataTable.isDataTable('#table_id')) {
             var table = $('#table_id').DataTable();
         } else {
-            var $datatable = $('<table id="table_id" class="display"><thead><tr><th>id</th><th>name</th><th>title</th><th>comment</th><th>modified</th><th>edit</th></tr></thead></table>');
+            var $datatable = $('<table id="table_id" class="display"><thead><tr><th>id</th><th>name</th><th>title</th><th>LCCN</th><th>comment</th><th>modified</th><th>edit</th></tr></thead></table>');
             var table = $(function() {
                 $('#table_id').DataTable({
                     "processing": true,
@@ -465,6 +465,29 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     retval = "No Title";
                                 }
                                 return retval;
+                            }
+                        },
+                        {
+                            "data": "rdf",
+                            "render": function(data, type, full, meta) {
+                                var text = "N/A";
+                                var lccns = _.filter(data, function(el) {
+                                        if (!_.isEmpty(el["@type"])){
+                                            if (el["@type"][0] === "http://id.loc.gov/ontologies/bibframe/Lccn"){
+                                                if (_.has(el, ["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"]))
+                                                    if (!_.isEmpty(el["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"]))
+                                                        return el["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+                                            }
+                                        }
+                                });
+                                if (!_.isEmpty(lccns)){
+                                   for(i=0; i < lccns.length; i++){
+                                       if (!lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"].startsWith("n"))
+                                           text = lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+                                   }
+                                }
+                                console.log(full.id);                                
+                                return text;
                             }
                         },
                         {

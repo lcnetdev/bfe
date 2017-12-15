@@ -458,7 +458,9 @@
                 "profile:bf2:Identifiers:Status"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Incorrect, Invalid or Canceled?"
@@ -1311,6 +1313,54 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
         "id": "profile:bf2:Identifiers:Shelfmark",
         "resourceLabel": "Accession or copy number"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Matrix Number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyLabel": "Qualifier"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on Matrix Number"
+          }
+        ],
+        "id": "profile:bf2:Identifiers:Matrix",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MatrixNumber",
+        "resourceLabel": "Matrix Number"
       }
     ],
     "id": "profile:bf2:Identifiers",

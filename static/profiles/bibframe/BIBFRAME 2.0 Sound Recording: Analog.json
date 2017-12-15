@@ -367,7 +367,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:SoundRecording:Expression"
+                "profile:bf2:Analog:Expression"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -391,22 +391,6 @@
             "remark": "http://access.rdatoolkit.org/6.28.1.html"
           },
           {
-            "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "resourceTemplates": [],
-            "type": "resource",
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Identifiers:LCCN"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "remark": "http://access.rdatoolkit.org/6.8.html"
-          },
-          {
             "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
@@ -426,7 +410,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:SoundRecording:Instance"
+                "profile:bf2:Analog:Instance"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -558,6 +542,21 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of Expression (RDA 6.11)",
             "remark": "http://access.rdatoolkit.org/6.11.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Matrix"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Identifier for the Expression",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy"
           },
           {
             "mandatory": "false",
@@ -699,7 +698,7 @@
             "type": "resource",
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:SoundRecording:Work"
+                "profile:bf2:Analog:Work"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1026,7 +1025,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://www.rdaregistry.info/termList/RDAGeneration"
+                "http://id.loc.gov/vocabulary/mgeneration"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Generation"
@@ -1061,43 +1060,6 @@
             "propertyLabel": "Sound Characteristics",
             "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/soundCharacteristic"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "false",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Analog:Digital",
-                "profile:bf2:Analog:Digital1",
-                "profile:bf2:Analog:Digital2"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeLabelHint": ""
-              },
-              "editable": "true",
-              "defaultLiteral": ""
-            },
-            "propertyLabel": "Digital Characteristics",
-            "remark": "",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/digitalCharacteristic"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Analog:SysReq"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/systemRequirement",
-            "propertyLabel": "System Requirement"
           },
           {
             "propertyLabel": "Uniform Resource Locator (RDA 4.6)",
@@ -1151,7 +1113,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:SoundRecording:Item"
+                "profile:bf2:Analog:Item"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1174,7 +1136,7 @@
           }
         ],
         "resourceLabel": "BIBFRAME Instance (RDA Manifestation)",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Instance"
       },
       {
         "id": "profile:bf2:Analog:Item",
@@ -1281,56 +1243,21 @@
             "type": "resource"
           },
           {
-            "propertyLabel": "Lending policy",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Reproduction policy",
+            "propertyLabel": "Lending, Reproduction, and Retention Policies",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:Access",
+                "profile:bf2:Item:Use",
+                "profile:bf2:Item:Retention"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Retention policy",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Access condition",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           }
         ],
         "resourceLabel": "BIBFRAME Item (RDA Item)",
@@ -1611,7 +1538,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
             "propertyLabel": "Place of Capture (RDA 7.11.2)",
             "remark": "http://access.rdatoolkit.org/7.11.2.html"
           },
@@ -1625,7 +1552,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
             "propertyLabel": "Date of Capture (RDA 7.11.3)",
             "remark": "http://access.rdatoolkit.org/7.11.3.html"
           },
@@ -1744,7 +1671,8 @@
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RecordingMethod"
               },
-              "defaultURI": ""
+              "defaultURI": "http://id.loc.gov/vocabulary/mrectype/analog",
+              "defaultLiteral": "analog"
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Type of Recording (RDA 3.16.2)",
@@ -2001,7 +1929,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8080/vocabulary/mgroove"
+                "http://id.loc.gov/vocabulary/mgroove"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/GrooveCharacteristic"
@@ -2010,6 +1938,21 @@
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Groove Characteristic (RDA 3.16.5)",
             "remark": "http://access.rdatoolkit.org/3.16.5.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Details of Groove Characteristic"
           }
         ],
         "id": "profile:bf2:Analog:Sound6",

@@ -1439,7 +1439,7 @@
                 "dataTypeURI": ""
               }
             },
-            "propertyLabel": "Search MARC relator code",
+            "propertyLabel": "Search MARC relator term",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Role"
           },
           {
@@ -1451,11 +1451,11 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Role"
+                "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Input RDA relationship designator (if it does not appear above)"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Role",
+            "propertyLabel": "Input RDA relationship designator term (if it does not appear above)"
           }
         ],
         "id": "profile:bf2:Agent:Role",

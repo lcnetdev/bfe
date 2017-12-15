@@ -1068,7 +1068,11 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:Access",
+                "profile:bf2:Item:Use",
+                "profile:bf2:Item:Retention"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1092,19 +1096,6 @@
             "mandatory": "false",
             "repeatable": "true",
             "type": "resource"
-          },
-          {
-            "propertyLabel": "Access condition",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
           },
           {
             "mandatory": "false",
@@ -1908,52 +1899,6 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
-            "propertyLabel": "Lending Policy"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
-            "propertyLabel": "Reproduction Policy"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
-            "propertyLabel": "Retention Policy"
-          }
-        ],
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
-        "id": "profile:bf2:Serial:UsageAccessPolicy",
-        "resourceLabel": "Usage and Access Policy"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/firstIssue",
             "propertyLabel": "Numeric and/or Alphabetic Designation of First Issue or Part of Sequence (RDA 2.6.2)",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5592.html"
@@ -1968,7 +1913,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/firstIssue",
             "propertyLabel": "Chronological Designation of First Issue or Part of Sequence (RDA 2.6.3)",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-5667.html"
           },

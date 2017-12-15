@@ -41,7 +41,7 @@
         ],
         "id": "profile:bf2:Place",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
-        "resourceLabel": "Place Associated with a Resource",
+        "resourceLabel": "Place Associated with a Work",
         "contact": ""
       }
     ],

@@ -1137,29 +1137,41 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:MIBluRayDVD:BroadStd",
+                "profile:bf2:MIBluRayDVD:VidFormat"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Video Characteristic (RDA 3.18)",
-            "remark": "http://access.rdatoolkit.org/3.18.html",
+            "propertyLabel": "Video Characteristics",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/videoCharacteristic"
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:MIBluRayDVD:Digital",
+                "profile:bf2:MIBluRayDVD:FileType",
+                "profile:bf2:MIBluRayDVD:RegEnc"
+              ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeLabel": "",
+                "dataTypeURI": "",
+                "dataTypeLabelHint": "",
+                "remark": ""
+              }
             },
-            "propertyLabel": "Digital File Characteristic (RDA 3.19)",
-            "remark": "http://access.rdatoolkit.org/3.19.html",
+            "propertyLabel": "Digital File Characteristics",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/digitalCharacteristic"
           },
           {
@@ -1407,56 +1419,21 @@
             "type": "resource"
           },
           {
-            "propertyLabel": "Lending policy",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Reproduction policy",
+            "propertyLabel": "Lending, Reproduction, and Retention Policies",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:Access",
+                "profile:bf2:Item:Use",
+                "profile:bf2:Item:Retention"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Retention policy",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Access condition",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
@@ -2143,7 +2120,7 @@
                 "http://id.loc.gov/vocabulary/mspecplayback"
               ],
               "valueDataType": {
-                "dataTypeURI": ""
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -2282,6 +2259,158 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/SupplementaryContent",
         "id": "profile:bf2:MIBluRayDVD:URL",
         "resourceLabel": "URL"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mregencoding"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RegionalEncoding"
+              }
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "Regional Encoding (RDA 3.19.6.3)",
+            "remark": "http://access.rdatoolkit.org/3.19.6.3.html"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/RegionalEncoding",
+        "id": "profile:bf2:MIBluRayDVD:RegEnc",
+        "resourceLabel": "Regional Encoding"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mfiletype"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/FileType"
+              }
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "File Type (RDA 3.19.2)",
+            "remark": "http://access.rdatoolkit.org/3.19.2.html"
+          }
+        ],
+        "id": "profile:bf2:MIBluRayDVD:FileType",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/FileType",
+        "resourceLabel": "File type"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "remark": "http://access.rdatoolkit.org/3.19.html",
+            "propertyLabel": "Digital File Characteristic (RDA 3.19)"
+          }
+        ],
+        "id": "profile:bf2:MIBluRayDVD:Digital",
+        "resourceLabel": "Digital Characteristics",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/FileType"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mbroadstd"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/BroadcastStandard"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Broadcast Standard (RDA 3.18.3)",
+            "remark": "http://access.rdatoolkit.org/3.18.3.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Details of Broadcast Standard"
+          }
+        ],
+        "id": "profile:bf2:MIBluRayDVD:BroadStd",
+        "resourceLabel": "Broadcast Standard",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/BroadcastStandard"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mvidformat"
+              ],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/VideoFormat"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Video Format (RDA 3.18.2)",
+            "remark": "http://access.rdatoolkit.org/3.18.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Details of Video Format"
+          }
+        ],
+        "id": "profile:bf2:MIBluRayDVD:VidFormat",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/VideoFormat",
+        "remark": "",
+        "resourceLabel": "Video Format"
       }
     ],
     "contact": "NDMSO",

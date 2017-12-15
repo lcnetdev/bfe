@@ -269,22 +269,6 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Identifiers:LCCN"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "LC Control Number for the Work (RDA 6.8)",
-            "remark": "http://access.rdatoolkit.org/6.8.html"
-          },
-          {
-            "mandatory": "false",
             "propertyLabel": "Your Windows ID and Comments",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
             "repeatable": "true",
@@ -863,30 +847,18 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Cartographic:Digital"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyLabel": "Digital File Characteristic (RDA 3.19)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/digitalCharacteristic",
             "remark": "http://access.rdatoolkit.org/3.19.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Digital Representation of Cartographic Content (RDA 3.19.8)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/digitalCharacteristic",
-            "remark": "http://access.rdatoolkit.org/3.19.8.html"
           },
           {
             "mandatory": "false",
@@ -1130,54 +1102,19 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
-            "propertyLabel": "Lending policy"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:Access",
+                "profile:bf2:Item:Use",
+                "profile:bf2:Item:Retention"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/usageAndAccessPolicy",
-            "propertyLabel": "Reproduction policy"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
-            "propertyLabel": "Retention policy"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
-            "propertyLabel": "Access condition"
+            "propertyLabel": "Lending, Reproduction, and Retention Policies"
           }
         ],
         "id": "profile:bf2:Cartography:Item",
@@ -1245,9 +1182,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "West"
           },
           {
@@ -1258,9 +1197,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "East"
           },
           {
@@ -1271,9 +1212,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "North"
           },
           {
@@ -1284,14 +1227,46 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "South"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Latitude"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Cartographic"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Longitude"
           }
         ],
         "id": "profile:bf2:Cartography:Coordinates",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Cartographic",
         "resourceLabel": "Cartographic Coordinates"
       },
       {
@@ -1450,6 +1425,39 @@
         "id": "profile:bf2:Cartographic:Extent",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Extent",
         "resourceLabel": "Extent"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/CartographicDataType",
+            "propertyLabel": "Cartographic data type"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/CartographicObjectType",
+            "propertyLabel": "Cartographic object type"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/DigitalCharacteristic",
+        "id": "profile:bf2:Cartographic:Digital",
+        "resourceLabel": "Digital characteristics"
       }
     ],
     "contact": "NDMSO",
