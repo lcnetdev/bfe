@@ -189,6 +189,7 @@
             "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Analog.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
 			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
@@ -290,7 +291,20 @@
                             }
 
                         ]},
+                        {"menuGroup": "Sound Recording: Analog",
+                        "menuItems": [
+                            {
+                                label: "Instance",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
+                            },
+                            {
+                                label: "Work",
+                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                useResourceTemplates: [ "profile:bf2:Analog:Work" ]
+                            }
 
+                        ]},
                         {"menuGroup": "Moving Image: BluRay DVD",
                         "menuItems": [
                             {

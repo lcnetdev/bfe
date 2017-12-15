@@ -25,7 +25,9 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:Shelfmarks"
+                "profile:bf2:Identifiers:LC",
+                "profile:bf2:Identifiers:DDC",
+                "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -133,6 +135,72 @@
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Item",
         "resourceLabel": "BIBFRAME 2.0 Item",
         "id": "profile:bf2:Item"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Lending or Access Policy"
+          }
+        ],
+        "id": "profile:bf2:Item:Access",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
+        "resourceLabel": "Lending or Access Policy"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/UsePolicy"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Use or Reproduction Policy"
+          }
+        ],
+        "id": "profile:bf2:Item:Use",
+        "resourceLabel": "Use or Reproduction Policy",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/UsePolicy"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Retention Policy"
+          }
+        ],
+        "id": "profile:bf2:Item:Retention",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
+        "resourceLabel": "Retention Policy"
       }
     ],
     "id": "profile:bf2:Item",
