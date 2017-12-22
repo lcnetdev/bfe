@@ -6,9 +6,9 @@
         "propertyTemplates": [
           {
             "propertyLabel": "Search works",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Work",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
             "resourceTemplates": [],
-            "type": "lookup",
+            "type": "resource",
             "valueConstraint": {
               "repeatable": "false",
               "useValuesFrom": [
@@ -138,49 +138,20 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/source"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
+            "propertyLabel": "(Geographic) Coverage of the Content",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/natureOfContent",
-            "propertyLabel": "Nature of the Content (RDA 7.2)",
-            "remark": "http://access.rdatoolkit.org/7.2.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/geographicAreas"
+              "valueTemplateRefs": [
+                "profile:bf2:Form:Geog"
               ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
-            "propertyLabel": "Geographic Area Code (MARC 043 Field)"
-          },
-          {
-            "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/7.3.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
@@ -1141,11 +1112,12 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:MIBluRayDVD:BroadStd",
-                "profile:bf2:MIBluRayDVD:VidFormat"
+                "profile:bf2:MIBluRayDVD:BroadStd"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/BroadcastStandard"
+              }
             },
             "propertyLabel": "Video Characteristics",
             "remark": "",
@@ -1326,7 +1298,6 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Identifiers:LC",
-                "profile:bf2:Identifiers:DDC",
                 "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
@@ -2347,7 +2318,7 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/BroadcastStandard"
               }
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Broadcast Standard (RDA 3.18.3)",
             "remark": "http://access.rdatoolkit.org/3.18.3.html"
           },

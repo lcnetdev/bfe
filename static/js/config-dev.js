@@ -79,24 +79,42 @@
             });
         }
 
-	function publish(data, rdfxml, bfelog, callback){
+	function publish(data, rdfxml, savename, bfelog, callback){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
             //var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
 	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/publish";
+        var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
+
+        var savedata = {};
+        savedata.name = savename;
+        savedata.profile = data.profile;
+        savedata.url = data.url;
+        savedata.created = data.created;
+        savedata.modified = data.modified;
+        savedata.rdf = data.rdf;
+
 	    data.rdfxml = JSON.stringify(rdfxml);
 	
+        $.when(
+            $.ajax({
+               url: saveurl,
+               type: "POST",
+               data:JSON.stringify(savedata),
+               dataType: "json",
+               contentType: "application/json; charset=utf-8"
+            }),
             $.ajax({
                url: url,
                type: "POST",
                data: JSON.stringify(data),
-	       dataType: "json",
+    	       dataType: "json",
                contentType: "application/json; charset=utf-8"
-            }).done(function (data) {
+            })).done(function (savedata, publishdata) {
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
-                bfelog.addMsg(new Error(), "INFO", "Published " + data);
+                bfelog.addMsg(new Error(), "INFO", "Published " + publishdata.id);
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                $messagediv.append('<div class="alert alert-success"><strong>Description Published:</strong><a href='+data.url+'>'+data.name+'</a></div>');
+                $messagediv.append('<div class="alert alert-success"><strong>Description Published:</strong><a href='+publishdata[0].url+'>'+publishdata[0].name+'</a></div>');
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
                 $messagediv.insertBefore('#bfeditor-previewPanel');

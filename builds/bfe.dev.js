@@ -947,7 +947,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             var save_json = {};
                             save_json.name = bfeditor.bfestore.name;
                             save_json.profile = loadtemplates[0].resourceTemplateID;
-                            save_json.url = bfeditor.bfestore.url;
+                            save_json.url = config.url + "/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22" + bfeditor.bfestore.name + "%22%7D%7D";
                             save_json.created = bfeditor.bfestore.created;
                             save_json.modified = new Date().toUTCString();
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
@@ -986,7 +986,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 save_json.created = bfeditor.bfestore.created;
                                 save_json.modified = new Date().toUTCString();
                                 save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-                                editorconfig.publish.callback(save_json, rdfxml, bfelog, function(published, publish_name){
+                                editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function(published, publish_name){
                                     console.log("Publish:" + published + " " + publish_name);
                                 });
                             });
@@ -1029,7 +1029,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfeditor.bfestore.store = [];
         bfeditor.bfestore.name = guid();
         bfeditor.bfestore.created = new Date().toUTCString();
-        bfeditor.bfestore.url = config.url + "/verso/api/bfs?filter={'name':'" + bfeditor.bfestore.name + "'}";
+        bfeditor.bfestore.url = config.url + "/verso/api/bfs?filter=%7B%22name%22%3A%20%22" + bfeditor.bfestore.name + "%22%7D";
         bfeditor.bfestore.state = "create";
         loadtemplatesCounter = 0;
         loadtemplatesCount = spoints.useResourceTemplates.length;
@@ -3269,7 +3269,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
             "xsd": "http://www.w3.org/2001/XMLSchema#",
             "bf": "http://id.loc.gov/ontologies/bibframe/",
             "bflc": "http://id.loc.gov/ontologies/bflc/",
-            "madsrdf": "http://www.loc.gov/standards/mads/rdf/v1#"
+            "madsrdf": "http://www.loc.gov/mads/rdf/v1#"
         };
 
         jsonld.compact(jsonstr, context, function(err, compacted) {
@@ -3473,20 +3473,20 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
         //console.log("scheme is " + scheme);
 
         var rdftype = "";
-        if (type == "http://www.loc.gov/standards/mads/rdf/v1#PersonalName") {
+        if (type == "http://www.loc.gov/mads/rdf/v1#PersonalName") {
             rdftype = "rdftype:PersonalName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#place") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#place") {
             rdftype = "rdftype:Geographic";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#organization") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#organization") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#family") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#family") {
             //rdftype = "rdftype:FamilyName";
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#meeting") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#meeting") {
             rdftype = "rdftype:ConferenceName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#jurisdiction") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#jurisdiction") {
             rdftype = "rdftype:CorporateName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/genreForm") {
             rdftype = "rdftype:GenreForm";
@@ -3637,7 +3637,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function(re
                         label.s = selected.uri;
                         label.otype = "literal";
                         label.p = "http://www.w3.org/2000/01/rdf-schema#label";
-                        label.o = resource["http://www.loc.gov/standards/mads/rdf/v1#authoritativeLabel"][0]["@value"];
+                        label.o = resource["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"];
                         triples.push(label);
                         return process(triples);
                     }
@@ -3808,20 +3808,20 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
         //console.log("scheme is " + scheme);
 
         var rdftype = "";
-        if (type == "http://www.loc.gov/standards/mads/rdf/v1#Person") {
+        if (type == "http://www.loc.gov/mads/rdf/v1#Person") {
             rdftype = "rdftype:PersonalName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Place") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#Place") {
             rdftype = "rdftype:Geographic";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Organization") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#Organization") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Family") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#Family") {
             //rdftype = "rdftype:FamilyName";
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Meeting") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#Meeting") {
             rdftype = "rdftype:ConferenceName";
-        } else if (type == "http://www.loc.gov/standards/mads/rdf/v1#Jurisdiction") {
+        } else if (type == "http://www.loc.gov/mads/rdf/v1#Jurisdiction") {
             rdftype = "rdftype:CorporateName";
         } else if (type == "http://id.loc.gov/ontologies/bibframe/GenreForm") {
             rdftype = "rdftype:GenreForm";

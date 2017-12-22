@@ -203,34 +203,20 @@
             "remark": "http://access.rdatoolkit.org/6.17.html"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/natureOfContent",
-            "propertyLabel": "Nature of the Content (RDA 7.2)",
-            "remark": "http://access.rdatoolkit.org/7.2.html"
-          },
-          {
-            "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
+            "propertyLabel": "(Geographic) Coverage of the Content",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                ""
+              "valueTemplateRefs": [
+                "profile:bf2:Form:Geog"
               ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/7.3.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
