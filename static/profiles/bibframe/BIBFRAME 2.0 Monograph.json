@@ -104,49 +104,20 @@
             "repeatable": "true"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
+            "propertyLabel": "(Geographic) Coverage of the Content",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/natureOfContent",
-            "propertyLabel": "Nature of Content (RDA 7.2)",
-            "remark": "http://access.rdatoolkit.org/7.2.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/geographicAreas"
+              "valueTemplateRefs": [
+                "profile:bf2:Form:Geog"
               ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
-            "propertyLabel": "Geographic Area Code (MARC 043 Field)"
-          },
-          {
-            "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/7.3.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
@@ -545,16 +516,16 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Monograph:Color"
+                "profile:bf2:Note"
               ],
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
               }
             },
-            "propertyLabel": "Colour Content",
+            "propertyLabel": "Color Content (RDA 7.17)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/colorContent",
-            "remark": ""
+            "remark": "http://access.rdatoolkit.org/7.17.html"
           },
           {
             "mandatory": "false",
@@ -990,9 +961,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Identifiers:LC",
-                "profile:bf2:Identifiers:DDC",
-                "profile:bf2:Identifiers:Shelfmark"
+                "profile:bf2:Identifiers:LC"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1341,48 +1310,6 @@
         "id": "profile:bf2:Monograph:Audience",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience",
         "resourceLabel": "Intended Audience"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/mcolor"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ColorContent"
-              },
-              "valueLanguage": ""
-            },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
-            "propertyLabel": "Color Content (RDA 7.17)",
-            "remark": "http://access.rdatoolkit.org/7.17.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Note"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Details of Color Content (RDA 7.17.1.4)",
-            "remark": "http://access.rdatoolkit.org/7.17.1.4.html"
-          }
-        ],
-        "id": "profile:bf2:Monograph:Color",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ColorContent",
-        "resourceLabel": "Color content"
       },
       {
         "propertyTemplates": [

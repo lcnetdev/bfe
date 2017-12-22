@@ -99,49 +99,20 @@
             "remark": "http://access.rdatoolkit.org/5.8.1.3.html"
           },
           {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/natureOfContent",
-            "propertyLabel": "Nature of the Content (RDA 7.2)",
-            "remark": "http://access.rdatoolkit.org/7.2.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/geographicAreas"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
-              }
-            },
-            "propertyLabel": "Geographic Area Code (MARC 043 Field)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage"
-          },
-          {
-            "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
+            "propertyLabel": "(Geographic) Coverage of the Content",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/geographicCoverage",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Form:Geog"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "remark": "http://access.rdatoolkit.org/7.3.html",
+            "remark": "",
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal"
+            "type": "resource"
           },
           {
             "mandatory": "false",
@@ -1139,7 +1110,6 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Identifiers:LC",
-                "profile:bf2:Identifiers:DDC",
                 "profile:bf2:Identifiers:Shelfmark"
               ],
               "useValuesFrom": [],
