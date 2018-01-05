@@ -951,8 +951,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             save_json.created = bfeditor.bfestore.created;
                             save_json.modified = new Date().toUTCString();
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-
-                            editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog);
+    
+                            if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/mainTitle"}) ){                        
+                                editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog);
+                            } else {
+                                //title required
+                                var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
+                                $messagediv.append('<div class="alert alert-error"><strong>No title found:</strong><a href='+bfeditor.bfestore.url+'>'+mintResource(bfeditor.bfestore.name)+'</a></div>');
+                                $messagediv.insertBefore('#bfeditor-previewPanel');
+                            }
                         } else {
                             //save disabled
                             $('#bfeditor-formdiv').empty();
@@ -978,18 +985,25 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         }
 
                         if (editorconfig.publish.callback !== undefined) {
-                            bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function(rdfxml) {
-                                var save_json = {};
-                                save_json.name = mintResource(bfeditor.bfestore.name);
-                                save_json.profile = loadtemplates[0].resourceTemplateID;
-                                save_json.url = bfeditor.bfestore.url;
-                                save_json.created = bfeditor.bfestore.created;
-                                save_json.modified = new Date().toUTCString();
-                                save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-                                editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function(published, publish_name){
-                                    console.log("Publish:" + published + " " + publish_name);
+                            if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/mainTitle"}) ){
+                                bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function(rdfxml) {
+                                    var save_json = {};
+                                    save_json.name = mintResource(bfeditor.bfestore.name);
+                                    save_json.profile = loadtemplates[0].resourceTemplateID;
+                                    save_json.url = bfeditor.bfestore.url;
+                                    save_json.created = bfeditor.bfestore.created;
+                                    save_json.modified = new Date().toUTCString();
+                                    save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+                                    editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function(published, publish_name){
+                                        console.log("Publish:" + published + " " + publish_name);
+                                    });
                                 });
-                            });
+                            } else {
+                                //title required
+                                var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
+                                $messagediv.append('<div class="alert alert-error"><strong>No title found:</strong><a href='+bfeditor.bfestore.url+'>'+mintResource(bfeditor.bfestore.name)+'</a></div>');
+                                $messagediv.insertBefore('#bfeditor-previewPanel');
+                            }
                         } else {
                             //save disabled
                             $('#bfeditor-formdiv').empty();

@@ -6,30 +6,34 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Place"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
-            "propertyLabel": "Place (RDA 2.8.2)",
-            "remark": "http://access.rdatoolkit.org/2.8.2.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place",
+            "remark": ""
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Name"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent",
-            "propertyLabel": "Name (RDA 2.8.4)",
-            "remark": "http://access.rdatoolkit.org/2.8.4.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Name",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -56,30 +60,34 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Place"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
-            "propertyLabel": "Place (RDA 2.9.2)",
-            "remark": "http://access.rdatoolkit.org/2.9.2.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place",
+            "remark": ""
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Name"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent",
-            "propertyLabel": "Name (RDA 2.9.4)",
-            "remark": "http://access.rdatoolkit.org/2.9.4.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Name",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -105,30 +113,38 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Place"
+              ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place",
-            "propertyLabel": "Place (RDA 2.10.2)",
-            "remark": "http://access.rdatoolkit.org/2.10.2.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place",
+            "remark": ""
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:Name"
+              ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Agent",
-            "propertyLabel": "Name (RDA 2.10.4)",
-            "remark": "http://access.rdatoolkit.org/2.10.4.html/"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Name",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -148,6 +164,48 @@
         "id": "profile:bf2:ManufactureInformation",
         "resourceLabel": "Manufacture Activity",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Manufacture"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Place (RDA 2.10.2)",
+            "remark": "http://access.rdatoolkit.org/2.10.2.html"
+          }
+        ],
+        "id": "profile:bf2:Provision:Place",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
+        "resourceLabel": "Place"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Name (RDA 2.8.4)",
+            "remark": "http://access.rdatoolkit.org/2.8.4.html"
+          }
+        ],
+        "id": "profile:bf2:Provision:Name",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Agent",
+        "resourceLabel": "Name"
       }
     ],
     "id": "profile:bf2:PublicationDistributionManufactureInformation",
