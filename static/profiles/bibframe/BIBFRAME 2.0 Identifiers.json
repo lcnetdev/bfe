@@ -889,7 +889,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:Distributor",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/StockNumber",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicDistributorNumber",
         "resourceLabel": "Music Distributor Number"
       },
       {
