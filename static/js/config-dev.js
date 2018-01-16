@@ -92,6 +92,7 @@
         savedata.url = data.url;
         savedata.created = data.created;
         savedata.modified = data.modified;
+        savedata.status = data.status;
         savedata.rdf = data.rdf;
 
 	    data.rdfxml = JSON.stringify(rdfxml);

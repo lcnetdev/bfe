@@ -1341,7 +1341,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
-            "propertyLabel": "Number of instruments"
+            "propertyLabel": "Number"
           },
           {
             "mandatory": "false",
@@ -1408,7 +1408,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/count",
-            "propertyLabel": "Number of voices"
+            "propertyLabel": "Number"
           },
           {
             "mandatory": "false",
@@ -1567,7 +1567,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1575,10 +1575,11 @@
                 "http://id.loc.gov/vocabulary/mproduction"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ProductionMethod"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/ProductionMethod"
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ProductionMethod",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Production Method (RDA 3.9.1.3)",
             "remark": "http://access.rdatoolkit.org/3.9.1.3.html"
           },
@@ -1600,7 +1601,7 @@
           }
         ],
         "id": "profile:bf2:Analog:Production",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/productionMethod",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ProductionMethod",
         "resourceLabel": "Production Method"
       },
       {
@@ -1614,7 +1615,8 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/SoundCharacteristic"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/SoundCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
@@ -1647,7 +1649,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1655,7 +1657,8 @@
                 "http://id.loc.gov/vocabulary/mrectype"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RecordingMethod"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/RecordingMethod"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/mrectype/analog",
               "defaultLiteral": "analog"
@@ -1674,7 +1677,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1682,7 +1685,8 @@
                 "http://id.loc.gov/vocabulary/mrecmedium"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RecordingMedium"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/RecordingMedium"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1720,7 +1724,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1728,7 +1732,8 @@
                 "http://id.loc.gov/vocabulary/mplayback"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/PlaybackChannels"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackChannels"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1761,7 +1766,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1769,7 +1774,8 @@
                 "http://id.loc.gov/vocabulary/mspecplayback"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1786,7 +1792,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1794,7 +1800,8 @@
                 "http://id.loc.gov/ontologies/bibframe/FileType"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/FileType"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/FileType"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1910,7 +1917,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1918,7 +1925,8 @@
                 "http://id.loc.gov/vocabulary/mgroove"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/GrooveCharacteristic"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/GrooveCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1980,6 +1988,27 @@
         "id": "profile:bf2:Analog:SupplContent",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/SupplementaryContent",
         "resourceLabel": "Supplementary Content"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Medium of Performance (RDA 6.15)",
+            "remark": "http://access.rdatoolkit.org/6.15.html"
+          }
+        ],
+        "id": "profile:bf2:Analog:MOPStatement",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium",
+        "resourceLabel": "Medium of Performance Statement"
       },
       {
         "propertyTemplates": [
@@ -2083,6 +2112,21 @@
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/originPlace",
             "propertyLabel": "Place of Origin of the Work (RDA 6.5)",
             "remark": "http://access.rdatoolkit.org/6.5.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Analog:MOPStatement"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
+            "propertyLabel": "Medium of Performance Statement"
           },
           {
             "mandatory": "false",

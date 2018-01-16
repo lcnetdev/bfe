@@ -668,7 +668,7 @@
           },
           {
             "propertyLabel": "Edition Statement (RDA 2.5)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -994,16 +994,18 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:35mmFeatureFilm:Source"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
-            "propertyLabel": "Source Consulted (RDA 5.8.1.3)",
-            "remark": "http://access.rdatoolkit.org/5.8.1.3.html"
+            "propertyLabel": "Source Consulted",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -1206,10 +1208,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:Enumeration"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1348,7 +1352,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
           }
         ],
         "id": "profile:bf2:35mmFeatureFilm:RelatedInstance",
@@ -1437,14 +1441,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:35mmFeatureFilm:Place"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place of Capture (RDA 7.11.2)",
             "remark": "http://access.rdatoolkit.org/7.11.2.html"
           },
@@ -1458,7 +1464,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
             "propertyLabel": "Date of Capture (RDA 7.11.3)",
             "remark": "http://access.rdatoolkit.org/7.11.3.html"
           },
@@ -1487,7 +1493,29 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Place"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Place"
+          }
+        ],
+        "id": "profile:bf2:35mmFeatureFilm:Place",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
+        "resourceLabel": "Place"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1528,7 +1556,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1640,7 +1668,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1648,7 +1676,8 @@
                 "http://id.loc.gov/vocabulary/msoundcontent"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/SoundContent"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/SoundContent"
               }
             },
             "propertyLabel": "Sound Content (RDA 7.18)",
@@ -1687,7 +1716,9 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/ProjectionCharacteristic"
+                "dataTypeURI": "",
+                "dataTypeLabelHint": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/ProjectionCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1757,7 +1788,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1765,7 +1796,8 @@
                 "http://id.loc.gov/vocabulary/mplayback"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/PlaybackChannels"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackChannels"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1798,7 +1830,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1806,7 +1838,8 @@
                 "http://id.loc.gov/vocabulary/mspecplayback"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
               }
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
@@ -1850,6 +1883,27 @@
         "id": "profile:bf2:35mmFeatureFilm:Event",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Event",
         "resourceLabel": "Event"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Source Consulted (RDA 5.8.1.3)",
+            "remark": "http://access.rdatoolkit.org/5.8.1.3.html"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Source",
+        "resourceLabel": "Source Consulted",
+        "id": "profile:bf2:35mmFeatureFilm:Source"
       },
       {
         "propertyTemplates": [

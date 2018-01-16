@@ -1129,16 +1129,18 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Item:ImmAcqSource"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/immediateAcquisition",
-            "propertyLabel": "Immediate Source of Acquisition (RDA 2.19)",
-            "remark": "http://access.rdatoolkit.org/2.19.html"
+            "propertyLabel": "Immediate Source of Acquisition",
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -1319,7 +1321,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1327,9 +1329,10 @@
                 "http://id.loc.gov/vocabulary/millus"
               ],
               "valueDataType": {
-                "dataTypeURI": ""
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/Illustration"
               },
-              "valueLanguage": "http://id.loc.gov/ontologies/bibframe/Illustration"
+              "valueLanguage": ""
             },
             "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Illustrative Content (RDA 7.15)",
@@ -1437,7 +1440,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
             "propertyLabel": "Relationship Designator for Related Manifestation (RDA Appendix J)",
             "remark": "http://access.rdatoolkit.org/J.4.html"
           }

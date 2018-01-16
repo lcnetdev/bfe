@@ -201,6 +201,67 @@
         "id": "profile:bf2:Item:Retention",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
         "resourceLabel": "Retention Policy"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Immediate Source of Acquisition of Item (RDA 2.19)",
+            "remark": "http://access.rdatoolkit.org/2.19.html"
+          }
+        ],
+        "id": "profile:bf2:Item:ImmAcqSource",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ImmediateAcquisition",
+        "resourceLabel": "Immediate Source of Acquisition"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Enumeration"
+          }
+        ],
+        "id": "profile:bf2:Item:Enumeration",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Enumeration",
+        "resourceLabel": "Enumeration"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Chronology"
+          }
+        ],
+        "id": "profile:bf2:Item:Chronology",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Chronology",
+        "resourceLabel": "Chronology"
       }
     ],
     "id": "profile:bf2:Item",

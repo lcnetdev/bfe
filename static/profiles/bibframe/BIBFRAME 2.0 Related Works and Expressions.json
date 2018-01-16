@@ -44,7 +44,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
           },
           {
             "mandatory": "false",
@@ -110,6 +110,21 @@
             },
             "propertyLabel": "Merged to form (work):",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergedToForm"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Description of Related Work"
           }
         ],
         "id": "profile:bf2:RelatedWork",
@@ -159,7 +174,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Relationship Designator for Related Expression (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
           }
         ],
         "resourceLabel": "Related Expression",
@@ -186,18 +201,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:Agent:Role"
-              ],
+              "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
             "propertyLabel": "Relationship designator"
           }
         ],
