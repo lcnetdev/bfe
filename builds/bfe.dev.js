@@ -486,8 +486,40 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                            text = lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
                                    }
                                 }
-                                console.log(full.id);                                
-                                return text;
+                                console.log(full.id);
+
+                                if (text !== "N/A"){
+                                    var ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.instances.e" + text.trim() + "0001";
+                                    var lccn = text.trim();
+                                    var table = new $.fn.dataTable.Api( meta.settings );
+                                    var cell = table.cell(meta.row, meta.col);
+
+                                    $.ajax({
+                                        type: "HEAD",
+                                        async: true,
+                                        data: { uri: ldsurl },
+                                        url: config.url + "/profile-edit/server/checkuri",
+                                    }).done(function(data){
+                                        cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";
+                                        $(cell.node()).css('background-color', 'lightgreen');
+                                    }).fail(function(data, text){
+                                        if (full.status === "published"){
+                                            $(cell.node()).css('background-color', 'lightcoral');                                            
+                                        } 
+                                        /*else {
+                                            var resourceuri = "http://mlvlp04.loc.gov:3000/resources/"+table.cell(meta.row,1).node().innerHTML+".rdf";
+                                            $.ajax({ 
+                                                type: "HEAD", 
+                                                async:true, 
+                                                url: resourceuri,
+                                            }).done( function (data){
+                                                $(cell.node()).css('background-color', 'lightcoral');
+                                            });                                        
+                                        }*/
+                                    })
+                                 } 
+                                 
+                                 return text;
                             }
                         },
                         {
@@ -904,7 +936,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                          <button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button> \
                          <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
                          <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-			 <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Publish</button> \
+			 <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
                          </div>');
 
                     var $bfeditor = $('#create > .row');
@@ -993,6 +1025,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     save_json.url = bfeditor.bfestore.url;
                                     save_json.created = bfeditor.bfestore.created;
                                     save_json.modified = new Date().toUTCString();
+                                    save_json.status = "published";
                                     save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
                                     editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function(published, publish_name){
                                         console.log("Publish:" + published + " " + publish_name);
@@ -1128,6 +1161,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     triple.o = rt.resourceURI;
                                     triple.otype = "uri";
                                     //fobject.store.push(triple);
+                                    console.log("1");
                                     bfestore.addTriple(triple);
                                     
                                     fobject.resourceTemplates[urt].defaulturi = triple.s;
@@ -1308,7 +1342,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     var fid = fobject.id;
                                     var rtid = rt.useguid;
                                     var pid = property.guid;
-                                    var mintedURI = editorconfig.baseURI + "resources/" + mintResource(guid());
+                                    //var mintedURI = editorconfig.baseURI + "resources/" + mintResource(guid());
                                     var newResourceURI = "_:bnode" + shortUUID(guid());
                                     $b.click({
                                         fobjectid: fid,
@@ -1494,6 +1528,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 triple.o = rt.resourceURI;
                 triple.otype = "uri";
                 fobject.store.push(triple);
+                //2
+                console.log("2");
                 bfestore.addTriple(triple);
                 //bfestore.store.push(triple);
                 rt.guid = rt.useguid;
@@ -1530,6 +1566,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     triple.o = relatedTemplates[0].s;
                                     triple.otype = "uri";
                                     fobject.store.push(triple);
+                                    console.log("3");
                                     bfestore.addTriple(triple);
                                     //bfestore.store.push(triple);
                                     property.display = "false";
@@ -1550,6 +1587,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     triple.o = rt.resourceURI;
                     triple.otype = "uri";
                     fobject.store.push(triple);
+                    console.log("4");
                     bfestore.addTriple(triple);
                     rt.guid = rt.useguid;
                 }
@@ -1687,7 +1725,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
                     typeTriple.otype = "uri";
                     fobject.store.push(typeTriple);
-                    bfestore.addTriple(typeTriple);
+                    console.log("A");
+                    //bfestore.addTriple(typeTriple);
                 }
 
                 var data = property.valueConstraint.defaultURI;
@@ -1703,7 +1742,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 triple.o = data;
                 triple.otype = "uri";
                 fobject.store.push(triple);
-                bfestore.addTriple(triple);
+                console.log("B");
+//                bfestore.addTriple(triple);
             }
                 //set the label
                 var label = {};
@@ -1720,7 +1760,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 label.o = property.valueConstraint.defaultLiteral;
 
                 fobject.store.push(label);
-                bfestore.addTriple(label);           
+                console.log("C");
+                //bfestore.addTriple(label);           
 
                 // set the form
                 var $formgroup = $("#" + property.guid, form).closest(".form-group");
@@ -2044,7 +2085,55 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     triplepassed.o = loadtemplate.resourceURI;
                     triplepassed.otype = "uri";
                     triplespassed.push(triplepassed);
-                }
+                
+
+                    if (properties[0].propertyURI === "http://id.loc.gov/ontologies/bibframe/adminMetadata"){
+                        //add name, id triples
+                        var mintedId =  "e" + window.ShortUUID("0123456789").fromUUID(bfeditor.bfestore.name);
+                        var mintedUri = config.url+"/resources/"+mintedId;
+                        var adminTriple = {};
+                        adminTriple.s = resourceURI;
+                        adminTriple.p = "http://id.loc.gov/ontologies/bflc/profile";
+                        adminTriple.o = t.id;
+                        adminTriple.otype = "literal";
+                        triplespassed.push(adminTriple);
+                        bfeditor.bfestore.store.push(adminTriple)
+
+                        var adminTriple = {};
+                        adminTriple.s = resourceURI;
+                        adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
+                        var d = new Date();
+                        adminTriple.o = d.getFullYear() + "-" + d.getMonth() + 1 + "-" + d.getDate();
+                        adminTriple.otype = "literal";
+                        triplespassed.push(adminTriple);
+                        bfeditor.bfestore.store.push(adminTriple)
+
+                        var adminTriple = {};
+                        adminTriple.s = resourceURI;
+                        adminTriple.p = "http://id.loc.gov/ontologies/bibframe/identifiedBy";
+                        adminTriple.o = mintedUri;
+                        adminTriple.otype = "uri";
+                        triplespassed.push(adminTriple);
+                        bfeditor.bfestore.store.push(adminTriple)
+
+                        var adminTriple = {};
+                        adminTriple.s = mintedUri;
+                        adminTriple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                        adminTriple.o = "http://id.loc.gov/ontologies/bibframe/Local";
+                        adminTriple.otype = "uri";
+                        triplespassed.push(adminTriple);
+                        bfeditor.bfestore.store.push(adminTriple)
+
+                        var adminTriple = {};
+                        adminTriple.s = mintedUri;
+                        adminTriple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#value";
+                        adminTriple.o = mintedId;
+                        adminTriple.otype = "literal";
+                        triplespassed.push(adminTriple);
+                        bfeditor.bfestore.store.push(adminTriple)
+
+                    }
+                }                
             });
         } else {
             // Just pass the triples on....
@@ -2225,6 +2314,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 
                 data.forEach(function(t) {
                     callingformobject.store.push(t);
+                    console.log("A");
                     bfestore.addTriple(t);
                     //bfestore.store.push(t);
                 });

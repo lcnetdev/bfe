@@ -881,10 +881,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Cartography:Class"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -1165,7 +1167,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
             "propertyLabel": "Relationship Designator for Related Manifestation (RDA Appendix J)",
             "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-15.html"
           }
@@ -1455,6 +1457,26 @@
         "id": "profile:bf2:Cartography:SupplContent",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/SupplementaryContent",
         "resourceLabel": "Supplementary Content"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Geographic Classification"
+          }
+        ],
+        "id": "profile:bf2:Cartography:Class",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Classification",
+        "resourceLabel": "Geographic Classification"
       },
       {
         "propertyTemplates": [
