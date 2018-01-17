@@ -28,7 +28,7 @@
                 "dataTypeLabelHint": "Date or date and time on which the original metadata first created."
               }
             },
-            "propertyLabel": "Creation date (YYYY-MM-DD)",
+            "propertyLabel": "Creation date",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/creationDate"
           },
           {

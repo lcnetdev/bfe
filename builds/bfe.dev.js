@@ -488,7 +488,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 }
                                 console.log(full.id);
 
-                                if (text !== "N/A"){
+                                if (text !== "N/A" && full.status === "published"){
                                     var ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.instances.e" + text.trim() + "0001";
                                     var lccn = text.trim();
                                     var table = new $.fn.dataTable.Api( meta.settings );
@@ -516,8 +516,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                                 $(cell.node()).css('background-color', 'lightcoral');
                                             });                                        
                                         }*/
-                                    })
-                                 } 
+                                    });
+                                 }
                                  
                                  return text;
                             }
@@ -563,17 +563,22 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             "render": function(td, cellData, rowData, row) {
                                 //             return '<a href="'+data+'">edit</a>';
 
-                                return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.id + '" type="button" class="btn btn-default">Edit</button> \
-                         <button id="bfeditor-delete' + rowData.id + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.id + '">Delete</button> \
-                         </div>'
+                             return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.id + '" type="button" class="btn btn-default">Edit</button> \
+                             <button id="bfeditor-delete' + rowData.id + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.id + '">Delete</button> \
+                             </div>'                                                
                             },
                             "createdCell": function(td, cellData, rowData, row, col) {
+
+                                if(rowData.status === "published")
+                                    $(td).find("#bfeditor-delete"+rowData.id).attr("disabled", "disabled");
+
                                 var useguid = guid();
                                 var loadtemplate = {};
                                 var tempstore = [];
 
                                 bfestore.store = [];
                                 loadtemplates = [];
+
                                 //default
                                 //var spoints = editorconfig.startingPoints[0].menuItems[0];
                                 var menuIndex = _.findIndex(_(editorconfig.startingPoints).chain().find({
@@ -624,6 +629,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 loadtemplate.embedType = "page";
                                 loadtemplate.data = tempstore;
                                 loadtemplates.push(loadtemplate);*/
+
                                 $(td).find("#bfeditor-retrieve" + rowData.id).click(function() {
                                     if (editorconfig.retrieve.callback !== undefined) {
                                         loadtemplates = temptemplates;
@@ -652,7 +658,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             <div class="modal-body"><h4>Delete?</h4></div>\
                             <div class="modal-footer"><button type="button" class="btn btn-default" id="bfeditor-modalCancel" data-dismiss="modal">Cancel</button> \
                             <button type="button" id="bfeditor-deleteConfirmButton' + rowData.id + '" class="btn btn-danger btn-ok" data-dismiss="modal">Delete</button></div></div></div></div></div>'));
-
+                            
                                 $(td).find("#bfeditor-deleteConfirmButton" + rowData.id).click(function() {
                                     if (editorconfig.deleteId.callback !== undefined) {
                                         editorconfig.deleteId.callback(rowData.id, editorconfig.getCSRF.callback(), bfelog);
@@ -981,9 +987,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             save_json.profile = loadtemplates[0].resourceTemplateID;
                             save_json.url = config.url + "/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22" + bfeditor.bfestore.name + "%22%7D%7D";
                             save_json.created = bfeditor.bfestore.created;
-                            save_json.modified = new Date().toUTCString();
-                            save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+                            save_json.modified = new Date().toUTCDateString();
     
+                            if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
+                                var adminTriple = {};
+                                adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
+                                adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
+                                adminTriple.o = save_json.modified;
+                                adminTriple.otype = "literal";
+                                bfeditor.bfestore.store.push(adminTriple)
+                            }
+
+                            save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+
                             if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/mainTitle"}) ){                        
                                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog);
                             } else {
@@ -1026,6 +1042,20 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     save_json.created = bfeditor.bfestore.created;
                                     save_json.modified = new Date().toUTCString();
                                     save_json.status = "published";
+                                    save_json.objid = "loc.natlib.instances." + save_json.name + "0001";
+                                    save_json.id = save_json.name;
+                                    
+                                    var lccns = _.where(_.where(bfeditor.bfestore.store, {s: _.where(bfeditor.bfestore.store, {o: "http://id.loc.gov/ontologies/bibframe/Lccn"})[0].s}), {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"});
+
+                                    if (!_.isEmpty(lccns)){
+                                       for(i=0; i < lccns.length; i++){
+                                           if (!lccns[i].o.trim().startsWith("n")){
+                                              save_json.id = lccns[i].o.trim();
+                                              save_json.objid = "loc.natlib.instances.e" + save_json.id + "0001" ;
+                                           }
+                                        }
+                                    }
+
                                     save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
                                     editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function(published, publish_name){
                                         console.log("Publish:" + published + " " + publish_name);
@@ -2102,8 +2132,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         var adminTriple = {};
                         adminTriple.s = resourceURI;
                         adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
-                        var d = new Date();
-                        adminTriple.o = d.getFullYear() + "-" + d.getMonth() + 1 + "-" + d.getDate();
+                        var d = new Date(bfeditor.bfestore.created);
+                        adminTriple.o = d.getMonth() + 1 + '-' + d.getDate() + '-' + d.getFullYear();
                         adminTriple.otype = "literal";
                         triplespassed.push(adminTriple);
                         bfeditor.bfestore.store.push(adminTriple)

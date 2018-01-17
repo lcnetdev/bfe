@@ -281,20 +281,6 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Related Manifestations (RDA Chapter 27,  Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
-            "remark": "http://access.rdatoolkit.org/rdachp27_rda27-40.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
