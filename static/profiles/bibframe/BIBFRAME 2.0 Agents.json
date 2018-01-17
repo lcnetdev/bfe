@@ -1467,7 +1467,7 @@
                 "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Role",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Input RDA relationship designator term (if it does not appear above)"
           }
         ],

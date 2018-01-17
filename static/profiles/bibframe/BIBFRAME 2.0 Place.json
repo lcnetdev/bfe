@@ -20,7 +20,7 @@
               }
             },
             "propertyLabel": "Search LCNAF/LCSH",
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -31,12 +31,13 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Place"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/Place"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Record Place (if it does not appear above)",
-            "remark": "http://http://access.rdatoolkit.org/6.5.html"
+            "remark": "http://access.rdatoolkit.org/6.5.html"
           }
         ],
         "id": "profile:bf2:Place",

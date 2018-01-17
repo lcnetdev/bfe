@@ -113,13 +113,14 @@
                contentType: "application/json; charset=utf-8"
             })).done(function (savedata, publishdata) {
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
-                bfelog.addMsg(new Error(), "INFO", "Published " + publishdata.id);
+                bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                $messagediv.append('<div class="alert alert-success"><strong>Description Published:</strong><a href='+publishdata[0].url+'>'+publishdata[0].name+'</a></div>');
+                $messagediv.append('<div class="alert alert-info"><strong>Description submitted for posting:</strong><a href=http://mlvlp04.loc.gov:8230/'+publishdata[0].objid+'>'+publishdata[0].id+'</a></div>');
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
-                $messagediv.insertBefore('#bfeditor-previewPanel');
+                $messagediv.insertBefore('.nav-tabs');
                 $('#bfeditor-previewPanel').remove();
+                $('.nav-tabs a[href="#browse"]').tab('show')
                 bfeditor.bfestore.store = [];
                 callback(true, data.name);
                 
@@ -273,12 +274,12 @@
                             {
                                 label: "Instance",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:Cartography:Instance" ]
+                                useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
                             },
                             {
                                 label: "Work",
                                 type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Cartography:Work" ]
+                                useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
                             }
 
                         ]},
