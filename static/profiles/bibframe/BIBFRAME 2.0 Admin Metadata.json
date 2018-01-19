@@ -26,7 +26,8 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeLabelHint": "Date or date and time on which the original metadata first created."
-              }
+              },
+              "editable": "false"
             },
             "propertyLabel": "Creation date",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/creationDate"
@@ -41,7 +42,8 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeLabelHint": "Date or date and time on which the metadata was modified."
-              }
+              },
+              "editable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/changeDate",
             "propertyLabel": "Change date"

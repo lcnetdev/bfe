@@ -462,6 +462,57 @@
         "id": "profile:bf2:Title:Note",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
         "resourceLabel": "Title note"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3695.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subtitle",
+            "propertyLabel": "Parallel Other Title Information (RDA 2.3.5)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3939.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Title:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note on Parallel Title",
+            "remark": "http://access.rdatoolkit.org/2.17.2.html"
+          }
+        ],
+        "id": "profile:bf2:ParallelTitle",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
+        "resourceLabel": "Parallel Title"
       }
     ],
     "title": "BIBFRAME 2.0 Title Information",

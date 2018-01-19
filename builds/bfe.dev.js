@@ -196,7 +196,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     var tabIndices = 1;
 
-    var loadtemplates = [];
+    //var loadtemplates = [];
     var loadtemplatesANDlookupsCount = 0;
     var loadtemplatesANDlookupsCounter = 0;
 
@@ -481,15 +481,22 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                         }
                                 });
                                 if (!_.isEmpty(lccns)){
-                                   for(i=0; i < lccns.length; i++){
-                                       if (!lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"].startsWith("n"))
-                                           text = lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+                                   if (lccns.length === 1) {
+                                       text = lccns[0]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+                                   } else {
+                                       for(i=0; i < lccns.length; i++){
+                                           if (!lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"].startsWith("n"))
+                                               text = lccns[i]["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+                                       }
                                    }
                                 }
                                 console.log(full.id);
 
-                                if (text !== "N/A" && full.status === "published"){
+                                if (text !== "N/A" && full.status === "published"){                                    
                                     var ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.instances.e" + text.trim() + "0001";
+                                    if (text.trim().startsWith("n"))
+                                        ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.works." + text.trim().replace(/\s+/g,'');
+
                                     var lccn = text.trim();
                                     var table = new $.fn.dataTable.Api( meta.settings );
                                     var cell = table.cell(meta.row, meta.col);
@@ -577,10 +584,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 var tempstore = [];
 
                                 bfestore.store = [];
-                                loadtemplates = [];
+                                bfestore.loadtemplates = [];
 
                                 //default
                                 //var spoints = editorconfig.startingPoints[0].menuItems[0];
+                                if (rowData.profile !== "profile:bf2:Load:Work"){
                                 var menuIndex = _.findIndex(_(editorconfig.startingPoints).chain().find({
                                     menuItems: [{
                                         useResourceTemplates: [rowData.profile]
@@ -593,6 +601,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                         useResourceTemplates: [rowData.profile]
                                     }]
                                 }).value().menuItems[menuIndex]
+                                } else {
+                                    var spoints = { label: "Loaded Work",
+                                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                        useResourceTemplates:["profile:bf2:Load:Work"]
+                                    };
+                                }
 
                                 var bTypes = [];
                                 /*rowData.rdf.forEach(function(t){
@@ -622,17 +636,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     temptemplates.push(loadtemplate);
                                 });
 
-                                /*loadtemplates = [];
-                                loadtemplate.templateGUID = rowData.name;
-                                loadtemplate.resourceTemplateID = "profile:bf:Work:Monograph";
-                                loadtemplate.resourceURI = cellData;
-                                loadtemplate.embedType = "page";
-                                loadtemplate.data = tempstore;
-                                loadtemplates.push(loadtemplate);*/
-
                                 $(td).find("#bfeditor-retrieve" + rowData.id).click(function() {
                                     if (editorconfig.retrieve.callback !== undefined) {
-                                        loadtemplates = temptemplates;
+                                        //loadtemplates = temptemplates;
+                                        bfestore.loadtemplates = temptemplates;
                                         //editorconfig.retrieve.callback(cellData,bfestore, bfelog, cbLoadTemplates);
                                         bfestore.store = [];
                                         bfestore.state = "edit";
@@ -703,25 +710,44 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             </form></div>'));
 
         $loaddiv.find("#bfeditor-loaduri").click(function() {
-            var loadtemplates = [];
+            //var loadtemplates = [];
+
+            var spoints = { label: "Loaded Work",
+                            type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                            useResourceTemplates:["profile:bf2:Load:Work"]
+                          };
+
+            bfeditor.bfestore.store = [];
+            bfeditor.bfestore.name = guid();
+            bfeditor.bfestore.created = new Date().toUTCString();
+            bfeditor.bfestore.url = config.url + "/verso/api/bfs?filter=%7B%22name%22%3A%20%22" + bfeditor.bfestore.name + "%22%7D";
+            bfeditor.bfestore.state = "loaduri";
+            bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
+            loadtemplatesCount = spoints.useResourceTemplates.length;
+    
+            var temptemplates = [];
+            spoints.useResourceTemplates.forEach(function(l) {
+                var useguid = guid();
+                var loadtemplate = {};
+                loadtemplate.templateGUID = useguid;
+                loadtemplate.resourceTemplateID = l;
+                loadtemplate.embedType = "page";
+                loadtemplate.data = [];
+                temptemplates.push(loadtemplate);
+            });
+
             if (editorconfig.retrieve.callback !== undefined) {
                 try {
-                    var spoints = editorconfig.startingPoints[0].menuItems[0];
-                    var temptemplates = [];
-                    spoints.useResourceTemplates.forEach(function(l) {
-                        var useguid = guid();
-                        var loadtemplate = {};
-                        loadtemplate.templateGUID = useguid;
-                        loadtemplate.resourceTemplateID = l;
-                        loadtemplate.embedType = "page";
-                        loadtemplate.data = [];
-                        temptemplates.push(loadtemplate);
-                    });
-
-                    loadtemplates = temptemplates;
+                    bfestore.loadtemplates = temptemplates;
                     var url = $(this.parentElement).find("#bfeditor-loaduriInput").val();
-                    editorconfig.retrieve.callback(url, bfestore, loadtemplates, bfelog, function(loadtemplates) {
-                        loadtemplates.data = bfeditor.bfestore.store;
+                    editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function(loadtemplates) {
+                        bfestore.loadtemplates.data = bfeditor.bfestore.store;
+                        $('[href=#create]').tab('show');
+                        $('#bfeditor-formdiv').show();
+                        if($('#bfeditor-messagediv').length){
+                                    $('#bfeditor-messagediv').remove();
+                        }
+                        cbLoadTemplates();
                     });
 
                 } catch (e) {
@@ -877,6 +903,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     function cbLoadTemplates() {
         $("#bfeditor-loader").width($("#bfeditor-loader").width() + 5 + "%");
         loadtemplatesANDlookupsCounter++;
+        var loadtemplates = bfeditor.bfestore.loadtemplates;
+
+//        if (bfeditor.loadtemplates !== undefined && bfestore.loadtemplates[0].resourceTemplateID === "profile:bf2:Load:Work"){
+//            loadtemplates = bfeditor.bfestore.loadtemplates;
+//        }
+
         if (loadtemplatesANDlookupsCounter >= loadtemplatesANDlookupsCount) {
             $("#bfeditor-formdiv").html("");
             if (loadtemplates.length > 0) {
@@ -987,15 +1019,23 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             save_json.profile = loadtemplates[0].resourceTemplateID;
                             save_json.url = config.url + "/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22" + bfeditor.bfestore.name + "%22%7D%7D";
                             save_json.created = bfeditor.bfestore.created;
-                            save_json.modified = new Date().toUTCDateString();
+                            save_json.modified = new Date().toUTCString();
     
                             if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
-                                var adminTriple = {};
-                                adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
-                                adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
-                                adminTriple.o = save_json.modified;
-                                adminTriple.otype = "literal";
-                                bfeditor.bfestore.store.push(adminTriple)
+                                
+                                var modifiedDate = new Date(save_json.modified);
+                                var modifiedDateString = modifiedDate.getFullYear(); + '-' + modifiedDate.getMonth() + 1 + '-' + modifiedDate.getDate();
+
+                                if (!_.has(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
+                                    _.find(bfeditor.bfestore.store, {p:"http://id.loc.gov/ontologies/bibframe/changeDate"}).o = modifiedDateString;
+                                } else {
+                                    var adminTriple = {};
+                                    adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
+                                    adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
+                                    adminTriple.o = modifiedDateString;
+                                    adminTriple.otype = "literal";
+                                    bfeditor.bfestore.store.push(adminTriple)
+                                }
                             }
 
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
@@ -1110,7 +1150,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfeditor.bfestore.state = "create";
         loadtemplatesCounter = 0;
         loadtemplatesCount = spoints.useResourceTemplates.length;
-        loadtemplates = [];
+        var loadtemplates = [];
 
         spoints.useResourceTemplates.forEach(function(l) {
             var useguid = guid();
@@ -1124,6 +1164,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             loadtemplates.push(loadtemplate);
             //cbLoadTemplates();
         });
+
+        bfeditor.bfestore.loadtemplates = loadtemplates;
 
         cbLoadTemplates();
     }
@@ -1920,7 +1962,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             if (t.p === "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"){
                                 tsearch = t.s;
                             }
-                            if (!tsearch.startsWith("_:bnode")){
+                            if (!tsearch.startsWith("_:b")){
                                 whichLabel(tsearch, function(label) { 
                                     console.log(label);
                                     tpreflabel = label;
@@ -2039,6 +2081,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             "tlabel": displaydata,
             "fobjectid": fobject.id,
             "inputid": property.guid,
+            "editable": property.valueConstraint.editable,
             "triples": triples
         };
         var $buttongroup = editDeleteButtonGroup(bgvars);
@@ -2133,7 +2176,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         adminTriple.s = resourceURI;
                         adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
                         var d = new Date(bfeditor.bfestore.created);
-                        adminTriple.o = d.getMonth() + 1 + '-' + d.getDate() + '-' + d.getFullYear();
+                        adminTriple.o = d.getFullYear(); + '-' + d.getMonth() + 1 + '-' + d.getDate();
                         adminTriple.otype = "literal";
                         triplespassed.push(adminTriple);
                         bfeditor.bfestore.store.push(adminTriple)
@@ -3149,9 +3192,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     //returnval = labelelement["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"]
                 } else {
                     //look for a rdfslabel
-                    returnval = _.filter(data[2], function(prop) { if (prop[0] === "rdfs:label") return prop })[0][2];
+                    var labels =  _.filter(data[2], function(prop) { if (prop[0] === "rdfs:label") return prop });
 
-                    if (returnval === undefined) {
+                    if (!_.isEmpty(labels)) {
+                        returnval = labels[0][2];
+                    } else {
                         returnval = uri;
                     }
                 }
@@ -3357,7 +3402,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
                 });
             }
             //skip blank bnodes
-            if (!((j["@id"].startsWith("_:bnode") || j["@id"].includes("loc.natlib")) && _.keys(j).length < 3))
+            if (!((j["@id"].startsWith("_:b") || j["@id"].includes("loc.natlib")) && _.keys(j).length < 3))
                 json.push(j);
         }
         return json;
@@ -3419,7 +3464,8 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
     }
 
     exports.jsonldcompacted2store = function(json, callback) {
-        jsonld.expand(json["@graph"], json["@context"], function(err, expanded) {
+
+        jsonld.expand(json, function(err, expanded) {
             callback(expanded)
         });
     }

@@ -1549,6 +1549,43 @@
         "id": "profile:bf2:Agent:Identifier:Source",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Source",
         "resourceLabel": "Source"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "lookup",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Search LCNAF",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Person"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Person"
+              }
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Preferred Name for Person (RDA 9.2.2) CORE ELEMENT"
+          }
+        ],
+        "id": "profile:bf2:Agent:bfPerson",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Person",
+        "resourceLabel": "Bibframe Person"
       }
     ],
     "id": "profile:bf2:Agents:Attributes",
