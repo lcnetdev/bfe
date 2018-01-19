@@ -138,6 +138,22 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:Agents:Contribution"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
+            "propertyLabel": "Contributor (RDA 20.2)",
+            "remark": "http://access.rdatoolkit.org/20.2.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:Topic"
               ],
               "useValuesFrom": [],
