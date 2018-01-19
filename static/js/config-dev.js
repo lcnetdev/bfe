@@ -224,7 +224,8 @@
             "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Note.json",
             "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json"
+            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
+            "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
             		],
             "startingPoints": [
                         {"menuGroup": "Monograph",
