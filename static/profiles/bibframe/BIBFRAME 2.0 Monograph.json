@@ -159,8 +159,8 @@
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
-            "propertyLabel": "Other Agent Associated with Work (RDA 19.3)",
-            "remark": "http://access.rdatoolkit.org/19.3.html"
+            "propertyLabel": "Contributor (RDA 19.3 and 20.2)",
+            "remark": "http://access.rdatoolkit.org/20.2.html"
           },
           {
             "mandatory": "false",

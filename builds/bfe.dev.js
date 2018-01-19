@@ -491,8 +491,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                    }
                                 }
                                 console.log(full.id);
-
-                                if (text !== "N/A" && full.status === "published"){                                    
+                                if (text !== "N/A" && full.status === "published" || full.status === "success"){                                    
                                     var ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.instances.e" + text.trim() + "0001";
                                     if (text.trim().startsWith("n"))
                                         ldsurl = "http://mlvlp04.loc.gov:8230/loc.natlib.works." + text.trim().replace(/\s+/g,'');
@@ -500,30 +499,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     var lccn = text.trim();
                                     var table = new $.fn.dataTable.Api( meta.settings );
                                     var cell = table.cell(meta.row, meta.col);
-
-                                    $.ajax({
-                                        type: "HEAD",
-                                        async: true,
-                                        data: { uri: ldsurl },
-                                        url: config.url + "/profile-edit/server/checkuri",
-                                    }).done(function(data){
-                                        cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";
+                                    if (full.status === "success"){
+                                        cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";    
                                         $(cell.node()).css('background-color', 'lightgreen');
-                                    }).fail(function(data, text){
-                                        if (full.status === "published"){
-                                            $(cell.node()).css('background-color', 'lightcoral');                                            
-                                        } 
-                                        /*else {
-                                            var resourceuri = "http://mlvlp04.loc.gov:3000/resources/"+table.cell(meta.row,1).node().innerHTML+".rdf";
-                                            $.ajax({ 
-                                                type: "HEAD", 
-                                                async:true, 
-                                                url: resourceuri,
-                                            }).done( function (data){
-                                                $(cell.node()).css('background-color', 'lightcoral');
-                                            });                                        
-                                        }*/
-                                    });
+                                    } else {
+                                        $.ajax({
+                                            type: "HEAD",
+                                            async: true,
+                                            data: { uri: ldsurl },
+                                            url: config.url + "/profile-edit/server/checkuri",
+                                        }).done(function(data){
+                                            cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";
+                                            $(cell.node()).css('background-color', 'lightgreen');
+                                        }).fail(function(data, text){
+                                            if (full.status === "published"){
+                                                $(cell.node()).css('background-color', 'lightcoral');                                            
+                                            } 
+                                        });
+                                    }
                                  }
                                  
                                  return text;
@@ -1024,9 +1017,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
                                 
                                 var modifiedDate = new Date(save_json.modified);
-                                var modifiedDateString = modifiedDate.getFullYear(); + '-' + modifiedDate.getMonth() + 1 + '-' + modifiedDate.getDate();
+                                var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-                                if (!_.has(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
+                                if (_.has(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
                                     _.find(bfeditor.bfestore.store, {p:"http://id.loc.gov/ontologies/bibframe/changeDate"}).o = modifiedDateString;
                                 } else {
                                     var adminTriple = {};
@@ -1081,6 +1074,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     save_json.url = bfeditor.bfestore.url;
                                     save_json.created = bfeditor.bfestore.created;
                                     save_json.modified = new Date().toUTCString();
+
+                                    if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
+
+                                        var modifiedDate = new Date(save_json.modified);
+                                        var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+
+                                        if (_.has(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
+                                            _.find(bfeditor.bfestore.store, {p:"http://id.loc.gov/ontologies/bibframe/changeDate"}).o = modifiedDateString;
+                                        } else {
+                                            var adminTriple = {};
+                                            adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
+                                            adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
+                                            adminTriple.o = modifiedDateString;
+                                            adminTriple.otype = "literal";
+                                            bfeditor.bfestore.store.push(adminTriple)
+                                        }
+                                    }
+
                                     save_json.status = "published";
                                     save_json.objid = "loc.natlib.instances." + save_json.name + "0001";
                                     save_json.id = save_json.name;
@@ -1215,7 +1226,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             if (!_.isEmpty(worklist)){
                                 //check for type
 
-                                var rtType = _.where(worklist, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
+                                var rtType = _.where(worklist, {"p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: fobject.resourceTemplates[urt].resourceURI});
 
                                 if (!_.isEmpty(rtType)){
                                     fobject.resourceTemplates[urt].defaulturi = rtType[0].s
@@ -1860,7 +1871,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 var $buttongroup = editDeleteButtonGroup(bgvars);
                 $save.append($buttongroup);
 
-                if (property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                if (property.repeatable === "false" || property.valueConstraint.repeatable == "false") {
                     var $el = $("#" + property.guid, form);
                     if ($el.is("input")) {
                         $el.prop("disabled", true);
@@ -2087,7 +2098,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var $buttongroup = editDeleteButtonGroup(bgvars);
 
         $save.append($buttongroup);
-        if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+        if (property.repeatable === "false" || property.valueConstraint.repeatable == "false") {
             var $el = $("#" + property.guid, form);
             if ($el.is("input")) {
                 $el.prop("disabled", true);
@@ -2176,7 +2187,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         adminTriple.s = resourceURI;
                         adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
                         var d = new Date(bfeditor.bfestore.created);
-                        adminTriple.o = d.getFullYear(); + '-' + d.getMonth() + 1 + '-' + d.getDate();
+                        adminTriple.o = d.getFullYear() + '-' + d.getMonth() + 1 + '-' + d.getDate();
                         adminTriple.otype = "literal";
                         triplespassed.push(adminTriple);
                         bfeditor.bfestore.store.push(adminTriple)
@@ -2885,7 +2896,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             $("#" + pguid, formobject.form).typeahead('val', "");
                             $("#" + pguid, formobject.form).typeahead('close');
 
-                            if (property.valueConstraint !== undefined && property.valueConstraint.repeatable !== undefined && property.valueConstraint.repeatable == "false") {
+                            if (property.repeatable === "false" || property.valueConstraint.repeatable == "false") {
                                 var $el = $("#" + pguid, formobject.form);
                                 if ($el.is("input")) {
                                     $el.prop("disabled", true);
