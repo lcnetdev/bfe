@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -16,14 +16,16 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "editable": "true",
+              "repeatable": "false"
             },
             "propertyLabel": "Search LCSH/LCNAF",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#Topic"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -37,14 +39,16 @@
               "valueDataType": {
                 "remark": "",
                 "dataTypeURI": ""
-              }
+              },
+              "editable": "true",
+              "repeatable": "false"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#componentList",
             "propertyLabel": "Search Subject Components"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -52,14 +56,16 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false",
+              "editable": "true"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel",
             "propertyLabel": "Input Subject + Subdivision string"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -70,7 +76,9 @@
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Source"
               },
-              "defaultURI": ""
+              "defaultURI": "",
+              "repeatable": "false",
+              "editable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Subject source"
@@ -95,7 +103,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true",
+              "editable": "true"
             },
             "propertyLabel": "Search LCSH/LCNAF",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#Topic"
@@ -119,7 +129,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "editable": "true",
+              "repeatable": "true"
             },
             "propertyLabel": "Search LCSH",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#GenreForm"
@@ -143,7 +155,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true",
+              "editable": "true"
             },
             "propertyLabel": "Search LCSH",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#Temporal"
@@ -168,20 +182,24 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "editable": "true",
+              "repeatable": "true"
             },
             "propertyLabel": "Search LCNAF/LCSH",
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "editable": "true",
+              "repeatable": "false"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#Geographic",
             "propertyLabel": "Input Geographic Term"

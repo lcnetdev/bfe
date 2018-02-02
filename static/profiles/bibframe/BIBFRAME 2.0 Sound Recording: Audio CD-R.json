@@ -233,7 +233,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience"
-              }
+              },
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/intendedAudience",
             "propertyLabel": "Intended Audience (RDA 7.7)",
@@ -252,7 +254,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
-            "propertyLabel": "Other Person, Family, or Corporate Body Associated With a Work (RDA 19.3)",
+            "propertyLabel": "Contributor (RDA 19.3)",
             "remark": "http://access.rdatoolkit.org/19.3.html"
           },
           {
@@ -346,7 +348,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/prm",
-              "defaultLiteral": "performed music"
+              "defaultLiteral": "performed music",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
             "propertyLabel": "Content Type (RDA 6.9)",
@@ -364,7 +368,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
-              }
+              },
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of Expression (RDA 6.11)",
@@ -381,7 +387,7 @@
               ],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/vocabulary/languages"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
@@ -476,19 +482,6 @@
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Authorized Access Point for the Musical Work (RDA 6.28.1)",
             "remark": "http://access.rdatoolkit.org/6.28.1.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "id": "profile:bf2:SoundCDR:Work",
@@ -624,7 +617,7 @@
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Issuance"
               },
-              "editable": "true",
+              "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/mono",
               "defaultLiteral": "single unit",
               "repeatable": "true"
@@ -692,7 +685,7 @@
           {
             "propertyLabel": "Media type (RDA 3.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/media",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -705,7 +698,8 @@
               },
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/s",
               "defaultLiteral": "audio",
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/3.2.html"
@@ -713,7 +707,7 @@
           {
             "propertyLabel": "Carrier Type (RDA 3.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/carrier",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -726,7 +720,8 @@
               },
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/sd",
               "defaultLiteral": "audio disc",
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/3.3.html"
@@ -869,7 +864,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -920,7 +915,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -963,19 +958,6 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasItem",
             "propertyLabel": "Has Item"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "resourceLabel": "BIBFRAME Instance",
@@ -1047,19 +1029,6 @@
           {
             "propertyLabel": "Held in sublocation",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/sublocation",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
-            "propertyLabel": "Circulation status",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1172,8 +1141,8 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
+            "repeatable": "false",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1181,10 +1150,12 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
-              }
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
+              },
+              "repeatable": "false"
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "LCMPT for Instrument"
           },
           {
@@ -1239,8 +1210,8 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
+            "repeatable": "false",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1248,10 +1219,12 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
-              }
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
+              },
+              "repeatable": "false"
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "LCMPT for Voice"
           },
           {
@@ -1306,8 +1279,8 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
+            "repeatable": "false",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1315,10 +1288,12 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
-              }
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/MusicMedium"
+              },
+              "repeatable": "false"
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "LCMPT for Ensemble"
           },
           {

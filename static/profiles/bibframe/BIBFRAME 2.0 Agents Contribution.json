@@ -17,7 +17,8 @@
                 "profile:bf2:Agent:CorporateBody",
                 "profile:bf2:Agent:Jurisdiction",
                 "profile:bf2:Agent:Conference"
-              ]
+              ],
+              "editable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "type": "resource",
@@ -36,7 +37,9 @@
               "valueTemplateRefs": [
                 "profile:bf2:Agent:Role"
               ],
-              "useValuesFrom": []
+              "useValuesFrom": [],
+              "editable": "true",
+              "repeatable": "true"
             },
             "remark": "http://access.rdatoolkit.org/rdaappi_rdai-34.html"
           }
@@ -45,7 +48,7 @@
       {
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Contribution",
         "id": "profile:bf2:Agents:bfContribution",
-        "resourceLabel": "Contribution",
+        "resourceLabel": "Contribution (test)",
         "propertyTemplates": [
           {
             "propertyLabel": "Agent",
@@ -83,7 +86,6 @@
           }
         ]
       }
-
     ],
     "id": "profile:bf2:AgentsContribution",
     "title": "BIBFRAME 2.0 Agents Contribution",

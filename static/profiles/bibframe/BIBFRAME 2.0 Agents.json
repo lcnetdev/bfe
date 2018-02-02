@@ -9,7 +9,7 @@
           {
             "propertyLabel": "Search LCNAF",
             "valueConstraint": {
-              "repeatable": "false",
+              "repeatable": "true",
               "useValuesFrom": [
                 "http://id.loc.gov/authorities/names"
               ],
@@ -199,7 +199,8 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#FamilyName",
             "type": "lookup",
@@ -427,7 +428,8 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#CorporateName",
             "type": "lookup",
@@ -508,7 +510,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Other Designation Associated with Corporate Body (RDA 11.7)",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v2.html#OtherDesignation",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#entityDescriptor",
             "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4726.html"
           },
           {
@@ -670,7 +672,8 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true"
             },
             "propertyURI": "http://www.loc.gov/mads/rdf/v1#ConferenceName",
             "type": "lookup",
@@ -767,7 +770,7 @@
             },
             "remark": "http://access.rdatoolkit.org/rdachp11_rda11-4726.html",
             "propertyLabel": "Other Designation Associated with Conference (RDA 11.7) CORE IF ...",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v2.html#OtherDesignation"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#entityDescriptor"
           },
           {
             "mandatory": "false",
@@ -916,7 +919,8 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "true"
             }
           },
           {
@@ -1440,7 +1444,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1450,14 +1454,15 @@
               ],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false"
             },
             "propertyLabel": "Search MARC relator term",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/Role"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1465,7 +1470,8 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false"
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Input RDA relationship designator term (if it does not appear above)"

@@ -6,7 +6,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -18,8 +18,25 @@
               },
               "valueLanguage": ""
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
-            "propertyLabel": "Lookup"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyLabel": "Language of Expression (RDA 6.11)",
+            "remark": "http://access.rdatoolkit.org/6.11.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Language of Content (RDA 7.12)",
+            "remark": "http://access.rdatoolkit.org/7.12.html"
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
@@ -32,20 +49,22 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Note Text"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Language of Content"
           }
         ],
         "id": "profile:bf2:Language:Note",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
-        "resourceLabel": "Language Note"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
+        "resourceLabel": "Language of Content"
       }
     ],
     "id": "profile:bf2:Language",

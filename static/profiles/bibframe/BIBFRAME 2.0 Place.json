@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -17,14 +17,15 @@
               "valueDataType": {
                 "remark": "http://id.loc.gov/ontologies/bibframe/Place",
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false"
             },
             "propertyLabel": "Search LCNAF/LCSH",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -33,7 +34,8 @@
               "valueDataType": {
                 "dataTypeURI": "",
                 "remark": "http://id.loc.gov/ontologies/bibframe/Place"
-              }
+              },
+              "repeatable": "false"
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Record Place (if it does not appear above)",
