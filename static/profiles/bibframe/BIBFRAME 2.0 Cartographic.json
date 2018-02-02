@@ -144,8 +144,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
-            "propertyLabel": "Contributor (RDA 20.2)",
-            "remark": "http://access.rdatoolkit.org/20.2.html"
+            "propertyLabel": "Contributor (RDA 19.3)",
+            "remark": "http://access.rdatoolkit.org/19.3.html"
           },
           {
             "mandatory": "false",
@@ -254,7 +254,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/cri",
-              "defaultLiteral": "cartographic image"
+              "defaultLiteral": "cartographic image",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
             "propertyLabel": "Content Type (RDA 6.9)",
@@ -272,7 +274,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
-              }
+              },
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of Expression (RDA 6.11)",
@@ -423,19 +427,6 @@
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
             "remark": "http://access.rdatoolkit.org/6.27.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "id": "profile:bf2:Cartographic:Work",
@@ -573,7 +564,8 @@
               "valueTemplateRefs": [],
               "defaultLiteral": "single unit",
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/mono",
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             }
           },
           {
@@ -615,7 +607,7 @@
             "propertyLabel": "Media type (RDA 3.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/media",
             "remark": "http://access.rdatoolkit.org/3.2.html",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -628,11 +620,12 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Media"
               },
               "valueTemplateRefs": [],
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             }
           },
           {
-            "mandatory": "true",
+            "mandatory": "false",
             "propertyLabel": "Carrier Type (RDA 3.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/carrier",
             "remark": "http://access.rdatoolkit.org/3.3.html",
@@ -649,7 +642,8 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
               },
               "valueTemplateRefs": [],
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             }
           },
           {
@@ -802,7 +796,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -860,19 +854,6 @@
             },
             "propertyLabel": "Has Item",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasItem"
-          },
-          {
-            "mandatory": "false",
-            "propertyLabel": "Your Windows ID and Comments",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "repeatable": "true",
-            "resourceTemplates": [],
-            "type": "literal",
-            "valueConstraint": {
-              "useValuesFrom": [],
-              "valueDataType": {},
-              "valueTemplateRefs": []
-            }
           }
         ],
         "resourceLabel": "BIBFRAME Instance",
@@ -969,19 +950,6 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
-            "propertyLabel": "Circulation status"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1071,7 +1039,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1079,7 +1047,8 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
             "propertyLabel": "Coordinates statement"
@@ -1278,13 +1247,14 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Geographic Classification"

@@ -203,7 +203,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
-            "propertyLabel": "Other Person, Family, or Corporate Body Associated With a Work (RDA 19.3)",
+            "propertyLabel": "Contributor (RDA 19.3)",
             "remark": "http://access.rdatoolkit.org/19.3.html"
           },
           {
@@ -297,7 +297,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/tdi",
-              "defaultLiteral": "two-dimensional moving image"
+              "defaultLiteral": "two-dimensional moving image",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
             "propertyLabel": "Content Type (RDA 6.9)",
@@ -315,7 +317,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
-              }
+              },
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of Expression (RDA 6.11)",
@@ -543,19 +547,6 @@
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
             "remark": "http://access.rdatoolkit.org/6.27.1.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "id": "profile:bf2:MIBluRayDVD:Work",
@@ -690,9 +681,10 @@
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Issuance"
               },
-              "editable": "true",
+              "editable": "false",
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/mono",
-              "defaultLiteral": "single unit"
+              "defaultLiteral": "single unit",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -770,7 +762,7 @@
           {
             "propertyLabel": "Media type (RDA 3.2)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/media",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -783,7 +775,8 @@
               },
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/v",
               "defaultLiteral": "video",
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/3.2.html"
@@ -791,7 +784,7 @@
           {
             "propertyLabel": "Carrier Type (RDA 3.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/carrier",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -804,7 +797,8 @@
               },
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/vd",
               "defaultLiteral": "videodisc",
-              "editable": "true"
+              "editable": "false",
+              "repeatable": "true"
             },
             "mandatory": "false",
             "remark": "http://access.rdatoolkit.org/3.3.html"
@@ -1114,19 +1108,6 @@
             },
             "propertyLabel": "Has Item",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasItem"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/comment",
-            "propertyLabel": "Your Windows ID and Comments"
           }
         ],
         "resourceLabel": "BIBFRAME Instance",
@@ -1223,19 +1204,6 @@
             "type": "literal"
           },
           {
-            "propertyLabel": "Circulation status",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal"
-          },
-          {
             "propertyLabel": "Notes on the Item",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "resourceTemplates": [],
@@ -1281,6 +1249,21 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology",
             "propertyLabel": "Enumeration"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Item:ImmAcqSource"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/immediateAcquisition",
+            "propertyLabel": "Immediate Source of Acquisition of Item"
           }
         ],
         "resourceLabel": "BIBFRAME Item",
@@ -1711,17 +1694,19 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/vocabulary/mrectype"
+              ],
               "valueDataType": {
                 "dataTypeURI": "",
                 "remark": "http://id.loc.gov/ontologies/bibframe/SoundCharacteristic"
               }
             },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Sound Characteristic (RDA 3.16)",
             "remark": "http://access.rdatoolkit.org/3.16.html"
           },

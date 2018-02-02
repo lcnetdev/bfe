@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -17,14 +17,15 @@
                 "profile:bf2:Agent:Conference"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Primary Contributor"
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -32,7 +33,8 @@
                 "profile:bf2:Agent:Role"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
             "propertyLabel": "Relationship Designator (RDA Appendix I)",
@@ -82,10 +84,9 @@
           }
         ],
         "id": "profile:bflc:Agents:bfPrimaryContribution",
-        "resourceLabel": "Primary Contribution",
+        "resourceLabel": "Primary Contribution (test)",
         "resourceURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
       }
-
     ],
     "contact": "NDMSO",
     "id": "profile:bflc:PrimaryContribution",

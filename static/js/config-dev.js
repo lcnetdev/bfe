@@ -45,7 +45,7 @@
             }
         }
 
-        function save(data, csrf, bfelog){
+        function save(data, csrf, bfelog, callback){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
 	    var url = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
@@ -63,17 +63,20 @@
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
                 var decimaltranslator = window.ShortUUID("0123456789");
                 var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-                $messagediv.append('<div class="alert alert-success"><strong>Record Created:</strong><a href='+data.url+'>'+resourceName+'</a></div>');
+                $messagediv.append('<div class="alert alert-info"><strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a></div>')
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
-                $messagediv.insertBefore('#bfeditor-previewPanel');
+                $messagediv.insertBefore('.nav-tabs');
                 $('#bfeditor-previewPanel').remove();
+                $('.nav-tabs a[href="#browse"]').tab('show')
                 bfeditor.bfestore.store = [];
+                window.location.hash = "";
+                callback(true, data.name);
             }).fail(function (XMLHttpRequest, textStatus, errorThrown){
                 bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
                 bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
                 $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
-                $messagediv.insertBefore('#bfeditor-previewPanel');
+                $messagediv.insertBefore('.nav-tabs');
             }).always(function(){                       
                 $('#table_id').DataTable().ajax.reload();
             });
@@ -83,7 +86,7 @@
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
             //var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
-	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/publish";
+	    var url = config.url + "/profile-edit/server/publish";
         var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
 
         var savedata = {};
@@ -115,15 +118,15 @@
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
                 bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
                 var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-                $messagediv.append('<div class="alert alert-info"><strong>Description submitted for posting:</strong><a href=http://mlvlp04.loc.gov:8230/'+publishdata[0].objid+'>'+publishdata[0].id+'</a></div>');
+                $messagediv.append('<div class="alert alert-info"><strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+publishdata[0].lccn+'</a></div>');
                 $('#bfeditor-formdiv').empty();
                 $('#save-btn').remove();
                 $messagediv.insertBefore('.nav-tabs');
                 $('#bfeditor-previewPanel').remove();
                 $('.nav-tabs a[href="#browse"]').tab('show')
                 bfeditor.bfestore.store = [];
-                callback(true, data.name);
-                
+                window.location.hash = "";
+                callback(true, data.name);                
             }).fail(function (XMLHttpRequest, textStatus, errorThrown){
                 bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
                 bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
@@ -137,7 +140,7 @@
 
         function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
 	    
-	    var url = "http://mlvlp04.loc.gov:3000/profile-edit/server/whichrt";
+	    var url = config.url + "/profile-edit/server/whichrt";
 	
             $.ajax({
                 dataType: "json",
@@ -161,6 +164,34 @@
                 }
             });
         }
+
+        function retrieveLDS(uri, bfestore, loadtemplates, bfelog, callback){
+
+        var url = config.url + "/profile-edit/server/retrieveLDS";
+
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                async: false,
+                data: { uri: uri},
+                url: url,
+                success: function (data) {
+                    bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
+                    bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                    bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+                       bfestore.store = [];
+                       tempstore = bfestore.jsonld2store(expanded);
+                       callback(loadtemplates);
+                    });
+                    //bfestore.n32store(data, url, tempstore, callback);
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                }
+            });
+        }
+
 
         function deleteId(id, csrf, bfelog){
             var url = config.url + "/verso/api/bfs/" + id;
@@ -192,6 +223,7 @@
             },*/
             "url" : "http://mlvlp04.loc.gov:3000",
             "baseURI": "http://id.loc.gov/",
+            "basedbURI": "http://mlvlp04.loc.gov:8230",
             "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
@@ -418,6 +450,9 @@
 	    "publish": {
 		"callback": publish
 	    },
+            "retrieveLDS": {
+                "callback":retrieveLDS
+            },            
             "retrieve": {
                 "callback": retrieve
             },

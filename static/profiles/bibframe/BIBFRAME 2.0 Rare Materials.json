@@ -68,7 +68,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
-            "propertyLabel": "Other Agent Associated with Work (RDA 19.3)",
+            "propertyLabel": "Contributor (RDA 19.3)",
             "remark": "http://access.rdatoolkit.org/19.3.html"
           },
           {
@@ -196,7 +196,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
-              "defaultLiteral": "text"
+              "defaultLiteral": "text",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
             "propertyLabel": "Content Type (RDA 6.9)",
@@ -214,7 +216,9 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
-              }
+              },
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/language",
             "propertyLabel": "Language of Expression (RDA 6.11)",
@@ -518,7 +522,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Issuance"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/issuance/mono",
-              "defaultLiteral": "single unit"
+              "defaultLiteral": "single unit",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/issuance",
             "propertyLabel": "Mode of Issuance (RDA 2.13)",
@@ -538,7 +544,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Media"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/mediaTypes/n",
-              "defaultLiteral": "unmediated"
+              "defaultLiteral": "unmediated",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/media",
             "propertyLabel": "Media type (RDA 3.2)",
@@ -558,7 +566,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
               },
               "defaultURI": "http://id.loc.gov/vocabulary/carriers/nc",
-              "defaultLiteral": "volume"
+              "defaultLiteral": "volume",
+              "editable": "false",
+              "repeatable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/carrier",
             "propertyLabel": "Carrier Type (RDA 3.3)",
