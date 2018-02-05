@@ -419,7 +419,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     "paging": true,
                     "ajax": {
                         "url": config.url + "/verso/api/bfs",
-                        "dataSrc": ""
+                        "dataSrc": "",
+                         "headers": {
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type':'application/json',
+                            'Access-Control-Allow-Methods': 'DELETE, HEAD, GET, OPTIONS, POST, PUT',
+                            'Access-Control-Allow-Headers': 'Content-Type, Content-Range, Content-Disposition, Content-Description',
+                            'Access-Control-Max-Age': '1728000'
+                         }
                     },
                     "columns": [{
                             "data": "id"
@@ -835,7 +842,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         });
 
                         //eliminate itemOf
-                        bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"}));
+                        if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"})){
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"}));
+                        }
 
 //                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}), function(triple) {
 //                            _.each(_.where(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}), function (typeTriple){

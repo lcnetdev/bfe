@@ -16,9 +16,10 @@
               "valueDataType": {
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
               },
-              "valueLanguage": ""
+              "valueLanguage": "",
+              "remark": ""
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
             "propertyLabel": "Language of Expression (RDA 6.11)",
             "remark": "http://access.rdatoolkit.org/6.11.html"
           },
@@ -41,7 +42,7 @@
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
         "id": "profile:bf2:Language",
-        "resourceLabel": "Language (unused)",
+        "resourceLabel": "Language",
         "remark": ""
       },
       {
