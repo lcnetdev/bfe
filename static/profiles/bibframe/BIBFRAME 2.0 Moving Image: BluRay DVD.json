@@ -485,8 +485,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
-            "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
+            "propertyLabel": "Related Works (RDA Chapter 25, Appendix J)",
             "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html"
           },
           {

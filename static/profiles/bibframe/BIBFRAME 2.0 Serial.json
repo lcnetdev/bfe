@@ -396,6 +396,24 @@
           },
           {
             "mandatory": "false",
+            "repeatable": "false",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:RelatedWork"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {},
+              "repeatable": "false",
+              "editable": "true"
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
+            "propertyLabel": "Related Works (RDA Chapter 25, Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-65.html"
+          },
+          {
+            "mandatory": "false",
             "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
@@ -407,7 +425,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Related Expressions (RDA Chapter 26 and Appendix J)",
+            "propertyLabel": "Related Expressions (RDA Chapter 26, Appendix J)",
             "remark": "http://access.rdatoolkit.org/rdachp26_rda26-25.html"
           },
           {
@@ -1054,136 +1072,109 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/absorbed",
-            "propertyLabel": "Absorbed (work):"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyLabel": "Continues (work):",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continues",
-            "remark": ""
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continuesInPart",
-            "propertyLabel": "Continues in part (work):"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergerOf",
-            "propertyLabel": "Merger of (work):"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/replacementOf",
-            "propertyLabel": "Replacement of (work):"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/separatedFrom",
-            "propertyLabel": "Separated from (work):"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/absorbedBy",
-            "propertyLabel": "Absorbed by (work):",
+            "propertyLabel": "Absorbed (work):",
             "remark": "http://access.rdatoolkit.org/J.2.6.html"
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
+              }
+            },
+            "propertyLabel": "Continues (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continues",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/continuesInPart",
+            "propertyLabel": "Continues in part (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergerOf",
+            "propertyLabel": "Merger of (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/replacementOf",
+            "propertyLabel": "Replacement of (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/separatedFrom",
+            "propertyLabel": "Separated from (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
               }
             },
             "propertyLabel": "Continued by (work):",
@@ -1193,15 +1184,29 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/absorbedBy",
+            "propertyLabel": "Absorbed by (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/continuedInPartBy",
@@ -1211,15 +1216,13 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergedToForm",
@@ -1229,91 +1232,39 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/replacedBy",
-            "propertyLabel": "Replaced by (work):"
+            "propertyLabel": "Replaced by (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
           },
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
+              "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
+                "dataTypeURI": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/splitInto",
-            "propertyLabel": "Split into (work):"
+            "propertyLabel": "Split into (work):",
+            "remark": "http://access.rdatoolkit.org/J.2.6.html"
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
         "id": "profile:bf2:Serial:RelatedWork",
         "resourceLabel": "Related Work"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://mlvlp04.loc.gov:8230/resources/works"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Search Related Expression Authorized Access Point"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Record Related Expression Authorized Access Point"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Record Relationship Designator for Related Expression (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
-          }
-        ],
-        "id": "profile:bf2:Serial:RelatedExpression",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-        "resourceLabel": "Related Expression"
       },
       {
         "propertyTemplates": [

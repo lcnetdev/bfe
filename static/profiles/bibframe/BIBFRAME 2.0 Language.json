@@ -19,7 +19,7 @@
               "valueLanguage": "",
               "remark": ""
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Language of Expression (RDA 6.11)",
             "remark": "http://access.rdatoolkit.org/6.11.html"
           },

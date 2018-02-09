@@ -421,7 +421,7 @@
             },
             "propertyLabel": "Variant Title for Work (RDA 6.2.3, 6.14.3 (Music))",
             "remark": "http://access.rdatoolkit.org/rdachp6_rda6-2658.html",
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle"
           },
           {
             "mandatory": "false",
@@ -476,7 +476,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Parallel Title Proper (RDA 2.3.3)",
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
             "remark": "http://access.rdatoolkit.org/rdachp2_rda2-3695.html"
           },
           {
@@ -513,6 +513,100 @@
         "id": "profile:bf2:ParallelTitle",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/ParallelTitle",
         "resourceLabel": "Parallel Title"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyLabel": "Key Title"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/KeyTitle",
+        "id": "profile:bf2:Title:KeyTitle",
+        "resourceLabel": "Key Title"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyLabel": "Abbreviated Title"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/AbbreviatedTitle",
+        "id": "profile:bf2:Title:AbbrTitle",
+        "resourceLabel": "Abbreviated Title"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyLabel": "Collective Title"
+          }
+        ],
+        "id": "profile:bf2:Title:CollTitle",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/CollectiveTitle",
+        "resourceLabel": "Collective Title"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyLabel": "Variant Title (RDA 2.3.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4013.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType",
+            "propertyLabel": "Variant title type"
+          }
+        ],
+        "id": "profile:bf2:Title:VarTitle",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
+        "resourceLabel": "Variant Title"
       }
     ],
     "title": "BIBFRAME 2.0 Title Information",
