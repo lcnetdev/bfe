@@ -197,22 +197,6 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "Related Works (RDA Chapter 25 and Appendix J)",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:RelatedWork"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
-            "propertyLabel": "Related Works (RDA Chapter 25 and Appendix J)",
-            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-64.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -398,6 +382,22 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/temporalCoverage",
             "propertyLabel": "Time Period of Content (MARC 045 field)"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "Related Works (RDA Chapter 25 and Appendix J)",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:RelatedWork"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
+            "propertyLabel": "Related Works (RDA Chapter 25, Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp25_rda25-64.html"
           },
           {
             "mandatory": "false",
