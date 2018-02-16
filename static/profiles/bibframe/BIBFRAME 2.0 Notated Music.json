@@ -324,7 +324,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -496,7 +496,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Related Expressions"
+            "propertyLabel": "Related Expressions (RDA Chapter 26, Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp26_rda26-25.html"
           },
           {
             "mandatory": "false",
@@ -557,11 +558,15 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
-                "profile:bflc:TranscribedTitle"
+                "profile:bf2:Title:VarTitle",
+                "profile:bf2:ParallelTitle",
+                "profile:bflc:TranscribedTitle",
+                "profile:bf2:Title:CollTitle"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": ""
+              }
             },
             "mandatory": "false",
             "repeatable": "true",
@@ -1315,7 +1320,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1384,7 +1389,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1452,7 +1457,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1553,7 +1558,7 @@
           }
         ],
         "id": "profile:bf2:NotatedMusic:Notation",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Notation",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicNotation",
         "resourceLabel": "Form of Musical Notation"
       },
       {
@@ -2342,7 +2347,7 @@
       }
     ],
     "contact": "NDMSO",
-    "date": "2017-05-13",
+    "date": "2018-02-13",
     "description": "Work, Expression, Instance for Notated Music",
     "id": "profile:bf2:NotatedMusic",
     "title": "BIBFRAME 2.0 Notated Music",

@@ -459,18 +459,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     text = _.find(data, "http://id.loc.gov/ontologies/bibframe/title")["http://id.loc.gov/ontologies/bibframe/title"];
                                     //return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
                                     if (text !== undefined)
-                                        if (text[0] !== undefined)
-                                            if (text[0]["@id"] !== undefined) {
-                                                id = text[0]["@id"]
+                                        _.each(text, function(el){
+                                            if (el["@id"] !== undefined) {
+                                                id = el["@id"]
                                                 title = _.where(data, {
                                                     "@id": id
                                                 });
-
+                                                   
                                                 if (_.has(title[0], "http://id.loc.gov/ontologies/bibframe/mainTitle"))
                                                     retval = title[0]["http://id.loc.gov/ontologies/bibframe/mainTitle"][0]["@value"];
                                                 else if (_.has(title[0], "http://www.w3.org/2000/01/rdf-schema#label"))
                                                     retval = title[0]["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
                                             }
+                                        });
                                 } else if (_.some(data, "http://www.loc.gov/mads/rdf/v1#authoritativeLabel")) {
                                     retval = _.find(data, "http://www.loc.gov/mads/rdf/v1#authoritativeLabel")["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"][0]["@value"]
                                     if (retval === undefined)
@@ -732,7 +733,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
             var spoints = { label: "Loaded Work",
                             type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                            useResourceTemplates:["profile:bf2:Load:Work"]
+                            useResourceTemplates:["profile:bf2:Monograph:Work"]
                           };
 
             bfeditor.bfestore.store = [];
@@ -765,6 +766,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         if($('#bfeditor-messagediv').length){
                                     $('#bfeditor-messagediv').remove();
                         }
+
+                        _.each(bfeditor.bfestore.store, function(el) {
+                            if( el.o.startsWith("_:_:"))
+                                el.o = "_:" + el.o.split("_:")[2];
+        
+                        });
                         cbLoadTemplates();
                     });
 
@@ -1513,7 +1520,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     //$formgroup.append($saves);
                 }
 
-                if (property.type === "resource" || property.type === "lookup") {
+                if (property.type === "resource" || property.type === "lookup" || property.type === "target") {
 
                     if (_.has(property, "valueConstraint")) {
                         if (_.has(property.valueConstraint, "valueTemplateRefs") && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
@@ -2451,7 +2458,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         adminTriple.s = resourceURI;
                         adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
                         var d = new Date(bfeditor.bfestore.created);
-                        adminTriple.o = d.getFullYear() + '-' + d.getMonth() + 1 + '-' + d.getDate();
+                        adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                         adminTriple.otype = "literal";
                         triplespassed.push(adminTriple);
                         bfeditor.bfestore.store.push(adminTriple)

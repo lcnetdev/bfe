@@ -82,7 +82,7 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"
               }
             },
-            "propertyLabel": "Lookup",
+            "propertyLabel": "Search related expressions",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
           },
           {
@@ -108,8 +108,23 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Record Relationship Designator for Related Expression (RDA Appendix J)",
+            "propertyLabel": "Relationship Designator for Related Expression  (RDA Appendix J)",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Description of Related Expression"
           }
         ],
         "resourceLabel": "Related Expression",
@@ -151,7 +166,7 @@
         ],
         "id": "profile:bf2:RelatedWork:Title",
         "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
-        "resourceLabel": "Title of Related Work",
+        "resourceLabel": "Title of Related Work (testing)",
         "remark": "testing"
       }
     ],
