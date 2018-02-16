@@ -207,7 +207,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -361,11 +361,15 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
-                "profile:bflc:TranscribedTitle"
+                "profile:bf2:Title:VarTitle",
+                "profile:bf2:ParallelTitle",
+                "profile:bflc:TranscribedTitle",
+                "profile:bf2:Title:CollTitle"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": ""
+              }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
             "propertyLabel": "Title Information"

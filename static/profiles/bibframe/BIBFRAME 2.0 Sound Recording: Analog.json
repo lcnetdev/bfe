@@ -357,7 +357,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -526,11 +526,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
+                "profile:bf2:Title:VarTitle",
+                "profile:bf2:ParallelTitle",
                 "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": ""
+              }
             },
             "mandatory": "false",
             "repeatable": "true",

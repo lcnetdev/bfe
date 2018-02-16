@@ -280,7 +280,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -316,10 +316,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Script"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -407,7 +409,8 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Related Expressions"
+            "propertyLabel": "Related Expressions (RDA Chapter 26, Appendix J)",
+            "remark": "http://access.rdatoolkit.org/rdachp26_rda26-25.html"
           },
           {
             "mandatory": "false",
@@ -468,11 +471,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:Title",
-                "profile:bf2:VariantTitle",
+                "profile:bf2:Title:VarTitle",
+                "profile:bf2:ParallelTitle",
                 "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": ""
+              }
             },
             "mandatory": "false",
             "repeatable": "true",
@@ -1096,7 +1102,7 @@
               "editable": "true",
               "repeatable": "true"
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Intended Audience (RDA 7.7)",
             "remark": "http://access.rdatoolkit.org/7.7.html"
           },

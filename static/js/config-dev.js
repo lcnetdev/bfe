@@ -227,229 +227,229 @@
             "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
             "profiles": [
 		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Agents Primary Contribution.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Form.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Language.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 LCC.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Notated Music.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Place.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Related Works and Expressions.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Analog.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 Series Information.json",
-			"static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Note.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
-            "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
-            		],
+			    "static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Agents Primary Contribution.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Form.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Language.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 LCC.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Notated Music.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Place.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Related Works and Expressions.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Topic.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Serial.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Analog.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Edition Information.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Series Information.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 DDC.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Item.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Note.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
+   		    ],
             "startingPoints": [
-                        {"menuGroup": "Monograph",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
-                            }
+                {"menuGroup": "Monograph",
+                "menuItems": [
+                    {
+                        label: "Instance",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                        useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
+                    },
+                    {
+                        label: "Work",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                        useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
+                    }
 
-                        ]},
-                        {"menuGroup": "Notated Music",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
-                            },
-                            {
-                                label: "Work", 
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
-                            }
+                ]},
+                {"menuGroup": "Notated Music",
+                "menuItems": [
+                    {
+                        label: "Instance",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                        useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
+                    },
+                    {
+                        label: "Work", 
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                        useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
+                    }
 
-                        ]},
-                        {"menuGroup": "Serial",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
-                                useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Text"],
-                                useResourceTemplates: [ "profile:bf2:Serial:Work" ]
-                            }
+                ]},
+                {"menuGroup": "Serial",
+                "menuItems": [
+                    {
+                        label: "Instance",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
+                        useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
+                    },
+                    {
+                        label: "Work",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Text"],
+                        useResourceTemplates: [ "profile:bf2:Serial:Work" ]
+                    }
 
-                        ]},
-			{"menuGroup": "Cartographic",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
-                            }
+                ]},
+            	{"menuGroup": "Cartographic",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
+                }
 
-                        ]},
-			            {"menuGroup": "Sound Recording: Audio CD",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
-                            }
+            ]},
+			{"menuGroup": "Sound Recording: Audio CD",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Sound Recording: Audio CD-R",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Sound Recording: Audio CD-R",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Sound Recording: Analog",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Analog:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Sound Recording: Analog",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:Analog:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Moving Image: BluRay DVD",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Moving Image: BluRay DVD",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Moving Image: 35mm Feature Film",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Moving Image: 35mm Feature Film",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Prints and Photographs",
-                        "menuItems": [
-                            {
-                                label: "Physical Description",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Prints and Photographs",
+            "menuItems": [
+                {
+                    label: "Physical Description",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Rare Materials",
-                        "menuItems": [
-                            {
-                                label: "Instance",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                                useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
-                            },
-                            {
-                                label: "Work",
-                                type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-                                useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
-                            }
+            ]},
+            {"menuGroup": "Rare Materials",
+            "menuItems": [
+                {
+                    label: "Instance",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                    useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
+                },
+                {
+                    label: "Work",
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                    useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
+                }
 
-                        ]},
-                        {"menuGroup": "Authorities",
-                        "menuItems": [
-                            {
-                                label: "Person",
-                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
-                                useResourceTemplates: [ "profile:bf2:Agent:Person" ]
-                            },
-                            {
-                                label: "Family",
-                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
-                                useResourceTemplates: [ "profile:bf2:Agent:Family" ]
-                            },
-                            {
-                                label: "Corporate Body",
-                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
-                                useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
-                            },
-                            {
-                                label: "Conference",
-                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
-                                useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
-                            },                            
+            ]},
+            {"menuGroup": "Authorities",
+            "menuItems": [
+                {
+                    label: "Person",
+                    type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
+                    useResourceTemplates: [ "profile:bf2:Agent:Person" ]
+                },
+                {
+                    label: "Family",
+                    type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
+                    useResourceTemplates: [ "profile:bf2:Agent:Family" ]
+                },
+                {
+                    label: "Corporate Body",
+                    type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
+                    useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
+                },
+                {
+                    label: "Conference",
+                    type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
+                    useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
+                },                            
 			    {
-                                label: "Jurisdiction",
-                                type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
-                                useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
-                            }
-                        ]}
+                    label: "Jurisdiction",
+                    type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
+                    useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
+                }
+            ]}
 
             ],
             "save": {
                 "callback": save
             },
-	    "publish": {
-		"callback": publish
-	    },
+    	    "publish": {
+	    	    "callback": publish
+	        },
             "retrieveLDS": {
                 "callback":retrieveLDS
             },            

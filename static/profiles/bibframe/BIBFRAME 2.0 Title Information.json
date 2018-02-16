@@ -369,7 +369,7 @@
         ],
         "id": "profile:bflc:TranscribedTitle",
         "resourceURI": "http://id.loc.gov/ontologies/bflc/TranscribedTitle",
-        "resourceLabel": "Transcribed Title"
+        "resourceLabel": "Transliterated Title"
       },
       {
         "propertyTemplates": [
@@ -462,6 +462,40 @@
         "id": "profile:bf2:Title:Note",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
         "resourceLabel": "Title note"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
+            "propertyLabel": "Variant Title (RDA 2.3.6)",
+            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4013.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType",
+            "propertyLabel": "Variant title type"
+          }
+        ],
+        "id": "profile:bf2:Title:VarTitle",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
+        "resourceLabel": "Variant Title"
       },
       {
         "propertyTemplates": [
@@ -573,40 +607,6 @@
         "id": "profile:bf2:Title:CollTitle",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/CollectiveTitle",
         "resourceLabel": "Collective Title"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/mainTitle",
-            "propertyLabel": "Variant Title (RDA 2.3.6)",
-            "remark": "http://access.rdatoolkit.org/rdachp2_rda2-4013.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/variantType",
-            "propertyLabel": "Variant title type"
-          }
-        ],
-        "id": "profile:bf2:Title:VarTitle",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/VariantTitle",
-        "resourceLabel": "Variant Title"
       }
     ],
     "title": "BIBFRAME 2.0 Title Information",

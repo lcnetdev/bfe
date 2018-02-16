@@ -42,7 +42,7 @@
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
         "id": "profile:bf2:Language",
-        "resourceLabel": "Language",
+        "resourceLabel": "Language (testing)",
         "remark": ""
       },
       {
