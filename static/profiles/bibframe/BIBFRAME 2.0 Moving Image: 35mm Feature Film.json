@@ -656,7 +656,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Credits",
+            "propertyLabel": "Cast/Credits",
             "remark": "http://access.rdatoolkit.org/2.17.3.5.html",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/credits"
           },
@@ -1280,12 +1280,12 @@
               "valueDataType": {}
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Credits note"
+            "propertyLabel": "Cast/credits note"
           }
         ],
         "id": "profile:bf2:35mmFeatureFilm:Credits",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Credits",
-        "resourceLabel": "Credits note"
+        "resourceLabel": "Cast/Credits note"
       },
       {
         "propertyTemplates": [
@@ -1519,7 +1519,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1533,7 +1533,7 @@
             },
             "propertyLabel": "Sound Content (RDA 7.18)",
             "remark": "http://access.rdatoolkit.org/7.18.html",
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -1639,7 +1639,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1651,7 +1651,7 @@
                 "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackChannels"
               }
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Configuration of Playback Channels (RDA 3.16.8)",
             "remark": "http://access.rdatoolkit.org/3.16.8.html"
           },
@@ -1681,7 +1681,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1693,7 +1693,7 @@
                 "remark": "http://id.loc.gov/ontologies/bibframe/PlaybackCharacteristic"
               }
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Special Playback Characteristic (RDA 3.16.9)",
             "remark": "http://access.rdatoolkit.org/3.16.9.html"
           }
