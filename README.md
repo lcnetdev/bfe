@@ -125,12 +125,11 @@ v0.2.x
 * Dryice build has been replaced with Grunt.
 
 v0.3.x
-* Document config.js
-* Refactor bfelookups.js into more generic component.
+* Implement BF 2.0 Ontology
+* LC Bibframe Pilot 2.0 support.
 * Implement save/load api
 
 v0.4.x
-* Implement v2.0 of vocabulary.
 * Rewrite editor using Angular.js.
 * Implement automated testing.
 

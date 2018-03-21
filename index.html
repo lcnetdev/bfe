@@ -23,8 +23,28 @@
     <script src="https://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="builds/bfe.min.js"></script>
-    <link rel="stylesheet" href="builds/bfe.min.css" />
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+
+    <script src="https://cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>	
+
+    <script src="static/js/short-uuid.min.js"></script>
+    <script src="static/js/twitter-typeahead-0.10.2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+    <!--static/js/lodash.min.js-->
+
+    <script type="text/javascript" src="static/js/n3-browser.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+
+    <script type="text/javascript" src="static/js/jsonld-vis.js"></script>
+    <link rel="stylesheet" href="static/css/jsonld-vis.css">
+
+    <script type="text/javascript" src="builds/bfe.dev.js"></script>
+    <link rel="stylesheet" href="builds/bfe.css" />
 
     <style>
         @media screen {
@@ -39,7 +59,6 @@
             }
         }
         </style>
-
 
   </head>
 
@@ -59,7 +78,7 @@
             <div class="collapse navbar-collapse visible-print" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="divider"></li>
-                    <li><a href="http://www.loc.gov/bibframe/">&laquo; LC BIBFRAME Site</a></li>
+                    <li><a href="http://www.loc.gov/bibframe/">&laquo; Back to LC BIBFRAME Site</a></li>
                     <li class="divider"></li>
                 </ul>
             </div>
@@ -75,7 +94,14 @@
     <div id="iealert"></div>
 </div>    
 
-<script type="text/javascript" src="static/js/config.js"></script>
+<script type="text/javascript">
+    function reloadJs(src) {
+        src = $('script[src$="' + src + '"]').attr("src");
+        $('script[src$="' + src + '"]').remove();
+        $('<script/>').attr('src', src).appendTo('body');
+    }
+</script>
+<script type="text/javascript" src="static/js/config-dev.js"></script>
 
 <br/><br/><br/>
 
