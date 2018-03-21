@@ -841,6 +841,21 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/collection",
             "propertyLabel": "Collection"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:RelatedWork"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Related Works",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship"
           }
         ],
         "id": "profile:bf2:RareMat:Item",
@@ -929,7 +944,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -938,11 +953,12 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "",
-                "remark": "http://id.loc.gov/ontologies/bibframe/Illustration"
+                "remark": "http://id.loc.gov/ontologies/bibframe/Illustration",
+                "dataTypeLabelHint": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
               },
               "valueLanguage": ""
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Illustrative Content (RDA 7.15)",
             "remark": "http://access.rdatoolkit.org/7.15.html"
           },

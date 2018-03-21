@@ -572,10 +572,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 var ampm = "a";
                                 if (min<10)
                                     min = "0"+min;
-                                if (hr>12){
-                                    hr-=12;
+                                if (hr>=12){
                                     ampm = "p";
-                                }    
+                                }
+                                if (hr > 12){
+                                    hr-=12;
+                                }
                                 return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + hr + ':' + min + ampm;
                             }
                         },
@@ -606,7 +608,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                                 //default
                                 //var spoints = editorconfig.startingPoints[0].menuItems[0];
-                                if (rowData.profile !== "profile:bf2:Load:Work"){
+                                if (rowData.profile !== "profile:bf2:Load:Work" && rowData.profile !== "profile:bf2:IBC:Instance"){
                                 var menuIndex = _.findIndex(_(editorconfig.startingPoints).chain().find({
                                     menuItems: [{
                                         useResourceTemplates: [rowData.profile]
@@ -619,11 +621,18 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                         useResourceTemplates: [rowData.profile]
                                     }]
                                 }).value().menuItems[menuIndex]
-                                } else {
+                                } else if (rowData.profile === "profile:bf2:Load:Work"){
                                     var spoints = { label: "Loaded Work",
                                         type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                                         useResourceTemplates:["profile:bf2:Load:Work"]
                                     };
+                                } else if (rowData.profile === "profile:bf2:IBC:Instance") {
+                                    
+                                    var spoints = { label: "IBC",
+                                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                        useResourceTemplates:["profile:bf2:IBC:Instance"]
+                                    };
+
                                 }
 
                                 var bTypes = [];
@@ -760,6 +769,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     bfestore.loadtemplates = temptemplates;
                     var url = $(this.parentElement).find("#bfeditor-loaduriInput").val();
                     editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function(loadtemplates) {
+                        //converter uses bf:person intead of personal name
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
+                           triple.o = "http://www.loc.gov/mads/rdf/v1#PersonalName"
+                        });
+                        //converter uses bf:organization intead of corporate name
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
+                           triple.o = "http://www.loc.gov/mads/rdf/v1#CorporateName"
+                        });
+                        //eliminate duplicate type bf:Contributor
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Contribution"}))
+                        });
+
+                        //Text to Work
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Text"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Text"}))
+                        });
+
                         bfestore.loadtemplates.data = bfeditor.bfestore.store;
                         $('[href=#create]').tab('show');
                         $('#bfeditor-formdiv').show();
@@ -767,11 +794,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     $('#bfeditor-messagediv').remove();
                         }
 
+                        //weird bnode prob
                         _.each(bfeditor.bfestore.store, function(el) {
                             if( el.o.startsWith("_:_:"))
                                 el.o = "_:" + el.o.split("_:")[2];
-        
                         });
+
+
                         cbLoadTemplates();
                     });
 
@@ -799,7 +828,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
             var spoints = { label: "Monograph",
                             type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                            useResourceTemplates:["profile:bf2:Monograph:Instance"]
+                            useResourceTemplates:["profile:bf2:IBC:Instance"]
                           };
 
             bfeditor.bfestore.store = [];
@@ -838,6 +867,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
                            triple.o = "http://www.loc.gov/mads/rdf/v1#PersonalName"
                         });
+                        //converter uses bf:organization intead of corporate name
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
+                           triple.o = "http://www.loc.gov/mads/rdf/v1#CorporateName"
+                        });
                         //eliminate duplicate type bf:Contributor
                         _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
                             bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Contribution"}))
@@ -852,6 +885,22 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"})){
                             bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"}));
                         }
+
+                        _.each(_.where(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/adminMetadata"}), function(am){;
+                            var adminTriple = {};
+                            adminTriple.s = am.o;
+                            adminTriple.p = "http://id.loc.gov/ontologies/bflc/profile";
+                            adminTriple.o = bfeditor.bfestore.profile;
+                            adminTriple.otype = "literal";
+                            bfeditor.bfestore.store.push(adminTriple)
+    
+                            adminTriple = {};
+                            adminTriple.s = am.o;
+                            adminTriple.p = "http://id.loc.gov/ontologies/bflc/procInfo";
+                            adminTriple.o = "ibc update";
+                            adminTriple.otype = "literal";
+                            bfeditor.bfestore.store.push(adminTriple)
+                        });
 
 //                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}), function(triple) {
 //                            _.each(_.where(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}), function (typeTriple){
@@ -3553,9 +3602,9 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
                     data = data.replace(/xmlns:ns1=/g, "xmlns:bf=");
                     data = data.replace(/ns1:/g, "bf:");
 
-                    data = data.replace(/xmlns:ns2=/g, "xmlns:madsrdf=");
+                    //data = data.replace(/xmlns:ns2=/g, "xmlns:madsrdf=");
                     data = data.replace(/ns2:/g, "madsrdf:");
-
+                    data = data.replace(/xmlns:ns2=\"madsrdf:\"/g, "");
                     callback(data)
                 },
                 error: function(XMLHttpRequest, status, err) {
@@ -4155,9 +4204,16 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function(re
             for (var s = 0; s < suggestions[1].length; s++) {
                 var l = suggestions[1][s];
                 var u = suggestions[3][s];
+                if (suggestions.length ===5){
+                    var i = suggestions[4][s];
+                    var li = l + " ("+i+")";
+                } else {
+                    var li = l;
+                }
+
                 typeahead_source.push({
                     uri: u,
-                    value: l
+                    value: li
                 });
             }
         }

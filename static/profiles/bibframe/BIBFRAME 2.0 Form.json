@@ -33,7 +33,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "lookup",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -45,11 +45,12 @@
                 "dataTypeURI": "",
                 "remark": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
               },
-              "repeatable": "false"
+              "repeatable": "false",
+              "remark": "http://id.loc.gov/ontologies/bflc/target"
             },
             "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
             "remark": "http://access.rdatoolkit.org/7.3.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
           },
           {
             "mandatory": "false",

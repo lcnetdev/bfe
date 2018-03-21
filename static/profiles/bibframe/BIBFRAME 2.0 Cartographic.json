@@ -850,7 +850,7 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:Cartography:Item"
+                "profile:bf2:Cartographic:Item"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
