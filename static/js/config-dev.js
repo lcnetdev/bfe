@@ -278,16 +278,20 @@
                 {"menuGroup": "Notated Music",
                 "menuItems": [
                     {
-                        label: "Instance",
-                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-                        useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
-                    },
-                    {
-                        label: "Work", 
+                        label: "Create Work",
                         type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                         useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
+                    },
+                    {
+                        label: "Create RDA Expression",
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                        useResourceTemplates: [ "profile:bf2:NotatedMusic:Expression" ]
+                    },
+                    {
+                        label: "Create Instance", 
+                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                        useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
                     }
-
                 ]},
                 {"menuGroup": "Serial",
                 "menuItems": [

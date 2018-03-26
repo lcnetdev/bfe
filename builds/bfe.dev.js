@@ -5180,7 +5180,7 @@ bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'module', 'src/loo
     exports.getResource = lcshared.getResource;
 
 });
-bfe.define(['require', 'exports', 'module', 'src/lookups/lcshared'], function(require, exports, module) {
+bfe.define('src/lookups/rdaaspectration',['require', 'exports', 'module', 'src/lookups/lcshared'], function(require, exports, module) {
     var lcshared = require("src/lookups/lcshared");
     var cache = [];
     exports.scheme = "http://rdaregistry.info/termList/AspectRatio";

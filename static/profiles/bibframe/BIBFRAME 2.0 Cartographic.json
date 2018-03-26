@@ -249,7 +249,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -415,20 +415,6 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
             "propertyLabel": "Has BIBFRAME Instance"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Authorized Access Point for the Work (RDA 6.27.1)",
-            "remark": "http://access.rdatoolkit.org/6.27.html"
           }
         ],
         "id": "profile:bf2:Cartographic:Work",
