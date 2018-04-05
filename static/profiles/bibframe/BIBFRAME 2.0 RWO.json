@@ -11,7 +11,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Affiliation"
@@ -78,7 +78,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/languages"
+                "https://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Language"
@@ -102,7 +102,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
@@ -140,7 +140,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
@@ -178,7 +178,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Country"
@@ -242,8 +242,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/names",
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
@@ -307,8 +307,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/names",
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
@@ -346,8 +346,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/names",
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
@@ -470,7 +470,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#fieldOfActivity"
@@ -535,8 +535,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/demographicTerms",
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/demographicTerms",
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#gender"
@@ -575,8 +575,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects",
-                "http://id.loc.gov/authorities/demographicTerms"
+                "https://id.loc.gov/authorities/subjects",
+                "https://id.loc.gov/authorities/demographicTerms"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Occupation"
@@ -642,7 +642,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#prominentFamilyMember"
@@ -908,7 +908,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },

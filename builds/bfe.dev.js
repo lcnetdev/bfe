@@ -210,31 +210,31 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     var forms = [];
 
     var lookups = {
-        "http://id.loc.gov/authorities/names": {
+        "https://id.loc.gov/authorities/names": {
             "name": "LCNAF",
             "load": require("src/lookups/lcnames")
         },
-        "http://id.loc.gov/authorities/subjects": {
+        "https://id.loc.gov/authorities/subjects": {
             "name": "LCSH",
             "load": require("src/lookups/lcsubjects")
         },
-        "http://id.loc.gov/authorities/genreForms": {
+        "https://id.loc.gov/authorities/genreForms": {
             "name": "LCGFT",
             "load": require("src/lookups/lcgenreforms")
         },
-        "http://id.loc.gov/resources/works": {
+        "https://id.loc.gov/resources/works": {
             "name": "LC-Works",
             "load": require("src/lookups/lcworks")
         },
-        "http://id.loc.gov/resources/instances": {
+        "https://id.loc.gov/resources/instances": {
             "name": "LC-Instances",
             "load": require("src/lookups/lcinstances")
         },
-        "http://id.loc.gov/vocabulary/organizations": {
+        "https://id.loc.gov/vocabulary/organizations": {
             "name": "Organizations",
             "load": require("src/lookups/lcorganizations")
         },
-        "http://id.loc.gov/vocabulary/relators": {
+        "https://id.loc.gov/vocabulary/relators": {
             "name": "Relators",
             "load": require("src/lookups/relators")
         },
@@ -455,9 +455,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             "data": "rdf",
                             "render": function(data, type, full, meta) {
                                 var retval = "No Title";
-                                if (_.some(data, "http://id.loc.gov/ontologies/bibframe/title")) {
-                                    text = _.find(data, "http://id.loc.gov/ontologies/bibframe/title")["http://id.loc.gov/ontologies/bibframe/title"];
-                                    //return text["http://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
+                                if (_.some(data, "https://id.loc.gov/ontologies/bibframe/title")) {
+                                    text = _.find(data, "https://id.loc.gov/ontologies/bibframe/title")["https://id.loc.gov/ontologies/bibframe/title"];
+                                    //return text["https://id.loc.gov/ontologies/bibframe/title"][0]["@value"];
                                     if (text !== undefined)
                                         _.each(text, function(el){
                                             if (el["@id"] !== undefined) {
@@ -466,8 +466,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                                     "@id": id
                                                 });
                                                    
-                                                if (_.has(title[0], "http://id.loc.gov/ontologies/bibframe/mainTitle"))
-                                                    retval = title[0]["http://id.loc.gov/ontologies/bibframe/mainTitle"][0]["@value"];
+                                                if (_.has(title[0], "https://id.loc.gov/ontologies/bibframe/mainTitle"))
+                                                    retval = title[0]["https://id.loc.gov/ontologies/bibframe/mainTitle"][0]["@value"];
                                                 else if (_.has(title[0], "http://www.w3.org/2000/01/rdf-schema#label"))
                                                     retval = title[0]["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
                                             }
@@ -488,7 +488,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 var text = "N/A";
                                 var lccns = _.filter(data, function(el) {
                                         if (!_.isEmpty(el["@type"])){
-                                            if (el["@type"][0] === "http://id.loc.gov/ontologies/bibframe/Lccn"){
+                                            if (el["@type"][0] === "https://id.loc.gov/ontologies/bibframe/Lccn"){
                                                 if (_.has(el, ["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"]))
                                                     if (!_.isEmpty(el["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"]))
                                                         return el["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
@@ -552,11 +552,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             "render": function(data, type, full, meta) {
                                 var text = "";
                                 if (_.filter(data, function(el) {
-                                        return el["http://id.loc.gov/ontologies/bflc/metadataAssigner"]
+                                        return el["https://id.loc.gov/ontologies/bflc/metadataAssigner"]
                                     }).length > 0)
                                     text = _.filter(data, function(el) {
-                                        return el["http://id.loc.gov/ontologies/bflc/metadataAssigner"]
-                                    })[0]["http://id.loc.gov/ontologies/bflc/metadataAssigner"][0]["@value"];
+                                        return el["https://id.loc.gov/ontologies/bflc/metadataAssigner"]
+                                    })[0]["https://id.loc.gov/ontologies/bflc/metadataAssigner"][0]["@value"];
                                 return text.length > 60 ? text.substr(0, 58) + "..." : text;
                             }
                         },
@@ -623,13 +623,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 }).value().menuItems[menuIndex]
                                 } else if (rowData.profile === "profile:bf2:Load:Work"){
                                     var spoints = { label: "Loaded Work",
-                                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                                        type: ["https://id.loc.gov/ontologies/bibframe/Work"],
                                         useResourceTemplates:["profile:bf2:Load:Work"]
                                     };
                                 } else if (rowData.profile === "profile:bf2:IBC:Instance") {
                                     
                                     var spoints = { label: "IBC",
-                                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                                        type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
                                         useResourceTemplates:["profile:bf2:IBC:Instance"]
                                     };
 
@@ -741,7 +741,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             //var loadtemplates = [];
 
             var spoints = { label: "Loaded Work",
-                            type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                            type: ["https://id.loc.gov/ontologies/bibframe/Work"],
                             useResourceTemplates:["profile:bf2:Monograph:Work"]
                           };
 
@@ -770,21 +770,21 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     var url = $(this.parentElement).find("#bfeditor-loaduriInput").val();
                     editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function(loadtemplates) {
                         //converter uses bf:person intead of personal name
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
                            triple.o = "http://www.loc.gov/mads/rdf/v1#PersonalName"
                         });
                         //converter uses bf:organization intead of corporate name
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
                            triple.o = "http://www.loc.gov/mads/rdf/v1#CorporateName"
                         });
                         //eliminate duplicate type bf:Contributor
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
-                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Contribution"}))
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Contribution"}))
                         });
 
                         //Text to Work
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Text"}), function(triple) {
-                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Text"}))
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Text"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Text"}))
                         });
 
                         bfestore.loadtemplates.data = bfeditor.bfestore.store;
@@ -827,7 +827,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             //var loadtemplates = [];
 
             var spoints = { label: "Monograph",
-                            type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                            type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
                             useResourceTemplates:["profile:bf2:IBC:Instance"]
                           };
 
@@ -864,39 +864,39 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     
                     editorconfig.retrieveLDS.callback(url, bfestore, bfestore.loadtemplates, bfelog, function(loadtemplates) {
                         //converter uses bf:person intead of personal name
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Person"}), function(triple) {
                            triple.o = "http://www.loc.gov/mads/rdf/v1#PersonalName"
                         });
                         //converter uses bf:organization intead of corporate name
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Organization"}), function(triple) {
                            triple.o = "http://www.loc.gov/mads/rdf/v1#CorporateName"
                         });
                         //eliminate duplicate type bf:Contributor
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
-                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Contribution"}))
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bflc/PrimaryContribution"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Contribution"}))
                         });
 
                         //eliminate duplicate type bf:ProvisionActivity
-                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/Publication"}), function(triple) {
-                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "http://id.loc.gov/ontologies/bibframe/ProvisionActivity"}))
+                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/Publication"}), function(triple) {
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"s":triple.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "o": "https://id.loc.gov/ontologies/bibframe/ProvisionActivity"}))
                         });
 
                         //eliminate itemOf
-                        if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"})){
-                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bflc/itemOf"}));
+                        if(_.some(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bflc/itemOf"})){
+                            bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bflc/itemOf"}));
                         }
 
-                        _.each(_.where(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/adminMetadata"}), function(am){;
+                        _.each(_.where(bfeditor.bfestore.store, {"p": "https://id.loc.gov/ontologies/bibframe/adminMetadata"}), function(am){;
                             var adminTriple = {};
                             adminTriple.s = am.o;
-                            adminTriple.p = "http://id.loc.gov/ontologies/bflc/profile";
+                            adminTriple.p = "https://id.loc.gov/ontologies/bflc/profile";
                             adminTriple.o = bfeditor.bfestore.profile;
                             adminTriple.otype = "literal";
                             bfeditor.bfestore.store.push(adminTriple)
     
                             adminTriple = {};
                             adminTriple.s = am.o;
-                            adminTriple.p = "http://id.loc.gov/ontologies/bflc/procInfo";
+                            adminTriple.p = "https://id.loc.gov/ontologies/bflc/procInfo";
                             adminTriple.o = "ibc update";
                             adminTriple.otype = "literal";
                             bfeditor.bfestore.store.push(adminTriple)
@@ -1194,19 +1194,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             save_json.created = bfeditor.bfestore.created;
                             save_json.modified = new Date().toUTCString();
     
-                            if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
+                            if(_.some(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bibframe/adminMetadata"})){
                                 
                                 var modifiedDate = new Date(save_json.modified);
                                 var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-                                if (_.some(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
-                                    _.each(_.where(bfeditor.bfestore.store, {p:"http://id.loc.gov/ontologies/bibframe/changeDate"}), function(cd){
+                                if (_.some(bfeditor.bfestore.store, {p: "https://id.loc.gov/ontologies/bibframe/changeDate"})){
+                                    _.each(_.where(bfeditor.bfestore.store, {p:"https://id.loc.gov/ontologies/bibframe/changeDate"}), function(cd){
                                        cd.o = modifiedDateString;
                                     });
                                 } else {
                                     var adminTriple = {};
-                                    adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
-                                    adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
+                                    adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
+                                    adminTriple.p = "https://id.loc.gov/ontologies/bibframe/changeDate";
                                     adminTriple.o = modifiedDateString;
                                     adminTriple.otype = "literal";
                                     bfeditor.bfestore.store.push(adminTriple)
@@ -1215,7 +1215,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
 
-                            if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/mainTitle"}) ){                        
+                            if (_.some(bfeditor.bfestore.store, {"p": "https://id.loc.gov/ontologies/bibframe/mainTitle"}) ){                        
                                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function(save, save_name){
                                         console.log("Saved: " + save_name);
                                     });
@@ -1242,16 +1242,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                         //remove problematic nodes
                         //instanceOf
-                        if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/instanceOf"}) ){
+                        if (_.some(bfeditor.bfestore.store, {"p": "https://id.loc.gov/ontologies/bibframe/instanceOf"}) ){
                            //remove cached work before publishing
-                           var work = _.find(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/instanceOf"}).o;
+                           var work = _.find(bfeditor.bfestore.store, {"p": "https://id.loc.gov/ontologies/bibframe/instanceOf"}).o;
                            //if (!_.isEmpty(work))
-                               //if(work.startsWith("http://id.loc.gov/resources/works/c"))                           
+                               //if(work.startsWith("https://id.loc.gov/resources/works/c"))                           
                                    //bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, {s:work});
                         }
 
                         if (editorconfig.publish.callback !== undefined) {
-                            if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bibframe/mainTitle"}) ){
+                            if (_.some(bfeditor.bfestore.store, {"p": "https://id.loc.gov/ontologies/bibframe/mainTitle"}) ){
                                 bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function(rdfxml) {
                                     var save_json = {};
                                     save_json.name = mintResource(bfeditor.bfestore.name);
@@ -1260,19 +1260,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     save_json.created = bfeditor.bfestore.created;
                                     save_json.modified = new Date().toUTCString();
 
-                                    if(_.some(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"})){
+                                    if(_.some(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bibframe/adminMetadata"})){
 
                                         var modifiedDate = new Date(save_json.modified);
                                         var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-                                        if (_.some(bfeditor.bfestore.store, {p: "http://id.loc.gov/ontologies/bibframe/changeDate"})){
-                                            _.each(_.where(bfeditor.bfestore.store, {p:"http://id.loc.gov/ontologies/bibframe/changeDate"}), function(cd){
+                                        if (_.some(bfeditor.bfestore.store, {p: "https://id.loc.gov/ontologies/bibframe/changeDate"})){
+                                            _.each(_.where(bfeditor.bfestore.store, {p:"https://id.loc.gov/ontologies/bibframe/changeDate"}), function(cd){
                                                cd.o = modifiedDateString;
                                             });
                                         } else {
                                             var adminTriple = {};
-                                            adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
-                                            adminTriple.p = "http://id.loc.gov/ontologies/bibframe/changeDate";
+                                            adminTriple.s = _.find(bfeditor.bfestore.store, {"p":"https://id.loc.gov/ontologies/bibframe/adminMetadata"}).o;
+                                            adminTriple.p = "https://id.loc.gov/ontologies/bibframe/changeDate";
                                             adminTriple.o = modifiedDateString;
                                             adminTriple.otype = "literal";
                                             bfeditor.bfestore.store.push(adminTriple)
@@ -1282,7 +1282,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     save_json.status = "published";
                                     save_json.objid = "loc.natlib.instances." + save_json.name + "0001";
                                     
-                                    var lccns = _.where(_.where(bfeditor.bfestore.store, {s: _.where(bfeditor.bfestore.store, {o: "http://id.loc.gov/ontologies/bibframe/Lccn"})[0].s}), {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"});
+                                    var lccns = _.where(_.where(bfeditor.bfestore.store, {s: _.where(bfeditor.bfestore.store, {o: "https://id.loc.gov/ontologies/bibframe/Lccn"})[0].s}), {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"});
 
                                     if (!_.isEmpty(lccns)){
                                        for(i=0; i < lccns.length; i++){
@@ -1939,13 +1939,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         }
                         propsdata = tempprops;
                         
-                    } else if (bfestore.state === "loaduri" && propsdata[0].o.startsWith("http://id.loc.gov/resources/works")) {
+                    } else if (bfestore.state === "loaduri" && propsdata[0].o.startsWith("https://id.loc.gov/resources/works")) {
                         //try with id.loc.gov
                         //var tempuri = rt.defaulturi.replace("mlvlp04.loc.gov:8230", "id.loc.gov");
                         var triple = {};
                         triple.s = propsdata[0].s;
                         triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-                        triple.o = "http://id.loc.gov/ontologies/bibframe/Work";
+                        triple.o = "https://id.loc.gov/ontologies/bibframe/Work";
                         triple.otype = "uri";
                         triple.guid = guid();
                         
@@ -2205,7 +2205,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
                             });
                             var tmainTitle = _.find(labeldata, {
-                                p: "http://id.loc.gov/ontologies/bibframe/mainTitle"
+                                p: "https://id.loc.gov/ontologies/bibframe/mainTitle"
                             });
 
 
@@ -2226,7 +2226,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 } else {
                                     var qualifier = _.find(labeldata, {
                                         s: tvalue.s,
-                                        p: "http://id.loc.gov/ontologies/bibframe/qualifier"
+                                        p: "https://id.loc.gov/ontologies/bibframe/qualifier"
                                     });
                                     if (!_.isEmpty(qualifier) && !_.isEmpty(qualifier.o)) {
                                         displaydata = tvalue.o + " " + qualifier.o;
@@ -2239,10 +2239,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 if (displaydata === "contribution") {
                                     //lookup agent and role;
                                     var role = _.find(labeldata, {
-                                        "p": "http://id.loc.gov/ontologies/bibframe/role"
+                                        "p": "https://id.loc.gov/ontologies/bibframe/role"
                                     });
                                     var agent = _.find(labeldata, {
-                                        "p": "http://id.loc.gov/ontologies/bibframe/agent"
+                                        "p": "https://id.loc.gov/ontologies/bibframe/agent"
                                     });
 
                                         if (!_.isEmpty(agent)){
@@ -2273,15 +2273,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                     
                                     } else if (displaydata === "classification") {
                                         if (_.some(labeldata, {
-                                            "p": "http://id.loc.gov/ontologies/bibframe/classificationPortion"
+                                            "p": "https://id.loc.gov/ontologies/bibframe/classificationPortion"
                                         })){
                                             displaydata = _.find(labeldata, {
-                                                "p": "http://id.loc.gov/ontologies/bibframe/classificationPortion"
+                                                "p": "https://id.loc.gov/ontologies/bibframe/classificationPortion"
                                             }).o;
                                         }
                                     } else if (displaydata === "provisionActivity") {
                                         var place = _.find(labeldata, {
-                                            "p": "http://id.loc.gov/ontologies/bibframe/place"
+                                            "p": "https://id.loc.gov/ontologies/bibframe/place"
                                         });
                                         var placeLabel, agentLabel, dateLabel;
                                         if (!_.isEmpty(place)) {
@@ -2297,7 +2297,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                             }
                                         }
                                         var agent = _.find(labeldata, {
-                                            "p": "http://id.loc.gov/ontologies/bibframe/agent"
+                                            "p": "https://id.loc.gov/ontologies/bibframe/agent"
                                         });
                                         if (!_.isEmpty(agent)) {
                                             if (agent.o.startsWith("_:b")) {
@@ -2313,7 +2313,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                         }
 
                                         var date = _.find(labeldata, {
-                                            "p": "http://id.loc.gov/ontologies/bibframe/date"
+                                            "p": "https://id.loc.gov/ontologies/bibframe/date"
                                         });
                                         if (!_.isEmpty(date))
                                             dateLabel = date.o;
@@ -2346,19 +2346,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                                 var tmainTitle = _.find(_.where(bfestore.store, {
                                     "s": labeldata[0].o
                                 }), {
-                                    p: "http://id.loc.gov/ontologies/bibframe/mainTitle"
+                                    p: "https://id.loc.gov/ontologies/bibframe/mainTitle"
                                 });
                                 //nested titles
                                 if (_.has(bfestore.store, {
                                         "s": labeldata[0].s,
-                                        p: "http://id.loc.gov/ontologies/bibframe/title"
+                                        p: "https://id.loc.gov/ontologies/bibframe/title"
                                     })) {
                                     var workTitle = _.find(bfestore.store, {
                                         "s": _.where(bfestore.store, {
                                             "s": labeldata[0].s,
-                                            p: "http://id.loc.gov/ontologies/bibframe/title"
+                                            p: "https://id.loc.gov/ontologies/bibframe/title"
                                         })[0].o,
-                                        "p": "http://id.loc.gov/ontologies/bibframe/mainTitle"
+                                        "p": "https://id.loc.gov/ontologies/bibframe/mainTitle"
                                     });
                                 }
                                 if (tlabel !== undefined) {
@@ -2491,13 +2491,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     triplespassed.push(triplepassed);
                 
 
-                    if (properties[0].propertyURI === "http://id.loc.gov/ontologies/bibframe/adminMetadata"){
+                    if (properties[0].propertyURI === "https://id.loc.gov/ontologies/bibframe/adminMetadata"){
                         //add name, id triples
                         var mintedId =  "e" + window.ShortUUID("0123456789").fromUUID(bfeditor.bfestore.name);
                         var mintedUri = config.url+"/resources/"+mintedId;
                         var adminTriple = {};
                         adminTriple.s = resourceURI;
-                        adminTriple.p = "http://id.loc.gov/ontologies/bflc/profile";
+                        adminTriple.p = "https://id.loc.gov/ontologies/bflc/profile";
                         adminTriple.o = t.id;
                         adminTriple.otype = "literal";
                         triplespassed.push(adminTriple);
@@ -2505,7 +2505,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                         var adminTriple = {};
                         adminTriple.s = resourceURI;
-                        adminTriple.p = "http://id.loc.gov/ontologies/bibframe/creationDate";
+                        adminTriple.p = "https://id.loc.gov/ontologies/bibframe/creationDate";
                         var d = new Date(bfeditor.bfestore.created);
                         adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                         adminTriple.otype = "literal";
@@ -2514,7 +2514,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
                         var adminTriple = {};
                         adminTriple.s = resourceURI;
-                        adminTriple.p = "http://id.loc.gov/ontologies/bibframe/identifiedBy";
+                        adminTriple.p = "https://id.loc.gov/ontologies/bibframe/identifiedBy";
                         adminTriple.o = mintedUri;
                         adminTriple.otype = "uri";
                         triplespassed.push(adminTriple);
@@ -2523,7 +2523,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         var adminTriple = {};
                         adminTriple.s = mintedUri;
                         adminTriple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-                        adminTriple.o = "http://id.loc.gov/ontologies/bibframe/Local";
+                        adminTriple.o = "https://id.loc.gov/ontologies/bibframe/Local";
                         adminTriple.otype = "uri";
                         triplespassed.push(adminTriple);
                         bfeditor.bfestore.store.push(adminTriple)
@@ -3454,8 +3454,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
         if (rt.resourceURI.startsWith("http://www.loc.gov/mads/rdf/v1#")) {
             uri = rt.resourceURI.replace("http://www.loc.gov/mads/rdf/v1#", config.url + "/bfe/static/v1.json#");
-        } else if (rt.resourceURI.startsWith("http://id.loc.gov/resources")) {
-            uri = rt.resourceURI.replace("http://id.loc.gov/resources", config.resourceURI) + ".json";
+        } else if (rt.resourceURI.startsWith("https://id.loc.gov/resources")) {
+            uri = rt.resourceURI.replace("https://id.loc.gov/resources", config.resourceURI) + ".json";
         } else if (rt.resourceURI.startsWith("http://mlvlp04.loc.gov:3000/resources")) {
             return;
         } else {
@@ -3474,20 +3474,20 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 data.some(function(resource) {
                     if (resource["@id"] === rt.resourceURI && !truthy) {
                         if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"] !== undefined) {
-                            if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Work") {
+                            if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "https://id.loc.gov/ontologies/bibframe/Work") {
                                 returnval = baseURI + "resources/works/";
                                 truthy = true;
-                            } else if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance") {
+                            } else if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "https://id.loc.gov/ontologies/bibframe/Instance") {
                                 returnval = baseURI + "resources/instances/";
                                 truthy = true;
                             } else if (resource["http://www.w3.org/2000/01/rdf-schema#subClassOf"][0]["@id"] === "http://www.loc.gov/mads/rdf/v1#Name") {
                                 returnval = baseURI + "resources/agents/";
                                 truthy = true;
                             }
-                        } else if (resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Instance") {
+                        } else if (resource["@id"] === "https://id.loc.gov/ontologies/bibframe/Instance") {
                             returnval = baseURI + "resources/instances/";
                             truthy = true;
-                        } else if (resource["@id"] === "http://id.loc.gov/ontologies/bibframe/Work") {
+                        } else if (resource["@id"] === "https://id.loc.gov/ontologies/bibframe/Work") {
                             returnval = baseURI + "resources/works/";
                             truthy = true;
                         }
@@ -3510,8 +3510,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var thisuri = uri;
 
         //normalize
-        if (uri.startsWith("http://id.loc.gov/resources")) {
-            uri = uri.replace("http://id.loc.gov/resources", config.resourceURI);
+        if (uri.startsWith("https://id.loc.gov/resources")) {
+            uri = uri.replace("https://id.loc.gov/resources", config.resourceURI);
         }
 
         if (uri.endsWith("marcxml.xml")){
@@ -3766,8 +3766,8 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
                 }
                 var turtleWriter = N3.Writer({
                     prefixes: {
-                        bf: 'http://id.loc.gov/ontologies/bibframe/',
-                        bflc: 'http://id.loc.gov/ontologies/bflc/',
+                        bf: 'https://id.loc.gov/ontologies/bibframe/',
+                        bflc: 'https://id.loc.gov/ontologies/bflc/',
                         madsrdf: "http://www.loc.gov/mads/rdf/v1#",
                         rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
                         rdfs: "http://www.w3.org/2000/01/rdf-schema#",
@@ -3789,8 +3789,8 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
             "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
             "xsd": "http://www.w3.org/2001/XMLSchema#",
-            "bf": "http://id.loc.gov/ontologies/bibframe/",
-            "bflc": "http://id.loc.gov/ontologies/bflc/",
+            "bf": "https://id.loc.gov/ontologies/bibframe/",
+            "bflc": "https://id.loc.gov/ontologies/bflc/",
             "madsrdf": "http://www.loc.gov/mads/rdf/v1#"
         };
 
@@ -3837,9 +3837,9 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function(require, e
             }
             for (var t in resource) {
                 if (t !== "@type" && t !== "@id") {
-                    var prop = t.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
-                    prop = prop.replace("http://id.loc.gov/vocabulary/relators/", "relators:");
-                    prop = prop.replace("http://id.loc.gov/ontologies/bibframe-lc/", "bflc:");
+                    var prop = t.replace("https://id.loc.gov/ontologies/bibframe/", "bf:");
+                    prop = prop.replace("https://id.loc.gov/vocabulary/relators/", "relators:");
+                    prop = prop.replace("https://id.loc.gov/ontologies/bibframe-lc/", "bflc:");
                     prop = prop.replace("http://rdaregistry.info/termList/", "rda");
                     predata += nlindent + prop;
                     resource[t].forEach(function(o) {
@@ -3968,7 +3968,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
     var cache = [];
 
     // This var is required because it is used as an identifier.
-    exports.scheme = "http://id.loc.gov/authorities/names";
+    exports.scheme = "https://id.loc.gov/authorities/names";
 
     exports.source = function(query, process, formobject) {
 
@@ -3985,9 +3985,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
         }
         //console.log("type is " + type);
 
-        var scheme = "http://id.loc.gov/authorities/names";
+        var scheme = "https://id.loc.gov/authorities/names";
         hits = _.where(triples, {
-            "p": "http://id.loc.gov/ontologies/bibframe/authoritySource"
+            "p": "https://id.loc.gov/ontologies/bibframe/authoritySource"
         })
         if (hits[0] !== undefined) {
             console.log(hits[0]);
@@ -3998,7 +3998,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
         var rdftype = "";
         if (type == "http://www.loc.gov/mads/rdf/v1#PersonalName") {
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
+        } else if (type == "https://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
         } else if (type == "http://www.loc.gov/mads/rdf/v1#place") {
             rdftype = "rdftype:Geographic";
@@ -4011,9 +4011,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
             rdftype = "rdftype:ConferenceName";
         } else if (type == "http://www.loc.gov/mads/rdf/v1#jurisdiction") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://id.loc.gov/ontologies/bibframe/genreForm") {
+        } else if (type == "https://id.loc.gov/ontologies/bibframe/genreForm") {
             rdftype = "rdftype:GenreForm";
-        } else if (type == "http://id.loc.gov/ontologies/bibframe/role") {
+        } else if (type == "https://id.loc.gov/ontologies/bibframe/role") {
             rdftype = "rdftype:Role";
         }
 
@@ -4061,7 +4061,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
                     }
                 });
             } else if (query.length > 2) {
-                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=" + q.replace("?", "");
+                u = "https://id.loc.gov/search/?format=jsonp&start=1&count=50&q=" + q.replace("?", "");
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -4311,7 +4311,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
 
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/authorities/subjects";
+    exports.scheme = "https://id.loc.gov/authorities/subjects";
 
     exports.source = function(query, process, formobject) {
         //console.log(JSON.stringify(formobject.store));
@@ -4327,9 +4327,9 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
         }
         //console.log("type is " + type);
 
-        var scheme = "http://id.loc.gov/authorities/subjects";
+        var scheme = "https://id.loc.gov/authorities/subjects";
         hits = _.where(triples, {
-            "p": "http://id.loc.gov/ontologies/bibframe/authoritySource"
+            "p": "https://id.loc.gov/ontologies/bibframe/authoritySource"
         })
         if (hits[0] !== undefined) {
             //console.log(hits[0]);
@@ -4340,7 +4340,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
         var rdftype = "";
         if (type == "http://www.loc.gov/mads/rdf/v1#Person") {
             rdftype = "rdftype:PersonalName";
-        } else if (type == "http://id.loc.gov/ontologies/bibframe/Topic") {
+        } else if (type == "https://id.loc.gov/ontologies/bibframe/Topic") {
             rdftype = "(rdftype:Topic OR rdftype:ComplexSubject)";
         } else if (type == "http://www.loc.gov/mads/rdf/v1#Place") {
             rdftype = "rdftype:Geographic";
@@ -4353,7 +4353,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
             rdftype = "rdftype:ConferenceName";
         } else if (type == "http://www.loc.gov/mads/rdf/v1#Jurisdiction") {
             rdftype = "rdftype:CorporateName";
-        } else if (type == "http://id.loc.gov/ontologies/bibframe/GenreForm") {
+        } else if (type == "https://id.loc.gov/ontologies/bibframe/GenreForm") {
             rdftype = "rdftype:GenreForm";
         }
 
@@ -4399,7 +4399,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
                     }
                 });
             } else if (query.length > 2) {
-                u = "http://id.loc.gov/search/?format=jsonp&start=1&count=10&q=" + q.replace("?", "");
+                u = "https://id.loc.gov/search/?format=jsonp&start=1&count=10&q=" + q.replace("?", "");
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -4429,10 +4429,10 @@ bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'module', 'src/loo
 
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/authorities/genreForms";
+    exports.scheme = "https://id.loc.gov/authorities/genreForms";
 
     exports.source = function(query, process) {
-        var scheme = "http://id.loc.gov/authorities/genreForms";
+        var scheme = "https://id.loc.gov/authorities/genreForms";
         var rdftype = "rdftype:GenreForm";
 
         var q = "";
@@ -4469,7 +4469,7 @@ bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'module', 'src/loo
 
                 u = scheme + "/suggest/?q=" + suggestquery;
 
-                //u = "http://id.loc.gov/authorities/genreForms/suggest/?q=" + query;
+                //u = "https://id.loc.gov/authorities/genreForms/suggest/?q=" + query;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -4497,7 +4497,7 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module'], function(req
     // Using twitter's typeahead, store may be completely unnecessary
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/resources/works";
+    exports.scheme = "https://id.loc.gov/resources/works";
 
     exports.source = function(query, process, formobject) {
 
@@ -4514,9 +4514,9 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module'], function(req
         }
         //console.log("type is " + type);
 
-        var scheme = "http://id.loc.gov/resources/works";
+        var scheme = "https://id.loc.gov/resources/works";
         hits = _.where(triples, {
-            "p": "http://id.loc.gov/ontologies/bibframe/authoritySource"
+            "p": "https://id.loc.gov/ontologies/bibframe/authoritySource"
         })
         if (hits[0] !== undefined) {
             console.log(hits[0]);
@@ -4551,7 +4551,7 @@ bfe.define('src/lookups/lcworks', ['require', 'exports', 'module'], function(req
 
         this.searching = setTimeout(function(formobject) {
             if (query.length > 2) {
-                u = "http://id.loc.gov/ml38281/search/?format=jsonp&start=1&count=50&q=" + q;
+                u = "https://id.loc.gov/ml38281/search/?format=jsonp&start=1&count=50&q=" + q;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -4699,7 +4699,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module'], function
     // Using twitter's typeahead, store may be completely unnecessary
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/resources/instances";
+    exports.scheme = "https://id.loc.gov/resources/instances";
 
     exports.source = function(query, process, formobject) {
 
@@ -4715,9 +4715,9 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module'], function
         }
         //console.log("type is " + type);
 
-        var scheme = "http://id.loc.gov/ml38281/resources/instances";
+        var scheme = "https://id.loc.gov/ml38281/resources/instances";
         hits = _.where(triples, {
-            "p": "http://id.loc.gov/ontologies/bibframe/authoritySource"
+            "p": "https://id.loc.gov/ontologies/bibframe/authoritySource"
         })
         if (hits[0] !== undefined) {
             console.log(hits[0]);
@@ -4752,7 +4752,7 @@ bfe.define('src/lookups/lcinstances', ['require', 'exports', 'module'], function
 
         this.searching = setTimeout(function() {
             if (query.length > 2) {
-                u = "http://id.loc.gov/ml38281/search/?format=jsonp&start=1&count=10&q=" + q;
+                u = "https://id.loc.gov/ml38281/search/?format=jsonp&start=1&count=10&q=" + q;
                 $.ajax({
                     url: u,
                     dataType: "jsonp",
@@ -5286,7 +5286,7 @@ bfe.define('src/lookups/lcorganizations', ['require', 'exports', 'module', 'src/
     var lcshared = require("src/lookups/lcshared");
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/vocabulary/organizations";
+    exports.scheme = "https://id.loc.gov/vocabulary/organizations";
 
     exports.source = function(query, process) {
         return lcshared.simpleQuery(query, cache, exports.scheme, process);
@@ -5300,7 +5300,7 @@ bfe.define('src/lookups/relators', ['require', 'exports', 'module', 'src/lookups
     var lcshared = require("src/lookups/lcshared");
     var cache = [];
 
-    exports.scheme = "http://id.loc.gov/vocabulary/relators";
+    exports.scheme = "https://id.loc.gov/vocabulary/relators";
 
     exports.source = function(query, process) {
         return lcshared.simpleQuery(query, cache, exports.scheme, process);

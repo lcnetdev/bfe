@@ -13,7 +13,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationPortion",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/classificationPortion",
             "propertyLabel": "DDC Classification number"
           },
           {
@@ -24,22 +24,22 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/classSchemes"
+                "https://id.loc.gov/vocabulary/classSchemes"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/edition"
+                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/edition"
               },
               "defaultURI": "",
               "defaultLiteral": "",
               "editable": "true"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/edition",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/edition",
             "propertyLabel": "Dewey Edition"
           }
         ],
         "id": "profile:bf2:DDC",
         "resourceLabel": "Dewey Decimal Classification",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ClassificationDdc"
+        "resourceURI": "https://id.loc.gov/ontologies/bibframe/ClassificationDdc"
       }
     ],
     "id": "profile:bf2:DDC",

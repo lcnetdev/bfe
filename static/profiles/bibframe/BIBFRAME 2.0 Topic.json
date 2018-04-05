@@ -11,8 +11,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects",
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/subjects",
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -71,16 +71,16 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/subjectSchemes"
+                "https://id.loc.gov/vocabulary/subjectSchemes"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Source"
+                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Source"
               },
               "defaultURI": "",
               "repeatable": "false",
               "editable": "true"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Subject source"
           }
         ],
@@ -98,8 +98,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects",
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/subjects",
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -125,7 +125,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -151,7 +151,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -177,8 +177,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/names",
-                "http://id.loc.gov/authorities/subjects"
+                "https://id.loc.gov/authorities/names",
+                "https://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -219,8 +219,8 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/authorities/subjects",
-                "http://id.loc.gov/authorities/names"
+                "https://id.loc.gov/authorities/subjects",
+                "https://id.loc.gov/authorities/names"
               ],
               "valueDataType": {},
               "repeatable": "false",
@@ -259,15 +259,15 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/vocabulary/subjectSchemes"
+                "https://id.loc.gov/vocabulary/subjectSchemes"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Source"
+                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Source"
               },
-              "defaultURI": "http://id.loc.gov/vocabulary/subjectSchemes/lcsh",
+              "defaultURI": "https://id.loc.gov/vocabulary/subjectSchemes/lcsh",
               "defaultLiteral": "LCSH"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Subject source"
           }
         ],

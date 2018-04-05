@@ -14,10 +14,10 @@
               ],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
+                "dataTypeURI": "https://id.loc.gov/ontologies/bflc/PrimaryContribution"
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/contribution",
             "propertyLabel": "Creator of Work (RDA 19.2)",
             "remark": "http://access.rdatoolkit.org/19.2.html"
           },
@@ -35,7 +35,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/title",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/title",
             "propertyLabel": "Title Information"
           },
           {
@@ -49,10 +49,10 @@
               ],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Contribution"
+                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Contribution"
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/contribution",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/contribution",
             "propertyLabel": "Other Agent Associated with Work (RDA 19.3)",
             "remark": "http://access.rdatoolkit.org/19.3.html"
           },
@@ -68,7 +68,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/subject",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/subject",
             "propertyLabel": "Subject of the Work (RDA Chapter 23)",
             "remark": "http://access.rdatoolkit.org/rdachp23_rda23-12.html"
           },
@@ -84,7 +84,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/identifiedBy",
             "propertyLabel": "LC Control Number for the Work",
             "remark": "http://access.rdatoolkit.org/2.15.html"
           },
@@ -100,12 +100,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/adminMetadata",
             "propertyLabel": "Administrative Metadata for Loaded Work"
           }
         ],
         "id": "profile:bf2:Load:Work",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Work",
+        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Work",
         "resourceLabel": "BIBFRAME Work for Loading"
       }
     ],

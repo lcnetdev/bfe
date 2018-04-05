@@ -2,7 +2,7 @@
   "Profile": {
     "resourceTemplates": [
       {
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Contribution",
+        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Contribution",
         "id": "profile:bf2:Agents:Contribution",
         "resourceLabel": "Contribution",
         "propertyTemplates": [
@@ -20,14 +20,14 @@
               ],
               "editable": "true"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
             "type": "resource",
             "mandatory": "false",
             "repeatable": "true",
             "resourceTemplates": []
           },
           {
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/role",
             "propertyLabel": "Relationship Designator (RDA Appendix I)",
             "type": "resource",
             "mandatory": "false",
@@ -46,7 +46,7 @@
         ]
       },
       {
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Contribution",
+        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Contribution",
         "id": "profile:bf2:Agents:bfContribution",
         "resourceLabel": "Contribution (test)",
         "propertyTemplates": [
@@ -63,14 +63,14 @@
                 "profile:bf2:Agent:Conference"
               ]
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
             "type": "resource",
             "mandatory": "false",
             "repeatable": "true",
             "resourceTemplates": []
           },
           {
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
+            "propertyURI": "https://id.loc.gov/ontologies/bibframe/role",
             "propertyLabel": "Relationship Designator (RDA Appendix I)",
             "type": "resource",
             "mandatory": "false",
