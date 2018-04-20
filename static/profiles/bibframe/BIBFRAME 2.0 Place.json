@@ -11,17 +11,17 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names",
-                "https://id.loc.gov/authorities/subjects"
+                "http://id.loc.gov/authorities/names",
+                "http://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
-                "remark": "https://id.loc.gov/ontologies/bibframe/Place",
+                "remark": "http://id.loc.gov/ontologies/bibframe/Place",
                 "dataTypeURI": ""
               },
               "repeatable": "false"
             },
             "propertyLabel": "Search LCNAF/LCSH",
-            "propertyURI": "https://id.loc.gov/ontologies/bflc/target"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -33,7 +33,7 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": "",
-                "remark": "https://id.loc.gov/ontologies/bibframe/Place"
+                "remark": "http://id.loc.gov/ontologies/bibframe/Place"
               },
               "repeatable": "false"
             },
@@ -43,7 +43,7 @@
           }
         ],
         "id": "profile:bf2:Place",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Place",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
         "resourceLabel": "Place Associated with a Work",
         "contact": ""
       }

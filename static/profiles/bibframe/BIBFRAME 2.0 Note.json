@@ -20,7 +20,7 @@
           }
         ],
         "id": "profile:bf2:Note",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Note",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
         "resourceLabel": "Note"
       },
       {
@@ -40,7 +40,7 @@
           }
         ],
         "id": "profile:bf2:Script",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Script",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Script",
         "resourceLabel": "Script"
       }
     ],

@@ -20,7 +20,7 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Primary Contributor"
           },
           {
@@ -36,14 +36,14 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/role",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
             "propertyLabel": "Relationship Designator (RDA Appendix I)",
             "remark": "http://access.rdatoolkit.org/rdaappi_rdai-34.html"
           }
         ],
         "id": "profile:bflc:Agents:PrimaryContribution",
         "resourceLabel": "Primary Contribution",
-        "resourceURI": "https://id.loc.gov/ontologies/bflc/PrimaryContribution"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
       },
       {
         "propertyTemplates": [
@@ -63,7 +63,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Primary Contributor"
           },
           {
@@ -78,14 +78,14 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/role",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/role",
             "propertyLabel": "Relationship Designator (RDA Appendix I)",
             "remark": "http://access.rdatoolkit.org/rdaappi_rdai-34.html"
           }
         ],
         "id": "profile:bflc:Agents:bfPrimaryContribution",
         "resourceLabel": "Primary Contribution (test)",
-        "resourceURI": "https://id.loc.gov/ontologies/bflc/PrimaryContribution"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/PrimaryContribution"
       }
     ],
     "contact": "NDMSO",

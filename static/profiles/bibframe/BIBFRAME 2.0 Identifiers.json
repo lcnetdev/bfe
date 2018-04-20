@@ -15,7 +15,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Barcode",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Barcode",
             "propertyLabel": "Barcode"
           },
           {
@@ -30,7 +30,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/CopyrightRegistration",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/CopyrightRegistration",
             "propertyLabel": "Copyright Registration Number"
           },
           {
@@ -46,7 +46,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "EAN",
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Ean"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ean"
           },
           {
             "mandatory": "false",
@@ -60,7 +60,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bflc/Eidr",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/Eidr",
             "propertyLabel": "EIDR"
           },
           {
@@ -75,7 +75,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Isbn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Isbn",
             "propertyLabel": "ISBN"
           },
           {
@@ -90,7 +90,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Ismn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ismn",
             "propertyLabel": "ISMN"
           },
           {
@@ -105,7 +105,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Ismn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ismn",
             "propertyLabel": "ISRC"
           },
           {
@@ -120,7 +120,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Issn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Issn",
             "propertyLabel": "ISSN"
           },
           {
@@ -135,7 +135,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/IssnL",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/IssnL",
             "propertyLabel": "ISSN-L"
           },
           {
@@ -151,7 +151,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "LCCN",
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Lccn"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Lccn"
           },
           {
             "mandatory": "false",
@@ -165,7 +165,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/StockNumber",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/StockNumber",
             "propertyLabel": "Music Distributor Number"
           },
           {
@@ -180,7 +180,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/MusicPlate",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/MusicPlate",
             "propertyLabel": "Music Plate Number"
           },
           {
@@ -195,7 +195,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/MusicPublisherNumber",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/MusicPublisherNumber",
             "propertyLabel": "Music Publisher Number"
           },
           {
@@ -210,7 +210,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/PublisherNumber",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/PublisherNumber",
             "propertyLabel": "Publisher Number"
           },
           {
@@ -225,7 +225,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Strn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Strn",
             "propertyLabel": "Standard Technical Report Number"
           },
           {
@@ -240,12 +240,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Upc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Upc",
             "propertyLabel": "Universal Product Code (UPC)"
           }
         ],
         "id": "profile:bf2:Identifiers",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Identifier",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Identifier",
         "resourceLabel": "Identifiers"
       },
       {
@@ -265,7 +265,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:Barcode",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Barcode",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Barcode",
         "resourceLabel": "Barcode"
       },
       {
@@ -296,7 +296,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Assigning agency"
           },
           {
@@ -311,12 +311,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Copyright Registration"
           }
         ],
         "id": "profile:bf2:Identifiers:Copyright",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/CopyrightRegistration",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/CopyrightRegistration",
         "resourceLabel": "Copyright Registration Number"
       },
       {
@@ -345,7 +345,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -360,12 +360,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on EAN"
           }
         ],
         "id": "profile:bf2:Identifiers:EAN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Ean",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Ean",
         "resourceLabel": "EAN"
       },
       {
@@ -395,12 +395,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on EIDR"
           }
         ],
         "id": "profile:bf2:Identifiers:Eidr",
-        "resourceURI": "https://id.loc.gov/ontologies/bflc/Eidr",
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Eidr",
         "resourceLabel": "EIDR"
       },
       {
@@ -430,7 +430,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -445,7 +445,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on ISBN"
           },
           {
@@ -456,18 +456,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/mstatus"
+                "http://id.loc.gov/vocabulary/mstatus"
               ],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Status"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Status"
               }
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/status",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Incorrect, Invalid or Canceled?"
           }
         ],
         "id": "profile:bf2:Identifiers:ISBN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Isbn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isbn",
         "resourceLabel": "ISBN"
       },
       {
@@ -496,7 +496,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -511,12 +511,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on ISMN"
           }
         ],
         "id": "profile:bf2:Identifiers:ISMN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Ismn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Ismn",
         "resourceLabel": "ISMN"
       },
       {
@@ -545,7 +545,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -560,12 +560,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on ISRC"
           }
         ],
         "id": "profile:bf2:TestProfile:ISRC",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Isrc",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Isrc",
         "resourceLabel": "ISRC"
       },
       {
@@ -596,7 +596,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Assigning agency"
           },
           {
@@ -611,7 +611,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on ISSN"
           },
           {
@@ -622,18 +622,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/mstatus"
+                "http://id.loc.gov/vocabulary/mstatus"
               ],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Status"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Status"
               }
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/status",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Incorrect, Invalid or Canceled?"
           }
         ],
         "id": "profile:bf2:Identifiers:ISSN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Issn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Issn",
         "resourceLabel": "ISSN"
       },
       {
@@ -664,7 +664,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Assigning agency"
           },
           {
@@ -679,7 +679,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on ISSN-L"
           },
           {
@@ -690,18 +690,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/mstatus"
+                "http://id.loc.gov/vocabulary/mstatus"
               ],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Status"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Status"
               }
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/status",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Incorrect, Invalid or Canceled?"
           }
         ],
         "id": "profile:bf2:Identifiers:ISSNL",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/IssnL",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/IssnL",
         "resourceLabel": "ISSN-L"
       },
       {
@@ -728,18 +728,18 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/mstatus"
+                "http://id.loc.gov/vocabulary/mstatus"
               ],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Status"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Status"
               }
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/status",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/status",
             "propertyLabel": "Invalid/Canceled?"
           }
         ],
         "id": "profile:bf2:Identifiers:LCCN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Lccn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Lccn",
         "resourceLabel": "LCCN"
       },
       {
@@ -769,7 +769,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Source of number (e.g. OCLC)"
           },
           {
@@ -784,12 +784,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on local system number"
           }
         ],
         "id": "profile:bf2:Identifiers:Local",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Local",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Local",
         "resourceLabel": "Local system number"
       },
       {
@@ -817,7 +817,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -832,12 +832,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Matrix Number"
           }
         ],
         "id": "profile:bf2:Identifiers:Matrix",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/MatrixNumber",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MatrixNumber",
         "resourceLabel": "Matrix Number"
       },
       {
@@ -868,7 +868,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Source of Number",
             "remark": "http://access.rdatoolkit.org/2.15.html"
           },
@@ -884,12 +884,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note"
           }
         ],
         "id": "profile:bf2:Identifiers:Distributor",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/MusicDistributorNumber",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicDistributorNumber",
         "resourceLabel": "Music Distributor Number"
       },
       {
@@ -920,7 +920,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Publisher Name"
           },
           {
@@ -933,7 +933,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -948,12 +948,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Music Plate Number"
           }
         ],
         "id": "profile:bf2:Identifiers:MusicPlate",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/MusicPlate",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicPlate",
         "resourceLabel": "Music Plate Number"
       },
       {
@@ -984,7 +984,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Label name"
           },
           {
@@ -997,7 +997,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -1012,12 +1012,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Music Publisher Number"
           }
         ],
         "id": "profile:bf2:Identifiers:MusicPub",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/MusicPublisherNumber",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/MusicPublisherNumber",
         "resourceLabel": "Music Publisher Number"
       },
       {
@@ -1046,7 +1046,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -1061,12 +1061,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on other identifier"
           }
         ],
         "id": "profile:bf2:Identifiers:Other",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Identifier",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Identifier",
         "resourceLabel": "Other Identifier"
       },
       {
@@ -1097,7 +1097,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Label name"
           },
           {
@@ -1110,7 +1110,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -1125,12 +1125,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Publisher Number"
           }
         ],
         "id": "profile:bf2:Identifiers:PubNumber",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/PublisherNumber",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/PublisherNumber",
         "resourceLabel": "Publisher Number"
       },
       {
@@ -1159,7 +1159,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -1174,12 +1174,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on STRN"
           }
         ],
         "id": "profile:bf2:Identifiers:STRN",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Strn",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Strn",
         "resourceLabel": "Standard Technical Report Number"
       },
       {
@@ -1208,7 +1208,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
             "propertyLabel": "Qualifier"
           },
           {
@@ -1223,12 +1223,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note on Universal Product Code (UPC)"
           }
         ],
         "id": "profile:bf2:Identifiers:UPC",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Upc",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Upc",
         "resourceLabel": "Universal Product Code (UPC)"
       },
       {
@@ -1248,7 +1248,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:Note",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Note",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Note",
         "resourceLabel": "Note"
       },
       {
@@ -1268,7 +1268,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:Source",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Source",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Source",
         "resourceLabel": "Source"
       },
       {
@@ -1288,7 +1288,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:LC",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
         "resourceLabel": "LC shelfmark"
       },
       {
@@ -1307,7 +1307,7 @@
             "propertyLabel": "DDC shelfmark"
           }
         ],
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/ShelfMarkDcc",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkDcc",
         "resourceLabel": "DDC shelfmark",
         "id": "profile:bf2:Identifiers:DDC"
       },
@@ -1327,7 +1327,7 @@
             "propertyLabel": "Accession or copy number"
           }
         ],
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/ShelfMark",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMark",
         "id": "profile:bf2:Identifiers:Shelfmark",
         "resourceLabel": "Accession or copy number"
       }

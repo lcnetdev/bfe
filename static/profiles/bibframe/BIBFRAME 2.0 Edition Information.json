@@ -13,7 +13,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/editionStatement",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
             "propertyLabel": "Edition Statement (RDA 2.5)",
             "remark": "http://access.rdatoolkit.org/2.5.html"
           },
@@ -28,7 +28,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Designation of Edition (RDA 2.5.2)",
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/editionEnumeration",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/editionEnumeration",
             "remark": "http://access.rdatoolkit.org/2.5.2.html"
           },
           {
@@ -41,13 +41,13 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/responsibilityStatement",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/responsibilityStatement",
             "propertyLabel": "Statement of Responsibility Relating to the Edition (RDA 2.5.4)",
             "remark": "http://access.rdatoolkit.org/2.5.4.html"
           }
         ],
         "id": "profile:bf2:EditionInformation",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/editionStatement",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/editionStatement",
         "resourceLabel": "Edition (unused)",
         "remark": "http://access.rdatoolkit.org/2.5.html"
       }

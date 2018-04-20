@@ -15,7 +15,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "propertyLabel": "Barcode"
           },
           {
@@ -32,7 +32,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/identifiedBy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "propertyLabel": "Call numbers"
           },
           {
@@ -45,7 +45,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/enumerationAndChronology",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology",
             "propertyLabel": "Enumeration and chronology"
           },
           {
@@ -57,12 +57,12 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Agent"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Agent"
               },
-              "defaultURI": "https://id.loc.gov/vocabulary/organizations/dlc",
+              "defaultURI": "http://id.loc.gov/vocabulary/organizations/dlc",
               "defaultLiteral": "DLC"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/heldBy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/heldBy",
             "propertyLabel": "Held by"
           },
           {
@@ -75,7 +75,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/sublocation",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/sublocation",
             "propertyLabel": "Shelving location"
           },
           {
@@ -88,7 +88,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/electronicLocator",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/electronicLocator",
             "propertyLabel": "Electronic location"
           },
           {
@@ -101,7 +101,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/UsageAndAccessPolicy",
             "propertyLabel": "Usage and access policy"
           },
           {
@@ -114,7 +114,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Note"
           },
           {
@@ -127,12 +127,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/acquisitionSource",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/acquisitionSource",
             "propertyLabel": "Contact information (RDA 4.3)",
             "remark": "http://access.rdatoolkit.org/rdachp4_rda4-93.html"
           }
         ],
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Item",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Item",
         "resourceLabel": "BIBFRAME 2.0 Item",
         "id": "profile:bf2:Item"
       },
@@ -147,7 +147,7 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/AccessPolicy"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
@@ -155,7 +155,7 @@
           }
         ],
         "id": "profile:bf2:Item:Access",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/AccessPolicy",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/AccessPolicy",
         "resourceLabel": "Lending or Access Policy"
       },
       {
@@ -169,7 +169,7 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/UsePolicy"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/UsePolicy"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
@@ -178,7 +178,7 @@
         ],
         "id": "profile:bf2:Item:Use",
         "resourceLabel": "Use or Reproduction Policy",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/UsePolicy"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/UsePolicy"
       },
       {
         "propertyTemplates": [
@@ -191,7 +191,7 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/RetentionPolicy"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
@@ -199,7 +199,7 @@
           }
         ],
         "id": "profile:bf2:Item:Retention",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/RetentionPolicy",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/RetentionPolicy",
         "resourceLabel": "Retention Policy"
       },
       {
@@ -220,7 +220,7 @@
           }
         ],
         "id": "profile:bf2:Item:ImmAcqSource",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/ImmediateAcquisition",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ImmediateAcquisition",
         "resourceLabel": "Immediate Source of Acquisition"
       },
       {
@@ -240,7 +240,7 @@
           }
         ],
         "id": "profile:bf2:Item:Enumeration",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Enumeration",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Enumeration",
         "resourceLabel": "Enumeration"
       },
       {
@@ -260,7 +260,7 @@
           }
         ],
         "id": "profile:bf2:Item:Chronology",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Chronology",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Chronology",
         "resourceLabel": "Chronology"
       }
     ],

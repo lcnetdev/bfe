@@ -16,7 +16,7 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
             "remark": ""
           },
@@ -33,7 +33,7 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Name",
             "remark": ""
           },
@@ -47,14 +47,14 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/date",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
             "propertyLabel": "Date (RDA 2.8.6)",
             "remark": "http://access.rdatoolkit.org/2.8.6.html"
           }
         ],
         "id": "profile:bf2:PublicationInformation",
         "contact": "",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Publication",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Publication",
         "resourceLabel": "Publication Activity"
       },
       {
@@ -72,7 +72,7 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
             "remark": ""
           },
@@ -89,7 +89,7 @@
               "valueDataType": {},
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Name",
             "remark": ""
           },
@@ -103,14 +103,14 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/date",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
             "propertyLabel": "Date (RDA 2.9.6)",
             "remark": "http://access.rdatoolkit.org/2.9.6.html"
           }
         ],
         "resourceLabel": "Distribution Activity",
         "id": "profile:bf2:DistributionInformation",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Distribution"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Distribution"
       },
       {
         "propertyTemplates": [
@@ -129,7 +129,7 @@
               },
               "repeatable": "false"
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/place",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
             "remark": ""
           },
@@ -147,7 +147,7 @@
                 "dataTypeURI": ""
               }
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/agent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Name",
             "remark": ""
           },
@@ -161,14 +161,14 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/date",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
             "propertyLabel": "Date (RDA 2.10.6)",
             "remark": "http://access.rdatoolkit.org/2.10.6.html"
           }
         ],
         "id": "profile:bf2:ManufactureInformation",
         "resourceLabel": "Manufacture Activity",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Manufacture"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Manufacture"
       },
       {
         "propertyTemplates": [
@@ -189,7 +189,7 @@
           }
         ],
         "id": "profile:bf2:Provision:Place",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Place",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
         "resourceLabel": "Place"
       },
       {
@@ -211,7 +211,7 @@
           }
         ],
         "id": "profile:bf2:Provision:Name",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Agent",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Agent",
         "resourceLabel": "Name"
       }
     ],

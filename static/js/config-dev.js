@@ -222,7 +222,7 @@
                 "toConsole": true
             },*/
             "url" : "http://mlvlp04.loc.gov:3000",
-            "baseURI": "https://id.loc.gov/",
+            "baseURI": "http://id.loc.gov/",
             "basedbURI": "http://mlvlp04.loc.gov:8230",
             "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
             "profiles": [
@@ -244,8 +244,8 @@
                 "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Analog.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD-R.json",
-			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
-			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image-BluRay DVD.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image-35mm Feature Film.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
@@ -265,12 +265,12 @@
                 "menuItems": [
                     {
                         label: "Instance",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                         useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
                     },
                     {
                         label: "Work",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                         useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
                     }
 
@@ -279,17 +279,17 @@
                 "menuItems": [
                     {
                         label: "Create Work",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                         useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
                     },
                     {
                         label: "Create RDA Expression",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                         useResourceTemplates: [ "profile:bf2:NotatedMusic:Expression" ]
                     },
                     {
                         label: "Create Instance", 
-                        type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                         useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
                     }
                 ]},
@@ -297,12 +297,12 @@
                 "menuItems": [
                     {
                         label: "Instance",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Serial"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
                         useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
                     },
                     {
                         label: "Work",
-                        type: ["https://id.loc.gov/ontologies/bibframe/Text"],
+                        type: ["http://id.loc.gov/ontologies/bibframe/Text"],
                         useResourceTemplates: [ "profile:bf2:Serial:Work" ]
                     }
 
@@ -311,12 +311,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
                 }
 
@@ -325,12 +325,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
                 }
 
@@ -339,12 +339,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
                 }
 
@@ -353,12 +353,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:Analog:Work" ]
                 }
 
@@ -367,12 +367,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
                 }
 
@@ -381,12 +381,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
                 }
 
@@ -395,12 +395,12 @@
             "menuItems": [
                 {
                     label: "Physical Description",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
                 }
 
@@ -409,12 +409,12 @@
             "menuItems": [
                 {
                     label: "Instance",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Instance"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
                     useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
                 },
                 {
                     label: "Work",
-                    type: ["https://id.loc.gov/ontologies/bibframe/Work"],
+                    type: ["http://id.loc.gov/ontologies/bibframe/Work"],
                     useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
                 }
 
@@ -470,10 +470,10 @@
 /*            "load": [
                 {
                     "templateID": ["profile:bf:Work:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta"],
-                    "defaulturi": "https://id.loc.gov/resources/bibs/5226",
+                    "defaulturi": "http://id.loc.gov/resources/bibs/5226",
                     "_remark": "Source must be JSONLD expanded, so only jsonp and json are possible requestTypes",
                     "source": {
-                        "location": "https://id.loc.gov/resources/bibs/5226.bibframe_raw.jsonp",
+                        "location": "http://id.loc.gov/resources/bibs/5226.bibframe_raw.jsonp",
                         "requestType": "jsonp",
                         "data": "UNUSED, BUT REMEMBER IT"
                     }

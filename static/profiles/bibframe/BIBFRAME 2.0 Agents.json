@@ -11,7 +11,7 @@
             "valueConstraint": {
               "repeatable": "true",
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueTemplateRefs": [],
               "valueDataType": {
@@ -182,7 +182,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -263,7 +263,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },
@@ -411,7 +411,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -655,7 +655,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -902,7 +902,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -1015,11 +1015,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/organizations"
+                "http://id.loc.gov/vocabulary/organizations"
               ],
               "valueDataType": {},
               "defaultLiteral": "DLC",
-              "defaultURI": "https://id.loc.gov/vocabulary/organizations/dlc"
+              "defaultURI": "http://id.loc.gov/vocabulary/organizations/dlc"
             },
             "propertyLabel": "Record Content Source",
             "propertyURI": "http://www.loc.gov/standards/mods/v3/mods-3-6#recordContentSource",
@@ -1103,10 +1103,10 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/languages"
+                "http://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {},
-              "defaultURI": "https://id.loc.gov/vocabulary/languages/eng",
+              "defaultURI": "http://id.loc.gov/vocabulary/languages/eng",
               "defaultLiteral": "eng"
             },
             "propertyLabel": "Language of Cataloging",
@@ -1121,11 +1121,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/descriptionConventions"
+                "http://id.loc.gov/vocabulary/descriptionConventions"
               ],
               "valueDataType": {},
               "editable": "false",
-              "defaultURI": "https://id.loc.gov/vocabulary/descriptionConventions/rda",
+              "defaultURI": "http://id.loc.gov/vocabulary/descriptionConventions/rda",
               "defaultLiteral": "rda"
             },
             "propertyLabel": "Description Standard",
@@ -1143,7 +1143,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Level of Establishment (Bflc)",
-            "propertyURI": "https://id.loc.gov/ontologies/bflc/levelOfEstablishment"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/levelOfEstablishment"
           }
         ],
         "id": "profile:bf2:Agents:AdminMetadata",
@@ -1307,7 +1307,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
                 "dataTypeURI": "http://www.loc.gov/mads/rdf/v1#Authority"
@@ -1327,7 +1327,7 @@
               ],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Role"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Role"
               }
             },
             "propertyLabel": "Relationship Designator (RDA Appendix K)",
@@ -1437,7 +1437,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/relators"
+                "http://id.loc.gov/vocabulary/relators"
               ],
               "valueDataType": {
                 "dataTypeURI": ""
@@ -1445,7 +1445,7 @@
               "repeatable": "false"
             },
             "propertyLabel": "Search MARC relator term",
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Role"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Role"
           },
           {
             "mandatory": "false",
@@ -1465,7 +1465,7 @@
           }
         ],
         "id": "profile:bf2:Agent:Role",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Role",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Role",
         "resourceLabel": "Role"
       },
       {
@@ -1495,7 +1495,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/source",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source",
             "propertyLabel": "Source of identifier"
           }
         ],
@@ -1540,7 +1540,7 @@
           }
         ],
         "id": "profile:bf2:Agent:Identifier:Source",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Source",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Source",
         "resourceLabel": "Source"
       },
       {
@@ -1553,12 +1553,12 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/authorities/names"
+                "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {}
             },
             "propertyLabel": "Search LCNAF",
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/Person"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Person"
           },
           {
             "mandatory": "false",
@@ -1569,7 +1569,7 @@
               "valueTemplateRefs": [],
               "useValuesFrom": [],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Person"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Person"
               }
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
@@ -1577,7 +1577,7 @@
           }
         ],
         "id": "profile:bf2:Agent:bfPerson",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Person",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Person",
         "resourceLabel": "Bibframe Person"
       }
     ],

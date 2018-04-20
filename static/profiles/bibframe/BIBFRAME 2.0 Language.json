@@ -11,15 +11,15 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "https://id.loc.gov/vocabulary/languages"
+                "http://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {
-                "dataTypeURI": "https://id.loc.gov/ontologies/bibframe/Language"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
               },
               "valueLanguage": "",
               "remark": ""
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bflc/target",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Language of Expression (RDA 6.11)",
             "remark": "http://access.rdatoolkit.org/6.11.html"
           },
@@ -35,12 +35,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Language of Content (RDA 7.12)",
             "remark": "http://access.rdatoolkit.org/7.12.html"
           }
         ],
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Language",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
         "id": "profile:bf2:Language",
         "resourceLabel": "Language (testing)",
         "remark": ""
@@ -59,12 +59,12 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "https://id.loc.gov/ontologies/bibframe/note",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
             "propertyLabel": "Language of Content"
           }
         ],
         "id": "profile:bf2:Language:Note",
-        "resourceURI": "https://id.loc.gov/ontologies/bibframe/Language",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
         "resourceLabel": "Language of Content"
       }
     ],
