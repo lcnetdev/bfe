@@ -6,7 +6,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "resource",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -41,8 +41,8 @@
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
-        "id": "profile:bf2:Language",
-        "resourceLabel": "Language (testing)",
+        "id": "profile:bf2:Language2",
+        "resourceLabel": "Language",
         "remark": ""
       },
       {
