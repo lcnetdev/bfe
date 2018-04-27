@@ -48,7 +48,7 @@
         function save(data, csrf, bfelog, callback){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
-	    var url = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
+	    var url = config.url + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
 
             $.ajax({
                url: url,

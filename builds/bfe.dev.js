@@ -405,7 +405,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             'dataSrc': '',
             'headers': {
               'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              //'Content-Type': 'application/json',
+              //'Accept': 'application/json',
               'Access-Control-Allow-Methods': 'DELETE, HEAD, GET, OPTIONS, POST, PUT',
               'Access-Control-Allow-Headers': 'Content-Type, Content-Range, Content-Disposition, Content-Description',
               'Access-Control-Max-Age': '1728000'
