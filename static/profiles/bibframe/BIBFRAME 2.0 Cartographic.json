@@ -604,7 +604,7 @@
             "propertyLabel": "Carrier Type (RDA 3.3)",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/carrier",
             "remark": "http://access.rdatoolkit.org/3.3.html",
-            "repeatable": "false",
+            "repeatable": "true",
             "resourceTemplates": [],
             "type": "resource",
             "valueConstraint": {
@@ -617,7 +617,7 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Carrier"
               },
               "valueTemplateRefs": [],
-              "editable": "false",
+              "editable": "true",
               "repeatable": "true"
             }
           },

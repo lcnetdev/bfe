@@ -992,7 +992,8 @@
                 "profile:bf2:MIBluRayDVD:Digital",
                 "profile:bf2:MIBluRayDVD:FileType",
                 "profile:bf2:MIBluRayDVD:RegEnc",
-                "profile:bf2:MIBluRayDVD:EncFmt"
+                "profile:bf2:MIBluRayDVD:EncFmt",
+                "profile:bf2:MIBluRayDVD:Resolution"
               ],
               "useValuesFrom": [],
               "valueDataType": {
@@ -1710,14 +1711,14 @@
               ],
               "valueDataType": {
                 "dataTypeURI": "",
-                "remark": "http://id.loc.gov/ontologies/bibframe/SoundCharacteristic",
+                "remark": "http://id.loc.gov/vocabulary/mrectype/digital",
                 "dataTypeLabelHint": ""
               },
               "defaultURI": "",
               "defaultLiteral": "",
               "editable": "true",
               "repeatable": "true",
-              "remark": "http://id.loc.gov/vocabulary/mrectype/digital"
+              "remark": ""
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Type of Recording (RDA 3.16.2)",
@@ -2135,6 +2136,27 @@
         "id": "profile:bf2:MIBluRayDVD:BroadStd",
         "resourceLabel": "Broadcast Standard",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/BroadcastStandard"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Resolution (RDA 3.19.5)",
+            "remark": "http://access.rdatoolkit.org/3.19.5.html"
+          }
+        ],
+        "id": "profile:bf2:MIBluRayDVD:Resolution",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Resolution",
+        "resourceLabel": "Resolution"
       },
       {
         "propertyTemplates": [

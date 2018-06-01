@@ -572,7 +572,7 @@
             "remark": "http://access.rdatoolkit.org/2.13.html"
           },
           {
-            "propertyLabel": "Identifier for the Manifestation",
+            "propertyLabel": "Identifiers",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "resourceTemplates": [],
             "type": "resource",

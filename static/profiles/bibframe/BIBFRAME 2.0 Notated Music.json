@@ -994,7 +994,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "Identifier for the Manifestation (RDA 2.15)"
+            "propertyLabel": "Identifiers"
           },
           {
             "mandatory": "false",
@@ -1341,7 +1341,7 @@
             "remark": "http://access.rdatoolkit.org/2.13.html"
           },
           {
-            "propertyLabel": "Identifier for the Manifestation (RDA 2.15)",
+            "propertyLabel": "Identifiers",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
             "resourceTemplates": [],
             "type": "resource",

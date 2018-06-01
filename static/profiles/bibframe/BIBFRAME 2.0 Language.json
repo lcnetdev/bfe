@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -17,7 +17,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
               },
               "valueLanguage": "",
-              "remark": ""
+              "remark": "",
+              "editable": "true",
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Language of Expression (RDA 6.11)",

@@ -258,7 +258,8 @@
                 "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD-R.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 IBC.json", 
+                "static/profiles/bibframe/BIBFRAME 2.0 IBC.json",
+                "static/profiles/bibframe/PMO Medium of Performance.json" 
                 //"static/profiles/bibframe/profiles.json"
    		    ],
             "startingPoints": [
