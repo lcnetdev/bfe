@@ -122,6 +122,51 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasMedium",
+            "propertyLabel": "Declared Medium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasAlternateMediumOfPerformance",
+            "propertyLabel": "Alternate Declared Medium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Doubling Declared Medium",
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDoublingMediumOfPerformance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:NotatedMusic:MedPerfInst"
               ],
               "useValuesFrom": [],
@@ -647,6 +692,51 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/musicMedium",
             "propertyLabel": "Medium of Performance Statement"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasMedium",
+            "propertyLabel": "Declared Medium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Alternate Declared Medium",
+            "propertyURI": "http://performedmusicontology.org/ontology/hasAlternateMediumOfPerformance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDoublingMediumOfPerformance",
+            "propertyLabel": "Doubling Declared Medium"
           },
           {
             "mandatory": "false",

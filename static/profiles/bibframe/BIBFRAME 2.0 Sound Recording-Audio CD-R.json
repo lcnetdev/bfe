@@ -126,6 +126,21 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:PerfMed"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasMedium",
+            "propertyLabel": "Performed Medium"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
                 "profile:bf2:SoundCDR:MedPerfInst"
               ],
               "useValuesFrom": [],

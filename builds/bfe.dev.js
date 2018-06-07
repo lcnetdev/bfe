@@ -788,21 +788,45 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     });
 
-    $loadibcdiv.append($('<div class="container"> \
+    var $loadibcform = $('<div class="container"> \
             <form role="form" method="get"> \
             <div class="form-group"> \
             <label for="url">URL for Bibframe JSON</label> \
-            <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"></div> \
+            <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
+            <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
+            </div></div> \
             <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
-            </form></div>'));
+            </form></div>')
 
+    var $ibcmenudiv = $loadibcform.find('#bfeditor-loadibc-dropdownMenu');
+
+    for (var h = 0; h < config.startingPoints.length; h++) {
+          var sp = config.startingPoints[h];
+          var label = sp.menuGroup
+          for (var i = 0; i < sp.menuItems.length; i++) {
+            var $option = $('<option>', {
+              class: 'dropdown-item',
+              value: 'sp-' + h + '_' + i
+            });
+            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance"){
+              //$a.html(sp.menuItems[i].label);
+              $option.html(label);
+              $ibcmenudiv.append($option);
+            }
+          }      
+        }
+
+    $loadibcdiv.append($loadibcform);
+            
     $loadibcdiv.find('#bfeditor-loadibcuri').click(function () {
       // var loadtemplates = [];
 
-      var spoints = { label: 'Monograph',
-        type: ['http://id.loc.gov/ontologies/bibframe/Instance'],
-        useResourceTemplates: ['profile:bf2:IBC:Instance']
-      };
+      var spid = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu').val();
+      
+      var spnums = spid.replace('sp-', '').split('_'); 
+      
+      var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+
       if ($('#bfeditor-messagediv').length) {
         $('#bfeditor-messagediv').remove();
       }
@@ -1111,7 +1135,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
           function jsonPanel (data) {
             bfeditor.bfestore.store2turtle(data, humanizedPanel);
-            bfeditor.bfestore.store2rdfxml(data, rdfxmlPanel);
+            //bfeditor.bfestore.store2rdfxml(data, rdfxmlPanel);
             $('#jsonld .panel-body pre').text(JSON.stringify(data, undefined, ' '));
 
             bfeditor.bfestore.store2jsonldnormalized(data, function (expanded) {
@@ -1230,7 +1254,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
             if (editorconfig.publish.callback !== undefined) {
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
-                bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
+                //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
+                  var rdfxml = $("#rdfxml .panel-body pre").text();
                   var save_json = {};
                   save_json.name = mintResource(bfeditor.bfestore.name);
                   save_json.profile = loadtemplates[0].resourceTemplateID;
@@ -1274,7 +1299,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
                     console.log('Publish:' + published + ' ' + publish_name);
                   });
-                });
+                //});
               } else {
                 // title required
                 $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'col-md-10 main'});
@@ -3493,27 +3518,66 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
 
   exports.store2rdfxml = function (jsonld, callback) {
     exports.store2jsonldnormalized(jsonld, function (expanded) {
-      $.ajax({
-        url: config.url + '/profile-edit/server/rdfxml',
+      /*$.ajax({
+        url: config.url + '/profile-edit/server/n3/rdfxml',
         type: 'POST',
         data: JSON.stringify(expanded),
         processData: false,
         contentType: 'application/json',
         success: function (rdfxml) {
           data = new XMLSerializer().serializeToString(rdfxml);
-          data = data.replace(/xmlns:ns1=/g, 'xmlns:bf=');
-          data = data.replace(/ns1:/g, 'bf:');
-
-          // data = data.replace(/xmlns:ns2=/g, "xmlns:madsrdf=");
-          data = data.replace(/ns2:/g, 'madsrdf:');
-          data = data.replace(/xmlns:ns2=\"madsrdf:\"/g, '');
           callback(data);
         },
         error: function (XMLHttpRequest, status, err) {
           console.log(err);
         }
-      });
-    });
+      });*/
+      jsonld.toRDF(expanded, {
+        format: 'application/nquads'
+      }, function(err, nquads) {
+        //json2turtle(nquads, callback);
+        var parser = N3.Parser();
+        var turtlestore = N3.Store();
+        parser.parse(nquads, function(error, triple, theprefixes) {
+            if (triple) {
+                turtlestore.addTriple(triple);
+            } else {
+                turtlestore.addPrefixes(theprefixes);                
+                var turtleWriter = N3.Writer({
+                    prefixes: {
+                        bf: 'http://id.loc.gov/ontologies/bibframe/',
+                        bflc: 'http://id.loc.gov/ontologies/bflc/',
+                        madsrdf: "http://www.loc.gov/mads/rdf/v1#",
+                        pmo: 'http://performedmusicontology.org/ontology/',
+                        rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                        rdfs: "http://www.w3.org/2000/01/rdf-schema#",
+                        xsd: "http://www.w3.org/2001/XMLSchema#"
+                    }
+                });
+                turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
+                //turtleWriter.addTriples(exports.n3store.getTriples(null, null, null));
+                turtleWriter.end(function(error, result) {                    
+                var input = {};
+                input.n3 = result;
+                $.ajax({
+                    url: config.url + "/profile-edit/server/n3/rdfxml",
+                    type: "POST",
+                    data: JSON.stringify(input),
+                    processData: false,
+                    contentType: "application/json",
+                    success: function(rdfxml) {
+                        var data = new XMLSerializer().serializeToString(rdfxml);
+                        $("#rdfxml .panel-body pre").text(data);
+                    },
+                    error: function(XMLHttpRequest, status, err) {
+                        console.log(err);
+                    }
+                });
+              });
+            }
+          });
+      });  
+    });  
   };
 
   exports.n32store = function (n3, graph, tempstore, callback) {
@@ -3651,33 +3715,48 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
   exports.store2turtle = function (jsonstr, callback) {
     jsonld.toRDF(jsonstr, {
       format: 'application/nquads'
-    }, function (err, nquads) {
-      // json2turtle(nquads, callback);
+    }, function(err, nquads) {
+      //json2turtle(nquads, callback);
       var parser = N3.Parser();
       var turtlestore = N3.Store();
-      parser.parse(nquads, function (error, triple, theprefixes) {
-        if (triple) {
-          turtlestore.addTriple(triple);
-        } else {
-          turtlestore.addPrefixes(theprefixes);
-        
-          var turtleWriter = N3.Writer({
-          prefixes: {
-              bf: 'http://id.loc.gov/ontologies/bibframe/',
-              bflc: 'http://id.loc.gov/ontologies/bflc/',
-              madsrdf: 'http://www.loc.gov/mads/rdf/v1#',
-              pmo: 'http://performedmusicontology.org/ontology/',
-              rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-              rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
-              xsd: 'http://www.w3.org/2001/XMLSchema#'
-            }
-          });
-          turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
-          
-          turtleWriter.end(function (error, result) {
-            callback(result);
-          });
-        }
+      parser.parse(nquads, function(error, triple, theprefixes) {
+          if (triple) {
+              turtlestore.addTriple(triple);
+          } else {
+              turtlestore.addPrefixes(theprefixes);                
+              var turtleWriter = N3.Writer({
+                  prefixes: {
+                      bf: 'http://id.loc.gov/ontologies/bibframe/',
+                      bflc: 'http://id.loc.gov/ontologies/bflc/',
+                      madsrdf: "http://www.loc.gov/mads/rdf/v1#",
+                      pmo: 'http://performedmusicontology.org/ontology/',
+                      rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                      rdfs: "http://www.w3.org/2000/01/rdf-schema#",
+                      xsd: "http://www.w3.org/2001/XMLSchema#"
+                  }
+              });
+              turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
+              //turtleWriter.addTriples(exports.n3store.getTriples(null, null, null));
+              turtleWriter.end(function(error, result) {
+                  callback(result);
+              });
+              var input = {};
+              input.n3 = $("#humanized .panel-body pre").text();
+              $.ajax({
+                  url: config.url + "/profile-edit/server/n3/rdfxml",
+                  type: "POST",
+                  data: JSON.stringify(input),
+                  processData: false,
+                  contentType: "application/json",
+                  success: function(rdfxml) {
+                      var data = new XMLSerializer().serializeToString(rdfxml);
+                      $("#rdfxml .panel-body pre").text(data);
+                  },
+                  error: function(XMLHttpRequest, status, err) {
+                      console.log(err);
+                  }
+              });
+          }
       });
     });
   };
