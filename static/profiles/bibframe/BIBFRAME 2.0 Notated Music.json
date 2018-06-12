@@ -142,7 +142,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasAlternateMediumOfPerformance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/hasAlternateMediumOfPerformance",
             "propertyLabel": "Alternate Declared Medium"
           },
           {
@@ -721,7 +721,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Alternate Declared Medium",
-            "propertyURI": "http://performedmusicontology.org/ontology/hasAlternateMediumOfPerformance"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/hasAlternateMediumOfPerformance"
           },
           {
             "mandatory": "false",

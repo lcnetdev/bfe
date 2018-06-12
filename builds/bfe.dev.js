@@ -808,7 +808,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               class: 'dropdown-item',
               value: 'sp-' + h + '_' + i
             });
-            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance"){
+            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
               //$a.html(sp.menuItems[i].label);
               $option.html(label);
               $ibcmenudiv.append($option);

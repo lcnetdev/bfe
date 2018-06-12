@@ -181,6 +181,7 @@
                     bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
                        bfestore.store = [];
                        tempstore = bfestore.jsonld2store(expanded);
+                       bfestore.storeDedup();
                        callback(loadtemplates);
                     });
                     //bfestore.n32store(data, url, tempstore, callback);

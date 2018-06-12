@@ -277,7 +277,8 @@
                 "http://id.loc.gov/authorities/performanceMediums"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://performedmusicontology.org/ontology/IndividualInstrument"
+                "dataTypeURI": "http://performedmusicontology.org/ontology/IndividualInstrument",
+                "remark": ""
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
