@@ -1459,7 +1459,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         id: rt.useguid,
         'data-uri': rt.defaulturi
       }); // is data-uri used?
-      var $resourcedivheading = $('<h4>' + rt.resourceLabel + '</h4>');
+
+      var $resourceId = (bfeditor.bfestore.store[0] !== undefined) ? bfeditor.bfestore.store[0].s : 'New record';
+      var $resourcedivheading = $('<h4 title="' + $resourceId + '">' + rt.resourceLabel + '</h4>');
       $resourcediv.append($resourcedivheading);
 
       var $formgroup = $('<div>', {
