@@ -217,8 +217,16 @@ function deleteId(id, csrf, bfelog){
 
 }
 
+/* Config object profiles
+ * Editor profiles are read from a WS endpoint
+ * The data are expected to be in a JSON array, with each object
+ * in the array containing a "json" property that has the profile
+ * itself. The "versoURL" variable is a convenience for setting the
+ * base URL of verso in the "config" definition below.
+ */
+
 var versoURL = "http://mlvlp04.loc.gov:3000/verso/api";
-// var versoURL = "/verso/api";
+//var versoURL = "/verso/api";
 var config = {
   /*            "logging": {
                 "level": "DEBUG",
@@ -230,39 +238,41 @@ var config = {
   "basedbURI": "http://mlvlp04.loc.gov:8230",
   "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
   "profiles": [
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Agents.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Agents Contribution.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Agents Primary Contribution.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Form.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Language.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 LCC.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Notated Music.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Place.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Related Works and Expressions.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Topic.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Serial.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Monograph.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Admin Metadata.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Cartographic.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Sound Recording: Analog.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Sound Recording: Audio CD.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Prints and Photographs.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 RWO.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Title Information.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Edition Information.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Series Information.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 DDC.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Item.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Identifiers.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Note.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Rare Materials.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 Load.json",
-    versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=/BIBFRAME 2.0 IBC.json"
+    versoURL + "/configs?filter[where][configType]=profile"
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Admin Metadata",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Agents Contribution",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Agents Primary Contribution",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Agents",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Cartographic",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 DDC",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Edition Information",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Form",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 IBC",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Identifiers",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Item",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 LCC",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Language",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Load",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Monograph",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Moving Image-35mm Feature Film",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Moving Image-BluRay DVD",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Notated Music",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Note",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Place",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Prints and Photographs",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 RWO",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Rare Materials",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Related Works and Expressions",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Serial",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Series Information",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Sound Recording-Analog",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Sound Recording-Audio CD-R",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Sound Recording-Audio CD",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Title Information",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Topic",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=PMO Medium of Performance",
+    // versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=Test BSR monograph"
   ],
   "startingPoints": [
     {"menuGroup": "Monograph",

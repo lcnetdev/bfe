@@ -278,23 +278,36 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     // Set up logging
     bfelog.init(editorconfig);
 
+    /**
+     * Profiles are expected to be in the form provided by Verso:
+     * A JSON Array of objects with a "json" property that contains the profile proper
+     **/
     for (var i = 0; i < config.profiles.length; i++) {
       var file = config.profiles[i];
-      bfelog.addMsg(new Error(), 'INFO', 'Loading profile: ' + config.profiles[i]);
       $.ajax({
         type: 'GET',
         dataType: 'json',
         url: file,
-        success: function (data) {
-          $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
-          profiles.push(data);
-          for (var rt = 0; rt < data.Profile.resourceTemplates.length; rt++) {
-            resourceTemplates.push(data.Profile.resourceTemplates[rt]);
-          }
-        },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
           bfelog.addMsg(new Error(), 'ERROR', 'FAILED to load profile: ' + file);
           bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+          if (textStatus == 'success') {
+            var data = JSON.parse(jqXHR.responseText);
+            $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
+            if (data.length > 0) {
+              for (var j = 0; j < data.length; j++) {
+                profiles.push(data[j].json);
+                for (var rt = 0; rt < data[j].json.Profile.resourceTemplates.length; rt++) {
+                  resourceTemplates.push(data[j].json.Profile.resourceTemplates[rt]);
+                }
+                bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data[j].name);
+              }
+            } else {
+              bfelog.addMsg(new Error(), 'ERROR', 'No profiles loaded from ' + this.url + ' (empty result set)');
+            }
+          }
         }
       });
     }
