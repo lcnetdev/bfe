@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -13,7 +13,8 @@
                 "profile:bf2:Provision:Place"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
@@ -21,7 +22,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -29,7 +30,8 @@
                 "profile:bf2:Provision:Name"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Name",
@@ -59,7 +61,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -67,7 +69,8 @@
                 "profile:bf2:Provision:Place"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
@@ -75,7 +78,7 @@
           },
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -83,7 +86,8 @@
                 "profile:bf2:Provision:Name"
               ],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Name",
@@ -112,7 +116,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -122,7 +126,8 @@
               "useValuesFrom": [],
               "valueDataType": {
                 "dataTypeURI": ""
-              }
+              },
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
             "propertyLabel": "Place",
@@ -169,13 +174,14 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Place (RDA 2.10.2)",
@@ -190,13 +196,14 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
+            "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {},
+              "repeatable": "false"
             },
             "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
             "propertyLabel": "Name (RDA 2.8.4)",

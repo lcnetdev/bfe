@@ -44,7 +44,8 @@
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-16.html"
           },
           {
             "mandatory": "false",
@@ -109,7 +110,8 @@
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Expression  (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-16.html"
           },
           {
             "mandatory": "false",

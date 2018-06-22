@@ -5,8 +5,8 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
+            "repeatable": "false",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -17,7 +17,9 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
               },
               "valueLanguage": "",
-              "remark": ""
+              "remark": "",
+              "editable": "true",
+              "repeatable": "false"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Language of Expression (RDA 6.11)",
@@ -41,8 +43,8 @@
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Language",
-        "id": "profile:bf2:Language",
-        "resourceLabel": "Language (testing)",
+        "id": "profile:bf2:Language2",
+        "resourceLabel": "Language",
         "remark": ""
       },
       {

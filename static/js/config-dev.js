@@ -48,7 +48,7 @@
         function save(data, csrf, bfelog, callback){
             var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
-	    var url = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
+	    var url = config.url + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
 
             $.ajax({
                url: url,
@@ -181,6 +181,7 @@
                     bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
                        bfestore.store = [];
                        tempstore = bfestore.jsonld2store(expanded);
+                       bfestore.storeDedup();
                        callback(loadtemplates);
                     });
                     //bfestore.n32store(data, url, tempstore, callback);
@@ -241,11 +242,11 @@
                 "static/profiles/bibframe/BIBFRAME 2.0 Monograph.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Admin Metadata.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Cartographic.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Analog.json",
-			    "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
-			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: BluRay DVD.json",
-			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image: 35mm Feature Film.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Analog.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD-R.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image-BluRay DVD.json",
+			    "static/profiles/bibframe/BIBFRAME 2.0 Moving Image-35mm Feature Film.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Prints and Photographs.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 RWO.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Title Information.json",
@@ -256,9 +257,11 @@
                 "static/profiles/bibframe/BIBFRAME 2.0 Identifiers.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Note.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Rare Materials.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording: Audio CD-R.json",
+                "static/profiles/bibframe/BIBFRAME 2.0 Sound Recording-Audio CD-R.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
-                "static/profiles/bibframe/BIBFRAME 2.0 IBC.json"
+                "static/profiles/bibframe/BIBFRAME 2.0 IBC.json",
+                "static/profiles/bibframe/PMO Medium of Performance.json" 
+                //"static/profiles/bibframe/profiles.json"
    		    ],
             "startingPoints": [
                 {"menuGroup": "Monograph",

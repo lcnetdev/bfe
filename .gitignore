@@ -10,3 +10,8 @@ builds/bfe.dev.bak
 builds/bfe.jodi.bak
 builds/bfe.jodi.js
 static/profiles/bibframe/Test All (jodiw).json
+static/profiles/bibframe/profiles.json
+
+.csslintrc
+.jshintrc
+.eslintrc

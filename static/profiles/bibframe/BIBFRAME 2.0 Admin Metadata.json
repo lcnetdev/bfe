@@ -123,10 +123,11 @@
                 "http://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
+                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language",
+                "dataTypeLabel": ""
               },
               "defaultLiteral": "eng",
-              "defaultURI": "http://id.loc.gov/vocabulary/languages/eng",
+              "defaultURI": "",
               "editable": "false",
               "repeatable": "false"
             },
