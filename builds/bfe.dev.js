@@ -1471,7 +1471,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         id: rt.useguid,
         'data-uri': rt.defaulturi
       }); // is data-uri used?
-      var $resourcedivheading = $('<h4>' + rt.resourceLabel + '</h4>');
+      
+      var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
+      var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+      $resourceInfo.attr('data-content',rt.defaulturi);
+      $resourceInfo.attr('data-toggle','popover');
+      $resourceInfo.attr('title','Resource ID');
+      $resourceInfo.popover({ trigger: "click hover" });
+      $resourcedivheading.append($resourceInfo);
       $resourcediv.append($resourcedivheading);
 
       var $formgroup = $('<div>', {
