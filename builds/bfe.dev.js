@@ -412,9 +412,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               'Access-Control-Max-Age': '1728000'
             }
           },
+          // id
           'columns': [{
             'data': 'id'
           },
+          // name
           {
             'data': 'name',
             'render': function (data, type, full, meta) {
@@ -431,6 +433,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return retval;
             }
           },
+          // title
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -459,6 +462,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return retval;
             }
           },
+          // lccn
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -493,7 +497,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 var table = new $.fn.dataTable.Api(meta.settings);
                 var cell = table.cell(meta.row, meta.col);
                 if (full.status === 'success') {
-                  cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                  if (full.objid.includes('instances/e')){
+                    cell.node().innerHTML = '<a href="' + ldsurl + '">' + lccn + '</a>';
+                  } else {
+                    cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                  }
+                  
                   $(cell.node()).css('background-color', 'lightgreen');
                 } else {
                   if (new Date(new Date(full.modified).getTime() + 60000) > new Date()) {
@@ -524,6 +533,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return text;
             }
           },
+          //comment
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -544,6 +554,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return text.length > 60 ? text.substr(0, 58) + '...' : text;
             }
           },
+          //modified
           {
             'data': 'modified',
             'width': '10%',
@@ -564,6 +575,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + hr + ':' + min + ampm;
             }
           },
+          //edit
           {
             'data': 'url',
             'width': '10%',

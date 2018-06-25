@@ -112,7 +112,7 @@
           }
         ],
         "id": "profile:bflc:TranscribedTitle",
-        "resourceURI": "http://id.loc.gov/ontologies/bflc/TranscribedTitle",
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/TransliteratedTitle",
         "resourceLabel": "Transliterated Title"
       },
       {
