@@ -121,7 +121,24 @@ callback function for when the user hits the `save` button.
 #### `config` Properties
 
 Required
-* `profiles`: (Array) location of Profiles to be loaded.
+* `profiles`: (Array) locations (URLs) of Profiles to be
+  loaded. Profiles should be in the form of a JSON array with one or
+  more objects that contain a "name" and a "json" property with the
+  profile itself. For example:
+
+```json
+[
+  {
+    "name": "BIBFRAME 2.0 Agent",
+    "json": {
+      "Profile": {
+        [...]
+      }
+    }
+  }
+]
+```
+
 * `return`: (Object) contains two properties.  `format`, which indicates how the 
   the data should be formatted/serialized.  Only "jsonld-expanded" is supported 
   presently.  `callback` is the name of the callback function, which expects one 
