@@ -1487,8 +1487,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       
       var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
       if (rt.defaulturi.match(/^http/)) {
+        var rid = rt.defaulturi;
         var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
-        $resourceInfo.attr('data-content', rt.defaulturi);
+        $resourceInfo.attr('data-content', rid);
         $resourceInfo.attr('data-toggle','popover');
         $resourceInfo.attr('title','Resource ID');
         $resourceInfo.popover({ trigger: "click hover" });
@@ -1499,8 +1500,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (rt.id.match(/Instance$/i)) {
         $resourcedivheading.append($clonebutton);
       }
-      
+
       $resourcediv.append($resourcedivheading);
+
+      $clonebutton.click(function() {
+        var oldguid = bfeditor.bfestore.name;
+        bfeditor.bfestore.name = guid();
+        $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
+        if (oldguid != bfeditor.bfestore.name) {
+          alert('Clone successfully created.')
+        }
+      });
 
       var $formgroup = $('<div>', {
         class: 'form-group row'
