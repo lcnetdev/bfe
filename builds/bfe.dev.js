@@ -1494,9 +1494,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourceInfo.popover({ trigger: "click hover" });
         $resourcedivheading.append($resourceInfo);
       }
+    
+      var $clonebutton = $('<button id="clone-instance" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
       if (rt.id.match(/Instance$/i)) {
-        $resourcedivheading.append('<button type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
+        $resourcedivheading.append($clonebutton);
       }
+      
       $resourcediv.append($resourcedivheading);
 
       var $formgroup = $('<div>', {
