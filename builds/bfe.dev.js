@@ -425,9 +425,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               'Access-Control-Max-Age': '1728000'
             }
           },
+          // id
           'columns': [{
             'data': 'id'
           },
+          // name
           {
             'data': 'name',
             'render': function (data, type, full, meta) {
@@ -444,6 +446,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return retval;
             }
           },
+          // title
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -472,6 +475,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return retval;
             }
           },
+          // lccn
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -506,7 +510,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 var table = new $.fn.dataTable.Api(meta.settings);
                 var cell = table.cell(meta.row, meta.col);
                 if (full.status === 'success') {
-                  cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                  if (full.objid.includes('instances/e')){
+                    cell.node().innerHTML = '<a href="' + ldsurl + '">' + lccn + '</a>';
+                  } else {
+                    cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                  }
+                  
                   $(cell.node()).css('background-color', 'lightgreen');
                 } else {
                   if (new Date(new Date(full.modified).getTime() + 60000) > new Date()) {
@@ -537,6 +546,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return text;
             }
           },
+          //comment
           {
             'data': 'rdf',
             'render': function (data, type, full, meta) {
@@ -557,6 +567,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return text.length > 60 ? text.substr(0, 58) + '...' : text;
             }
           },
+          //modified
           {
             'data': 'modified',
             'width': '10%',
@@ -577,6 +588,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + hr + ':' + min + ampm;
             }
           },
+          //edit
           {
             'data': 'url',
             'width': '10%',
@@ -1474,13 +1486,31 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }); // is data-uri used?
       
       var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
-      var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
-      $resourceInfo.attr('data-content',rt.defaulturi);
-      $resourceInfo.attr('data-toggle','popover');
-      $resourceInfo.attr('title','Resource ID');
-      $resourceInfo.popover({ trigger: "click hover" });
-      $resourcedivheading.append($resourceInfo);
+      if (rt.defaulturi.match(/^http/)) {
+        var rid = rt.defaulturi;
+        var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+        $resourceInfo.attr('data-content', rid);
+        $resourceInfo.attr('data-toggle','popover');
+        $resourceInfo.attr('title','Resource ID');
+        $resourceInfo.popover({ trigger: "click hover" });
+        $resourcedivheading.append($resourceInfo);
+      }
+    
+      var $clonebutton = $('<button id="clone-instance" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
+      if (rt.id.match(/Instance$/i)) {
+        $resourcedivheading.append($clonebutton);
+      }
+
       $resourcediv.append($resourcedivheading);
+
+      $clonebutton.click(function() {
+        var oldguid = bfeditor.bfestore.name;
+        bfeditor.bfestore.name = guid();
+        $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
+        if (oldguid != bfeditor.bfestore.name) {
+          alert('Clone successfully created.')
+        }
+      });
 
       var $formgroup = $('<div>', {
         class: 'form-group row'
