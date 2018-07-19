@@ -1434,18 +1434,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var worklist = _.filter(bfeditor.bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
               if (!_.isEmpty(worklist)) {
                 // check for type
-                var rtType = {};
-                if (bfeditor.bfestore.state != 'clone') {
-                  console.log('not clone');
-                  rtType = _.where(worklist, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI});
-                }
+                var rtType = _.where(worklist, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI});
                 if (!_.isEmpty(rtType)) {
                   fobject.resourceTemplates[urt].defaulturi = rtType[0].s;
                 } else {
                   // find uniq s, and look for one that has no o.
 
                   var rt = fobject.resourceTemplates[urt];
-console.log(rt);
                   // add type
                   var triple = {};
                   triple.guid = rt.useguid;
@@ -1458,7 +1453,6 @@ console.log(rt);
                   bfestore.addTriple(triple);
 
                   fobject.resourceTemplates[urt].defaulturi = triple.s;
-                  console.log(fobject);
                 }
               } else {
                 fobject.resourceTemplates[urt].defaulturi = baseuri + mintResource(loadTemplates[urt].templateGUID);
@@ -1510,10 +1504,12 @@ console.log(rt);
       $clonebutton.click(function() {
         var oldguid = bfeditor.bfestore.name;
         bfeditor.bfestore.name = guid();
-        // fobject.resourceTemplates[0].defaulturi = '123456';
-        bfeditor.bfestore.state = 'clone';
+        var iid = mintResource(bfeditor.bfestore.name);
+        bfeditor.bfestore.store.forEach( function(trip) {
+          trip.s = trip.s.replace(/(\/instances\/)\w+$/,"$1" + iid);
+        });
         cbLoadTemplates();
-        $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
+        // $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
 
         if (oldguid != bfeditor.bfestore.name) {
           alert('Clone successfully created.')
