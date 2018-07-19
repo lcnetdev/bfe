@@ -1421,7 +1421,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       });
       if (rt !== undefined && rt[0] !== undefined) {
         fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
-        // console.log(loadTemplates[urt].data);
+        // console.log(loadTemplates[urt]);
         fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
         fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
         fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
@@ -1434,16 +1434,18 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var worklist = _.filter(bfeditor.bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
               if (!_.isEmpty(worklist)) {
                 // check for type
-
-                var rtType = _.where(worklist, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI});
-
+                var rtType = {};
+                if (bfeditor.bfestore.state != 'clone') {
+                  console.log('not clone');
+                  rtType = _.where(worklist, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI});
+                }
                 if (!_.isEmpty(rtType)) {
                   fobject.resourceTemplates[urt].defaulturi = rtType[0].s;
                 } else {
                   // find uniq s, and look for one that has no o.
 
                   var rt = fobject.resourceTemplates[urt];
-
+console.log(rt);
                   // add type
                   var triple = {};
                   triple.guid = rt.useguid;
@@ -1456,6 +1458,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   bfestore.addTriple(triple);
 
                   fobject.resourceTemplates[urt].defaulturi = triple.s;
+                  console.log(fobject);
                 }
               } else {
                 fobject.resourceTemplates[urt].defaulturi = baseuri + mintResource(loadTemplates[urt].templateGUID);
@@ -1497,6 +1500,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     
       var $clonebutton = $('<button id="clone-instance" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
+      // var $clonebutton = $('<button id="bfeditor-exitsave" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
       if (rt.id.match(/Instance$/i)) {
         $resourcedivheading.append($clonebutton);
       }
@@ -1506,7 +1510,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $clonebutton.click(function() {
         var oldguid = bfeditor.bfestore.name;
         bfeditor.bfestore.name = guid();
+        // fobject.resourceTemplates[0].defaulturi = '123456';
+        bfeditor.bfestore.state = 'clone';
+        cbLoadTemplates();
         $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
+
         if (oldguid != bfeditor.bfestore.name) {
           alert('Clone successfully created.')
         }
