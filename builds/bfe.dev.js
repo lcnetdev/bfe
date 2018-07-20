@@ -553,10 +553,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var text = '';
               var mahttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/metadataAssigner');
               var mahttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/metadataAssigner');
+              var cihttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/catalogerId');
+              var cihttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/catalogerId');
               if (mahttps) {
                 text = _.pluck(data[mahttps]['https://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
               } else if (mahttp) {
                 text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
+              } else if (cihttps) {
+                text = _.pluck(data[mahttps]['https://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
+              } else if (cihttp) {
+                text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
               }
               //                                if (_.filter(data, function(el) {
               //                                        return el["http://id.loc.gov/ontologies/bflc/metadataAssigner"]
