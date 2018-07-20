@@ -560,9 +560,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               } else if (mahttp) {
                 text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
               } else if (cihttps) {
-                text = _.pluck(data[mahttps]['https://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
+                text = _.pluck(data[cihttps]['https://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
               } else if (cihttp) {
-                text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
+                text = _.pluck(data[cihttp]['http://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
               }
               //                                if (_.filter(data, function(el) {
               //                                        return el["http://id.loc.gov/ontologies/bflc/metadataAssigner"]
