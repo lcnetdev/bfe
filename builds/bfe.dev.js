@@ -1495,6 +1495,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourceInfo.attr('data-content', rid);
         $resourceInfo.attr('data-toggle','popover');
         $resourceInfo.attr('title','Resource ID');
+        $resourceInfo.attr('id','resource-id-popover');
         $resourceInfo.popover({ trigger: "click hover" });
         $resourcedivheading.append($resourceInfo);
       }
@@ -1508,18 +1509,27 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $resourcediv.append($resourcedivheading);
 
       $clonebutton.click(function() {
-        var oldguid = bfeditor.bfestore.name;
+        var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
+        var olduri = rt.defaulturi;
         bfeditor.bfestore.name = guid();
-        var iid = mintResource(bfeditor.bfestore.name);
+        var iid = mintResource(guid());
+        var oldiid = olduri.replace(/^http.+\//,'');
         bfeditor.bfestore.store.forEach( function(trip) {
           trip.s = trip.s.replace(/(\/instances\/)\w+$/,"$1" + iid);
         });
         cbLoadTemplates();
-        // $resourceInfo.attr('data-content', 'Clone of ' + rt.defaulturi);
-
-        if (oldguid != bfeditor.bfestore.name) {
-          alert('Clone successfully created.')
-        }
+        var errs = 0;
+        bfeditor.bfestore.store.forEach( function(trip) {
+          if (trip.s == olduri) {        
+             errs++;
+          }
+        });
+        if (errs > 0) {
+          alert('Old instances URIs found');
+        } else {
+          $msgnode.append('<div class="alert alert-info">Instance cloned as ' + iid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+        } 
+        $msgnode.insertBefore('.nav-tabs');   
       });
 
       var $formgroup = $('<div>', {
