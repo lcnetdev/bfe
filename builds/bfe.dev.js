@@ -1531,11 +1531,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfeditor.bfestore.name = guid();  // verso save name
         var rid = mintResource(guid()); // new resource id
         var ctype = $clonebutton.data('label'); // get label for alert message
-        var re = RegExp('(/' + $clonebutton.data('match') + '/)\\w+$'); // match on part of uri ie. /works/ or /instances/
+        var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
 
         // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
         bfeditor.bfestore.store.forEach( function(trip) {
-          trip.s = trip.s.replace(re, "$1" + rid);
+          trip.s = trip.s.replace(re, "$1" + rid + "$2");
+          trip.o = trip.o.replace(re, "$1" + rid + "$2");
         });
 
         // reload the newly created templage
