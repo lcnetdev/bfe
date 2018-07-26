@@ -1520,10 +1520,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfeditor.bfestore.name = guid();
         var rid = mintResource(guid());
         var rclass = 'instances';
+        if ($clonebutton.attr('id') == 'clone-work') {
+          rclass = 'works';
+        }
         var re = RegExp('(/' + rclass + '/)\\w+$');
         console.log(re);
         bfeditor.bfestore.store.forEach( function(trip) {
-          trip.s = trip.s.replace(re,"$1" + rid);
+          trip.s = trip.s.replace(re, "$1" + rid);
         });
         cbLoadTemplates();
         var errs = 0;
