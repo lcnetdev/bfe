@@ -1500,9 +1500,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourcedivheading.append($resourceInfo);
       }
     
-      var $clonebutton = $('<button id="clone-instance" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
-      // var $clonebutton = $('<button id="bfeditor-exitsave" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
-      if (rt.id.match(/Instance$/i)) {
+      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span></button>');
+
+      if (rt.id.match(/:Instance$/i)) {
+        $clonebutton.attr('id','clone-instance');
+        $clonebutton.text(' Clone Instance');
+        $resourcedivheading.append($clonebutton);
+      } else if (rt.id.match(/:Work$/i)) {
+        $clonebutton.attr('id','clone-work');
+        $clonebutton.text(' Clone Work');
         $resourcedivheading.append($clonebutton);
       }
 
@@ -1512,10 +1518,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
         var olduri = rt.defaulturi;
         bfeditor.bfestore.name = guid();
-        var iid = mintResource(guid());
-        var oldiid = olduri.replace(/^http.+\//,'');
+        var rid = mintResource(guid());
+        var rclass = 'instances';
+        var re = RegExp('(/' + rclass + '/)\\w+$');
+        console.log(re);
         bfeditor.bfestore.store.forEach( function(trip) {
-          trip.s = trip.s.replace(/(\/instances\/)\w+$/,"$1" + iid);
+          trip.s = trip.s.replace(re,"$1" + rid);
         });
         cbLoadTemplates();
         var errs = 0;
@@ -1527,7 +1535,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         if (errs > 0) {
           alert('Old instances URIs found');
         } else {
-          $msgnode.append('<div class="alert alert-info">Instance cloned as ' + iid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+          $msgnode.append('<div class="alert alert-info">Instance cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
         } 
         $msgnode.insertBefore('.nav-tabs');   
       });
