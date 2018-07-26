@@ -1207,7 +1207,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').show();
           });
-          $('#bfeditor-exitcancel').click(function () {
+          $('#bfeditor-exitcancel, [href=#browse]').click(function () {
             $('#save-btn').remove();
             $('#bfeditor-previewPanel').remove();
             $('#bfeditor-messagediv').remove();
