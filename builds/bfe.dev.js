@@ -1488,6 +1488,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         'data-uri': rt.defaulturi
       }); // is data-uri used?
       
+      // create a popover box to display resource ID of the thing.
       var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
       if (rt.defaulturi.match(/^http/)) {
         var rid = rt.defaulturi;
@@ -1499,36 +1500,48 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourceInfo.popover({ trigger: "click hover" });
         $resourcedivheading.append($resourceInfo);
       }
-    
+      
+      // create an empty clone button
       var $clonebutton = $('<button type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span></button>');
 
+      // populate the clone button for Instance or Work descriptions
       if (rt.id.match(/:Instance$/i)) {
         $clonebutton.attr('id','clone-instance');
         $clonebutton.text(' Clone Instance');
-        $resourcedivheading.append($clonebutton);
+        $clonebutton.data({'match':'instances','label':'Instance'});
       } else if (rt.id.match(/:Work$/i)) {
         $clonebutton.attr('id','clone-work');
         $clonebutton.text(' Clone Work');
+        $clonebutton.data({'match':'works','label':'Work'});
+      }
+
+      // append to the resource heading if there is a clone button id
+      if ($clonebutton.attr('id')) {
         $resourcedivheading.append($clonebutton);
       }
 
+      // append to the resource div
       $resourcediv.append($resourcedivheading);
 
+      // the cloning starts here if clone button is clicked
       $clonebutton.click(function() {
         var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
         var olduri = rt.defaulturi;
-        bfeditor.bfestore.name = guid();
-        var rid = mintResource(guid());
-        var rclass = 'instances';
-        if ($clonebutton.attr('id') == 'clone-work') {
-          rclass = 'works';
-        }
-        var re = RegExp('(/' + rclass + '/)\\w+$');
-        console.log(re);
+
+        bfeditor.bfestore.name = guid();  // verso save name
+        var rid = mintResource(guid()); // new resource id
+        var ctype = $clonebutton.data('label'); // get label for alert message
+        var re = RegExp('(/' + $clonebutton.data('match') + '/)\\w+$'); // match on part of uri ie. /works/ or /instances/
+
+        // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
         bfeditor.bfestore.store.forEach( function(trip) {
           trip.s = trip.s.replace(re, "$1" + rid);
         });
+
+        // reload the newly created templage
         cbLoadTemplates();
+
+        // start checking for errors (basically check for remnants of old resource IDs)
         var errs = 0;
         bfeditor.bfestore.store.forEach( function(trip) {
           if (trip.s == olduri) {        
@@ -1536,9 +1549,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           }
         });
         if (errs > 0) {
-          alert('Old instances URIs found');
-        } else {
-          $msgnode.append('<div class="alert alert-info">Instance cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+          alert('Old ' + ctype + ' URIs found');
+        } else {         
+          $msgnode.append('<div class="alert alert-info">' + ctype + ' cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
         } 
         $msgnode.insertBefore('.nav-tabs');   
       });
