@@ -1530,9 +1530,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
                 </div>\
                 <div class="modal-body">\
-                    <div class="input-group col-xs-8">\
-                      <label for="resource-id">New Resource ID</label>\
+                    <div class="input-group col-xs-12">\
+                      <span class="input-group-addon">New Resource ID:</span>\
                       <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                      <span class="input-group-btn">\
+                        <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                      </span>\
                     </div>\
                 </div>\
                 <div class="modal-footer">\
@@ -1547,7 +1550,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
       // append to the resource div
       $resourcediv.append($resourcedivheading);
-
+      $resourcediv.find('#clear-id').click(function() {
+        $('#resource-id').attr('value','');
+        $('#resource-id').focus();
+      });
       // the cloning starts here if clone button is clicked
       $resourcediv.find('#clone-save').click(function() {
         var rid = $('#resource-id').attr('value');
