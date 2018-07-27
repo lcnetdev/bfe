@@ -1502,7 +1502,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
       
       // create an empty clone button
-      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span></button>');
+      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"><span class="glyphicon glyphicon-duplicate"></span></button>');
 
       // populate the clone button for Instance or Work descriptions
       if (rt.id.match(/:Instance$/i)) {
@@ -1517,19 +1517,46 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
       // append to the resource heading if there is a clone button id
       if ($clonebutton.attr('id')) {
+        var newid = mintResource(guid());
         $resourcedivheading.append($clonebutton);
+        
+        // ask user to input custom id
+        $cloneinput = $('\
+          <div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+            <div class="modal-dialog" role="document">\
+              <div class="modal-content">\
+                <div class="modal-header">\
+                  <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
+                  <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
+                </div>\
+                <div class="modal-body">\
+                    <div class="input-group col-xs-8">\
+                      <label for="resource-id">New Resource ID</label>\
+                      <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                    </div>\
+                </div>\
+                <div class="modal-footer">\
+                  <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                </div>\
+              </div>\
+            </div>\
+          </div>');
+        $resourcediv.append($cloneinput);
       }
 
       // append to the resource div
       $resourcediv.append($resourcedivheading);
 
       // the cloning starts here if clone button is clicked
-      $clonebutton.click(function() {
+      $resourcediv.find('#clone-save').click(function() {
+        var rid = $('#resource-id').attr('value');
+        $('#clone-input').modal('hide');
         var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
         var olduri = rt.defaulturi;
 
         bfeditor.bfestore.name = guid();  // verso save name
-        var rid = mintResource(guid()); // new resource id
+        // var rid = mintResource(guid()); // new resource id
         var ctype = $clonebutton.data('label'); // get label for alert message
         var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
 
