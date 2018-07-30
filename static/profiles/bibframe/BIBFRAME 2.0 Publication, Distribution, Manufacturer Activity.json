@@ -213,6 +213,113 @@
         "id": "profile:bf2:Provision:Name",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/Agent",
         "resourceLabel": "Name"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:PlaceTest"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/place",
+            "propertyLabel": "Place"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Provision:NameTest"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
+            "propertyLabel": "Name"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
+            "propertyLabel": "Date"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/provisionActivityStatement",
+            "propertyLabel": "Provision activity statement"
+          }
+        ],
+        "id": "profile:bf2:PublicationInformationTest",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Publication",
+        "resourceLabel": "Publication Test"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "lookup",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyLabel": "Place"
+          }
+        ],
+        "id": "profile:bf2:Provision:PlaceTest",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Place",
+        "resourceLabel": "Place Test"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "lookup",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/names"
+              ],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyLabel": "Name"
+          }
+        ],
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Agent",
+        "id": "profile:bf2:Provision:NameTest",
+        "resourceLabel": "Name Test"
       }
     ],
     "id": "profile:bf2:PublicationDistributionManufactureInformation",

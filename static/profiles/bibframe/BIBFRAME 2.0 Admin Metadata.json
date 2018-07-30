@@ -11,9 +11,11 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {}
+              "valueDataType": {
+                "remark": "http://id.loc.gov/ontologies/bflc/catalogerId"
+              }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/metadataAssigner",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/catalogerId",
             "propertyLabel": "Your cataloger ID (Windows ID)"
           },
           {
@@ -66,9 +68,9 @@
               "defaultURI": "http://id.loc.gov/vocabulary/organizations/dlc",
               "repeatable": "false"
             },
-            "propertyLabel": "Assigner",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_assigner",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/assigner"
+            "propertyLabel": "Assigning agency",
+            "remark": "",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/source"
           },
           {
             "mandatory": "false",
@@ -87,7 +89,7 @@
               "defaultURI": "http://id.loc.gov/vocabulary/marcauthen/pcc"
             },
             "propertyLabel": "Description authentication",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#c_DescriptionAuthentication",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionAuthentication"
           },
           {
@@ -110,7 +112,7 @@
             },
             "propertyLabel": "Description conventions",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionConventions",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionConventions"
+            "remark": ""
           },
           {
             "mandatory": "false",
@@ -132,7 +134,7 @@
               "repeatable": "false"
             },
             "propertyLabel": "Description language",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionLanguage",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionLanguage"
           },
           {
@@ -152,7 +154,7 @@
               "repeatable": "true"
             },
             "propertyLabel": "Description modifier",
-            "remark": "http://id.loc.gov/ontologies/bibframe.html#p_descriptionModifier",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/descriptionModifier"
           },
           {
@@ -170,7 +172,7 @@
               }
             },
             "propertyLabel": "Encoding level",
-            "remark": "http://id.loc.gov/ontologies/bflc.html#c_EncodingLevel",
+            "remark": "",
             "propertyURI": "http://id.loc.gov/ontologies/bflc/encodingLevel"
           },
           {

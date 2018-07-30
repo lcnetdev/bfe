@@ -6,7 +6,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "resource",
+            "type": "lookup",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -15,13 +15,13 @@
                 "http://id.loc.gov/authorities/subjects"
               ],
               "valueDataType": {
-                "remark": "http://id.loc.gov/ontologies/bibframe/Place",
+                "remark": "",
                 "dataTypeURI": ""
               },
               "repeatable": "false"
             },
             "propertyLabel": "Search LCNAF/LCSH",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Place"
           },
           {
             "mandatory": "false",

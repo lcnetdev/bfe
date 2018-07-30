@@ -44,7 +44,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Work (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
             "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-16.html"
           },
           {
@@ -110,7 +110,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Relationship Designator for Related Expression  (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
             "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-16.html"
           },
           {
@@ -131,45 +131,7 @@
         ],
         "resourceLabel": "Related Expression",
         "id": "profile:bf2:RelatedExpression",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bflc/Relationship"
-              }
-            },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Related Work AAP"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression",
-            "propertyLabel": "Relationship designator"
-          }
-        ],
-        "id": "profile:bf2:RelatedWork:Title",
-        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
-        "resourceLabel": "Title of Related Work (testing)",
-        "remark": "testing"
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Relationship"
       }
     ],
     "id": "profile:bf2:RelatedWorkorExpression",

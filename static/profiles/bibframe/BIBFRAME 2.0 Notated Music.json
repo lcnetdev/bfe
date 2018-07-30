@@ -58,6 +58,20 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
+            "propertyLabel": "Authorized Access Point Representing the Musical Work (RDA 6.28.1)",
+            "remark": "http://access.rdatoolkit.org/6.28.1.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -128,7 +142,22 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasMedium",
-            "propertyLabel": "Declared Medium"
+            "propertyLabel": "Medium of Performance—Instrumentation with Individual Counts"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:DecMedTotals"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasMedium",
+            "propertyLabel": "Medium of Performance: Totaling Counts for the Entire Work"
           },
           {
             "mandatory": "false",
@@ -142,7 +171,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/hasAlternateMediumOfPerformance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/alternateMediumOfPerformance",
             "propertyLabel": "Alternate Declared Medium"
           },
           {
@@ -159,51 +188,6 @@
             },
             "propertyLabel": "Doubling Declared Medium",
             "propertyURI": "http://performedmusicontology.org/ontology/hasDoublingMediumOfPerformance"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfInst"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/instrument",
-            "propertyLabel": "Medium of Performance - Instrument"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfVoice"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/voice",
-            "propertyLabel": "Medium of Performance - Voice"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfEnsemble"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensemble",
-            "propertyLabel": "Medium of Performance - Ensemble"
           },
           {
             "mandatory": "false",
@@ -544,20 +528,6 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
             "propertyLabel": "Add BIBFRAME Instance"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://www.w3.org/2000/01/rdf-schema#label",
-            "propertyLabel": "Authorized Access Point Representing the Musical Work (RDA 6.28.1)",
-            "remark": "http://access.rdatoolkit.org/6.28.1.html"
           }
         ],
         "id": "profile:bf2:NotatedMusic:Work",
@@ -721,7 +691,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Alternate Declared Medium",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/hasAlternateMediumOfPerformance"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/alternateMediumOfPerformance"
           },
           {
             "mandatory": "false",
@@ -737,51 +707,6 @@
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasDoublingMediumOfPerformance",
             "propertyLabel": "Doubling Declared Medium"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfInst"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/instrument",
-            "propertyLabel": "Medium of Performance - Instrument"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfVoice"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/voice",
-            "propertyLabel": "Medium of Performance - Voice"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "resource",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [
-                "profile:bf2:NotatedMusic:MedPerfEnsemble"
-              ],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/ensemble",
-            "propertyLabel": "Medium of Performance - Ensemble"
           },
           {
             "mandatory": "false",

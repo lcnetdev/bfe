@@ -1131,19 +1131,6 @@
             "propertyLabel": "Description Standard",
             "propertyURI": "http://www.loc.gov/standards/mods/v3/mods-3-6#descriptionStandard",
             "remark": "https://www.loc.gov/standards/mods/userguide/recordinfo.html#descriptionstandard"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Level of Establishment (Bflc)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/levelOfEstablishment"
           }
         ],
         "id": "profile:bf2:Agents:AdminMetadata",

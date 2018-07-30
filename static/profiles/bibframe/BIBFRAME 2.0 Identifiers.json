@@ -105,7 +105,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Ismn",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/Isrc",
             "propertyLabel": "ISRC"
           },
           {

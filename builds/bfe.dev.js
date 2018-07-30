@@ -3077,7 +3077,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", returntriples);
 
         var resourceTriple = '';
-        var replaceBnode = !!(property.propertyLabel === 'Lookup' || property.type === 'lookup');
+        var replaceBnode = (property.propertyLabel === 'Lookup' || property.type === 'lookup');
 
         returntriples.forEach(function (t) {
           if (t.guid === undefined) {
@@ -3106,6 +3106,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
               if (replaceBnode) {
                 resourceTriple.o = t.o;
+                formobject.defaulturi = t.o;
                 // find the bnode
                 bfestore.addTriple(resourceTriple);
                 formobject.store.push(resourceTriple);
@@ -3115,7 +3116,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
             }
           } else {
-            // I don't think this workst.s = resourceTriple.o;
+            if(replaceBnode){
+              t.s = formobject.defaulturi;
+            }
             formobject.store.push(t);
             bfestore.addTriple(t);
           }
@@ -3210,7 +3213,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     lu.name = name.substr(name.lastIndexOf('/') + 1);
     var scheme = name;
     var source = function (query, process) {
-      return lcshared.simpleQuery(query, cache, scheme, process);
+      if (scheme.startsWith('https://lookup.ld4l.org')){
+        return lcshared.qaQuery(query, cache, scheme, process);
+      } else {
+        return lcshared.simpleQuery(query, cache, scheme, process);
+      }
     };
 
     var getResource = function (subjecturi, property, selected, process) {
@@ -4208,6 +4215,28 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
     return typeahead_source;
   };
 
+  exports.qaSuggestions = function (suggestions, query) {
+    var typeahead_source = [];
+    if (suggestions !== undefined) {
+      suggestions.forEach(function(suggestion) {
+        typeahead_source.push({
+          uri: suggestion.uri,
+          value: suggestion.label
+        });
+      }, typeahead_source);
+    }
+
+    if (typeahead_source.length === 0) {
+      typeahead_source[0] = {
+        uri: '',
+        value: '[No suggestions found for ' + query + '.]'
+      };
+    }
+    // console.log(typeahead_source);
+    // $("#dropdown-footer").text('Total Results:' + suggestions.length);
+    return typeahead_source;
+  };
+
   exports.processATOM = function (atomjson, query) {
     var typeahead_source = [];
     for (var k in atomjson) {
@@ -4282,7 +4311,42 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
       }
     }, 300); // 300 ms
   };
+
+  exports.qaQuery = function (query, cache, scheme, process) {
+    console.log('q is ' + query);
+
+    q = encodeURI(query.normalize());
+    if (cache[q]) {
+      process(cache[q]);
+      return;
+    }
+    if (typeof this.searching !== 'undefined') {
+      clearTimeout(this.searching);
+      process([]);
+    }
+    this.searching = setTimeout(function () {
+      if (query.length >= 1) {
+        u = scheme + '?maxRecords=50&q=' + q;
+        $.ajax({
+          type: 'GET',
+          async: false,
+          data: {
+            uri: u
+          },
+          url: config.url + '/profile-edit/server/whichrt',
+          success: function (data) {
+            parsedlist = exports.qaSuggestions(data, query);
+            cache[q] = parsedlist;
+            return process(parsedlist);
+          }
+        });
+      } else {
+        return [];
+      }
+    }, 300); // 300 ms
+  };
 });
+
 bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/lookups/lcshared'], function (require, exports, module) {
   var lcshared = require('src/lookups/lcshared');
 

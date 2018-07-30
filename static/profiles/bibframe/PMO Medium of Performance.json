@@ -17,50 +17,11 @@
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasMediumPart",
             "propertyLabel": "has Medium Part"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
-            "propertyLabel": "Distinct Part Count"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
-            "propertyLabel": "Required Performer Count"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
-            "propertyLabel": "Ensemble Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:DecMed",
         "resourceURI": "http://performedmusicontology.org/ontology/DeclaredMedium",
-        "resourceLabel": "Declared Medium"
+        "resourceLabel": "Medium of Performance—Instrumentation with Individual Counts"
       },
       {
         "propertyTemplates": [
@@ -90,7 +51,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
-            "propertyLabel": "Distinct Part Count"
+            "propertyLabel": "has Distinct Part Count"
           },
           {
             "mandatory": "false",
@@ -103,7 +64,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
-            "propertyLabel": "Ensemble Count"
+            "propertyLabel": "has Ensemble Count"
           },
           {
             "mandatory": "false",
@@ -154,7 +115,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
-            "propertyLabel": "Distinct Part Count"
+            "propertyLabel": "has Distinct Part Count"
           },
           {
             "mandatory": "false",
@@ -167,7 +128,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
-            "propertyLabel": "Required Performer Count"
+            "propertyLabel": "AND has Required Performer Count"
           },
           {
             "mandatory": "false",
@@ -180,7 +141,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
-            "propertyLabel": "Ensemble Count"
+            "propertyLabel": "OR has Ensemble Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:MedPart2",
@@ -218,7 +179,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
-            "propertyLabel": "Distinct Part Count"
+            "propertyLabel": "has Distinct Part Count"
           },
           {
             "mandatory": "false",
@@ -231,7 +192,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
-            "propertyLabel": "Required Performer Count"
+            "propertyLabel": "has Required Performer Count"
           },
           {
             "mandatory": "false",
@@ -244,7 +205,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
-            "propertyLabel": "Ensemble Count"
+            "propertyLabel": "has Ensemble Count"
           },
           {
             "mandatory": "false",
@@ -257,7 +218,7 @@
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasPerformerCount",
-            "propertyLabel": "Performer Count"
+            "propertyLabel": "has Performer Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:MedPart",
@@ -360,6 +321,53 @@
         "id": "profile:bf2:PMOMedPerf:MedPerfV2",
         "resourceURI": "http://performedmusicontology.org/ontology/VoiceEnsemble",
         "resourceLabel": "Voice Ensemble"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
+            "propertyLabel": "has Distinct Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
+            "propertyLabel": "has Required Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
+            "propertyLabel": "has Ensemble Count"
+          }
+        ],
+        "id": "profile:bf2:PMOMedPerf:DecMedTotals",
+        "resourceURI": "http://performedmusicontology.org/ontology/DeclaredMedium",
+        "resourceLabel": "Medium of Performance: Totaling Counts for the Entire Work",
+        "remark": ""
       }
     ],
     "id": "profile:bf2:PMOMedPerf",

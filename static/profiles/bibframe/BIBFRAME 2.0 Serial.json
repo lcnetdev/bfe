@@ -1439,39 +1439,6 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Description based on:"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
-            "propertyLabel": "Latest issue consulted:"
-          }
-        ],
-        "id": "profile:bf2:Serial:NoteOnIssuePartIteration",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/note",
-        "resourceLabel": "Note on Issue, Part or Iteration"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
             "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],

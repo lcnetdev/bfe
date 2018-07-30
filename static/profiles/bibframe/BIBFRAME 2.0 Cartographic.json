@@ -109,7 +109,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/coordinates",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/cartographicAttributes",
             "propertyLabel": "Coordinates of Cartographic Content (RDA 7.4)",
             "remark": "http://access.rdatoolkit.org/7.4.html"
           },
@@ -408,7 +408,7 @@
         "resourceLabel": "BIBFRAME Work"
       },
       {
-        "id": "profile:bf2:Cartographic:Instance",
+        "id": "http://mlvlp04.loc.gov:8230/resources/works/c020133227.jsonld",
         "propertyTemplates": [
           {
             "mandatory": "false",

@@ -688,9 +688,7 @@
               "valueTemplateRefs": [
                 "profile:bf2:Monograph:RelatedInstance"
               ],
-              "useValuesFrom": [
-                ""
-              ],
+              "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",

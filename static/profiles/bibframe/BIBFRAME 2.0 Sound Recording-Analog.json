@@ -2178,8 +2178,8 @@
                 "remark": "http://id.loc.gov/ontologies/bibframe/RecordingMedium",
                 "dataTypeLabelHint": ""
               },
-              "defaultURI": "",
-              "defaultLiteral": ""
+              "defaultURI": "http://id.loc.gov/vocabulary/mrecmedium/mag",
+              "defaultLiteral": "magnetic"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Recording Medium (RDA 3.16.3)",
@@ -2347,12 +2347,14 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [
-                "http://id.loc.gov/ontologies/bibframe/FileType"
+                "http://id.loc.gov/vocabulary/mfiletype"
               ],
               "valueDataType": {
                 "dataTypeURI": "",
                 "remark": "http://id.loc.gov/ontologies/bibframe/FileType"
-              }
+              },
+              "defaultURI": "http://id.loc.gov/vocabulary/mfiletype/audio",
+              "defaultLiteral": "audio file"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "File Type (RDA 3.19)",

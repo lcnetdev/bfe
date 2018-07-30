@@ -14,7 +14,8 @@
                 "http://id.loc.gov/vocabulary/languages"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Language"
+                "dataTypeURI": "",
+                "remark": "http://id.loc.gov/ontologies/bibframe/Language"
               },
               "valueLanguage": "",
               "remark": "",
