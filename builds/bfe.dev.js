@@ -1207,7 +1207,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').show();
           });
-          $('#bfeditor-exitcancel').click(function () {
+          $('#bfeditor-exitcancel, [href=#browse]').click(function () {
             $('#save-btn').remove();
             $('#bfeditor-previewPanel').remove();
             $('#bfeditor-messagediv').remove();
@@ -1488,6 +1488,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         'data-uri': rt.defaulturi
       }); // is data-uri used?
       
+      // create a popover box to display resource ID of the thing.
       var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
       if (rt.defaulturi.match(/^http/)) {
         var rid = rt.defaulturi;
@@ -1499,25 +1500,82 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourceInfo.popover({ trigger: "click hover" });
         $resourcedivheading.append($resourceInfo);
       }
-    
-      var $clonebutton = $('<button id="clone-instance" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
-      // var $clonebutton = $('<button id="bfeditor-exitsave" type="button" class="pull-right btn btn-primary"><span class="glyphicon glyphicon-duplicate"></span> Clone Instance</button>');
-      if (rt.id.match(/Instance$/i)) {
-        $resourcedivheading.append($clonebutton);
+      
+      // create an empty clone button
+      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"><span class="glyphicon glyphicon-duplicate"></span></button>');
+
+      // populate the clone button for Instance or Work descriptions
+      if (rt.id.match(/:Instance$/i)) {
+        $clonebutton.attr('id','clone-instance');
+        $clonebutton.text(' Clone Instance');
+        $clonebutton.data({'match':'instances','label':'Instance'});
+      } else if (rt.id.match(/:Work$/i)) {
+        $clonebutton.attr('id','clone-work');
+        $clonebutton.text(' Clone Work');
+        $clonebutton.data({'match':'works','label':'Work'});
       }
 
-      $resourcediv.append($resourcedivheading);
+      // append to the resource heading if there is a clone button id
+      if ($clonebutton.attr('id')) {
+        var newid = mintResource(guid());
+        $resourcedivheading.append($clonebutton);
+        
+        // ask user to input custom id
+        $cloneinput = $('\
+          <div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+            <div class="modal-dialog" role="document">\
+              <div class="modal-content">\
+                <div class="modal-header">\
+                  <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
+                  <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
+                </div>\
+                <div class="modal-body">\
+                    <div class="input-group col-xs-12">\
+                      <span class="input-group-addon">New Resource ID:</span>\
+                      <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                      <span class="input-group-btn">\
+                        <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                      </span>\
+                    </div>\
+                </div>\
+                <div class="modal-footer">\
+                  <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                </div>\
+              </div>\
+            </div>\
+          </div>');
+        $resourcediv.append($cloneinput);
+      }
 
-      $clonebutton.click(function() {
+      // append to the resource div
+      $resourcediv.append($resourcedivheading);
+      $resourcediv.find('#clear-id').click(function() {
+        $('#resource-id').attr('value','');
+        $('#resource-id').focus();
+      });
+      // the cloning starts here if clone button is clicked
+      $resourcediv.find('#clone-save').click(function() {
+        var rid = $('#resource-id').attr('value');
+        $('#clone-input').modal('hide');
         var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
         var olduri = rt.defaulturi;
-        bfeditor.bfestore.name = guid();
-        var iid = mintResource(guid());
-        var oldiid = olduri.replace(/^http.+\//,'');
+
+        bfeditor.bfestore.name = guid();  // verso save name
+        // var rid = mintResource(guid()); // new resource id
+        var ctype = $clonebutton.data('label'); // get label for alert message
+        var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
+
+        // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
         bfeditor.bfestore.store.forEach( function(trip) {
-          trip.s = trip.s.replace(/(\/instances\/)\w+$/,"$1" + iid);
+          trip.s = trip.s.replace(re, "$1" + rid + "$2");
+          trip.o = trip.o.replace(re, "$1" + rid + "$2");
         });
+
+        // reload the newly created templage
         cbLoadTemplates();
+
+        // start checking for errors (basically check for remnants of old resource IDs)
         var errs = 0;
         bfeditor.bfestore.store.forEach( function(trip) {
           if (trip.s == olduri) {        
@@ -1525,9 +1583,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           }
         });
         if (errs > 0) {
-          alert('Old instances URIs found');
-        } else {
-          $msgnode.append('<div class="alert alert-info">Instance cloned as ' + iid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+          $msgnode.append('<div class="alert alert-danger">Old ' + ctype + ' URIs found in cloned description. Clone failed!<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+        } else {         
+          $msgnode.append('<div class="alert alert-info">' + ctype + ' cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
         } 
         $msgnode.insertBefore('.nav-tabs');   
       });
