@@ -278,23 +278,36 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     // Set up logging
     bfelog.init(editorconfig);
 
+    /**
+     * Profiles are expected to be in the form provided by Verso:
+     * A JSON Array of objects with a "json" property that contains the profile proper
+     **/
     for (var i = 0; i < config.profiles.length; i++) {
       var file = config.profiles[i];
-      bfelog.addMsg(new Error(), 'INFO', 'Loading profile: ' + config.profiles[i]);
       $.ajax({
         type: 'GET',
         dataType: 'json',
         url: file,
-        success: function (data) {
-          $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
-          profiles.push(data);
-          for (var rt = 0; rt < data.Profile.resourceTemplates.length; rt++) {
-            resourceTemplates.push(data.Profile.resourceTemplates[rt]);
-          }
-        },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
           bfelog.addMsg(new Error(), 'ERROR', 'FAILED to load profile: ' + file);
           bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+          if (textStatus == 'success') {
+            var data = JSON.parse(jqXHR.responseText);
+            $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
+            if (data !== undefined) {
+            //  for (var j = 0; j < data.length; j++) {
+                profiles.push(data);
+                for (var rt = 0; rt < data.Profile.resourceTemplates.length; rt++) {
+                  resourceTemplates.push(data.Profile.resourceTemplates[rt]);
+                }
+                bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data.Profile.title);
+              //}
+            } else {
+              bfelog.addMsg(new Error(), 'ERROR', 'No profiles loaded from ' + this.url + ' (empty result set)');
+            }
+          }
         }
       });
     }
@@ -540,10 +553,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var text = '';
               var mahttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/metadataAssigner');
               var mahttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/metadataAssigner');
+              var cihttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/catalogerId');
+              var cihttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/catalogerId');
               if (mahttps) {
                 text = _.pluck(data[mahttps]['https://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
               } else if (mahttp) {
                 text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
+              } else if (cihttps) {
+                text = _.pluck(data[cihttps]['https://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
+              } else if (cihttp) {
+                text = _.pluck(data[cihttp]['http://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
               }
               //                                if (_.filter(data, function(el) {
               //                                        return el["http://id.loc.gov/ontologies/bflc/metadataAssigner"]
@@ -1188,7 +1207,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').show();
           });
-          $('#bfeditor-exitcancel').click(function () {
+          $('#bfeditor-exitcancel, [href=#browse]').click(function () {
             $('#save-btn').remove();
             $('#bfeditor-previewPanel').remove();
             $('#bfeditor-messagediv').remove();
@@ -1408,7 +1427,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       });
       if (rt !== undefined && rt[0] !== undefined) {
         fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
-        // console.log(loadTemplates[urt].data);
+        // console.log(loadTemplates[urt]);
         fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
         fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
         fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
@@ -1421,16 +1440,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var worklist = _.filter(bfeditor.bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
               if (!_.isEmpty(worklist)) {
                 // check for type
-
                 var rtType = _.where(worklist, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI});
-
                 if (!_.isEmpty(rtType)) {
                   fobject.resourceTemplates[urt].defaulturi = rtType[0].s;
                 } else {
                   // find uniq s, and look for one that has no o.
 
                   var rt = fobject.resourceTemplates[urt];
-
                   // add type
                   var triple = {};
                   triple.guid = rt.useguid;
@@ -1472,14 +1488,107 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         'data-uri': rt.defaulturi
       }); // is data-uri used?
       
+      // create a popover box to display resource ID of the thing.
       var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
-      var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
-      $resourceInfo.attr('data-content',rt.defaulturi);
-      $resourceInfo.attr('data-toggle','popover');
-      $resourceInfo.attr('title','Resource ID');
-      $resourceInfo.popover({ trigger: "click hover" });
-      $resourcedivheading.append($resourceInfo);
+      if (rt.defaulturi.match(/^http/)) {
+        var rid = rt.defaulturi;
+        var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+        $resourceInfo.attr('data-content', rid);
+        $resourceInfo.attr('data-toggle','popover');
+        $resourceInfo.attr('title','Resource ID');
+        $resourceInfo.attr('id','resource-id-popover');
+        $resourceInfo.popover({ trigger: "click hover" });
+        $resourcedivheading.append($resourceInfo);
+      }
+      
+      // create an empty clone button
+      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"><span class="glyphicon glyphicon-duplicate"></span></button>');
+
+      // populate the clone button for Instance or Work descriptions
+      if (rt.id.match(/:Instance$/i)) {
+        $clonebutton.attr('id','clone-instance');
+        $clonebutton.text(' Clone Instance');
+        $clonebutton.data({'match':'instances','label':'Instance'});
+      } else if (rt.id.match(/:Work$/i)) {
+        $clonebutton.attr('id','clone-work');
+        $clonebutton.text(' Clone Work');
+        $clonebutton.data({'match':'works','label':'Work'});
+      }
+
+      // append to the resource heading if there is a clone button id
+      if ($clonebutton.attr('id')) {
+        var newid = mintResource(guid());
+        $resourcedivheading.append($clonebutton);
+        
+        // ask user to input custom id
+        $cloneinput = $('\
+          <div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+            <div class="modal-dialog" role="document">\
+              <div class="modal-content">\
+                <div class="modal-header">\
+                  <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
+                  <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
+                </div>\
+                <div class="modal-body">\
+                    <div class="input-group col-xs-12">\
+                      <span class="input-group-addon">New Resource ID:</span>\
+                      <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                      <span class="input-group-btn">\
+                        <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                      </span>\
+                    </div>\
+                </div>\
+                <div class="modal-footer">\
+                  <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                </div>\
+              </div>\
+            </div>\
+          </div>');
+        $resourcediv.append($cloneinput);
+      }
+
+      // append to the resource div
       $resourcediv.append($resourcedivheading);
+      $resourcediv.find('#clear-id').click(function() {
+        $('#resource-id').attr('value','');
+        $('#resource-id').focus();
+      });
+      // the cloning starts here if clone button is clicked
+      $resourcediv.find('#clone-save').click(function() {
+        var rid = $('#resource-id').attr('value');
+        $('#clone-input').modal('hide');
+        var $msgnode = $('<div>', {id: "bfeditor-messagediv"});
+        var olduri = rt.defaulturi;
+
+        bfeditor.bfestore.name = guid();  // verso save name
+        // var rid = mintResource(guid()); // new resource id
+        var ctype = $clonebutton.data('label'); // get label for alert message
+        var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
+
+        // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
+        bfeditor.bfestore.store.forEach( function(trip) {
+          trip.s = trip.s.replace(re, "$1" + rid + "$2");
+          trip.o = trip.o.replace(re, "$1" + rid + "$2");
+        });
+
+        // reload the newly created templage
+        cbLoadTemplates();
+
+        // start checking for errors (basically check for remnants of old resource IDs)
+        var errs = 0;
+        bfeditor.bfestore.store.forEach( function(trip) {
+          if (trip.s == olduri) {        
+             errs++;
+          }
+        });
+        if (errs > 0) {
+          $msgnode.append('<div class="alert alert-danger">Old ' + ctype + ' URIs found in cloned description. Clone failed!<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+        } else {         
+          $msgnode.append('<div class="alert alert-info">' + ctype + ' cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+        } 
+        $msgnode.insertBefore('.nav-tabs');   
+      });
 
       var $formgroup = $('<div>', {
         class: 'form-group row'
@@ -3077,7 +3186,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", returntriples);
 
         var resourceTriple = '';
-        var replaceBnode = (property.propertyLabel === 'Lookup' || property.type === 'lookup');
+        var replaceBnode = !!(property.propertyLabel === 'Lookup' || property.type === 'lookup');
 
         returntriples.forEach(function (t) {
           if (t.guid === undefined) {
@@ -3106,7 +3215,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
               if (replaceBnode) {
                 resourceTriple.o = t.o;
-                formobject.defaulturi = t.o;
                 // find the bnode
                 bfestore.addTriple(resourceTriple);
                 formobject.store.push(resourceTriple);
@@ -3116,9 +3224,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
             }
           } else {
-            if(replaceBnode){
-              t.s = formobject.defaulturi;
-            }
+            // I don't think this workst.s = resourceTriple.o;
             formobject.store.push(t);
             bfestore.addTriple(t);
           }
@@ -3213,11 +3319,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     lu.name = name.substr(name.lastIndexOf('/') + 1);
     var scheme = name;
     var source = function (query, process) {
-      if (scheme.startsWith('https://lookup.ld4l.org')){
-        return lcshared.qaQuery(query, cache, scheme, process);
-      } else {
-        return lcshared.simpleQuery(query, cache, scheme, process);
-      }
+      return lcshared.simpleQuery(query, cache, scheme, process);
     };
 
     var getResource = function (subjecturi, property, selected, process) {
@@ -4215,28 +4317,6 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
     return typeahead_source;
   };
 
-  exports.qaSuggestions = function (suggestions, query) {
-    var typeahead_source = [];
-    if (suggestions !== undefined) {
-      suggestions.forEach(function(suggestion) {
-        typeahead_source.push({
-          uri: suggestion.uri,
-          value: suggestion.label
-        });
-      }, typeahead_source);
-    }
-
-    if (typeahead_source.length === 0) {
-      typeahead_source[0] = {
-        uri: '',
-        value: '[No suggestions found for ' + query + '.]'
-      };
-    }
-    // console.log(typeahead_source);
-    // $("#dropdown-footer").text('Total Results:' + suggestions.length);
-    return typeahead_source;
-  };
-
   exports.processATOM = function (atomjson, query) {
     var typeahead_source = [];
     for (var k in atomjson) {
@@ -4311,42 +4391,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
       }
     }, 300); // 300 ms
   };
-
-  exports.qaQuery = function (query, cache, scheme, process) {
-    console.log('q is ' + query);
-
-    q = encodeURI(query.normalize());
-    if (cache[q]) {
-      process(cache[q]);
-      return;
-    }
-    if (typeof this.searching !== 'undefined') {
-      clearTimeout(this.searching);
-      process([]);
-    }
-    this.searching = setTimeout(function () {
-      if (query.length >= 1) {
-        u = scheme + '?maxRecords=50&q=' + q;
-        $.ajax({
-          type: 'GET',
-          async: false,
-          data: {
-            uri: u
-          },
-          url: config.url + '/profile-edit/server/whichrt',
-          success: function (data) {
-            parsedlist = exports.qaSuggestions(data, query);
-            cache[q] = parsedlist;
-            return process(parsedlist);
-          }
-        });
-      } else {
-        return [];
-      }
-    }, 300); // 300 ms
-  };
 });
-
 bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/lookups/lcshared'], function (require, exports, module) {
   var lcshared = require('src/lookups/lcshared');
 
