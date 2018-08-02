@@ -659,7 +659,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         if (findRt[0] !== undefined){
                             spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[0];
                         }
-  */
+              */
               var temptemplates = [];
               spoints.useResourceTemplates.forEach(function (l) {
                 var useguid = guid();
@@ -1183,7 +1183,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                          <button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button> \
                          <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
                          <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-   <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
+                         <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
                          </div>');
 
           var $bfeditor = $('#create > .row');
@@ -1195,8 +1195,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                          <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre></div></div>\
                          <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#rdfxml">RDF-XML</a></h3></div>\
                          <div class="panel-collapse collapse in" id="rdfxml"><div class="panel-body"><pre></pre></div></div>\
-   <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
-   <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
+                         <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
+                         <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
                          </div>');
           var $messagediv;
           $bfeditor.append($saveButtonGroup);
