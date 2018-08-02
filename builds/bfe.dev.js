@@ -1122,7 +1122,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
         var form = getForm(loadtemplates);
-        $('.typeahead', form.form).each(function () {
+        $('.typeahead:not(#add-property)', form.form).each(function () {
           setTypeahead(this);
         });
         var $exitButtonGroup = $('<div class="btn-group pull-right"> \
@@ -1833,12 +1833,28 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $formgroup.append($input);
             $formgroup.append($button);
             // $formgroup.append($saves);
-          }
+          }       
         }
-
+        
         $resourcediv.append($formgroup);
         forEachFirst = false;
       });
+
+      $addpropinput = $('<input>', { type: 'text', id: 'add-property', class: 'typeahead' });
+      $addpropinput.typeahead({
+        hint: true,
+        minLength: 1,
+        source: ['homer','marge','bart','lisa']
+      });
+
+      $addpropdata = $('<div>', { class: 'col-sm-8' });
+      $addpropdata.append($addpropinput);
+      $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
+      $addprop = $('<div>', { class: 'form-group row' });
+      $addprop.append($addproplabel);
+      $addprop.append($addpropdata);
+
+      $resourcediv.append($addprop);
       form.append($resourcediv);
     });
 
