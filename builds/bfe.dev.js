@@ -1515,8 +1515,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $clonebutton.data({'match':'works','label':'Work'});
       }
 
-      // append to the resource heading if there is a clone button id
-      if ($clonebutton.attr('id')) {
+      // append to the resource heading if there is a clone button id and is not a modal window      
+      if ($clonebutton.attr('id') && rt.embedType != 'modal') {
         var newid = mintResource(guid());
         $resourcedivheading.append($clonebutton);
         
@@ -2522,6 +2522,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   // inputID is the ID of hte DOM element within the loadtemplate form
   // triples is the base data.
   function openModal (callingformobjectid, loadtemplate, resourceURI, inputID, triples) {
+
     // Modals
     var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="' + tabIndices++ + '" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
             <div class="modal-dialog"> \
