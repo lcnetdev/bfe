@@ -1878,15 +1878,20 @@ var substringMatcher = function(strs) {
     // contains the substring `q`, add it to the `matches` array
     $.each(strs, function(i, str) {
       if (substrRegex.test(str.id)) {
-        matches.push(str.id);
+        matches.push({value: str.id});
       }
     });
     console.log(matches);
     cb(matches);
   };
 };
+
       $addpropinput = $('<input>', { type: 'text', id: 'add-property', class: 'typeahead' });
-      $addpropinput.typeahead(null,
+      $addpropinput.typeahead(
+        {
+          hint: true,
+          suggestions: true
+        },
         {
           name: 'resources',
           displayKey: 'value',
