@@ -1864,45 +1864,33 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         forEachFirst = false;
       });
       
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substrRegex;
-
-    // an array that will be populated with substring matches
-    matches = [];
-
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
-
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str.id)) {
-        matches.push({value: str.id});
-      }
-    });
-    console.log(matches);
-    cb(matches);
-  };
-};
-
-      $addpropinput = $('<input>', { type: 'text', id: 'add-property', class: 'typeahead' });
-      $addpropinput.typeahead(
+      var substringMatcher = function(strs) {
+        return function findMatches(q, cb) {
+          var matches, substrRegex;
+          matches = [];
+          substrRegex = new RegExp(q, 'i');
+          $.each(strs, function(i, str) {
+            if (substrRegex.test(str.id)) {
+              matches.push({value: str.id});
+            }
+          });
+          console.log(matches);
+          cb(matches);
+        };
+      };
+      
+      $addpropdata = $('<div>', { class: 'col-sm-8' });
+      $('<input>').appendTo($addpropdata).typeahead(
         {
           hint: true,
-          suggestions: true
+          limit: 5
         },
         {
           name: 'resources',
           displayKey: 'value',
-          templates: { header: '<div>Hey</div>' },
           source: substringMatcher(resourceTemplates)
         }
       );
-      $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $addpropspan = $('<span>', {class: 'twitter-typeahead' });
-      $addpropspan.append($addpropinput);
-      $addpropdata.append($addpropspan);
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
       $addprop = $('<div>', { class: 'form-group row' });
       $addprop.append($addproplabel);
