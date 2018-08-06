@@ -1122,7 +1122,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
         var form = getForm(loadtemplates);
-        $('.typeahead:not(#add-property)', form.form).each(function () {
+        $('.typeahead:not("#add-property")', form.form).each(function () {
           setTypeahead(this);
         });
         var $exitButtonGroup = $('<div class="btn-group pull-right"> \
@@ -1880,15 +1880,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
       
       $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $('<input>').appendTo($addpropdata).typeahead(
+      $('<input>', { id: 'add-property' }).appendTo($addpropdata).typeahead(
         {
-          hint: true,
-          limit: 5
+          highlight: true,
         },
         {
           name: 'resources',
           displayKey: 'value',
-          source: substringMatcher(resourceTemplates)
+          source: substringMatcher(resourceTemplates),
+          limit: 5
         }
       );
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
