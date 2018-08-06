@@ -1632,7 +1632,31 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       // $button.append($linkbutton);
       // $formgroup.append($button);
       $resourcediv.append($formgroup);
-
+      console.log(resourceTemplates);
+      /* rt.propertyTemplates.push({
+        "mandatory": "false",
+        "repeatable": "true",
+        "type": "resource",
+        "resourceTemplates": [],
+        "valueConstraint": {
+          "valueTemplateRefs": [],
+          "useValuesFrom": [
+            "http://id.loc.gov/vocabulary/contentTypes"
+          ],
+          "valueDataType": {
+            "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
+          },
+          "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
+          "defaultLiteral": "text",
+          "editable": "false",
+          "repeatable": "true"
+        },
+        "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
+        "propertyLabel": "Add Field...",
+        "remark": "",
+        "guid": "b5b847d5-be28-4ee6-a9cc-8f3d4c4ba61c",
+        "display": "true"
+      }); */
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
         // the resourceTemplate.
@@ -1839,23 +1863,48 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourcediv.append($formgroup);
         forEachFirst = false;
       });
+      
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substrRegex;
 
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str.id)) {
+        matches.push(str.id);
+      }
+    });
+    console.log(matches);
+    cb(matches);
+  };
+};
       $addpropinput = $('<input>', { type: 'text', id: 'add-property', class: 'typeahead' });
-      $addpropinput.typeahead({
-        hint: true,
-        minLength: 1,
-        source: ['homer','marge','bart','lisa']
-      });
-
+      $addpropinput.typeahead(null,
+        {
+          name: 'resources',
+          displayKey: 'value',
+          templates: { header: '<div>Hey</div>' },
+          source: substringMatcher(resourceTemplates)
+        }
+      );
       $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $addpropdata.append($addpropinput);
+      $addpropspan = $('<span>', {class: 'twitter-typeahead' });
+      $addpropspan.append($addpropinput);
+      $addpropdata.append($addpropspan);
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
       $addprop = $('<div>', { class: 'form-group row' });
       $addprop.append($addproplabel);
       $addprop.append($addpropdata);
-
       $resourcediv.append($addprop);
       form.append($resourcediv);
+      
     });
 
     // OK now we need to populate the form with data, if appropriate.
@@ -3104,6 +3153,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
       dshash.displayKey = 'value';
       dshashes.push(dshash);
+      console.log(dshash);
     });
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Data source hashes', dshashes);
