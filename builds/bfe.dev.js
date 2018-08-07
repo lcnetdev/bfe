@@ -1122,7 +1122,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
         var form = getForm(loadtemplates);
-        $('.typeahead.form-control', form.form).each(function () {
+        $('.typeahead', form.form).each(function () {
           setTypeahead(this);
         });
         var $exitButtonGroup = $('<div class="btn-group pull-right"> \
@@ -1880,7 +1880,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
       
       $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'typeahead', style: 'width: 100%' });
+      $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control' });
       $addpropinput.appendTo($addpropdata).typeahead(
         {
           highlight: true,        
@@ -2752,7 +2752,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $(this).empty();
     });
 
-    $('.typeahead.form-control', form.form).each(function () {
+    $('.typeahead', form.form).each(function () {
       setTypeahead(this);
     });
 
