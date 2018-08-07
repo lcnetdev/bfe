@@ -1122,7 +1122,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
         var form = getForm(loadtemplates);
-        $('.typeahead:not("#add-property")', form.form).each(function () {
+        $('.typeahead.form-control', form.form).each(function () {
           setTypeahead(this);
         });
         var $exitButtonGroup = $('<div class="btn-group pull-right"> \
@@ -1871,7 +1871,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           substrRegex = new RegExp(q, 'i');
           $.each(strs, function(i, str) {
             if (substrRegex.test(str.id)) {
-              matches.push({value: str.id});
+              matches.push({value: str.id, key: i});
             }
           });
           console.log(matches);
@@ -1880,24 +1880,26 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
       
       $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $('<input>', { id: 'add-property' }).appendTo($addpropdata).typeahead(
+      $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'typeahead', style: 'width: 100%' });
+      $addpropinput.appendTo($addpropdata).typeahead(
         {
-          highlight: true,
+          highlight: true,        
         },
         {
           name: 'resources',
           displayKey: 'value',
           source: substringMatcher(resourceTemplates),
-          limit: 5
         }
-      );
+      ).on('typeahead:selected', function (e, suggestion) {
+        console.log(resourceTemplates[suggestion.key]);
+      });
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
       $addprop = $('<div>', { class: 'form-group row' });
       $addprop.append($addproplabel);
       $addprop.append($addpropdata);
       $resourcediv.append($addprop);
+      $addpropinput
       form.append($resourcediv);
-      
     });
 
     // OK now we need to populate the form with data, if appropriate.
@@ -2750,7 +2752,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $(this).empty();
     });
 
-    $('.typeahead', form.form).each(function () {
+    $('.typeahead.form-control', form.form).each(function () {
       setTypeahead(this);
     });
 
