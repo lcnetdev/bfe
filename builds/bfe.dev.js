@@ -646,20 +646,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               var bTypes = [];
-              /* rowData.rdf.forEach(function(t){
-                            if(t["@type"] !== undefined && t["@type"].length > 0 && t["@id"].indexOf("_:b")){
-                                //console.log(t["@id"] + " " +t["@type"][0]);
-                                bTypes.push(t["@type"][0]);
-                            } else {
-                                //console.log();
-                            }
-                        });
-
-                        findRt = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })
-                        if (findRt[0] !== undefined){
-                            spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[0];
-                        }
-              */
               var temptemplates = [];
               spoints.useResourceTemplates.forEach(function (l) {
                 var useguid = guid();
@@ -1421,7 +1407,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     // Load up the requested templates, add seed data.
     for (var urt = 0; urt < loadTemplates.length; urt++) {
-      // console.log(loadTemplates[urt]);
+      console.log(loadTemplates[urt]);
       rt = _.where(resourceTemplates, {
         'id': loadTemplates[urt].resourceTemplateID
       });
@@ -1473,7 +1459,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfelog.addMsg(new Error(), 'WARN', 'Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.');
       }
     }
-
+console.log('fobject');
+console.log(fobject);
     // Let's create the form
     var form = $('<form>', {
       id: 'bfeditor-form-' + fobject.id,
@@ -1626,37 +1613,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
 
       $resourceinput.keyup(enterHandler);
-      // $formgroup.append($label);
       $resourceinput.append($saves);
-      // $formgroup.append($resourceinput);
-      // $button.append($linkbutton);
-      // $formgroup.append($button);
       $resourcediv.append($formgroup);
-      console.log(resourceTemplates);
-      /* rt.propertyTemplates.push({
-        "mandatory": "false",
-        "repeatable": "true",
-        "type": "resource",
-        "resourceTemplates": [],
-        "valueConstraint": {
-          "valueTemplateRefs": [],
-          "useValuesFrom": [
-            "http://id.loc.gov/vocabulary/contentTypes"
-          ],
-          "valueDataType": {
-            "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Content"
-          },
-          "defaultURI": "http://id.loc.gov/vocabulary/contentTypes/txt",
-          "defaultLiteral": "text",
-          "editable": "false",
-          "repeatable": "true"
-        },
-        "propertyURI": "http://id.loc.gov/ontologies/bibframe/content",
-        "propertyLabel": "Add Field...",
-        "remark": "",
-        "guid": "b5b847d5-be28-4ee6-a9cc-8f3d4c4ba61c",
-        "display": "true"
-      }); */
+
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
         // the resourceTemplate.
@@ -1874,7 +1833,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               matches.push({value: str.id, key: i});
             }
           });
-          console.log(matches);
+          // console.log(matches);
           cb(matches);
         };
       };
@@ -1891,7 +1850,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           source: substringMatcher(resourceTemplates),
         }
       ).on('typeahead:selected', function (e, suggestion) {
-        console.log(resourceTemplates[suggestion.key]);
+        var newproperties = resourceTemplates[suggestion.key].propertyTemplates;
+        console.log(newproperties);
+        newproperties.forEach(function(p) {
+          p.display = 'true';
+          p.guid = guid();
+          rt.propertyTemplates.push(p);
+        });
+        console.log(rt);
+        getForm(bfeditor.bfestore.loadtemplates);
       });
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
       $addprop = $('<div>', { class: 'form-group row' });
@@ -1975,6 +1942,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           rt.guid = rt.useguid;
         }
         rt.propertyTemplates.forEach(function (property) {
+          console.log('HEY');
+          console.log(property);
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var vtRefs = property.valueConstraint.valueTemplateRefs;
@@ -3148,7 +3117,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
       dshash.displayKey = 'value';
       dshashes.push(dshash);
-      console.log(dshash);
     });
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Data source hashes', dshashes);
