@@ -1094,7 +1094,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     }
   }
 
-  function cbLoadTemplates () {
+  function cbLoadTemplates (propTemps) {
     $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
     loadtemplatesANDlookupsCounter++;
     var loadtemplates = bfeditor.bfestore.loadtemplates;
@@ -1107,7 +1107,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $('#bfeditor-formdiv').html('');
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
-        var form = getForm(loadtemplates);
+        var form = getForm(loadtemplates, propTemps);
         $('.typeahead', form.form).each(function () {
           setTypeahead(this);
         });
@@ -1393,9 +1393,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             data=bfestore
         }
     */
-  function getForm (loadTemplates) {
+  function getForm (loadTemplates, pt) {
     var rt, property;
-
+  
     // Create the form object.
     var fguid = guid();
     var fobject = {};
@@ -1407,7 +1407,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     // Load up the requested templates, add seed data.
     for (var urt = 0; urt < loadTemplates.length; urt++) {
-      console.log(loadTemplates[urt]);
       rt = _.where(resourceTemplates, {
         'id': loadTemplates[urt].resourceTemplateID
       });
@@ -1459,8 +1458,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         bfelog.addMsg(new Error(), 'WARN', 'Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.');
       }
     }
-console.log('fobject');
-console.log(fobject);
+
     // Let's create the form
     var form = $('<form>', {
       id: 'bfeditor-form-' + fobject.id,
@@ -1468,6 +1466,9 @@ console.log(fobject);
       role: 'form'
     });
     var forEachFirst = true;
+    if (pt) {
+      fobject.resourceTemplates[0].propertyTemplates = pt;
+    }
     fobject.resourceTemplates.forEach(function (rt) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
       var $resourcediv = $('<div>', {
@@ -1830,6 +1831,7 @@ console.log(fobject);
           substrRegex = new RegExp(q, 'i');
           $.each(strs, function(i, str) {
             if (substrRegex.test(str.id)) {
+              console.log(str);
               matches.push({value: str.id, key: i});
             }
           });
@@ -1837,7 +1839,6 @@ console.log(fobject);
           cb(matches);
         };
       };
-      
       $addpropdata = $('<div>', { class: 'col-sm-8' });
       $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control' });
       $addpropinput.appendTo($addpropdata).typeahead(
@@ -1857,8 +1858,7 @@ console.log(fobject);
           p.guid = guid();
           rt.propertyTemplates.push(p);
         });
-        console.log(rt);
-        getForm(bfeditor.bfestore.loadtemplates);
+        cbLoadTemplates(rt.propertyTemplates);       
       });
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
       $addprop = $('<div>', { class: 'form-group row' });
@@ -2096,7 +2096,7 @@ console.log(fobject);
 
     if (propsdata[0] === undefined) {
       // log the resulttry again
-      console.log(property.propertyURI + ' not matched.');
+      // console.log(property.propertyURI + ' not matched.');
     }
     if (propsdata[0] !== undefined) {
       // If this property exists for this resource in the pre-loaded data
