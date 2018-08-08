@@ -1823,19 +1823,27 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourcediv.append($formgroup);
         forEachFirst = false;
       });
-      
+      var addFields = {};
+      resourceTemplates.forEach(function(rtemp) {
+        rtemp.propertyTemplates.forEach(function(ptemp) {
+          if (ptemp.type != 'resource') {
+            addFields[ptemp.propertyURI] = ptemp;
+          }
+        })
+      });
+      console.log(addFields);
       var substringMatcher = function(strs) {
         return function findMatches(q, cb) {
           var matches, substrRegex;
           matches = [];
           substrRegex = new RegExp(q, 'i');
           $.each(strs, function(i, str) {
-            if (substrRegex.test(str.id)) {
-              console.log(str);
-              matches.push({value: str.id, key: i});
+            if (substrRegex.test(str.propertyLabel)) {
+              // console.log(str);
+              matches.push({value: str.propertyLabel, key: i});
             }
           });
-          // console.log(matches);
+          console.log(matches);
           cb(matches);
         };
       };
@@ -1848,16 +1856,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         {
           name: 'resources',
           displayKey: 'value',
-          source: substringMatcher(resourceTemplates),
+          source: substringMatcher(addFields),
         }
       ).on('typeahead:selected', function (e, suggestion) {
-        var newproperties = resourceTemplates[suggestion.key].propertyTemplates;
-        console.log(newproperties);
-        newproperties.forEach(function(p) {
-          p.display = 'true';
-          p.guid = guid();
-          rt.propertyTemplates.push(p);
-        });
+        var newproperty = addFields[suggestion.key];
+        console.log(newproperty);
+        newproperty.display = 'true';
+        newproperty.guid = guid();
+        rt.propertyTemplates.push(newproperty);
         cbLoadTemplates(rt.propertyTemplates);       
       });
       $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
