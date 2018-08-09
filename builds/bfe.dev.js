@@ -1843,10 +1843,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $.each(strs, function(i, str) {
             if (substrRegex.test(str.propertyLabel)) {
               // console.log(str);
-              matches.push({value: str.propertyLabel, key: i});
+              matches.push({value: i});
             }
           });
-          console.log(matches);
+          // console.log(matches);
           cb(matches);
         };
       };
@@ -1862,7 +1862,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           source: substringMatcher(addFields),
         }
       ).on('typeahead:selected', function (e, suggestion) {
-        var newproperty = addFields[suggestion.key];
+        var newproperty = addFields[suggestion.value];
         console.log(newproperty);
         newproperty.display = 'true';
         newproperty.guid = guid();
