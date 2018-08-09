@@ -1837,45 +1837,46 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         forEachFirst = false;
       });
       // starting the "add property" stuff here
-      var substringMatcher = function(strs) {
-        return function findMatches(q, cb) {
-          var matches, substrRegex;
-          matches = [];
-          substrRegex = new RegExp(q, 'i');
-          $.each(strs, function(i, str) {
-              if (substrRegex.test(str.propertyLabel) && !addPropsUsed[str.propertyURI]) {
-                matches.push({value: i});
-              }
-          });
-          // console.log(matches);
-          cb(matches);
+      if (rt.embedType == 'page') {
+        var substringMatcher = function(strs) {
+          return function findMatches(q, cb) {
+            var matches, substrRegex;
+            matches = [];
+            substrRegex = new RegExp(q, 'i');
+            $.each(strs, function(i, str) {
+                if (substrRegex.test(str.propertyLabel) && !addPropsUsed[str.propertyURI]) {
+                  matches.push({value: i});
+                }
+            });
+            // console.log(matches);
+            cb(matches);
+          };
         };
-      };
-      $addpropdata = $('<div>', { class: 'col-sm-8' });
-      $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control' });
-      $addpropinput.appendTo($addpropdata).typeahead(
-        {
-          highlight: true,        
-        },
-        {
-          name: 'resources',
-          displayKey: 'value',
-          source: substringMatcher(addFields),
-        }
-      ).on('typeahead:selected', function (e, suggestion) {
-        var newproperty = addFields[suggestion.value];
-        console.log(newproperty);
-        newproperty.display = 'true';
-        newproperty.guid = guid();
-        rt.propertyTemplates.push(newproperty);
-        cbLoadTemplates(rt.propertyTemplates);       
-      });
-      $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
-      $addprop = $('<div>', { class: 'form-group row' });
-      $addprop.append($addproplabel);
-      $addprop.append($addpropdata);
-      $resourcediv.append($addprop);
-      $addpropinput
+        $addpropdata = $('<div>', { class: 'col-sm-8' });
+        $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control' });
+        $addpropinput.appendTo($addpropdata).typeahead(
+          {
+            highlight: true,        
+          },
+          {
+            name: 'resources',
+            displayKey: 'value',
+            source: substringMatcher(addFields),
+          }
+        ).on('typeahead:selected', function (e, suggestion) {
+          var newproperty = addFields[suggestion.value];
+          console.log(newproperty);
+          newproperty.display = 'true';
+          newproperty.guid = guid();
+          rt.propertyTemplates.push(newproperty);
+          cbLoadTemplates(rt.propertyTemplates);       
+        });
+        $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
+        $addprop = $('<div>', { class: 'form-group row' });
+        $addprop.append($addproplabel);
+        $addprop.append($addpropdata);
+        $resourcediv.append($addprop);
+      }
       form.append($resourcediv);
     });
 
