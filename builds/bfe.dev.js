@@ -177,6 +177,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   var profiles = [];
   var resourceTemplates = [];
   var addFields = {};
+  var addedProperties = [];
   // var startingPoints = [];
   // var formTemplates = [];
   // var lookups = [];
@@ -671,6 +672,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               });
 
               $(td).find('#bfeditor-retrieve' + rowData.id).click(function () {
+                addedProperties = [];
                 if (editorconfig.retrieve.callback !== undefined) {
                   // loadtemplates = temptemplates;
                   bfestore.loadtemplates = temptemplates;
@@ -1246,6 +1248,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+              save_json.addedproperties = addedProperties;
 
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function (save, save_name) {
@@ -1366,7 +1369,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     // store = new rdfstore.Store();
     var spnums = spid.replace('sp-', '').split('_');
     var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
-
+    addedProperties = [];
+    
     bfeditor.bfestore.store = [];
     bfeditor.bfestore.name = guid();
     bfeditor.bfestore.created = new Date().toUTCString();
@@ -1406,7 +1410,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     */
   function getForm (loadTemplates, pt) {
     var rt, property;
-  
+
     // Create the form object.
     var fguid = guid();
     var fobject = {};
@@ -1480,6 +1484,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     if (pt) {
       fobject.resourceTemplates[0].propertyTemplates = pt;
     }
+
     fobject.resourceTemplates.forEach(function (rt) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
       var $resourcediv = $('<div>', {
@@ -1869,6 +1874,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           newproperty.display = 'true';
           newproperty.guid = guid();
           rt.propertyTemplates.push(newproperty);
+          addedProperties.push(newproperty);
           cbLoadTemplates(rt.propertyTemplates);       
         });
         $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
@@ -1953,8 +1959,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           rt.guid = rt.useguid;
         }
         rt.propertyTemplates.forEach(function (property) {
-          console.log('HEY');
-          console.log(property);
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var vtRefs = property.valueConstraint.valueTemplateRefs;
