@@ -176,6 +176,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   // var store = new rdfstore.Store();
   var profiles = [];
   var resourceTemplates = [];
+  var addFields = {};
   // var startingPoints = [];
   // var formTemplates = [];
   // var lookups = [];
@@ -301,6 +302,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 profiles.push(data[j].json);
                 for (var rt = 0; rt < data[j].json.Profile.resourceTemplates.length; rt++) {
                   resourceTemplates.push(data[j].json.Profile.resourceTemplates[rt]);
+                  // populate addFields hash with property templates for the "add property" function.
+                  data[j].json.Profile.resourceTemplates[rt].propertyTemplates.forEach(function(ptemp) {
+                    if (ptemp.type != 'resource') {
+                      if (ptemp.propertyLabel !== undefined) {
+                        var propKey = ptemp.propertyLabel;
+                        propKey = propKey.replace(/^\d\w*\. /,'');
+                        addFields[propKey] = ptemp;
+                      }
+                    }
+                  })
                 }
                 bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data[j].name);
               }
@@ -1823,15 +1834,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $resourcediv.append($formgroup);
         forEachFirst = false;
       });
-      var addFields = {};
-      resourceTemplates.forEach(function(rtemp) {
-        rtemp.propertyTemplates.forEach(function(ptemp) {
-          if (ptemp.type != 'resource') {
-            addFields[ptemp.propertyURI] = ptemp;
-          }
-        })
-      });
-      console.log(addFields);
+      // starting the "add property" stuff here
       var substringMatcher = function(strs) {
         return function findMatches(q, cb) {
           var matches, substrRegex;
