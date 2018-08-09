@@ -1627,6 +1627,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $resourceinput.keyup(enterHandler);
       $resourceinput.append($saves);
       $resourcediv.append($formgroup);
+      var addPropsUsed = {};
 
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
@@ -1634,6 +1635,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var pguid = guid();
         property.guid = pguid;
         property.display = 'true';
+        addPropsUsed[property.propertyURI] = 1;
 
         var $formgroup = $('<div>', {
           class: 'form-group row'
@@ -1841,10 +1843,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           matches = [];
           substrRegex = new RegExp(q, 'i');
           $.each(strs, function(i, str) {
-            if (substrRegex.test(str.propertyLabel)) {
-              // console.log(str);
-              matches.push({value: i});
-            }
+              if (substrRegex.test(str.propertyLabel) && !addPropsUsed[str.propertyURI]) {
+                matches.push({value: i});
+              }
           });
           // console.log(matches);
           cb(matches);
