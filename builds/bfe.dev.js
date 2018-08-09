@@ -684,6 +684,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   bfestore.created = rowData.created;
                   bfestore.url = rowData.url;
                   bfestore.profile = rowData.profile;
+                  bfestore.addedproperties = rowData.addedproperties;
                   $('[href=#create]').tab('show');
                   if ($('#bfeditor-messagediv').length) {
                     $('#bfeditor-messagediv').remove();
@@ -1248,7 +1249,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-              save_json.addedproperties = addedProperties;
+              addedProperties.forEach(function(addprops) {
+                bfeditor.bfestore.addedproperties.push(addprops);
+              });
+              save_json.addedproperties = bfeditor.bfestore.addedproperties;
+              
 
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function (save, save_name) {
@@ -1370,7 +1375,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     var spnums = spid.replace('sp-', '').split('_');
     var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
     addedProperties = [];
-    
+
     bfeditor.bfestore.store = [];
     bfeditor.bfestore.name = guid();
     bfeditor.bfestore.created = new Date().toUTCString();
@@ -1633,7 +1638,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $resourceinput.append($saves);
       $resourcediv.append($formgroup);
       var addPropsUsed = {};
-
+      if (bfeditor.bfestore.addedproperties !== undefined && rt.embedType == 'page' && !pt) {
+        bfeditor.bfestore.addedproperties.forEach(function(adata) {
+          rt.propertyTemplates.push(adata);
+        });
+      }
+      console.log(rt);
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
         // the resourceTemplate.
