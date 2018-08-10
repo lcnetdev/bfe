@@ -1249,11 +1249,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-              /* addedProperties.forEach(function(addprops) {
-                save_json.addedproperties
-              }); */
               save_json.addedproperties = addedProperties;
-              
 
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function (save, save_name) {
@@ -1868,7 +1864,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           };
         };
         $addpropdata = $('<div>', { class: 'col-sm-8' });
-        $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control' });
+        $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
         $addpropinput.appendTo($addpropdata).typeahead(
           {
             highlight: true,        
