@@ -672,7 +672,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               });
 
               $(td).find('#bfeditor-retrieve' + rowData.id).click(function () {
-                addedProperties = [];
                 if (editorconfig.retrieve.callback !== undefined) {
                   // loadtemplates = temptemplates;
                   bfestore.loadtemplates = temptemplates;
@@ -684,7 +683,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   bfestore.created = rowData.created;
                   bfestore.url = rowData.url;
                   bfestore.profile = rowData.profile;
-                  bfestore.addedproperties = rowData.addedproperties;
+                  addedProperties = rowData.addedproperties;
                   $('[href=#create]').tab('show');
                   if ($('#bfeditor-messagediv').length) {
                     $('#bfeditor-messagediv').remove();
@@ -696,6 +695,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   window.location.hash = mintResource(rowData.name);
                 } else {
                   // retrieve disabled
+                  addedProperties = [];
                 }
               });
 
@@ -1249,10 +1249,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-              addedProperties.forEach(function(addprops) {
-                bfeditor.bfestore.addedproperties.push(addprops);
-              });
-              save_json.addedproperties = bfeditor.bfestore.addedproperties;
+              /* addedProperties.forEach(function(addprops) {
+                save_json.addedproperties
+              }); */
+              save_json.addedproperties = addedProperties;
               
 
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
@@ -1638,12 +1638,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $resourceinput.append($saves);
       $resourcediv.append($formgroup);
       var addPropsUsed = {};
-      if (bfeditor.bfestore.addedproperties !== undefined && rt.embedType == 'page' && !pt) {
-        bfeditor.bfestore.addedproperties.forEach(function(adata) {
+      if (addedProperties !== undefined && rt.embedType == 'page' && !pt) {
+        addedProperties.forEach(function(adata) {
           rt.propertyTemplates.push(adata);
         });
       }
-      console.log(rt);
+
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
         // the resourceTemplate.
