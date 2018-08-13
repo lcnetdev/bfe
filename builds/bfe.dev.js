@@ -176,6 +176,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   // var store = new rdfstore.Store();
   var profiles = [];
   var resourceTemplates = [];
+  var addFields = {};
+  var addedProperties = [];
   // var startingPoints = [];
   // var formTemplates = [];
   // var lookups = [];
@@ -301,6 +303,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 profiles.push(data[j].json);
                 for (var rt = 0; rt < data[j].json.Profile.resourceTemplates.length; rt++) {
                   resourceTemplates.push(data[j].json.Profile.resourceTemplates[rt]);
+                  // populate addFields hash with property templates for the "add property" function.
+                  data[j].json.Profile.resourceTemplates[rt].propertyTemplates.forEach(function(ptemp) {
+                    if (ptemp.type != 'resource') {
+                      if (ptemp.propertyLabel !== undefined) {
+                        var propKey = ptemp.propertyLabel;
+                        propKey = propKey.replace(/^\d\w*\. /,'');
+                        addFields[propKey] = ptemp;
+                      }
+                    }
+                  })
                 }
                 bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data[j].name);
               }
@@ -646,20 +658,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               var bTypes = [];
-              /* rowData.rdf.forEach(function(t){
-                            if(t["@type"] !== undefined && t["@type"].length > 0 && t["@id"].indexOf("_:b")){
-                                //console.log(t["@id"] + " " +t["@type"][0]);
-                                bTypes.push(t["@type"][0]);
-                            } else {
-                                //console.log();
-                            }
-                        });
-
-                        findRt = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })
-                        if (findRt[0] !== undefined){
-                            spoints = _.where(editorconfig.startingPoints, { menuItems:[{type:bTypes}] })[0].menuItems[0];
-                        }
-  */
               var temptemplates = [];
               spoints.useResourceTemplates.forEach(function (l) {
                 var useguid = guid();
@@ -685,6 +683,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   bfestore.created = rowData.created;
                   bfestore.url = rowData.url;
                   bfestore.profile = rowData.profile;
+                  addedProperties = rowData.addedproperties;
                   $('[href=#create]').tab('show');
                   if ($('#bfeditor-messagediv').length) {
                     $('#bfeditor-messagediv').remove();
@@ -696,6 +695,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   window.location.hash = mintResource(rowData.name);
                 } else {
                   // retrieve disabled
+                  addedProperties = [];
                 }
               });
 
@@ -1108,7 +1108,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     }
   }
 
-  function cbLoadTemplates () {
+  function cbLoadTemplates (propTemps) {
     $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
     loadtemplatesANDlookupsCounter++;
     var loadtemplates = bfeditor.bfestore.loadtemplates;
@@ -1121,7 +1121,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       $('#bfeditor-formdiv').html('');
       if (loadtemplates.length > 0) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Loading selected template(s)', loadtemplates);
-        var form = getForm(loadtemplates);
+        var form = getForm(loadtemplates, propTemps);
         $('.typeahead', form.form).each(function () {
           setTypeahead(this);
         });
@@ -1183,7 +1183,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                          <button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button> \
                          <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
                          <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-   <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
+                         <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
                          </div>');
 
           var $bfeditor = $('#create > .row');
@@ -1195,8 +1195,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                          <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre></div></div>\
                          <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#rdfxml">RDF-XML</a></h3></div>\
                          <div class="panel-collapse collapse in" id="rdfxml"><div class="panel-body"><pre></pre></div></div>\
-   <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
-   <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
+                         <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
+                         <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
                          </div>');
           var $messagediv;
           $bfeditor.append($saveButtonGroup);
@@ -1249,6 +1249,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+              save_json.addedproperties = addedProperties;
 
               if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
                 editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function (save, save_name) {
@@ -1369,6 +1370,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     // store = new rdfstore.Store();
     var spnums = spid.replace('sp-', '').split('_');
     var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+    addedProperties = [];
 
     bfeditor.bfestore.store = [];
     bfeditor.bfestore.name = guid();
@@ -1407,7 +1409,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             data=bfestore
         }
     */
-  function getForm (loadTemplates) {
+  function getForm (loadTemplates, pt) {
     var rt, property;
 
     // Create the form object.
@@ -1421,7 +1423,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     // Load up the requested templates, add seed data.
     for (var urt = 0; urt < loadTemplates.length; urt++) {
-      // console.log(loadTemplates[urt]);
       rt = _.where(resourceTemplates, {
         'id': loadTemplates[urt].resourceTemplateID
       });
@@ -1481,6 +1482,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       role: 'form'
     });
     var forEachFirst = true;
+    if (pt) {
+      fobject.resourceTemplates[0].propertyTemplates = pt;
+    }
+
     fobject.resourceTemplates.forEach(function (rt) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
       var $resourcediv = $('<div>', {
@@ -1626,12 +1631,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       };
 
       $resourceinput.keyup(enterHandler);
-      // $formgroup.append($label);
       $resourceinput.append($saves);
-      // $formgroup.append($resourceinput);
-      // $button.append($linkbutton);
-      // $formgroup.append($button);
       $resourcediv.append($formgroup);
+      var addPropsUsed = {};
+      if (addedProperties !== undefined && rt.embedType == 'page' && !pt) {
+        addedProperties.forEach(function(adata) {
+          rt.propertyTemplates.push(adata);
+        });
+      }
 
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
@@ -1639,6 +1646,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var pguid = guid();
         property.guid = pguid;
         property.display = 'true';
+        addPropsUsed[property.propertyURI] = 1;
 
         var $formgroup = $('<div>', {
           class: 'form-group row'
@@ -1833,12 +1841,54 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $formgroup.append($input);
             $formgroup.append($button);
             // $formgroup.append($saves);
-          }
+          }       
         }
-
+        
         $resourcediv.append($formgroup);
         forEachFirst = false;
       });
+      // starting the "add property" stuff here
+      if (rt.embedType == 'page') {
+        var substringMatcher = function(strs) {
+          return function findMatches(q, cb) {
+            var matches, substrRegex;
+            matches = [];
+            substrRegex = new RegExp(q, 'i');
+            $.each(strs, function(i, str) {
+                if (substrRegex.test(str.propertyLabel) && !addPropsUsed[str.propertyURI]) {
+                  matches.push({value: i});
+                }
+            });
+            // console.log(matches);
+            cb(matches);
+          };
+        };
+        $addpropdata = $('<div>', { class: 'col-sm-8' });
+        $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
+        $addpropinput.appendTo($addpropdata).typeahead(
+          {
+            highlight: true,        
+          },
+          {
+            name: 'resources',
+            displayKey: 'value',
+            source: substringMatcher(addFields),
+          }
+        ).on('typeahead:selected', function (e, suggestion) {
+          var newproperty = addFields[suggestion.value];
+          console.log(newproperty);
+          newproperty.display = 'true';
+          newproperty.guid = guid();
+          rt.propertyTemplates.push(newproperty);
+          addedProperties.push(newproperty);
+          cbLoadTemplates(rt.propertyTemplates);       
+        });
+        $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
+        $addprop = $('<div>', { class: 'form-group row' });
+        $addprop.append($addproplabel);
+        $addprop.append($addpropdata);
+        $resourcediv.append($addprop);
+      }
       form.append($resourcediv);
     });
 
@@ -2067,7 +2117,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     if (propsdata[0] === undefined) {
       // log the resulttry again
-      console.log(property.propertyURI + ' not matched.');
+      // console.log(property.propertyURI + ' not matched.');
     }
     if (propsdata[0] !== undefined) {
       // If this property exists for this resource in the pre-loaded data
