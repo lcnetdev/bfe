@@ -974,16 +974,27 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $loadmarcdiv.append($('<div class="container"> \
             <form role="form" method="get"> \
             <div class="form-group"> \
-            <label for="bibid">Bib ID or LCCN</label> \
+            <label for="marcdx">Bib ID or LCCN</label> \
+            <div class="input-group"> \
+            <div class="input-group-btn"> \
+            <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></button> \
+            <ul class="dropdown-menu"> \
+            <li><a href="#" id="bibid">Bib ID</a></li> \
+            <li><a href="#" id="lccn">LCCN</a></li> \
+            </ul></div> \
             <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID or LCCN" type="text" name="url" id="url"> \
-            <div class="radio-group"><label class="radio-inline"><input type="radio" name="index" checked>Bib ID</label> \
-            <label class="radio-inline"><input type="radio" name="index">LCCN</label></div> \
+            </div> \
             <label for="bfeditor-loadmarc-dropdown">Choose Profile</label> \
             <div id="bfeditor-loadmarc-dropdown" class="dropdown"><select id="bfeditor-loadmarc-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
             <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
             </form></div>'));
     
     getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'));
+    
+    $loadmarcdiv.find('.dropdown-menu > li > a').click(function() {
+      console.log($(this));
+      $('#marcdx').html($(this).text() + ' <span class="caret">');
+    });
     
     $tabcontentdiv.append($browsediv);
     $tabcontentdiv.append($creatediv);
