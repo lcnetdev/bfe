@@ -821,6 +821,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     });
 
+    var getProfileOptions = function(jqObject) {
+      for (var h = 0; h < config.startingPoints.length; h++) {
+        var sp = config.startingPoints[h];
+        var label = sp.menuGroup
+        for (var i = 0; i < sp.menuItems.length; i++) {
+          var $option = $('<option>', {
+            class: 'dropdown-item',
+            value: 'sp-' + h + '_' + i
+          });
+          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+            //$a.html(sp.menuItems[i].label);
+            $option.html(label);
+            jqObject.append($option);
+          }
+        }      
+      }
+    }
+
     var $loadibcform = $('<div class="container"> \
             <form role="form" method="get"> \
             <div class="form-group"> \
@@ -829,25 +847,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
             </div></div> \
             <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
-            </form></div>')
+            </form></div>');
 
-    var $ibcmenudiv = $loadibcform.find('#bfeditor-loadibc-dropdownMenu');
-
-    for (var h = 0; h < config.startingPoints.length; h++) {
-          var sp = config.startingPoints[h];
-          var label = sp.menuGroup
-          for (var i = 0; i < sp.menuItems.length; i++) {
-            var $option = $('<option>', {
-              class: 'dropdown-item',
-              value: 'sp-' + h + '_' + i
-            });
-            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
-              //$a.html(sp.menuItems[i].label);
-              $option.html(label);
-              $ibcmenudiv.append($option);
-            }
-          }      
-        }
+    getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'));
 
     $loadibcdiv.append($loadibcform);
             
@@ -974,11 +976,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             <div class="form-group"> \
             <label for="bibid">Bib ID or LCCN</label> \
             <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID or LCCN" type="text" name="url" id="url"> \
-            <label class="radio-inline"><input type="radio" name="bibid" checked>Bib ID</label> \
-            <label class="radio-inline"><input type="radio" name="lccn">LCCN</label></div> \
+            <div class="radio-group"><label class="radio-inline"><input type="radio" name="index" checked>Bib ID</label> \
+            <label class="radio-inline"><input type="radio" name="index">LCCN</label></div> \
+            <label for="bfeditor-loadmarc-dropdown">Choose Profile</label> \
+            <div id="bfeditor-loadmarc-dropdown" class="dropdown"><select id="bfeditor-loadmarc-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
             <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
             </form></div>'));
-
+    
+    getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'));
+    
     $tabcontentdiv.append($browsediv);
     $tabcontentdiv.append($creatediv);
     $tabcontentdiv.append($loaddiv);
