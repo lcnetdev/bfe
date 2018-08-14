@@ -938,7 +938,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $tabcontentdiv.append($loadibcdiv);
     $tabcontentdiv.append($loadmarcdiv);
 
-    $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarcxx').click(function () {
+    $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
       // var loadtemplates = [];
 
       var spoints = { label: 'Loaded Work',
@@ -968,8 +968,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       if (editorconfig.retrieve.callback !== undefined) {
         try {
           bfestore.loadtemplates = temptemplates;
-          var url = $(this.parentElement).find('#bfeditor-loaduriInput').val();
+          var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
           editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (loadtemplates) {
+            console.log(this);
             // converter uses bf:person intead of personal name
             _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person'}), function (triple) {
               triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
