@@ -385,6 +385,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $tabul.append('<li><a data-toggle="tab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" href="#load">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" href="#loadibc">Load IBC</a></li>');
+    $tabul.append('<li><a data-toggle="tab" href="#loadmarc">Load MARC</a></li>');
 
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
@@ -394,6 +395,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
     var $loaddiv = $('<div id="load" class="tab-pane fade"><br></div>');
     var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
+    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
 
     var $menudiv = $('<div>', {
       id: 'bfeditor-menudiv',
@@ -967,10 +969,21 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     });
 
+    $loadmarcdiv.append($('<div class="container"> \
+            <form role="form" method="get"> \
+            <div class="form-group"> \
+            <label for="bibid">Bib ID or LCCN</label> \
+            <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID or LCCN" type="text" name="url" id="url"> \
+            <label class="radio-inline"><input type="radio" name="bibid" checked>Bib ID</label> \
+            <label class="radio-inline"><input type="radio" name="lccn">LCCN</label></div> \
+            <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
+            </form></div>'));
+
     $tabcontentdiv.append($browsediv);
     $tabcontentdiv.append($creatediv);
     $tabcontentdiv.append($loaddiv);
     $tabcontentdiv.append($loadibcdiv);
+    $tabcontentdiv.append($loadmarcdiv);
 
     $containerdiv.append($tabcontentdiv);
 
