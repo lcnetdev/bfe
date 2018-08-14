@@ -994,6 +994,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $loadmarcdiv.find('.dropdown-menu > li > a').click(function() {
       console.log($(this));
       $('#marcdx').html($(this).text() + ' <span class="caret">');
+      $('#marcdx').attr('value', $(this).attr('id'));
     });
     
     $tabcontentdiv.append($browsediv);
