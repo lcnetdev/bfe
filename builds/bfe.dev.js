@@ -905,7 +905,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             <label for="marcdx">Bib ID or LCCN</label> \
             <div class="input-group"> \
             <div class="input-group-btn"> \
-            <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></button> \
+            <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bib ID <span class="caret"></span></button> \
             <ul class="dropdown-menu"> \
             <li><a href="#" id="bibid">Bib ID</a></li> \
             <li><a href="#" id="lccn">LCCN</a></li> \
