@@ -970,7 +970,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           bfestore.loadtemplates = temptemplates;
           var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
           editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (loadtemplates) {
-            console.log(this);
+            console.log(loadtemplates);
             // converter uses bf:person intead of personal name
             _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person'}), function (triple) {
               triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
@@ -3727,6 +3727,10 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
       url: url,
       success: function (data) {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          expanded.forEach(function (nnode) {
+            nnode['@id'] = nnode['@id'].replace(/^_:N/, '_:bnode');
+          });
+          console.log(expanded);
           bfestore.store = [];
           tempstore = bfestore.jsonld2store(expanded);
           callback(loadtemplates);
