@@ -3727,12 +3727,14 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
       url: url,
       success: function (data) {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
-          expanded.forEach(function (nnode) {
-            nnode['@id'] = nnode['@id'].replace(/^_:N/, '_:bnode');
-          });
           console.log(expanded);
           bfestore.store = [];
           tempstore = bfestore.jsonld2store(expanded);
+          tempstore.forEach(function (nnode) {
+            nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
+            nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
+          });
+          console.log(tempstore);
           callback(loadtemplates);
         });
       },
