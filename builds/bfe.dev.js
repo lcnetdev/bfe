@@ -3716,10 +3716,9 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
 
   exports.store = [];
 
-  exports.rdfTranslate = function (rdf, from, to) {
-
-    var url = 'http://rdf-translator.appspot.com/convert/' + from + '/' + to + '/content';
-
+  exports.rdfxml2store = function (rdf, loadtemplates, callback) {
+    var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
+    var bfestore = this;
     $.ajax({
       contentType: 'application/x-www-form-urlencoded',
       type: "POST",
@@ -3727,7 +3726,11 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
       data: { content: rdf},
       url: url,
       success: function (data) {
-        console.log(data);
+        bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          bfestore.store = [];
+          tempstore = bfestore.jsonld2store(expanded);
+          callback(loadtemplates);
+        });
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
         bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
