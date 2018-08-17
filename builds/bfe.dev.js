@@ -998,7 +998,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
             // weird bnode prob
             _.each(bfeditor.bfestore.store, function (el) {
-              if (el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
+              if (el.o !== undefined && el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
             });
 
             cbLoadTemplates();
@@ -3727,14 +3727,14 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
       url: url,
       success: function (data) {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
-          console.log(expanded);
           bfestore.store = [];
           tempstore = bfestore.jsonld2store(expanded);
           tempstore.forEach(function (nnode) {
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
-            nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
+            if (nnode.o !== undefined) {
+              nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
+            }
           });
-          console.log(tempstore);
           callback(loadtemplates);
         });
       },
