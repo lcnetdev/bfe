@@ -3716,6 +3716,26 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
 
   exports.store = [];
 
+  exports.rdfTranslate = function (rdf, from, to) {
+
+    var url = 'http://rdf-translator.appspot.com/convert/' + from + '/' + to + '/content';
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      type: "POST",
+      async: false,
+      data: { content: rdf},
+      url: url,
+      success: function (data) {
+        console.log(data);
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+      }
+    });
+  }
+
   exports.addTriple = function (triple) {
     exports.store.push(triple);
     if (triple.rtid !== undefined) { exports.n3store.addTriple(triple.s, triple.p, triple.o, triple.rtID); } else { exports.n3store.addTriple(triple.s, triple.p, triple.o); }
