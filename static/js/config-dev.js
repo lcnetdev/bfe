@@ -139,11 +139,12 @@ function publish(data, rdfxml, savename, bfelog, callback){
 
 
 function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
-  
+  console.log(loadtemplates);
   var url = config.url + "/profile-edit/server/whichrt";
+  var dType = !uri.match(/jsonld$/) ? 'xml' : 'json';
   
   $.ajax({
-    dataType: "json",
+    dataType: dType,
     type: "GET",
     async: false,
     data: { uri: uri},
@@ -151,11 +152,17 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
     success: function (data) {
       bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
       bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
-      bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
-        bfestore.store = [];
-        tempstore = bfestore.jsonld2store(expanded);
-        callback(loadtemplates);
-      });
+      
+      if (dType == 'xml') {
+        var rdfrec  = $('zs\\:recordData', data).html();
+        bfestore.rdfxml2store(rdfrec, loadtemplates, callback);
+      } else {
+        bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          bfestore.store = [];
+          tempstore = bfestore.jsonld2store(expanded);
+          callback(loadtemplates);
+        });
+      }
       //bfestore.n32store(data, url, tempstore, callback);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) { 
@@ -228,14 +235,13 @@ var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 // The following line is for local developement
 // rectoBase = "http://localhost:3000";
-
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-  /*            "logging": {
+              /* "logging": {
                 "level": "DEBUG",
-                "toConsole": true
-                },*/
+                "toConsole": false
+              }, */
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
