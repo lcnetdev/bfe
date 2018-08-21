@@ -141,7 +141,7 @@ function publish(data, rdfxml, savename, bfelog, callback){
 function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
   var url = config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
-  
+
   $.ajax({
     dataType: dType,
     type: "GET",
@@ -233,14 +233,14 @@ function deleteId(id, csrf, bfelog){
 var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 // The following line is for local developement
-rectoBase = "http://localhost:3000";
+// rectoBase = "http://localhost:3000";
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-              "logging": {
+              /* "logging": {
                 "level": "DEBUG",
                 "toConsole": false
-              },
+              }, */
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
