@@ -139,9 +139,10 @@ function publish(data, rdfxml, savename, bfelog, callback){
 
 
 function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
+  var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   var url = config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
-
+  console.log(dType);
   $.ajax({
     dataType: dType,
     type: "GET",
@@ -153,8 +154,14 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
       bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
       
       if (dType == 'xml') {
-        var rdfrec  = $('zs\\:recordData', data).html();
-        bfestore.rdfxml2store(rdfrec, loadtemplates, callback);
+        var recCount = $('zs\\:numberOfRecords', data).text();
+        if (recCount != '0') {
+          var rdfrec  = $('zs\\:recordData', data).html();
+          bfestore.rdfxml2store(rdfrec, loadtemplates, callback);
+        } else {
+          $messagediv.append('<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times; </a><strong>No records found! </strong>(' + uri + ')</div>');
+          $messagediv.insertAfter('#loadmarc .container');
+        }
       } else {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
           bfestore.store = [];
@@ -233,7 +240,7 @@ function deleteId(id, csrf, bfelog){
 var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 // The following line is for local developement
-// rectoBase = "http://localhost:3000";
+rectoBase = "http://localhost:3000";
 var versoURL = rectoBase + "/verso/api";
 
 var config = {

@@ -3729,7 +3729,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
   exports.rdfxml2store = function (rdf, loadtemplates, callback) {
     var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
     var bfestore = this;
-    console.log(loadtemplates);
+
     $.ajax({
       contentType: 'application/x-www-form-urlencoded',
       type: "POST",
@@ -3742,16 +3742,16 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
           tempstore = bfestore.jsonld2store(expanded);
           tempstore.forEach(function (nnode) {
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/$1');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/$1');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/$1');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/c' + '$1'.padStart(7, 0));
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0));
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0));
             if (nnode.o !== undefined) {
               nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/$1');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/$1');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/$1');
-            }
-            console.log(nnode);
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/c' + '$1'.padStart(7, 0));
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0));
+              // nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Item.*$/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0));
+            } 
+            // console.log(nnode);
           });
           callback(loadtemplates);
         });
