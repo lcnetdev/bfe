@@ -939,18 +939,19 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $tabcontentdiv.append($loadmarcdiv);
 
     $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
-      // var loadtemplates = [];
-
-      var spoints = { label: 'Loaded Work',
-        type: ['http://id.loc.gov/ontologies/bibframe/Work'],
-        useResourceTemplates: ['profile:bf2:Monograph:Work']
-      };
-
-     /* spoints = { label: 'Loaded Instance',
-        type: ['http://id.loc.gov/ontologies/bibframe/Instance'],
-        useResourceTemplates: ['profile:bf2:Monograph:Instance']
-      }; */
-
+      var spoints = {};
+      
+      if (this.id == 'bfeditor-loadmarc') {
+        var spid = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu').val();
+        var spnums = spid.replace('sp-', '').split('_'); 
+        spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+      } else {
+        spoints = { label: 'Loaded Work',
+          type: ['http://id.loc.gov/ontologies/bibframe/Work'],
+          useResourceTemplates: ['profile:bf2:Monograph:Work']
+        };
+      }
+ 
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
