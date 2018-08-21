@@ -946,6 +946,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         useResourceTemplates: ['profile:bf2:Monograph:Work']
       };
 
+     /* spoints = { label: 'Loaded Instance',
+        type: ['http://id.loc.gov/ontologies/bibframe/Instance'],
+        useResourceTemplates: ['profile:bf2:Monograph:Instance']
+      }; */
+
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
@@ -970,7 +975,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           bfestore.loadtemplates = temptemplates;
           var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
           editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (loadtemplates) {
-            console.log(loadtemplates);
             // converter uses bf:person intead of personal name
             _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person'}), function (triple) {
               triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
@@ -2091,6 +2095,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   }
 
   function preloadData (property, rt, form, fobject) {
+    console.log(rt.defaulturi);
+    console.log(property.propertyURI);
+    console.log('-------');
     var propsdata = _.where(bfestore.store, {
       's': rt.defaulturi,
       'p': property.propertyURI
@@ -3719,6 +3726,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
   exports.rdfxml2store = function (rdf, loadtemplates, callback) {
     var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
     var bfestore = this;
+    console.log(loadtemplates);
     $.ajax({
       contentType: 'application/x-www-form-urlencoded',
       type: "POST",
@@ -3731,9 +3739,16 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
           tempstore = bfestore.jsonld2store(expanded);
           tempstore.forEach(function (nnode) {
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/$1');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/$1');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/$1');
             if (nnode.o !== undefined) {
               nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/$1');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/$1');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/$1');
             }
+            console.log(nnode);
           });
           callback(loadtemplates);
         });
