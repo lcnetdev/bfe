@@ -940,23 +940,25 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
       var spoints = {};
-      
+
       if (this.id == 'bfeditor-loadmarc') {
         var spid = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu').val();
         var spnums = spid.replace('sp-', '').split('_'); 
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+        bfeditor.bfestore.state = 'loadmarc';
       } else {
         spoints = { label: 'Loaded Work',
           type: ['http://id.loc.gov/ontologies/bibframe/Work'],
           useResourceTemplates: ['profile:bf2:Monograph:Work']
         };
+        bfeditor.bfestore.state = 'loaduri';
       }
  
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
       bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
-      bfeditor.bfestore.state = 'loaduri';
+      // bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
       loadtemplatesCount = spoints.useResourceTemplates.length;
 
