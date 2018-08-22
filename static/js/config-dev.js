@@ -142,7 +142,7 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
   var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   var url = config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
-  console.log(dType);
+
   $.ajax({
     dataType: dType,
     type: "GET",
@@ -159,7 +159,6 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
           var rdfrec  = $('zs\\:recordData', data).html();
           var recid = $('bf\\:Local > rdf\\:value', data).html()
           recid = recid.padStart(9, '0');
-          console.log(recid);
           bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
         } else {
           var q = uri.replace(/.+query=(.+?)&.+/, "$1");
@@ -167,8 +166,6 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
           <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
           <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
           $nohits.modal('show');
-          /* $('body').append($nohits);
-          $('#nohits').modal('show'); */
         }
       } else {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
