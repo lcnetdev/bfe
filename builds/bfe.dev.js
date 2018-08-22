@@ -4290,7 +4290,6 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
             parsedlist.forEach(function (item) {
               item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
             });
-            console.log(parsedlist);
             cache[q] = parsedlist;
             return process(parsedlist);
           }
@@ -4302,6 +4301,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processATOM(data, query);
+            parsedlist.forEach(function (item) {
+              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+            });
             cache[q] = parsedlist;
             return process(parsedlist);
           }
