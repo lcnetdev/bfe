@@ -157,7 +157,10 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
         var recCount = $('zs\\:numberOfRecords', data).text();
         if (recCount != '0') {
           var rdfrec  = $('zs\\:recordData', data).html();
-          bfestore.rdfxml2store(rdfrec, loadtemplates, callback);
+          var recid = $('bf\\:Local > rdf\\:value', data).html()
+          recid = recid.padStart(9, '0');
+          console.log(recid);
+          bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
         } else {
           var q = uri.replace(/.+query=(.+?)&.+/, "$1");
           $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
