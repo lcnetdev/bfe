@@ -2098,9 +2098,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   }
 
   function preloadData (property, rt, form, fobject) {
-    console.log(rt.defaulturi);
-    console.log(property.propertyURI);
-    console.log('-------');
+
     var propsdata = _.where(bfestore.store, {
       's': rt.defaulturi,
       'p': property.propertyURI
@@ -3743,15 +3741,15 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
           tempstore.forEach(function (nnode) {
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
             nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/c' + '$1'.padStart(7, 0));
-            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0));
-            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0));
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0) + '0001');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/(\d+)#Item.*/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0) + '0001');
             if (nnode.o !== undefined) {
               nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
               nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Work/, 'id.loc.gov/resources/works/c' + '$1'.padStart(7, 0));
-              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0));
-              // nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Item.*$/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0));
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Instance/, 'id.loc.gov/resources/instances/c' + '$1'.padStart(7, 0) + '0001');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/(\d+)#Item.*$/, 'id.loc.gov/resources/items/c' + '$1'.padStart(7, 0) + '0001');
             } 
-            // console.log(nnode);
+            console.log(nnode);
           });
           callback(loadtemplates);
         });
