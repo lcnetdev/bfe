@@ -159,8 +159,13 @@ function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
           var rdfrec  = $('zs\\:recordData', data).html();
           bfestore.rdfxml2store(rdfrec, loadtemplates, callback);
         } else {
-          $messagediv.append('<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times; </a><strong>No records found! </strong>(' + uri + ')</div>');
-          $messagediv.insertAfter('#loadmarc .container');
+          var q = uri.replace(/.+query=(.+?)&.+/, "$1");
+          $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
+          <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
+          <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
+          $nohits.modal('show');
+          /* $('body').append($nohits);
+          $('#nohits').modal('show'); */
         }
       } else {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
@@ -240,7 +245,7 @@ function deleteId(id, csrf, bfelog){
 var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 // The following line is for local developement
-rectoBase = "http://localhost:3000";
+// rectoBase = "http://localhost:3000";
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
