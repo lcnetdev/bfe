@@ -3185,7 +3185,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         header: '<h3>' + lu.name + '</h3>',
         footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
       };
-      dshash.displayKey = 'value';
+      dshash.displayKey = (dshash.name == 'LCNAF') ? 'display' : 'value';
       dshashes.push(dshash);
     });
 
@@ -4275,7 +4275,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
     }
 
     this.searching = setTimeout(function () {
-      if (query.length > 2 && query.substr(0, 1) != '?' && !query.substr(2, 1).match(/\d/)) {
+      if (query.length > 2 && query.substr(0, 1) != '?' && !query.substr(1, 2).match(/\d/)) {
         suggestquery = query.normalize();
         console.log(query);
         if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
@@ -4287,6 +4287,10 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processSuggestions(data, query);
+            parsedlist.forEach(function (item) {
+              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+            });
+            console.log(parsedlist);
             cache[q] = parsedlist;
             return process(parsedlist);
           }
