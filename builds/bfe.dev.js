@@ -4275,13 +4275,13 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
     }
 
     this.searching = setTimeout(function () {
-      if (query.length > 2 && query.substr(0, 1) != '?') {
+      if (query.length > 2 && query.substr(0, 1) != '?' && !query.substr(2, 1).match(/\d/)) {
         suggestquery = query.normalize();
+        console.log(query);
         if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
 
         u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
 
-        // u = exports.scheme + "/suggest/?q=" + query;
         $.ajax({
           url: u,
           dataType: 'jsonp',
