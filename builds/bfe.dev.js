@@ -3185,7 +3185,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         header: '<h3>' + lu.name + '</h3>',
         footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
       };
-      dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
+      // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
+      dshash.displayKey = 'display';
       dshashes.push(dshash);
     });
 
@@ -4287,9 +4288,6 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processSuggestions(data, query);
-            parsedlist.forEach(function (item) {
-              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
-            });
             cache[q] = parsedlist;
             return process(parsedlist);
           }
@@ -4301,9 +4299,6 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processATOM(data, query);
-            parsedlist.forEach(function (item) {
-              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
-            });
             cache[q] = parsedlist;
             return process(parsedlist);
           }
@@ -4436,6 +4431,8 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
       for (var s = 0; s < suggestions[1].length; s++) {
         var l = suggestions[1][s];
         var u = suggestions[3][s];
+        var id = u.replace(/.+\/(.+)/, '$1');
+        var d = l + ' (' + id + ')';
         if (suggestions.length === 5) {
           var i = suggestions[4][s];
           var li = l + ' (' + i + ')';
@@ -4445,14 +4442,15 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
 
         typeahead_source.push({
           uri: u,
-          value: li
+          value: li,
+          display: d
         });
       }
     }
     if (typeahead_source.length === 0) {
       typeahead_source[0] = {
         uri: '',
-        value: '[No suggestions found for ' + query + '.]'
+        display: '[No suggestions found for ' + query + '.]'
       };
     }
     // console.log(typeahead_source);
@@ -4467,6 +4465,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
         var t = '';
         var u = '';
         var source = '';
+        var d = '';
         for (var e in atomjson[k]) {
           if (atomjson[k][e][0] == 'atom:title') {
             t = atomjson[k][e][2];
@@ -4474,22 +4473,26 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'module'], function (r
           if (atomjson[k][e][0] == 'atom:link') {
             u = atomjson[k][e][1].href;
             source = u.substr(0, u.lastIndexOf('/'));
+            var id = u.replace(/.+\/(.+)/, '$1');
+            d = t + ' (' + id + ')';
           }
           if (t !== '' && u !== '') {
             typeahead_source.push({
               uri: u,
               source: source,
-              value: t
+              value: t, 
+              display: d
             });
             break;
           }
+          console.log(typeahead_source);
         }
       }
     }
     if (typeahead_source.length === 0) {
       typeahead_source[0] = {
         uri: '',
-        value: '[No suggestions found for ' + query + '.]'
+        display: '[No suggestions found for ' + query + '.]'
       };
     }
     // console.log(typeahead_source);
@@ -4622,9 +4625,6 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processSuggestions(data, query);
-            parsedlist.forEach(function (item) {
-              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
-            });
             cache[q] = parsedlist;
             return process(parsedlist);
           }
@@ -4636,9 +4636,6 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
           dataType: 'jsonp',
           success: function (data) {
             parsedlist = lcshared.processATOM(data, query);
-            parsedlist.forEach(function (item) {
-              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
-            });
             cache[q] = parsedlist;
             return process(parsedlist);
           }
@@ -4694,7 +4691,7 @@ bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'module', 'src/loo
     }
     // lcgft
     this.searching = setTimeout(function () {
-      if (query.length > 2) {
+      if (query.length > 2 && !query.match(/[Gg][A-z]?\d/)) {
         suggestquery = query;
         if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
 
@@ -4711,7 +4708,18 @@ bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'module', 'src/loo
           }
 
         });
-      } else {
+      } /* else if (query.length > 2 && query.match(/[Gg][A-z]?\d/)) {
+        u = 'http://id.loc.gov/search/?q=cs:http://id.loc.gov/authorities/genreForms%20AND%20(' + query + ')&start=1&format=atom';
+        $.ajax({
+          url: u,
+          dataType: 'jsonp',
+          success: function (data) {
+            parsedlist = lcshared.processATOM(data, query);
+            cache[q] = parsedlist;
+            return process(parsedlist);
+          }
+        });
+      } */ else {
         return [];
       }
     }, 300); // 300 ms
