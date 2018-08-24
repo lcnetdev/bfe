@@ -385,6 +385,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     $tabul.append('<li><a data-toggle="tab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" href="#load">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" href="#loadibc">Load IBC</a></li>');
+    $tabul.append('<li><a data-toggle="tab" href="#loadmarc">Load MARC</a></li>');
 
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
@@ -394,6 +395,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
     var $loaddiv = $('<div id="load" class="tab-pane fade"><br></div>');
     var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
+    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
 
     var $menudiv = $('<div>', {
       id: 'bfeditor-menudiv',
@@ -746,78 +748,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             <button id="bfeditor-loaduri" type="button" class="btn btn-primary">Submit URL</button> \
             </form></div>'));
 
-    $loaddiv.find('#bfeditor-loaduri').click(function () {
-      // var loadtemplates = [];
-
-      var spoints = { label: 'Loaded Work',
-        type: ['http://id.loc.gov/ontologies/bibframe/Work'],
-        useResourceTemplates: ['profile:bf2:Monograph:Work']
-      };
-
-      bfeditor.bfestore.store = [];
-      bfeditor.bfestore.name = guid();
-      bfeditor.bfestore.created = new Date().toUTCString();
-      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
-      bfeditor.bfestore.state = 'loaduri';
-      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
-      loadtemplatesCount = spoints.useResourceTemplates.length;
-
-      var temptemplates = [];
-      spoints.useResourceTemplates.forEach(function (l) {
-        var useguid = guid();
-        var loadtemplate = {};
-        loadtemplate.templateGUID = useguid;
-        loadtemplate.resourceTemplateID = l;
-        loadtemplate.embedType = 'page';
-        loadtemplate.data = [];
-        temptemplates.push(loadtemplate);
-      });
-
-      if (editorconfig.retrieve.callback !== undefined) {
-        try {
-          bfestore.loadtemplates = temptemplates;
-          var url = $(this.parentElement).find('#bfeditor-loaduriInput').val();
-          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (loadtemplates) {
-            // converter uses bf:person intead of personal name
-            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person'}), function (triple) {
-              triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
-            });
-            // converter uses bf:organization intead of corporate name
-            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Organization'}), function (triple) {
-              triple.o = 'http://www.loc.gov/mads/rdf/v1#CorporateName';
-            });
-            // eliminate duplicate type bf:Contributor
-            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bflc/PrimaryContribution'}), function (triple) {
-              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution'}));
-            });
-
-            // Text to Work
-            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}), function (triple) {
-              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}));
-            });
-
-            bfestore.loadtemplates.data = bfeditor.bfestore.store;
-            $('[href=#create]').tab('show');
-            $('#bfeditor-formdiv').show();
-            if ($('#bfeditor-messagediv').length) {
-              $('#bfeditor-messagediv').remove();
-            }
-
-            // weird bnode prob
-            _.each(bfeditor.bfestore.store, function (el) {
-              if (el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
-            });
-
-            cbLoadTemplates();
+    
+    var getProfileOptions = function(jqObject) {
+      for (var h = 0; h < config.startingPoints.length; h++) {
+        var sp = config.startingPoints[h];
+        var label = sp.menuGroup
+        for (var i = 0; i < sp.menuItems.length; i++) {
+          var $option = $('<option>', {
+            class: 'dropdown-item',
+            value: 'sp-' + h + '_' + i
           });
-        } catch (e) {
-          $(this.parentElement).find('#bfeditor-loaduriInput').val('An error occured: ' + e.message);
-        }
-      } else {
-        // retrieve disabled
-        $(this.parentElement).find('#bfeditor-loaduriInput').val('This function has been disabled');
+          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+            //$a.html(sp.menuItems[i].label);
+            $option.html(label);
+            jqObject.append($option);
+          }
+        }      
       }
-    });
+    }
 
     var $loadibcform = $('<div class="container"> \
             <form role="form" method="get"> \
@@ -827,25 +775,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
             </div></div> \
             <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
-            </form></div>')
+            </form></div>');
 
-    var $ibcmenudiv = $loadibcform.find('#bfeditor-loadibc-dropdownMenu');
-
-    for (var h = 0; h < config.startingPoints.length; h++) {
-          var sp = config.startingPoints[h];
-          var label = sp.menuGroup
-          for (var i = 0; i < sp.menuItems.length; i++) {
-            var $option = $('<option>', {
-              class: 'dropdown-item',
-              value: 'sp-' + h + '_' + i
-            });
-            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
-              //$a.html(sp.menuItems[i].label);
-              $option.html(label);
-              $ibcmenudiv.append($option);
-            }
-          }      
-        }
+    getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'));
 
     $loadibcdiv.append($loadibcform);
             
@@ -967,10 +899,126 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     });
 
+    $loadmarcdiv.append($('<div class="container"> \
+            <form role="form" method="get"> \
+            <div class="form-group"> \
+            <label for="marcdx">Bib ID or LCCN</label> \
+            <div class="input-group"> \
+            <div class="input-group-btn"> \
+            <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bib ID <span class="caret"></span></button> \
+            <ul class="dropdown-menu"> \
+            <li><a href="#" id="bibid">Bib ID</a></li> \
+            <li><a href="#" id="lccn">LCCN</a></li> \
+            </ul></div> \
+            <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID or LCCN" type="text" name="url"></div> \
+            <input type="hidden" id="loadmarc-uri"></hidden>\
+            <label for="bfeditor-loadmarc-dropdown">Choose Profile</label> \
+            <div id="bfeditor-loadmarc-dropdown" class="dropdown"><select id="bfeditor-loadmarc-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
+            <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
+            </form></div>'));
+    
+    getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'));
+    
+    $loadmarcdiv.find('.dropdown-menu > li > a').click(function() {
+      $('#marcdx').html($(this).text() + ' <span class="caret">');
+    });
+    $loadmarcdiv.find('#bfeditor-loadmarc').click(function() {
+      var term = $('#bfeditor-loadmarcterm').val();
+      var dx = 'rec.id';
+      if ($('#marcdx').text().match(/LCCN/i)) {
+        dx = 'bath.lccn';
+      }
+      var url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
+      $('#loadmarc-uri').attr('value', url);
+    });
+    
     $tabcontentdiv.append($browsediv);
     $tabcontentdiv.append($creatediv);
     $tabcontentdiv.append($loaddiv);
     $tabcontentdiv.append($loadibcdiv);
+    $tabcontentdiv.append($loadmarcdiv);
+
+    $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
+      var spoints = {};
+
+      if (this.id == 'bfeditor-loadmarc') {
+        var spid = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu').val();
+        var spnums = spid.replace('sp-', '').split('_'); 
+        spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+        bfeditor.bfestore.state = 'loadmarc';
+      } else {
+        spoints = { label: 'Loaded Work',
+          type: ['http://id.loc.gov/ontologies/bibframe/Work'],
+          useResourceTemplates: ['profile:bf2:Monograph:Work']
+        };
+        bfeditor.bfestore.state = 'loaduri';
+      }
+ 
+      bfeditor.bfestore.store = [];
+      bfeditor.bfestore.name = guid();
+      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
+      // bfeditor.bfestore.state = 'loaduri';
+      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
+      loadtemplatesCount = spoints.useResourceTemplates.length;
+
+      var temptemplates = [];
+      spoints.useResourceTemplates.forEach(function (l) {
+        var useguid = guid();
+        var loadtemplate = {};
+        loadtemplate.templateGUID = useguid;
+        loadtemplate.resourceTemplateID = l;
+        loadtemplate.embedType = 'page';
+        loadtemplate.data = [];
+        temptemplates.push(loadtemplate);
+      });
+
+      if (editorconfig.retrieve.callback !== undefined) {
+        try {
+          bfestore.loadtemplates = temptemplates;
+          var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
+          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (loadtemplates) {
+            // converter uses bf:person intead of personal name
+            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person'}), function (triple) {
+              triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
+            });
+            // converter uses bf:organization intead of corporate name
+            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Organization'}), function (triple) {
+              triple.o = 'http://www.loc.gov/mads/rdf/v1#CorporateName';
+            });
+            // eliminate duplicate type bf:Contributor
+            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bflc/PrimaryContribution'}), function (triple) {
+              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution'}));
+            });
+
+            // Text to Work
+            _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}), function (triple) {
+              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}));
+            });
+
+            bfestore.loadtemplates.data = bfeditor.bfestore.store;
+            $('[href=#create]').tab('show');
+            $('#bfeditor-formdiv').show();
+            if ($('#bfeditor-messagediv').length) {
+              $('#bfeditor-messagediv').remove();
+            }
+
+            // weird bnode prob
+            _.each(bfeditor.bfestore.store, function (el) {
+              if (el.o !== undefined && el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
+            });
+
+            cbLoadTemplates();
+          });
+        } catch (e) {
+          $(this.parentElement).find('#bfeditor-loaduriInput').val('An error occured: ' + e.message);
+        }
+      } else {
+        // retrieve disabled
+        $(this.parentElement).find('#bfeditor-loaduriInput').val('This function has been disabled');
+      }
+    });
+
 
     $containerdiv.append($tabcontentdiv);
 
@@ -2050,6 +2098,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
   }
 
   function preloadData (property, rt, form, fobject) {
+
     var propsdata = _.where(bfestore.store, {
       's': rt.defaulturi,
       'p': property.propertyURI
@@ -3674,6 +3723,43 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
   exports.n3store = N3.Store();
 
   exports.store = [];
+
+  exports.rdfxml2store = function (rdf, loadtemplates, recid, callback) {
+    var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
+    var bfestore = this;
+
+    $.ajax({
+      contentType: 'application/x-www-form-urlencoded',
+      type: "POST",
+      async: false,
+      data: { content: rdf},
+      url: url,
+      success: function (data) {
+        bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          bfestore.store = [];
+          tempstore = bfestore.jsonld2store(expanded);
+          tempstore.forEach(function (nnode) {
+            nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work|Topic).*/, 'id.loc.gov/resources/works/c' + recid);
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
+            if (nnode.o !== undefined) {
+              nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work|Topic).*/, 'id.loc.gov/resources/works/c' + recid);
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
+            } 
+            console.log(nnode);
+          });
+          callback(loadtemplates);
+        });
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+      }
+    });
+  }
 
   exports.addTriple = function (triple) {
     exports.store.push(triple);

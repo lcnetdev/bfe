@@ -139,23 +139,41 @@ function publish(data, rdfxml, savename, bfelog, callback){
 
 
 function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
-  
+  var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   var url = config.url + "/profile-edit/server/whichrt";
-  
+  var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
+
   $.ajax({
-    dataType: "json",
+    dataType: dType,
     type: "GET",
     async: false,
     data: { uri: uri},
     url: url,
     success: function (data) {
-      bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
+      bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI " + uri);
       bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
-      bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
-        bfestore.store = [];
-        tempstore = bfestore.jsonld2store(expanded);
-        callback(loadtemplates);
-      });
+      
+      if (dType == 'xml') {
+        var recCount = $('zs\\:numberOfRecords', data).text();
+        if (recCount != '0') {
+          var rdfrec  = $('zs\\:recordData', data).html();
+          var recid = $('bf\\:Local > rdf\\:value', data).html()
+          recid = recid.padStart(9, '0');
+          bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
+        } else {
+          var q = uri.replace(/.+query=(.+?)&.+/, "$1");
+          $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
+          <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
+          <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
+          $nohits.modal('show');
+        }
+      } else {
+        bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          bfestore.store = [];
+          tempstore = bfestore.jsonld2store(expanded);
+          callback(loadtemplates);
+        });
+      }
       //bfestore.n32store(data, url, tempstore, callback);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) { 
@@ -228,14 +246,13 @@ var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 // The following line is for local developement
 // rectoBase = "http://localhost:3000";
-
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-  /*            "logging": {
+              /* "logging": {
                 "level": "DEBUG",
-                "toConsole": true
-                },*/
+                "toConsole": false
+              }, */
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
