@@ -4288,7 +4288,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           success: function (data) {
             parsedlist = lcshared.processSuggestions(data, query);
             parsedlist.forEach(function (item) {
-              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
             });
             cache[q] = parsedlist;
             return process(parsedlist);
@@ -4302,7 +4302,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
           success: function (data) {
             parsedlist = lcshared.processATOM(data, query);
             parsedlist.forEach(function (item) {
-              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
             });
             cache[q] = parsedlist;
             return process(parsedlist);
@@ -4623,7 +4623,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
           success: function (data) {
             parsedlist = lcshared.processSuggestions(data, query);
             parsedlist.forEach(function (item) {
-              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
             });
             cache[q] = parsedlist;
             return process(parsedlist);
@@ -4637,7 +4637,7 @@ bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'module', 'src/looku
           success: function (data) {
             parsedlist = lcshared.processATOM(data, query);
             parsedlist.forEach(function (item) {
-              item.display = item.value + ' (' + item.uri.replace(/^.+\//, "") + ')';
+              item.display = (item.uri) ? item.value + ' (' + item.uri.replace(/^.+\//, "") + ')' : item.value;
             });
             cache[q] = parsedlist;
             return process(parsedlist);
