@@ -216,18 +216,31 @@
             });
 
         }
-
+        /* Config object profiles
+         * Editor profiles are read from a WS endpoint
+         * The data are expected to be in a JSON array, with each object
+         * in the array containing a "json" property that has the profile
+         * itself. The "versoURL" variable is a convenience for setting the
+         * base URL of verso in the "config" definition below.
+         */
+        var rectoBase = "http://mlvlp04.loc.gov:3000";
+        
+        // The following line is for local developement
+        // rectoBase = "http://localhost:3000";
+        var versoURL = rectoBase + "/verso/api";
+        
         var config = {
 /*            "logging": {
                 "level": "DEBUG",
                 "toConsole": true
             },*/
-            "url" : "http://mlvlp04.loc.gov:3000",
+            "url" : rectoBase,
             "baseURI": "http://id.loc.gov/",
             "basedbURI": "http://mlvlp04.loc.gov:8230",
             "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
             "profiles": [
-		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
+                versoURL + "/configs?filter[where][configType]=profile"
+/*		        "static/profiles/bibframe/BIBFRAME 2.0 Agents.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Agents Contribution.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Agents Primary Contribution.json",
 			    "static/profiles/bibframe/BIBFRAME 2.0 Form.json",
@@ -261,7 +274,7 @@
                 "static/profiles/bibframe/BIBFRAME 2.0 Load.json",
                 "static/profiles/bibframe/BIBFRAME 2.0 IBC.json",
                 "static/profiles/bibframe/PMO Medium of Performance.json" 
-                //"static/profiles/bibframe/profiles.json"
+*/                //"static/profiles/bibframe/profiles.json"
    		    ],
             "startingPoints": [
                 {"menuGroup": "Monograph",

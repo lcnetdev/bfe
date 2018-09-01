@@ -45,7 +45,8 @@
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [
-                "profile:bf2:WorkTitle"
+                "profile:bf2:WorkTitle",
+                "profile:bflc:TranscribedTitle"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -408,7 +409,7 @@
         "resourceLabel": "BIBFRAME Work"
       },
       {
-        "id": "http://mlvlp04.loc.gov:8230/resources/works/c020133227.jsonld",
+        "id": "profile:bf2:Cartographic:Instance",
         "propertyTemplates": [
           {
             "mandatory": "false",
@@ -797,7 +798,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
             "propertyLabel": "Related Manifestation"
           },
           {
@@ -871,14 +872,16 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:Shelfmark"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/classificationLcc",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/shelfmark",
             "propertyLabel": "Copy, issue, offprint number"
           },
           {
@@ -972,10 +975,10 @@
                 "http://mlvlp04.loc.gov:8230/resources/instances"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Instance"
+                "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Lookup"
           },
           {
@@ -988,7 +991,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Related Manifestation Authorized Access Point"
           },
           {
@@ -1007,7 +1010,7 @@
           }
         ],
         "id": "profile:bf2:Cartographic:RelatedInstance",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
         "resourceLabel": "Related Instance"
       },
       {

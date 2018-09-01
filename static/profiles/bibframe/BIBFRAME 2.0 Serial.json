@@ -387,10 +387,12 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Serial:RelatedInstance"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
@@ -694,7 +696,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
             "propertyLabel": "Related Manifestation (RDA 27.1)"
           },
           {
@@ -1015,7 +1017,7 @@
               }
             },
             "propertyLabel": "Search related works",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -1028,7 +1030,8 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Relationship Designator for Related Work (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
+            "remark": "http://access.rdatoolkit.org/rdaappj_rdaj-16.html"
           },
           {
             "mandatory": "false",
@@ -1092,22 +1095,6 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/mergerOf",
             "propertyLabel": "Merger of (work):",
-            "remark": "http://access.rdatoolkit.org/J.2.6.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/replacementOf",
-            "propertyLabel": "Replacement of (work):",
             "remark": "http://access.rdatoolkit.org/J.2.6.html"
           },
           {
@@ -1202,8 +1189,8 @@
                 "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/replacedBy",
-            "propertyLabel": "Replaced by (work):",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/splitInto",
+            "propertyLabel": "Split into (work):",
             "remark": "http://access.rdatoolkit.org/J.2.6.html"
           },
           {
@@ -1214,13 +1201,38 @@
             "valueConstraint": {
               "valueTemplateRefs": [],
               "useValuesFrom": [],
-              "valueDataType": {
-                "dataTypeURI": ""
-              }
+              "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/splitInto",
-            "propertyLabel": "Split into (work):",
-            "remark": "http://access.rdatoolkit.org/J.2.6.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/supplement",
+            "propertyLabel": "Has supplement (work):"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/supplementTo",
+            "propertyLabel": "Supplement to (work):"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Description of Related Work"
           }
         ],
         "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship",
@@ -1232,6 +1244,25 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                ""
+              ],
+              "useValuesFrom": [
+                "http://mlvlp04.loc.gov:8230/resources/works"
+              ],
+              "valueDataType": {
+                "dataTypeURI": ""
+              }
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyLabel": "Search Related Manifestation"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "literal",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1239,8 +1270,8 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
-            "propertyLabel": "Related Manifestations (RDA 27)",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyLabel": "Record Related Manifestation Authorized Access Point",
             "remark": "http://access.rdatoolkit.org/27.html"
           },
           {
@@ -1253,8 +1284,24 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
+            "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
+            "remark": "http://access.rdatoolkit.org/J.4.html"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Identifiers:ISSN"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/identifiedBy",
-            "propertyLabel": "ISSN of related manifestation"
+            "propertyLabel": "ISSN of Related Manifestation"
           },
           {
             "mandatory": "false",
@@ -1287,44 +1334,17 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "literal",
+            "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
-              "valueTemplateRefs": [],
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyLabel": "Reprinted as (manifestation):",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasEquivalent",
-            "remark": "http://access.rdatoolkit.org/J.4.2.html"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "remark": "http://access.rdatoolkit.org/J.4.2.html",
-            "propertyLabel": "Reprint of (manifestation)",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasEquivalent"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
-            "remark": "http://access.rdatoolkit.org/J.4.html"
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Description of Related Manifestation"
           }
         ],
         "id": "profile:bf2:Serial:RelatedInstance",

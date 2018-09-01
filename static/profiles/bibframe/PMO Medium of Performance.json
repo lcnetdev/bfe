@@ -17,11 +17,50 @@
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasMediumPart",
             "propertyLabel": "has Medium Part"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
+            "propertyLabel": "Total Distinct Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
+            "propertyLabel": "Total Required Performer Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
+            "propertyLabel": "Total Ensemble Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:DecMed",
         "resourceURI": "http://performedmusicontology.org/ontology/DeclaredMedium",
-        "resourceLabel": "Medium of Performance—Instrumentation with Individual Counts"
+        "resourceLabel": "Declared Medium of Performance"
       },
       {
         "propertyTemplates": [
@@ -94,54 +133,13 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:PMOMedPerf:MedPerfI1",
-                "profile:bf2:PMOMedPerf:MedPerfI2",
-                "profile:bf2:PMOMedPerf:MedPerfV1",
-                "profile:bf2:PMOMedPerf:MedPerfV2"
+                "profile:bf2:PMOMedPerf:MedPerfI2"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
             },
             "propertyURI": "http://performedmusicontology.org/ontology/hasMediumOfPerformance",
             "propertyLabel": "has Medium of Performance"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
-            "propertyLabel": "has Distinct Part Count"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
-            "propertyLabel": "AND has Required Performer Count"
-          },
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "literal",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [],
-              "valueDataType": {}
-            },
-            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
-            "propertyLabel": "OR has Ensemble Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:MedPart2",
@@ -158,9 +156,7 @@
             "valueConstraint": {
               "valueTemplateRefs": [
                 "profile:bf2:PMOMedPerf:MedPerfI1",
-                "profile:bf2:PMOMedPerf:MedPerfI2",
-                "profile:bf2:PMOMedPerf:MedPerfV1",
-                "profile:bf2:PMOMedPerf:MedPerfV2"
+                "profile:bf2:PMOMedPerf:MedPerfI2"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -243,12 +239,38 @@
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
-            "propertyLabel": "Individual Instrument"
+            "propertyLabel": "Individual Instrument or Voice"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
+            "propertyLabel": "Distinct Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
+            "propertyLabel": "Required Performer Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:MedPerfI1",
-        "resourceURI": "http://performedmusicontology.org/ontology/IndividualInstrument",
-        "resourceLabel": "Individual Instrument"
+        "resourceURI": "http://performedmusicontology.org/ontology/IndividualMediumOfPerformance",
+        "resourceLabel": "Individual Medium of Performance"
       },
       {
         "propertyTemplates": [
@@ -267,60 +289,25 @@
               }
             },
             "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
-            "propertyLabel": "Instrument Ensemble"
+            "propertyLabel": "Ensemble"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
+            "propertyLabel": "has Ensemble Count"
           }
         ],
         "id": "profile:bf2:PMOMedPerf:MedPerfI2",
-        "resourceURI": "http://performedmusicontology.org/ontology/InstrumentEnsemble",
-        "resourceLabel": "Instrument Ensemble"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "target",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/authorities/performanceMediums"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://performedmusicontology.org/ontology/IndividualVoice"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
-            "propertyLabel": "Individual Voice"
-          }
-        ],
-        "id": "profile:bf2:PMOMedPerf:MedPerfV1",
-        "resourceURI": "http://performedmusicontology.org/ontology/IndividualVoice",
-        "resourceLabel": "Individual Voice"
-      },
-      {
-        "propertyTemplates": [
-          {
-            "mandatory": "false",
-            "repeatable": "true",
-            "type": "target",
-            "resourceTemplates": [],
-            "valueConstraint": {
-              "valueTemplateRefs": [],
-              "useValuesFrom": [
-                "http://id.loc.gov/authorities/performanceMediums"
-              ],
-              "valueDataType": {
-                "dataTypeURI": "http://performedmusicontology.org/ontology/VoiceEnsemble"
-              }
-            },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
-            "propertyLabel": "Voice Ensemble"
-          }
-        ],
-        "id": "profile:bf2:PMOMedPerf:MedPerfV2",
-        "resourceURI": "http://performedmusicontology.org/ontology/VoiceEnsemble",
-        "resourceLabel": "Voice Ensemble"
+        "resourceURI": "http://performedmusicontology.org/ontology/EnsembleMediumOfPerformance",
+        "resourceLabel": "Ensemble Medium of Performance"
       },
       {
         "propertyTemplates": [
@@ -368,6 +355,97 @@
         "resourceURI": "http://performedmusicontology.org/ontology/DeclaredMedium",
         "resourceLabel": "Medium of Performance: Totaling Counts for the Entire Work",
         "remark": ""
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:MedPart2"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasMediumPart",
+            "propertyLabel": "has Medium Part"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:MedPart2"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/alternateMediumOfPerformance",
+            "propertyLabel": "OR has Alternate Medium Part"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:PMOMedPerf:MedPart2"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyLabel": "OR has Doubling Medium Part",
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDoublingMediumOfPerformance"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasDistinctPartCount",
+            "propertyLabel": "Total Distinct Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasRequiredPerformerCount",
+            "propertyLabel": "Total Required Part Count"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://performedmusicontology.org/ontology/hasEnsembleCount",
+            "propertyLabel": "Total Ensemble Count"
+          }
+        ],
+        "id": "profile:bf2:PMOMedPerf:DecMedTest",
+        "resourceURI": "http://performedmusicontology.org/ontology/DeclaredMedium",
+        "resourceLabel": "Declared Medium Test"
       }
     ],
     "id": "profile:bf2:PMOMedPerf",

@@ -440,7 +440,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
             "propertyLabel": "Related Manifestations (RDA Chapter 27, Appendix J)"
           },
           {
@@ -1088,10 +1088,10 @@
                 "http://mlvlp04.loc.gov:8230/resources/instances"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Instance"
+                "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Search"
           },
           {
@@ -1104,7 +1104,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Record Related Manifestation Authorized Access Point"
           },
           {
@@ -1118,12 +1118,12 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)",
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation"
           }
         ],
         "id": "profile:bf2:35mmFeatureFilm:RelatedInstance",
         "resourceLabel": "Related Instance",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship"
       },
       {
         "propertyTemplates": [
@@ -1322,7 +1322,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1333,7 +1333,7 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience"
               }
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Audience"
           },
           {

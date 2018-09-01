@@ -18,7 +18,7 @@
               }
             },
             "propertyLabel": "Search related works",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -84,7 +84,7 @@
               }
             },
             "propertyLabel": "Search related expressions",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -97,7 +97,7 @@
               "valueDataType": {}
             },
             "propertyLabel": "Record Related Expression Authorized Access Point",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasExpression"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -131,7 +131,7 @@
         ],
         "resourceLabel": "Related Expression",
         "id": "profile:bf2:RelatedExpression",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Relationship"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship"
       }
     ],
     "id": "profile:bf2:RelatedWorkorExpression",

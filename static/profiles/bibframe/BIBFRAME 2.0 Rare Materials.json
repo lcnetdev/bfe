@@ -637,7 +637,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
             "propertyLabel": "Related Manifestation"
           },
           {
@@ -1011,7 +1011,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Related Manifestations (RDA 27)",
             "remark": "http://access.rdatoolkit.org/27.1.html"
           },
@@ -1081,7 +1081,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
             "propertyLabel": "Relationship Designator for Related Manifestation (RDA Appendix J)",
             "remark": "http://access.rdatoolkit.org/J.4.html"
           }

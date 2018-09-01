@@ -354,7 +354,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/eventContent",
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/eventContentOf",
             "propertyLabel": "Event"
           },
           {
@@ -503,7 +503,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationship",
             "propertyLabel": "Related Manifestations (RDA Chapter 27,  Appendix J)"
           },
           {
@@ -691,7 +691,8 @@
                 "profile:bf2:Identifiers:PubNumber",
                 "profile:bf2:Identifiers:EAN",
                 "profile:bf2:Identifiers:Other",
-                "profile:bf2:Identifiers:Local"
+                "profile:bf2:Identifiers:Local",
+                "profile:bf2:Identifiers:Gtin14"
               ],
               "useValuesFrom": [],
               "valueDataType": {}
@@ -1270,6 +1271,19 @@
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/immediateAcquisition",
             "propertyLabel": "Immediate Source of Acquisition of Item"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/date",
+            "propertyLabel": "Received date"
           }
         ],
         "resourceLabel": "BIBFRAME Item",
@@ -1288,10 +1302,10 @@
                 "http://mlvlp04.loc.gov:8230/resources/instances"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Instance"
+                "dataTypeURI": ""
               }
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/relatedTo",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Search"
           },
           {
@@ -1304,7 +1318,7 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/hasInstance",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Record Related Manifestation Authorized Access Point"
           },
           {
@@ -1317,13 +1331,13 @@
               "useValuesFrom": [],
               "valueDataType": {}
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/relationshipTarget",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/relation",
             "propertyLabel": "Record Relationship Designator for Related Manifestation (RDA Appendix J)"
           }
         ],
         "id": "profile:bf2:MIBluRayDVD:RelatedInstance",
         "resourceLabel": "Related Instance",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/hasInstance"
+        "resourceURI": "http://id.loc.gov/ontologies/bflc/Relationship"
       },
       {
         "propertyTemplates": [
@@ -1581,7 +1595,7 @@
           {
             "mandatory": "false",
             "repeatable": "true",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -1592,7 +1606,7 @@
                 "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/IntendedAudience"
               }
             },
-            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
             "propertyLabel": "Intended Audience (RDA 7.7)",
             "remark": "http://access.rdatoolkit.org/7.7.html"
           },

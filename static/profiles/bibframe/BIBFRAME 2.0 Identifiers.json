@@ -407,6 +407,41 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
+            "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+            "propertyLabel": "GTIN-14 number"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "resource",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [
+                "profile:bf2:Note"
+              ],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/note",
+            "propertyLabel": "Note about GTIN-14"
+          }
+        ],
+        "id": "profile:bf2:Identifiers:Gtin14",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/Gtin14Number",
+        "resourceLabel": "GTIN-14"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
             "repeatable": "false",
             "type": "literal",
             "resourceTemplates": [],
@@ -875,6 +910,19 @@
           {
             "mandatory": "false",
             "repeatable": "true",
+            "type": "literal",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [],
+              "valueDataType": {}
+            },
+            "propertyURI": "http://id.loc.gov/ontologies/bibframe/qualifier",
+            "propertyLabel": "Qualifier"
+          },
+          {
+            "mandatory": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -1288,7 +1336,7 @@
           }
         ],
         "id": "profile:bf2:Identifiers:LC",
-        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/ShelfmarkLcc",
         "resourceLabel": "LC shelfmark"
       },
       {

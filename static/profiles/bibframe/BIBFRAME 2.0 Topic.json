@@ -15,12 +15,12 @@
                 "http://id.loc.gov/authorities/names"
               ],
               "valueDataType": {
-                "dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Topic"
+                "dataTypeURI": ""
               },
               "repeatable": "false",
               "editable": "true"
             },
-            "propertyURI": "http://id.loc.gov/ontologies/bflc/target",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel",
             "propertyLabel": "Search LCSH/LCNAF"
           }
         ],
@@ -115,7 +115,7 @@
               "editable": "true"
             },
             "propertyLabel": "Search LCSH/LCNAF",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Topic"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"
           }
         ],
         "id": "profile:bf2:Topic:madsTopic",
@@ -141,7 +141,7 @@
               "repeatable": "true"
             },
             "propertyLabel": "Search LCSH",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#GenreForm"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"
           }
         ],
         "id": "profile:bf2:Topic:madsGenreForm",
@@ -167,7 +167,7 @@
               "editable": "true"
             },
             "propertyLabel": "Search LCSH",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Temporal"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"
           }
         ],
         "id": "profile:bf2:Topic:madsTemporal",
@@ -194,7 +194,7 @@
               "repeatable": "true"
             },
             "propertyLabel": "Search LCNAF/LCSH",
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Geographic"
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"
           },
           {
             "mandatory": "false",
@@ -208,7 +208,7 @@
               "editable": "true",
               "repeatable": "false"
             },
-            "propertyURI": "http://www.loc.gov/mads/rdf/v1#Geographic",
+            "propertyURI": "http://www.loc.gov/mads/rdf/v1#authoritativeLabel",
             "propertyLabel": "Input Geographic Term"
           }
         ],

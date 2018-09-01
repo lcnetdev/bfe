@@ -33,7 +33,7 @@
           {
             "mandatory": "false",
             "repeatable": "false",
-            "type": "lookup",
+            "type": "target",
             "resourceTemplates": [],
             "valueConstraint": {
               "valueTemplateRefs": [],
@@ -50,7 +50,7 @@
             },
             "propertyLabel": "(Geographic) Coverage of the Content (RDA 7.3)",
             "remark": "http://access.rdatoolkit.org/7.3.html",
-            "propertyURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage"
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
           },
           {
             "mandatory": "false",
@@ -71,6 +71,28 @@
         "id": "profile:bf2:Form:Geog",
         "resourceURI": "http://id.loc.gov/ontologies/bibframe/GeographicCoverage",
         "resourceLabel": "Geographic coverage"
+      },
+      {
+        "propertyTemplates": [
+          {
+            "mandatory": "false",
+            "repeatable": "true",
+            "type": "target",
+            "resourceTemplates": [],
+            "valueConstraint": {
+              "valueTemplateRefs": [],
+              "useValuesFrom": [
+                "http://id.loc.gov/authorities/genreForms"
+              ],
+              "valueDataType": {}
+            },
+            "propertyLabel": "Search LCGFT",
+            "propertyURI": "http://id.loc.gov/ontologies/bflc/target"
+          }
+        ],
+        "id": "profile:bf2:FormTest",
+        "resourceURI": "http://id.loc.gov/ontologies/bibframe/GenreForm",
+        "resourceLabel": "Form/Genre Test"
       }
     ],
     "id": "profile:bf2:Form",

@@ -5,7 +5,7 @@
         "propertyTemplates": [
           {
             "mandatory": "false",
-            "repeatable": "false",
+            "repeatable": "true",
             "type": "resource",
             "resourceTemplates": [],
             "valueConstraint": {
@@ -18,7 +18,8 @@
               ],
               "useValuesFrom": [],
               "valueDataType": {},
-              "repeatable": "false"
+              "repeatable": "true",
+              "editable": "true"
             },
             "propertyURI": "http://id.loc.gov/ontologies/bibframe/agent",
             "propertyLabel": "Primary Contributor"
