@@ -2304,7 +2304,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           loadPropsdata(pd, property, form, fobject);
         });
       }
-    } else if (_.has(property, 'valueConstraint') && (!_.isEmpty(property.valueConstraint.defaultURI) || !_.isEmpty(property.valueConstraint.defaultLiteral))) {
+    } else if (_.has(property, 'valueConstraint')) {
+      //(!_.isEmpty(property.valueConstraint.defaultURI) || !_.isEmpty(property.valueConstraint.defaultLiteral))) {
       // Otherwise - if the property is not found in the pre-loaded data
       // then do we have a default value?
       var data;
