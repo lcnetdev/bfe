@@ -1827,8 +1827,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var $button;
 
         if (property.type == 'literal') {
-          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
-
+          var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
+          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
+          console.log(property);
           $input.find('input').keyup(function (e) {
             if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
               var text = this.value;
