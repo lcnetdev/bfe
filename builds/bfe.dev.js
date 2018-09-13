@@ -1842,7 +1842,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
 
           $button.click(function () {
-            setLiteral(fobject.id, rt.useguid, property.guid);
+            if ($input.find(':invalid').length == 1) {
+              alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+            } else {
+              setLiteral(fobject.id, rt.useguid, property.guid);
+            }
           });
 
           var enterHandler = function (event) {
