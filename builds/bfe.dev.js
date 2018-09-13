@@ -1829,7 +1829,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         if (property.type == 'literal') {
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
           $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
-          console.log(property);
+
           $input.find('input').keyup(function (e) {
             if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
               var text = this.value;
