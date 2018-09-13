@@ -3038,7 +3038,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
         data.forEach(function (t) {
           callingformobject.store.push(t);
-          console.log('A');
           bfestore.addTriple(t);
           // bfestore.store.push(t);
         });
