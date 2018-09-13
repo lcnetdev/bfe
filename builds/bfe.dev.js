@@ -2346,7 +2346,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 fobject.store.push(typeTriple);
                 // bfestore.addTriple(typeTriple);
               }
-
+              
               data = property.valueConstraint.defaults[d].defaultURI;
               // set the triples
               var triple = {};
@@ -2360,7 +2360,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               triple.o = data;
               triple.otype = 'uri';
               fobject.store.push(triple);
-              //                bfestore.addTriple(triple);
+              // bfestore.addTriple(triple);
             }
             // set the label
             var label = {};
