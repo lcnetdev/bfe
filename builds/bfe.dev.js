@@ -2327,7 +2327,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         for (d = 0; d < property.valueConstraint.defaults.length; d++) {
           if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
             var data;
-            
+
             if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
               data = property.valueConstraint.defaults[d].defaultURI;
             }
@@ -2518,7 +2518,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
               if (!tsearch.startsWith('_:b')) {
                 whichLabel(tsearch, function (label) {
-                  console.log(label);
                   tpreflabel = label;
                 });
               }
