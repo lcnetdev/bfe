@@ -2332,6 +2332,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         for (d = 0; d < property.valueConstraint.defaults.length; d++) {
           if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
             var data;
+            var label;
             if (property.type === "literal"){
                 //the default is the literal
                 var literalTriple = {};
@@ -2344,7 +2345,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 literalTriple.p = property.propertyURI;
                 literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
                 literalTriple.otype = 'literal';
-                
+                label = literalTriple;
+                displayguid = literalTriple.guid;
                 fobject.store.push(literalTriple);
                 bfestore.addTriple(literalTriple);
 
@@ -2379,7 +2381,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               bfestore.addTriple(triple);
             
               // set the label
-                var label = {};
+                label = {};
                 if (triple) {
                   label.s = triple.o;
                   displayguid = triple.guid;
