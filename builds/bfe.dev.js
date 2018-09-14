@@ -2332,12 +2332,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         for (d = 0; d < property.valueConstraint.defaults.length; d++) {
           if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
             var data;
+            if (property.type === "literal"){
+                //the default is the literal
+                var literalTriple = {};
+                literalTriple.guid = guid();
+                if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                    literalTriple.s = rt.defaulturi;
+                } else {
+                    literalTriple.s = editorconfig.baseURI + rt.useguid;
+                }
+                literalTriple.p = property.propertyURI;
+                literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
+                literalTriple.otype = 'literal';
+                
+                fobject.store.push(literalTriple);
+                bfestore.addTriple(literalTriple);
 
-            if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
+            } else if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
               data = property.valueConstraint.defaults[d].defaultURI;
-            }
-
-            if (data) {
               bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
 
               // is there a type?
@@ -2349,10 +2361,9 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
                 typeTriple.otype = 'uri';
                 fobject.store.push(typeTriple);
-                // bfestore.addTriple(typeTriple);
+                bfestore.addTriple(typeTriple);
               }
               
-              data = property.valueConstraint.defaults[d].defaultURI;
               // set the triples
               var triple = {};
               triple.guid = guid();
@@ -2365,24 +2376,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               triple.o = data;
               triple.otype = 'uri';
               fobject.store.push(triple);
-              // bfestore.addTriple(triple);
-            }
-            // set the label
-            var label = {};
-            if (triple) {
-              label.s = triple.o;
-              displayguid = triple.guid;
-            } else {
-              label.s = rt.defaulturi;
-              displayguid = guid();
-            }
+              bfestore.addTriple(triple);
+            
+              // set the label
+                var label = {};
+                if (triple) {
+                  label.s = triple.o;
+                  displayguid = triple.guid;
+                } else {
+                    label.s = rt.defaulturi;
+                    displayguid = guid();
+                }
 
-            label.otype = 'literal';
-            label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-            label.o = property.valueConstraint.defaults[d].defaultLiteral;
-
-            fobject.store.push(label);
-            // bfestore.addTriple(label);
+                label.otype = 'literal';
+                label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+                label.o = property.valueConstraint.defaults[d].defaultLiteral;
+                fobject.store.push(label);
+                bfestore.addTriple(label);
+            }
 
             // set the form
             var $formgroup = $('#' + property.guid, form).closest('.form-group');
