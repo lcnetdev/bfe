@@ -1827,7 +1827,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         var $button;
 
         if (property.type == 'literal') {
-          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+          var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
+          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
 
           $input.find('input').keyup(function (e) {
             if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
@@ -1841,7 +1842,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
 
           $button.click(function () {
-            setLiteral(fobject.id, rt.useguid, property.guid);
+            if ($input.find(':invalid').length == 1) {
+              alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+            } else {
+              setLiteral(fobject.id, rt.useguid, property.guid);
+            }
           });
 
           var enterHandler = function (event) {
@@ -2304,96 +2309,131 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           loadPropsdata(pd, property, form, fobject);
         });
       }
-    } else if (_.has(property, 'valueConstraint') && (!_.isEmpty(property.valueConstraint.defaultURI) || !_.isEmpty(property.valueConstraint.defaultLiteral))) {
-      // Otherwise - if the property is not found in the pre-loaded data
-      // then do we have a default value?
-      var data;
-      if (_.has(property.valueConstraint, 'defaultURI') && !_.isEmpty(property.valueConstraint.defaultURI)) {
-        data = property.valueConstraint.defaultURI;
-      }
+    } else if (_.has(property, 'valueConstraint')) {
 
-      if (data) {
-        bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
-
-        // is there a type?
-        if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
-          var typeTriple = {};
-          typeTriple.guid = guid();
-          typeTriple.s = data;
-          typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
-          typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
-          typeTriple.otype = 'uri';
-          fobject.store.push(typeTriple);
-          // bfestore.addTriple(typeTriple);
+        // we need to convert defaults from the old "defaults" model to the new.
+        if (!_.has(property.valueConstraint, 'defaults')) {
+          property.valueConstraint.defaults = [];
+          var defaultsObj = {};
+          if (!_.isEmpty(property.valueConstraint.defaultURI)) {
+            defaultsObj.defaultURI = property.valueConstraint.defaultURI;
+          }
+          if (!_.isEmpty(property.valueConstraint.defaultLiteral)) {
+            defaultsObj.defaultLiteral = property.valueConstraint.defaultLiteral;
+          }
+          if (!_.isEmpty(defaultsObj)) {
+            property.valueConstraint.defaults.push(defaultsObj);
+          }
         }
+        
+        // Otherwise - if the property is not found in the pre-loaded data
+        // then do we have a default value?
+        
+        for (d = 0; d < property.valueConstraint.defaults.length; d++) {
+          if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
+            var data;
+            var label;
+            if (property.type === "literal"){
+                //the default is the literal
+                var literalTriple = {};
+                literalTriple.guid = guid();
+                if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                    literalTriple.s = rt.defaulturi;
+                } else {
+                    literalTriple.s = editorconfig.baseURI + rt.useguid;
+                }
+                literalTriple.p = property.propertyURI;
+                literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
+                literalTriple.otype = 'literal';
+                label = literalTriple;
+                displayguid = literalTriple.guid;
+                fobject.store.push(literalTriple);
+                bfestore.addTriple(literalTriple);
 
-        data = property.valueConstraint.defaultURI;
-        // set the triples
-        var triple = {};
-        triple.guid = guid();
-        if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
-          triple.s = rt.defaulturi;
-        } else {
-          triple.s = editorconfig.baseURI + rt.useguid;
-        }
-        triple.p = property.propertyURI;
-        triple.o = data;
-        triple.otype = 'uri';
-        fobject.store.push(triple);
-        //                bfestore.addTriple(triple);
-      }
-      // set the label
-      var label = {};
-      if (triple) {
-        label.s = triple.o;
-        displayguid = triple.guid;
-      } else {
-        label.s = rt.defaulturi;
-        displayguid = guid();
-      }
+            } else if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
+              data = property.valueConstraint.defaults[d].defaultURI;
+              bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
 
-      label.otype = 'literal';
-      label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-      label.o = property.valueConstraint.defaultLiteral;
+              // is there a type?
+              if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
+                var typeTriple = {};
+                typeTriple.guid = guid();
+                typeTriple.s = data;
+                typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
+                typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
+                typeTriple.otype = 'uri';
+                fobject.store.push(typeTriple);
+                bfestore.addTriple(typeTriple);
+              }
+              
+              // set the triples
+              var triple = {};
+              triple.guid = guid();
+              if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                triple.s = rt.defaulturi;
+              } else {
+                triple.s = editorconfig.baseURI + rt.useguid;
+              }
+              triple.p = property.propertyURI;
+              triple.o = data;
+              triple.otype = 'uri';
+              fobject.store.push(triple);
+              bfestore.addTriple(triple);
+            
+              // set the label
+                label = {};
+                if (triple) {
+                  label.s = triple.o;
+                  displayguid = triple.guid;
+                } else {
+                    label.s = rt.defaulturi;
+                    displayguid = guid();
+                }
 
-      fobject.store.push(label);
-      // bfestore.addTriple(label);
+                label.otype = 'literal';
+                label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+                label.o = property.valueConstraint.defaults[d].defaultLiteral;
+                fobject.store.push(label);
+                bfestore.addTriple(label);
+            }
 
-      // set the form
-      var $formgroup = $('#' + property.guid, form).closest('.form-group');
-      var $save = $formgroup.find('.btn-toolbar').eq(0);
+            // set the form
+            var $formgroup = $('#' + property.guid, form).closest('.form-group');
+            var $save = $formgroup.find('.btn-toolbar').eq(0);
 
-      var displaydata = '';
-      if (_.has(property.valueConstraint, 'defaultLiteral')) {
-        displaydata = property.valueConstraint.defaultLiteral;
-      }
-      // displaydata = display;
-      var editable = true;
-      if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === 'false') {
-        editable = false;
-      }
-      var bgvars = {
-        'tguid': displayguid,
-        'tlabelhover': displaydata,
-        'tlabel': displaydata,
-        'fobjectid': fobject.id,
-        'inputid': property.guid,
-        'editable': editable,
-        'triples': [label]
-      };
-      var $buttongroup = editDeleteButtonGroup(bgvars);
-      $save.append($buttongroup);
+            var displaydata = '';
+            if (_.has(property.valueConstraint.defaults[d], 'defaultLiteral')) {
+              displaydata = property.valueConstraint.defaults[d].defaultLiteral;
+            }
+            // displaydata = display;
+            var editable = true;
+            if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === 'false') {
+              editable = false;
+            }
+            var bgvars = {
+              'tguid': displayguid,
+              'tlabelhover': displaydata,
+              'tlabel': displaydata,
+              'fobjectid': fobject.id,
+              'inputid': property.guid,
+              'editable': editable,
+              'triples': [label]
+            };
+            var $buttongroup = editDeleteButtonGroup(bgvars);
+            $save.append($buttongroup);
 
-      if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
-        var $el = $('#' + property.guid, form);
-        if ($el.is('input')) {
-          $el.prop('disabled', true);
-        } else {
-          // console.log(property.propertyLabel);
-          var $buttons = $('div.btn-group', $el).find('button');
-          $buttons.each(function () {
-            $(this).prop('disabled', true);
-          });
+            if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
+              var $el = $('#' + property.guid, form);
+              if ($el.is('input')) {
+                $el.prop('disabled', true);
+              } else {
+                // console.log(property.propertyLabel);
+                var $buttons = $('div.btn-group', $el).find('button');
+                $buttons.each(function () {
+                  $(this).prop('disabled', true);
+                });
+              }
+            }
         }
       }
     }
@@ -2496,7 +2536,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
               if (!tsearch.startsWith('_:b')) {
                 whichLabel(tsearch, function (label) {
-                  console.log(label);
                   tpreflabel = label;
                 });
               }
@@ -3017,7 +3056,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
         data.forEach(function (t) {
           callingformobject.store.push(t);
-          console.log('A');
           bfestore.addTriple(t);
           // bfestore.store.push(t);
         });
