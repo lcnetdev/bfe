@@ -769,7 +769,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $option.html(label);
             jqObject.append($option);
           }
-        }      
+        }
       }
     }
 
@@ -875,7 +875,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $option.html(label);
             jqObject.append($option);
           }
-        }      
+        }   
       }
     }
 
