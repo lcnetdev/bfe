@@ -855,6 +855,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         $(this.parentElement).find('#bfeditor-loadworkuriInput').val('This function has been disabled');
 
       }
+    });
+
+    var getProfileOptions = function(jqObject) {
+      for (var h = 0; h < config.startingPoints.length; h++) {
+        var sp = config.startingPoints[h];
+        var label = sp.menuGroup
+        for (var i = 0; i < sp.menuItems.length; i++) {
+          var $option = $('<option>', {
+            class: 'dropdown-item',
+            value: 'sp-' + h + '_' + i
+          });
+          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+            //$a.html(sp.menuItems[i].label);
+            $option.html(label);
+            jqObject.append($option);
+          }
+        }      
+      }
     }
 
     var $loadibcform = $('<div class="container"> \
