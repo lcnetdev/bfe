@@ -42,6 +42,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony",
     "rdf-translator": "^0.1.0"
   }
 }
