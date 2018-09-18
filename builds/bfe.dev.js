@@ -769,7 +769,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             $option.html(label);
             jqObject.append($option);
           }
-        }      
+        }
       }
     }
 
@@ -871,11 +871,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             value: 'sp-' + h + '_' + i
           });
           if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
-             //$a.html(sp.menuItems[i].label);
+            //$a.html(sp.menuItems[i].label);
             $option.html(label);
             jqObject.append($option);
           }
-        }
+        }   
       }
     }
 
