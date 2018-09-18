@@ -861,16 +861,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       }
     });
 
-    var $loadibcform = $('<div class="container"> \
-            <form role="form" method="get"> \
-            <div class="form-group"> \
-            <label for="url">URL for Bibframe JSON</label> \
-            <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
-            <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
-            </div></div> \
-            <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
-            </form></div>');
-
     var getProfileOptions = function(jqObject) {
       for (var h = 0; h < config.startingPoints.length; h++) {
         var sp = config.startingPoints[h];
@@ -881,13 +871,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             value: 'sp-' + h + '_' + i
           });
           if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
-            //$a.html(sp.menuItems[i].label);
+             //$a.html(sp.menuItems[i].label);
             $option.html(label);
             jqObject.append($option);
           }
         }
       }
     }
+
+
+    var $loadibcform = $('<div class="container"> \
+            <form role="form" method="get"> \
+            <div class="form-group"> \
+            <label for="url">URL for Bibframe JSON</label> \
+            <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
+            <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
+            </div></div> \
+            <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
+            </form></div>');
 
     getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'));
 
