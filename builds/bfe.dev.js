@@ -755,7 +755,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
 
     var $workmenudiv = $loadworkform.find('#bfeditor-loadwork-dropdownMenu');
 
-    var getProfileOptions = function(jqObject) {
+    var getWorkProfileOptions = function(jqObject) {
       for (var h = 0; h < config.startingPoints.length; h++) {
         var sp = config.startingPoints[h];
         var label = sp.menuGroup
@@ -764,14 +764,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             class: 'dropdown-item',
             value: 'sp-' + h + '_' + i
           });
-          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Work" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Work"){
             //$a.html(sp.menuItems[i].label);
             $option.html(label);
-            $workmenudiv.append($option);
+            jqObject.append($option);
           }
         }      
       }
     }
+
+    getWorkProfileOptions($workmenudiv);
 
     $loadworkdiv.append($loadworkform);
 
@@ -868,6 +870,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             </div></div> \
             <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
             </form></div>');
+
+    var getProfileOptions = function(jqObject) {
+      for (var h = 0; h < config.startingPoints.length; h++) {
+        var sp = config.startingPoints[h];
+        var label = sp.menuGroup
+        for (var i = 0; i < sp.menuItems.length; i++) {
+          var $option = $('<option>', {
+            class: 'dropdown-item',
+            value: 'sp-' + h + '_' + i
+          });
+          if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+            //$a.html(sp.menuItems[i].label);
+            $option.html(label);
+            jqObject.append($option);
+          }
+        }
+      }
+    }
 
     getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'));
 
