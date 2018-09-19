@@ -276,7 +276,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   for (var rt = 0; rt < data[j].json.Profile.resourceTemplates.length; rt++) {
                     resourceTemplates.push(data[j].json.Profile.resourceTemplates[rt]);
                     // populate addFields hash with property templates for the "add property" function.
-                    data[j].json.Profile.resourceTemplates[rt].propertyTemplates.forEach(function(ptemp) {
+                    /* data[j].json.Profile.resourceTemplates[rt].propertyTemplates.forEach(function(ptemp) {
                       if (ptemp.type != 'resource') {
                         if (ptemp.propertyLabel !== undefined) {
                           var propKey = ptemp.propertyLabel;
@@ -284,8 +284,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                           addFields[propKey] = ptemp;
                         }
                       }
-                    })
-  
+                    }); */
                   }
                   bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data[j].name);
                 }
@@ -2013,6 +2012,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         // starting the "add property" stuff here
         if (rt.embedType == 'page') {
           var substringMatcher = function(strs) {
+            console.log(strs);
             return function findMatches(q, cb) {
               var matches, substrRegex;
               matches = [];
@@ -2028,9 +2028,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           };
           $addpropdata = $('<div>', { class: 'col-sm-8' });
           $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
-          console.log(addFields);
           $addpropinput.click(function() {
-            addFields = [];
             $.ajax({
               url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
               success: function(data) {
@@ -2041,14 +2039,24 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     dataType: 'json',
                     url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
                     success: function(ontdata) {
-                      _.filter(ontdata, function(o) {
+                      ontdata.forEach(function(o) {
                         var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
                         if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
                           var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
                           var uri = o['@id'];
-                          console.log(uri);
+                          console.log(label + ' ' + uri);
+                          addFields[label] = uri;
                         }
                       });
+                      /* _.filter(ontdata, function(o) {
+                        var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
+                        if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
+                          var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
+                          var uri = o['@id'];
+                          addFields[label] = uri;
+                          console.log(addFields);
+                        }
+                      }); */
                       // console.log(ontdata);
                     },
                     error: function (err) {
@@ -2061,7 +2069,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 console.log(err);
               }
             });
-          })
+          });
+          console.log(addFields);
           $addpropinput.appendTo($addpropdata).typeahead(
             {
               highlight: true,        
