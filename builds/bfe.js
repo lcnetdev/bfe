@@ -2012,17 +2012,16 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
         // starting the "add property" stuff here
         if (rt.embedType == 'page') {
           var substringMatcher = function(strs) {
-            console.log(strs);
             return function findMatches(q, cb) {
               var matches, substrRegex;
               matches = [];
               substrRegex = new RegExp(q, 'i');
+              strs.sort();
               $.each(strs, function(i, str) {
-                  if (substrRegex.test(str.propertyLabel) && !addPropsUsed[str.propertyURI]) {
-                    matches.push({value: i});
-                  }
+                if (substrRegex.test(i) && !addPropsUsed[str]) {
+                  matches.push({value: i});
+                }
               });
-              // console.log(matches);
               cb(matches);
             };
           };
@@ -2044,20 +2043,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
                           var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
                           var uri = o['@id'];
-                          console.log(label + ' ' + uri);
-                          addFields[label] = uri;
+                          // console.log(label + ' ' + uri);
+                          if (label) {
+                            addFields[label] = uri;
+                          }
                         }
                       });
-                      /* _.filter(ontdata, function(o) {
-                        var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
-                        if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
-                          var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
-                          var uri = o['@id'];
-                          addFields[label] = uri;
-                          console.log(addFields);
-                        }
-                      }); */
-                      // console.log(ontdata);
                     },
                     error: function (err) {
                       console.log(err);
@@ -2070,7 +2061,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
             });
           });
-          console.log(addFields);
+ 
           $addpropinput.appendTo($addpropdata).typeahead(
             {
               highlight: true,        
@@ -2082,7 +2073,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             }
           ).on('typeahead:selected', function (e, suggestion) {
             var newproperty = addFields[suggestion.value];
-            console.log(newproperty);
+            // console.log(newproperty);
             newproperty.display = 'true';
             newproperty.guid = guid();
             rt.propertyTemplates.push(newproperty);
