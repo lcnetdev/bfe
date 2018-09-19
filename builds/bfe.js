@@ -2016,7 +2016,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var matches, substrRegex;
               matches = [];
               substrRegex = new RegExp(q, 'i');
-              strs.sort();
               $.each(strs, function(i, str) {
                 if (substrRegex.test(i) && !addPropsUsed[str]) {
                   matches.push({value: i});
@@ -2072,13 +2071,26 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               source: substringMatcher(addFields),
             }
           ).on('typeahead:selected', function (e, suggestion) {
-            var newproperty = addFields[suggestion.value];
-            // console.log(newproperty);
-            newproperty.display = 'true';
-            newproperty.guid = guid();
+            // var newproperty = addFields[suggestion.value];
+            var newproperty = {
+              'propertyLabel': suggestion.value,
+              'propertyURI': addFields[suggestion.value],
+              'type': 'literal',
+              'mandatory': 'false',
+              'repeatable': 'true',
+              'valueConstraint': { 
+                'valueTemplateRefs': [],
+                'useValuesFrom': [],
+                'valueDataType': {}
+              },
+              'display': 'true',
+              'guid': guid()
+            };
+
+            console.log(newproperty);
             rt.propertyTemplates.push(newproperty);
             addedProperties.push(newproperty);
-            cbLoadTemplates(rt.propertyTemplates);       
+            cbLoadTemplates(rt.propertyTemplates);     
           });
           $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
           $addprop = $('<div>', { class: 'form-group row' });
