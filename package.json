@@ -12,7 +12,7 @@
     "node": ">= 0.9.0"
   },
   "author": "Kirk Hess <khes@loc.gov>",
-  "main": "src/bfe",
+  "main": "Gruntfile.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/lcnetdev/bfe.git"
