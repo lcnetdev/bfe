@@ -1,4 +1,4 @@
-/* bfe 2018-09-19 *//**
+/* bfe 2018-09-20 *//**
  * Define a module along with a payload
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
@@ -147,7 +147,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
     // var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
-    var addFields = {};
+    var addFields = [];
     var addedProperties = [];
     // var startingPoints = [];
     // var formTemplates = [];
@@ -275,16 +275,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                   profiles.push(data[j].json);
                   for (var rt = 0; rt < data[j].json.Profile.resourceTemplates.length; rt++) {
                     resourceTemplates.push(data[j].json.Profile.resourceTemplates[rt]);
-                    // populate addFields hash with property templates for the "add property" function.
-                    /* data[j].json.Profile.resourceTemplates[rt].propertyTemplates.forEach(function(ptemp) {
-                      if (ptemp.type != 'resource') {
-                        if (ptemp.propertyLabel !== undefined) {
-                          var propKey = ptemp.propertyLabel;
-                          propKey = propKey.replace(/^\d\w*\. /,'');
-                          addFields[propKey] = ptemp;
-                        }
-                      }
-                    }); */
                   }
                   bfelog.addMsg(new Error(), 'INFO', 'Loaded profile: ' + data[j].name);
                 }
@@ -2016,9 +2006,14 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               var matches, substrRegex;
               matches = [];
               substrRegex = new RegExp(q, 'i');
-              $.each(strs, function(i, str) {
-                if (substrRegex.test(i) && !addPropsUsed[str]) {
-                  matches.push({value: i});
+              $.each(strs, function(index, str) {
+                if (substrRegex.test(str.display) && !addPropsUsed[str.uri]) {
+                  matches.push({
+                    'key': index,
+                    'value': str.display,
+                    'label': str.label,
+                    'uri': str.uri
+                  });
                 }
               });
               cb(matches);
@@ -2032,7 +2027,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               success: function(data) {
                 data.forEach(function(ont) {
                   ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
-                  console.log(ont.json.url);
                   $.ajax({
                     dataType: 'json',
                     url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
@@ -2042,9 +2036,13 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                         if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
                           var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
                           var uri = o['@id'];
-                          // console.log(label + ' ' + uri);
                           if (label) {
-                            addFields[label] = uri;
+                            addFields.push({
+                              'label': label,
+                              'uri': uri,
+                              'type': prop,
+                              'display': label + ' (' + ont.json.label + ')'
+                            });
                           }
                         }
                       });
@@ -2060,7 +2058,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               }
             });
           });
- 
+          
           $addpropinput.appendTo($addpropdata).typeahead(
             {
               highlight: true,        
@@ -2073,8 +2071,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           ).on('typeahead:selected', function (e, suggestion) {
             // var newproperty = addFields[suggestion.value];
             var newproperty = {
-              'propertyLabel': suggestion.value,
-              'propertyURI': addFields[suggestion.value],
+              'propertyLabel': suggestion.label,
+              'propertyURI': suggestion.uri,
               'type': 'literal',
               'mandatory': 'false',
               'repeatable': 'true',
