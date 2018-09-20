@@ -1,4 +1,4 @@
-/* bfe 2018-09-18 *//**
+/* bfe 2018-09-20 *//**
  * Define a module along with a payload
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
