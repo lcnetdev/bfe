@@ -1858,9 +1858,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           forEachFirst = false;
         });
         // starting the "add property" stuff here
+
         if (rt.embedType == 'page') {
           var substringMatcher = function(strs) {
             return function findMatches(q, cb) {
+              strs = _.sortBy(strs, 'display');
               var matches, substrRegex;
               matches = [];
               substrRegex = new RegExp(q, 'i');
@@ -1879,7 +1881,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $addpropdata = $('<div>', { class: 'col-sm-8' });
           $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
           $addpropinput.click(function() {
-            
             if (addFields.length == 0) {
               $addpropinput.prop('disabled', true);
               $addpropinput.attr('placeholder', 'Loading field choices...');
@@ -1893,6 +1894,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
                     $.ajax({
                       dataType: 'json',
+                      async: false,
                       url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
                       success: function(ontdata) {
                         ontdata.forEach(function(o) {
@@ -1936,7 +1938,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               source: substringMatcher(addFields),
             }
           ).on('typeahead:selected', function (e, suggestion) {
-
             var newproperty = {
               'propertyLabel': suggestion.label,
               'propertyURI': suggestion.uri,
@@ -1951,8 +1952,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               'display': 'true',
               'guid': guid()
             };
-
-            console.log(newproperty);
             rt.propertyTemplates.push(newproperty);
             addedProperties.push(newproperty);
             cbLoadTemplates(rt.propertyTemplates);     
