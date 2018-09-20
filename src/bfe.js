@@ -1885,14 +1885,15 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               $addpropinput.attr('placeholder', 'Loading field choices...');
               $.ajax({
                 url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
-                async: false,
                 success: function(data) {
+                  if (data.length == 0) {
+                    $addpropinput.attr('placeholder', 'No ontologies defined...');
+                  }
                   data.forEach(function(ont) {
                     ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
                     $.ajax({
                       dataType: 'json',
                       url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
-                      async: false,
                       success: function(ontdata) {
                         ontdata.forEach(function(o) {
                           var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
@@ -1909,6 +1910,11 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                       },
                       error: function (err) {
                         console.log(err);
+                      },
+                      complete: function () {
+                        $addpropinput.prop('disabled', false);
+                        $addpropinput.attr('placeholder', 'Type for suggestions');
+                        $addpropinput.focus();
                       }
                     });
                   });
@@ -1916,12 +1922,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 error: function (err) {
                   console.log(err);
                 },
-                complete: function () {
-                  $addpropinput.prop('disabled', false);
-                  $addpropinput.attr('placeholder', 'Type for suggestions');
-                  $addpropinput.focus();
-                  addFields = _.sortBy(addFields, 'display');
-                }
               });
             }
           });
