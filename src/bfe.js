@@ -1879,7 +1879,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $addpropdata = $('<div>', { class: 'col-sm-8' });
           $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
           $addpropinput.click(function() {
-            addFields = [];
+            
             $.ajax({
               url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
               success: function(data) {
@@ -1903,7 +1903,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                           });
                         }
                       });
-                      console.log(addFields);
                     },
                     error: function (err) {
                       console.log(err);
