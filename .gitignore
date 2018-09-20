@@ -10,3 +10,15 @@ builds/bfe.dev.bak
 builds/bfe.jodi.bak
 builds/bfe.jodi.js
 static/profiles/bibframe/Test All (jodiw).json
+static/profiles/bibframe/profiles.json
+
+builds/bfe.test.js
+static/js/config-test.js
+static/profiles/bibframe/BIBFRAME 2.0 Test: Notated Music: Work, Expression, Instance.json
+static/profiles/bibframe/Test profile (Prints & Photographs).json
+test.html
+
+
+.csslintrc
+.jshintrc
+.eslintrc
