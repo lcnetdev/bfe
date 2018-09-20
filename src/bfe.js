@@ -1879,17 +1879,21 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $addpropdata = $('<div>', { class: 'col-sm-8' });
           $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
           $addpropinput.click(function() {
+            
             if (addFields.length == 0) {
+              $addpropinput.prop('disabled', true);
+              $addpropinput.attr('placeholder', 'Loading field choices...');
               $.ajax({
                 url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
+                async: false,
                 success: function(data) {
                   data.forEach(function(ont) {
                     ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
                     $.ajax({
                       dataType: 'json',
                       url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
+                      async: false,
                       success: function(ontdata) {
-                        console.log(ont.json.url);
                         ontdata.forEach(function(o) {
                           var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
                           if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
@@ -1898,7 +1902,6 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                             addFields.push({
                               'label': label,
                               'uri': uri,
-                              'remark': prop,
                               'display': label + ' (' + ont.json.label + ')'
                             });
                           }
@@ -1912,6 +1915,12 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                 },
                 error: function (err) {
                   console.log(err);
+                },
+                complete: function () {
+                  $addpropinput.prop('disabled', false);
+                  $addpropinput.attr('placeholder', 'Type for suggestions');
+                  $addpropinput.focus();
+                  addFields = _.sortBy(addFields, 'display');
                 }
               });
             }
