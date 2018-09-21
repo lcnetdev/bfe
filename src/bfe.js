@@ -1898,9 +1898,10 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                       url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
                       success: function(ontdata) {
                         ontdata.forEach(function(o) {
-                          var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
-                          if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
-                            var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
+                          var prop = o['@type'][0].match(/property$/i);
+                          if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'] !== undefined && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
+                            var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'];
+                            label = label.replace(/\s+/g,' ');
                             var uri = o['@id'];
                             addFields.push({
                               'label': label,
@@ -1939,16 +1940,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
             }
           ).on('typeahead:selected', function (e, suggestion) {
             var newproperty = {
-              'propertyLabel': suggestion.label,
-              'propertyURI': suggestion.uri,
-              'type': 'literal',
               'mandatory': 'false',
               'repeatable': 'true',
+              'type': 'literal',
+              'resourceTemplates': [],
               'valueConstraint': { 
                 'valueTemplateRefs': [],
                 'useValuesFrom': [],
                 'valueDataType': {}
               },
+              'propertyLabel': suggestion.label,
+              'propertyURI': suggestion.uri,
               'display': 'true',
               'guid': guid()
             };
