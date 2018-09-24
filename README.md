@@ -18,42 +18,21 @@ Twitter's [Bootstrap] and a few additional custom CSS declarations.
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/tools/editor/
+[demo-page]: http://bibframe.org/bibliomata/bfe/index.html
+[ontology]: http://id.loc.gov/ontologies/bibframe/
 [bfi]: http://www.loc.gov/bibframe/
 [profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
-[JQuery]: http://jquery.com/
-[Lo-Dash]: http://lodash.com/
-[Bootstrap]: http://getbootstrap.com/
-[typeahead.js]: https://github.com/twitter/typeahead.js
-
 
 Getting Started
 ---------------
+`bfe` is currently submodule of [recto](http://github.com/lcnetdev/recto), an express-based webserver, which uses [verso](http://github.com/lcnetdev/verso) a loopback-based server for backend data. The current recommendation is to install recto and verso and use bfe as part of the demonstration environment.
 
-`bfe` should be run on or within a server.  To run the demo or development version, 
-you can use the simple express-based server - found in the main `bfe` directory - 
+`bfe` can be run as a demo or development version using a simple express-based server - found in the main `bfe` directory - 
 that ships with `bfe`:
 
 ```bash
 node server-bfe.js
 ```
-or something like Python's SimpleHTTPServer:
-
-```bash
-python -m SimpleHTTPServer
-```
-
-As for integrating `bfe` with your own project, take a look at the `index.html` 
-file.  Pay particular attention to the includes - the javascript file and CSS - 
-at the top of the page.  Those includes and the little bit of configuration below 
-those includes is all that is needed.  
-
-If you do not want to clone this repository and use it locally, then, in order 
-to acquire those includes, you should download the minified, raw versions from the 
-`builds` directory:
-* Javascript - https://github.com/lcnetdev/bfe/blob/v0.2.0/builds/bfe.min.js
-* CSS - https://github.com/lcnetdev/bfe/blob/v0.2.0/builds/bfe.min.css
-
 
 Documentation 
 -------------
@@ -72,8 +51,7 @@ Demo?
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/tools/editor/
-
+[demo-page]: http://bibframe.org/bibliomata/bfe/index.html
 
 Browser Support
 ---------------
@@ -85,9 +63,8 @@ Browser Support
 * Opera - 12+
 
 **NOTE:** `bfe` has also not been **thoroughly** tested in the browsers for which
-support is currently listed.  It has been developed primarily in Chrome.
+support is currently listed.  It has been developed primarily using Chrome.
 It has been tested in both Chrome and Safari mobile versions.
-
 
 Issues
 ------
@@ -130,17 +107,22 @@ v0.3.x
 * Implement save/load api
 
 v0.4.x
-* Rewrite editor using Angular.js.
+* Additional features to support LC Bibframe Pilot 2.0
+* Additional features to support requirements for LD4P2
+
+v1.x
+* Support for LD4P2 requirements
+* Refactor into MVC
+* Implement common javascript framework (React, Angular, etc)
 * Implement automated testing.
+
 
 Developers
 ----------
 
-From a design standpoint, the objective with `bfe` is to create the simplest 
+From a design standpoint, the objective with `bfe` was to create the simplest 
 'pluggable' form editor one can to maximize experimental implementer's abilities 
-to create/edit BIBFRAME data.  It might be a little weighty as a result, but 
-ease-of-use is the objective.  Still, there's lots to do and the roadmap above includes 
-a few of those things.  
+to create/edit BIBFRAME data.  The current focus is to transform bfe into a production ready tool.
 
 All contributions are welcome.  If you do not code, surely you will discover an 
 [issue] you can report.  
@@ -159,7 +141,6 @@ Basic build steps:
 [Lookup]: https://github.com/lcnetdev/bfe/tree/master/src/bfelookups.js
 [node.js]: http://nodejs.org
 [Grunt]: http://gruntjs.com
-
 
 Acknowledgements
 ----------
@@ -204,6 +185,9 @@ Contributors
 * [Kevin Ford](https://github.com/kefo)
 * [Kirk Hess](https://github.com/kirkhess)
 
+[Index Data](http://indexdata.com/):
+* [Charles Ledvina](https://github.com/cledvina)
+* [Wayne Schneider](https://github.com/wafschneider)
 
 Maintainer
 -----------

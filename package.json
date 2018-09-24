@@ -6,24 +6,20 @@
     "editor",
     "rdf"
   ],
-  "version": "0.2.0",
+  "version": "0.4.0",
   "homepage": "http://github.com/lcnetdev/bfe",
   "engines": {
     "node": ">= 0.9.0"
   },
   "author": "Kirk Hess <khes@loc.gov>",
-  "main": "src/bfe",
+  "main": "Gruntfile.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/lcnetdev/bfe.git"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-cssmin": "~0.14.0",
-    "grunt-contrib-concat": "~0.5.1",
-    "express": "~4.13.0",
-    "serve-static": "~1.10.0"
+    "express": "^4.16.3",
+    "serve-static": "^1.13.2"
   },
   "bugs": {
     "url": "http://github.com/lcnetdev/bfe/issues"
@@ -42,7 +38,9 @@
   },
   "license": "ISC",
   "dependencies": {
-    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony",
-    "rdf-translator": "^0.1.0"
+    "grunt": "^1.x.x",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony"
   }
 }

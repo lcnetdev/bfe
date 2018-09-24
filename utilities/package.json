@@ -1,9 +1,0 @@
-{
-    "name": "bfeutilties",
-    "description": "Utilities",
-    "version": "0.1.0",
-    "dependencies": {
-        "lodash": "2.4.x",
-        "request": "2.33.x"
-    }
-}
