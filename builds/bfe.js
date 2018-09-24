@@ -1,4 +1,4 @@
-/* bfe 2018-09-20 *//**
+/* bfe 2018-09-24 *//**
  * Define a module along with a payload
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
@@ -647,7 +647,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     bfestore.created = rowData.created;
                     bfestore.url = rowData.url;
                     bfestore.profile = rowData.profile;
-                    addedProperties = rowData.addedproperties;
+                    if(!_.isEmpty(rowData.addedProperties))
+                        addedProperties = rowData.addedproperties;
                     $('[href=#create]').tab('show');
                     if ($('#bfeditor-messagediv').length) {
                       $('#bfeditor-messagediv').remove();
@@ -2000,16 +2001,17 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           forEachFirst = false;
         });
         // starting the "add property" stuff here
+
         if (rt.embedType == 'page') {
           var substringMatcher = function(strs) {
             return function findMatches(q, cb) {
+              strs = _.sortBy(strs, 'display');
               var matches, substrRegex;
               matches = [];
               substrRegex = new RegExp(q, 'i');
               $.each(strs, function(index, str) {
                 if (substrRegex.test(str.display) && !addPropsUsed[str.uri]) {
                   matches.push({
-                    'key': index,
                     'value': str.display,
                     'label': str.label,
                     'uri': str.uri
@@ -2022,41 +2024,52 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
           $addpropdata = $('<div>', { class: 'col-sm-8' });
           $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
           $addpropinput.click(function() {
-            $.ajax({
-              url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
-              success: function(data) {
-                data.forEach(function(ont) {
-                  ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
-                  $.ajax({
-                    dataType: 'json',
-                    url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
-                    success: function(ontdata) {
-                      ontdata.forEach(function(o) {
-                        var prop = o['@type'][0].match(/#(objectproperty|property)$/i);
-                        if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
-                          var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'].replace(/\s+/g,' ');
-                          var uri = o['@id'];
-                          if (label) {
+            if (addFields.length == 0) {
+              $addpropinput.prop('disabled', true);
+              $addpropinput.attr('placeholder', 'Loading field choices...');
+              $.ajax({
+                url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
+                success: function(data) {
+                  if (data.length == 0) {
+                    $addpropinput.attr('placeholder', 'No ontologies defined...');
+                  }
+                  data.forEach(function(ont) {
+                    ont.json.url = ont.json.url.replace(/\.rdf$/,'.json');
+                    $.ajax({
+                      dataType: 'json',
+                      async: false,
+                      url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
+                      success: function(ontdata) {
+                        ontdata.forEach(function(o) {
+                          var prop = o['@type'][0].match(/property$/i);
+                          if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'] !== undefined && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
+                            var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'];
+                            label = label.replace(/\s+/g,' ');
+                            var uri = o['@id'];
                             addFields.push({
                               'label': label,
                               'uri': uri,
-                              'type': prop,
                               'display': label + ' (' + ont.json.label + ')'
                             });
                           }
-                        }
-                      });
-                    },
-                    error: function (err) {
-                      console.log(err);
-                    }
+                        });
+                      },
+                      error: function (err) {
+                        console.log(err);
+                      },
+                      complete: function () {
+                        $addpropinput.prop('disabled', false);
+                        $addpropinput.attr('placeholder', 'Type for suggestions');
+                        $addpropinput.focus();
+                      }
+                    });
                   });
-                });
-              },
-              error: function (err) {
-                console.log(err);
-              }
-            });
+                },
+                error: function (err) {
+                  console.log(err);
+                },
+              });
+            }
           });
           
           $addpropinput.appendTo($addpropdata).typeahead(
@@ -2069,23 +2082,21 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
               source: substringMatcher(addFields),
             }
           ).on('typeahead:selected', function (e, suggestion) {
-            // var newproperty = addFields[suggestion.value];
             var newproperty = {
-              'propertyLabel': suggestion.label,
-              'propertyURI': suggestion.uri,
-              'type': 'literal',
               'mandatory': 'false',
               'repeatable': 'true',
+              'type': 'literal',
+              'resourceTemplates': [],
               'valueConstraint': { 
                 'valueTemplateRefs': [],
                 'useValuesFrom': [],
                 'valueDataType': {}
               },
+              'propertyLabel': suggestion.label,
+              'propertyURI': suggestion.uri,
               'display': 'true',
               'guid': guid()
             };
-
-            console.log(newproperty);
             rt.propertyTemplates.push(newproperty);
             addedProperties.push(newproperty);
             cbLoadTemplates(rt.propertyTemplates);     
@@ -3911,6 +3922,7 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
       // return returnval;
     }
   });
+
 bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, exports, module) {
     exports.n3store = N3.Store();
   

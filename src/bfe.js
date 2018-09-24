@@ -505,7 +505,8 @@ bfe.define('src/bfe', ['require', 'exports', 'module', 'src/bfestore', 'src/bfel
                     bfestore.created = rowData.created;
                     bfestore.url = rowData.url;
                     bfestore.profile = rowData.profile;
-                    addedProperties = rowData.addedproperties;
+                    if(!_.isEmpty(rowData.addedProperties))
+                        addedProperties = rowData.addedproperties;
                     $('[href=#create]').tab('show');
                     if ($('#bfeditor-messagediv').length) {
                       $('#bfeditor-messagediv').remove();
