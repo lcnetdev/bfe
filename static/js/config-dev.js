@@ -242,10 +242,9 @@ function deleteId(id, csrf, bfelog){
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-var rectoBase = "http://bibframe.org/bibliomata";
-
 // The following line is for local developement
-// rectoBase = "http://localhost:3000";
+var rectoBase = "http://localhost:3000";
+
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
