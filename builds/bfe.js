@@ -4727,7 +4727,24 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
               return process(parsedlist);
             }
           });
-        } else if (query.length >= 1) {
+        } else if (query.length >= 2 && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
+          if (query.match(/^[0-9]{3,}$/))
+            u = scheme + '/suggest/lccn/' + q;
+          else
+            u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
+          $.ajax({
+            url: u,
+            dataType: 'jsonp',
+            success: function (data) {
+              parsedlist = exports.processSuggestions(data, query);
+              cache[q] = parsedlist;
+              return process(parsedlist);
+            }, 
+            fail: function (err){
+              console.log(err);
+            }
+          });
+        } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
           u = scheme + '/suggest/?count=50&q=' + q;
           $.ajax({
             url: u,
