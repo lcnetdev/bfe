@@ -242,7 +242,7 @@ var ie = (function(){
    * itself. The "versoURL" variable is a convenience for setting the
    * base URL of verso in the "config" definition below.
    */
-  var rectoBase = "http://bibframe.org/bibliomata";
+  var rectoBase = "http://mlvlp04.loc.gov:3000";
   
   // The following line is for local developement
   // rectoBase = "http://localhost:3000";
