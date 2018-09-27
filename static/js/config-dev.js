@@ -243,7 +243,7 @@ function deleteId(id, csrf, bfelog){
  * base URL of verso in the "config" definition below.
  */
 // The following line is for local developement
-var rectoBase = "http://localhost:3000";
+var rectoBase = "http://bibframe.org/bibliomata";
 
 var versoURL = rectoBase + "/verso/api";
 

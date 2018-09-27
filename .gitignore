@@ -1,23 +1,10 @@
 tmp
 examples
 node_modules
-static/js/config-jodi.js
-builds/bfe.dev.js.typeahead
-jodi.html
-static/profiles/bibframe/Test profile (jodiw).json
+builds
 
-builds/bfe.dev.bak
-builds/bfe.jodi.bak
-builds/bfe.jodi.js
-static/profiles/bibframe/Test All (jodiw).json
-static/profiles/bibframe/profiles.json
-
-builds/bfe.test.js
-static/js/config-test.js
-static/profiles/bibframe/BIBFRAME 2.0 Test: Notated Music: Work, Expression, Instance.json
-static/profiles/bibframe/Test profile (Prints & Photographs).json
-test.html
-
+*.html
+static/js/config-*.js
 
 .csslintrc
 .jshintrc
