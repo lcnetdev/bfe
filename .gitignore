@@ -1,20 +1,10 @@
 tmp
 examples
 node_modules
-
-jodi.html
-test.html
-
 builds/*
 
-static/js/config-jodi.js
-static/js/config-test.js
-
-static/profiles/bibframe/Test All (jodiw).json
-static/profiles/bibframe/profiles.json
-static/profiles/bibframe/Test profile (jodiw).json
-static/profiles/bibframe/BIBFRAME 2.0 Test: Notated Music: Work, Expression, Instance.json
-static/profiles/bibframe/Test profile (Prints & Photographs).json
+*.html
+static/js/config-*.js
 
 .csslintrc
 .jshintrc
