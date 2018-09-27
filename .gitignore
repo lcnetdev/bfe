@@ -1,7 +1,7 @@
 tmp
 examples
 node_modules
-builds
+builds/*
 
 *.html
 static/js/config-*.js
