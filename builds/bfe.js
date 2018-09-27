@@ -1,4 +1,4 @@
-/* bfe 2018-09-24 *//**
+/* bfe 2018-09-27 *//**
  * Define a module along with a payload
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
@@ -4739,7 +4739,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'module', 'src/lookups/
               parsedlist = exports.processSuggestions(data, query);
               cache[q] = parsedlist;
               return process(parsedlist);
-            }, 
+            },
             fail: function (err){
               console.log(err);
             }

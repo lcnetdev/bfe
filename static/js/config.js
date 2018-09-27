@@ -240,12 +240,10 @@ var ie = (function(){
    * The data are expected to be in a JSON array, with each object
    * in the array containing a "json" property that has the profile
    * itself. The "versoURL" variable is a convenience for setting the
-   * base URL of verso in the "config" definition below.
+   * base URL of verso in the "config" definition below. 
    */
   var rectoBase = "http://mlvlp04.loc.gov:3000";
   
-  // The following line is for local developement
-  // rectoBase = "http://localhost:3000";
   var versoURL = rectoBase + "/verso/api";
   
   var config = {

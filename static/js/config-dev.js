@@ -244,8 +244,6 @@ function deleteId(id, csrf, bfelog){
  */
 var rectoBase = "http://mlvlp04.loc.gov:3000";
 
-// The following line is for local developement
-// rectoBase = "http://localhost:3000";
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
