@@ -8,9 +8,6 @@
   ],
   "version": "0.4.0",
   "homepage": "http://github.com/lcnetdev/bfe",
-  "engines": {
-    "node": ">= 0.9.0"
-  },
   "author": "Kirk Hess <khes@loc.gov>",
   "main": "Gruntfile.js",
   "repository": {
@@ -24,19 +21,13 @@
   "bugs": {
     "url": "http://github.com/lcnetdev/bfe/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/MIT"
-    }
-  ],
+  "license": "CC0-1.0",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "ISC",
   "dependencies": {
     "grunt": "^1.x.x",
     "grunt-contrib-concat": "^1.0.1",
