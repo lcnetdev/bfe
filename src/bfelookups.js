@@ -1,6 +1,6 @@
-bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
-  
+    var bfelog = require('src/bfelogging');
     var cache = [];
   
     // This var is required because it is used as an identifier.
@@ -118,14 +118,15 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
       */
     exports.getResource = lcshared.getResourceWithAAP;
   });
-  bfe.define('src/lookups/lcshared', ['require', 'exports'], function (require, exports) {
+  bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], function (require, exports) {
     // require('https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js');
   
     /*
           subjecturi propertyuri selected.uri
           selected.uri  bf:label selected.value
       */
-  
+    var bfelog = require('src/bfelogging');
+
     exports.getResource = function (subjecturi, property, selected, process) {
       var triples = [];
   
@@ -329,7 +330,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
             u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
           $.ajax({
             url: u,
-            dataType: 'jsonp',
+            dataType: 'json',
             success: function (data) {
               var parsedlist = exports.processSuggestions(data, query);
               cache[q] = parsedlist;
@@ -356,9 +357,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
       }, 300); // 300 ms
     };
   });
-  bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
-  
+    var bfelog = require('src/bfelogging');
     var cache = [];
   
     exports.scheme = 'http://id.loc.gov/authorities/subjects';
@@ -471,9 +472,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
       */
     exports.getResource = lcshared.getResourceWithAAP;
   });
-  bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
-  
+    var bfelog = require('src/bfelogging');
     var cache = [];
   
     exports.scheme = 'http://id.loc.gov/authorities/genreForms';
@@ -546,8 +547,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
     exports.getResource = lcshared.getResourceWithAAP;
   });
   
-  bfe.define('src/lookups/rdaformatnotemus', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdaformatnotemus', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/FormatNoteMus';
   
@@ -594,8 +596,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdamediatype', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdamediatype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/RDAMediaType';
   
@@ -642,8 +645,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdamodeissue', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdamodeissue', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/ModeIssue';
   
@@ -690,8 +694,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdacarriertype', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdacarriertype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/RDACarrierType';
   
@@ -738,8 +743,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdacontenttype', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdacontenttype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/RDAContentType';
   
@@ -786,8 +792,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/frequency';
   
@@ -834,8 +841,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdaaspectration', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdaaspectration', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/AspectRatio';
   
@@ -882,8 +890,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
   
     exports.getResource = lcshared.getResource;
   });
-  bfe.define('src/lookups/rdageneration', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/rdageneration', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
     exports.scheme = 'http://rdaregistry.info/termList/RDAGeneration';
   
@@ -931,8 +940,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
     exports.getResource = lcshared.getResource;
   });
   
-  bfe.define('src/lookups/lcorganizations', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/lcorganizations', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
   
     exports.scheme = 'http://id.loc.gov/vocabulary/organizations';
@@ -944,8 +954,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared']
     exports.getResource = lcshared.getResourceWithAAP;
   });
   
-  bfe.define('src/lookups/relators', ['require', 'exports', 'src/lookups/lcshared'], function (require, exports) {
+  bfe.define('src/lookups/relators', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
     var cache = [];
   
     exports.scheme = 'http://id.loc.gov/vocabulary/relators';

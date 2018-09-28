@@ -201,12 +201,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
       var $tabuldiv = $('<div class="tabs"></div>');
       var $tabul = $('<ul class="nav nav-tabs"></ul>');
-      $tabul.append('<li class="active"><a data-toggle="tab" href="#browse">Browse</a></li>');
-      $tabul.append('<li><a data-toggle="tab" href="#create">Editor</a></li>');
-      $tabul.append('<li><a data-toggle="tab" href="#loadwork">Load Work</a></li>');
-      $tabul.append('<li><a data-toggle="tab" href="#loadibc">Load IBC</a></li>');
-      $tabul.append('<li><a data-toggle="tab" href="#loadmarc">Load MARC</a></li>');
-  
+      $tabul.append('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+      $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
+      $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
+      $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
+      $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+
       $tabuldiv.append($tabul);
       $containerdiv.append($tabuldiv);
   
@@ -243,6 +243,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             'initComplete': function (settings, json) {
               if (window.location.hash !== '') {
                 $('#table_id').DataTable().search(window.location.hash.split('#')[1]).draw();
+              }
+
+              var urlParams = new URLSearchParams(window.location.search)
+              if (urlParams.has('action')){
+                var action = urlParams.get('action');
+                var $actiontab = $('a[href="#'+action+'"]')
+                $actiontab.tab('show');
+                var url = urlParams.get('url');
+                $('#bfeditor-'+action+'uriInput').val(url)
               }
             },
             'processing': true,
@@ -594,7 +603,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       getWorkProfileOptions($workmenudiv);
   
       $loadworkdiv.append($loadworkform);
-  
+
       $loadworkdiv.find('#bfeditor-loadworkuri').click(function () {
         // var loadtemplates = [];
   
@@ -602,9 +611,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         //   type: ['http://id.loc.gov/ontologies/bibframe/Work'],
         //   useResourceTemplates: ['profile:bf2:Monograph:Work']
         // };
-        
-        window.location.hash = "LoadWork";
-  
+         
         var spid = $(this.parentElement).find('#bfeditor-loadwork-dropdownMenu').val();
         
         var spnums = spid.replace('sp-', '').split('_'); 
@@ -669,6 +676,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               });
   
               cbLoadTemplates();
+              
             });
           } catch (e) {
             $(this.parentElement).find('#bfeditor-loadworkuriInput').val('An error occured: ' + e.message);
@@ -715,7 +723,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               
       $loadibcdiv.find('#bfeditor-loadibcuri').click(function () {
         // var loadtemplates = [];
-        window.location.hash = "LoadIBC";
 
         var spid = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu').val();
         
@@ -811,6 +818,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // before loading the data, clean up the types
   
                 cbLoadTemplates();
+
               });
             }
           } catch (e) {
