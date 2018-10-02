@@ -8,7 +8,8 @@ module.exports = {
         "config": false,
         "d3": false,
         "N3": false,
-        "jsonld": false
+        "jsonld": false,
+        "define": false
     },
     "env":{
         "browser": true,

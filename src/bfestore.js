@@ -28,14 +28,14 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
               } 
-              bfelog.addMsg(new Error(), "INFO", nnode);
+              bfeditor.bfelog.addMsg(new Error(), "INFO", nnode);
             });
             callback(loadtemplates);
           });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) { 
-          bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
-          bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+          bfeditor.bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+          bfeditor.bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
         }
       });
     }
@@ -114,14 +114,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                           $("#rdfxml .panel-body pre").text(data);
                       },
                       error: function(XMLHttpRequest, status, err) {
-                        bfelog.addMsg(new Error(), 'ERROR', err);
+                        bfeditor.bfelog.addMsg(new Error(), 'ERROR', err);
                       }
                   });
                 });
               }
             });
         });  
-      });  
+      });
+      callback;
     };
   
     exports.n32store = function (n3, graph, tempstore, callback) {
@@ -297,30 +298,41 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                         $("#rdfxml .panel-body pre").text(data);
                     },
                     error: function(XMLHttpRequest, status, err) {
-                      bfelog.addMsg(new Error(), "ERROR", err);
+                      bfeditor.bfelog.addMsg(new Error(), "ERROR", err);
                     }
                 });
             }
         });
       });
     };
-    var context = {
-      'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-      'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-      'xsd': 'http://www.w3.org/2001/XMLSchema#',
-      'bf': 'http://id.loc.gov/ontologies/bibframe/',
-      'bflc': 'http://id.loc.gov/ontologies/bflc/',
-      'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
-      'pmo': 'http://performedmusicontology.org/ontology/',
-    };
 
     exports.store2jsonldcompacted = function (jsonstr, callback) {
+      var context = {
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+        'xsd': 'http://www.w3.org/2001/XMLSchema#',
+        'bf': 'http://id.loc.gov/ontologies/bibframe/',
+        'bflc': 'http://id.loc.gov/ontologies/bflc/',
+        'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
+        'pmo': 'http://performedmusicontology.org/ontology/',
+      };
+
       jsonld.compact(jsonstr, context, function (err, compacted) {
         callback(compacted);
       });
     };
   
     exports.store2jsonldnormalized = function (jsonstr, callback) {
+      var context = {
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+        'xsd': 'http://www.w3.org/2001/XMLSchema#',
+        'bf': 'http://id.loc.gov/ontologies/bibframe/',
+        'bflc': 'http://id.loc.gov/ontologies/bflc/',
+        'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
+        'pmo': 'http://performedmusicontology.org/ontology/',
+      };
+
       jsonld.expand(jsonstr, context, function (err, jsonld) {
         callback(jsonld);
       });

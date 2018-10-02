@@ -1016,6 +1016,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
       $('a[data-toggle="tab"]').click(function (e) {
         $('#bfeditor-messagediv').remove();
+        bfelog.addMsg(new Error(), 'INFO', e.type + " " + e.target);
       });
   
       return {
@@ -1325,6 +1326,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-debug').html(JSON.stringify(bfelog.getLog(), undefined, ' '));
   
           // set state to edit
+          bfeditor.bfestore.store.profile = loadtemplates[0].resourceTemplateID;
+
           bfeditor.bfestore.state = 'edit';
         }
       }
@@ -1490,8 +1493,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $resourcedivheading.append($clonebutton);
           
           // ask user to input custom id
-          var $cloneinput = $('\
-            <div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+          var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
               <div class="modal-dialog" role="document">\
                 <div class="modal-content">\
                   <div class="modal-header">\
@@ -1603,7 +1605,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $linkbutton.click(function () {
           $('#bfeditor').append($linkmodal);
           $('#linkmodal' + rt.useguid).modal();
-          $('#linkmodal' + rt.useguid).on('show.bs.modal', function (event) {
+          $('#linkmodal' + rt.useguid).on('show.bs.modal', function () {
             $(this).css('z-index', 10000);
           });
         });
@@ -1731,7 +1733,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
   
                     var fid = fobject.id;
-                    var rtid = rt.useguid;
+                    //var rtid = rt.useguid;
                     var pid = property.guid;
                     // var mintedURI = editorconfig.baseURI + "resources/" + mintResource(guid());
                     var newResourceURI = '_:bnode' + shortUUID(guid());
@@ -2048,7 +2050,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     });
                     triple = {};
                     triple.guid = guid();
-                    triple.s = uri;
+                    triple.s = fobject.defaulturi; //uri
                     triple.p = property.propertyURI;
                     triple.o = relatedTemplates[0].s;
                     triple.otype = 'uri';
@@ -2723,7 +2725,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               var adminTriple = {};
               adminTriple.s = resourceURI;
               adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-              adminTriple.o = t.id;
+              adminTriple.o = bfeditor.bfestore.store.profile;
               adminTriple.otype = 'literal';
               triplespassed.push(adminTriple);
               bfeditor.bfestore.store.push(adminTriple);
@@ -3686,10 +3688,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
     function whichLabel (uri, callback) {
       // for resource templates, determine if they are works, instances, or other
-   
+      var jsonuri = uri + '.json';
       // normalize
       if (uri.startsWith('http://id.loc.gov/resources')) {
-        uri = uri.replace('http://id.loc.gov/resources', config.resourceURI);
+        jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
       }
   
       if (uri.endsWith('marcxml.xml')) {
@@ -3700,7 +3702,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           type: 'GET',
           async: false,
           data: {
-            uri: uri + '.json'
+            uri: jsonuri
           },
           url: config.url + '/profile-edit/server/whichrt',
           success: function (data) {

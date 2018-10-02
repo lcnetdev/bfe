@@ -457,6 +457,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
               var parsedlist = lcshared.processATOM(data, query);
               cache[q] = parsedlist;
               return process(parsedlist);
+            },
+            fail: function (err){
+              bfelog.addMsg(new Error(), 'INFO',err);
             }
           });
         } else {
@@ -948,6 +951,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://id.loc.gov/vocabulary/organizations';
   
     exports.source = function (query, process) {
+      bfelog.addMsg(new Error(), 'INFO', query);
       return lcshared.simpleQuery(query, cache, exports.scheme, process);
     };
   
@@ -958,10 +962,11 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
     var cache = [];
-  
+    
     exports.scheme = 'http://id.loc.gov/vocabulary/relators';
   
     exports.source = function (query, process) {
+      bfelog.addMsg(new Error(), 'INFO', query);
       return lcshared.simpleQuery(query, cache, exports.scheme, process);
     };
   

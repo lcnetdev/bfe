@@ -7,6 +7,9 @@
     "rdf"
   ],
   "version": "0.4.0",
+  "engines": {
+      "node": ">=10.0.0"
+  },
   "homepage": "http://github.com/lcnetdev/bfe",
   "author": "Kirk Hess <khes@loc.gov>",
   "main": "Gruntfile.js",
@@ -15,6 +18,7 @@
     "url": "http://github.com/lcnetdev/bfe.git"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
     "express": "^4.16.3",
     "serve-static": "^1.13.2"
   },
@@ -26,7 +30,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/"
   },
   "dependencies": {
     "grunt": "^1.x.x",
