@@ -32,6 +32,7 @@
  * @param module a name for the payload
  * @param payload a function to call with (require, exports, module) params
  */
+/*eslint no-console: 0*/
 (function () {
     var ACE_NAMESPACE = 'bfe';
   
@@ -102,7 +103,7 @@
   
         while (moduleName.indexOf('.') !== -1 && previous !== moduleName) {
           var previous = moduleName;
-          moduleName = moduleName.replace(/\/\.\//, '/').replace(/[^\/]+\/\.\.\//, '');
+          moduleName = moduleName.replace(/\/\.\//, '/').replace(/[^/]+\/\.\.\//, '');
         }
       }
   

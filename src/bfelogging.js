@@ -1,4 +1,5 @@
-bfe.define('src/bfelogging', ['require', 'exports', 'module' ], function(require, exports, module) {
+/*eslint no-console: 0*/
+bfe.define('src/bfelogging', ['require', 'exports' ], function(require, exports) {
 
     var level = "INFO";
     var toConsole = true;

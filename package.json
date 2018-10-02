@@ -7,10 +7,10 @@
     "rdf"
   ],
   "version": "0.4.0",
-  "homepage": "http://github.com/lcnetdev/bfe",
   "engines": {
-    "node": ">= 0.9.0"
+      "node": ">=10.0.0"
   },
+  "homepage": "http://github.com/lcnetdev/bfe",
   "author": "Kirk Hess <khes@loc.gov>",
   "main": "Gruntfile.js",
   "repository": {
@@ -18,29 +18,25 @@
     "url": "http://github.com/lcnetdev/bfe.git"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
     "express": "^4.16.3",
     "serve-static": "^1.13.2"
   },
   "bugs": {
     "url": "http://github.com/lcnetdev/bfe/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/MIT"
-    }
-  ],
+  "license": "CC0-1.0",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/"
   },
-  "license": "ISC",
   "dependencies": {
     "grunt": "^1.x.x",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony"
+    "grunt-contrib-uglify-es": "^3.3.0"
   }
 }
