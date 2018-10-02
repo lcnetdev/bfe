@@ -242,8 +242,7 @@ function deleteId(id, csrf, bfelog){
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-// The following line is for local developement
-var rectoBase = "http://localhost:3000";
+var rectoBase = "http://mlvlp04.loc.gov:3000";
 
 var versoURL = rectoBase + "/verso/api";
 
@@ -264,7 +263,7 @@ var config = {
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Agents",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Cartographic",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 DDC",
-     versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Edition Information",
+     versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Extra menus",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Form",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 IBC",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Identifiers",

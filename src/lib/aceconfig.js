@@ -34,6 +34,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ***** END LICENSE BLOCK ***** */
+/*eslint no-console: 0*/
 bfe.define('src/lib/aceconfig', ['require', 'exports', 'module' ], function(require, exports, module) {
 
 var global = (function() {
@@ -83,7 +84,7 @@ function init(packaged) {
             }
         }
 
-        var m = src.match(/^(.*)\/ace(\-\w+)?\.js(\?|$)/);
+        var m = src.match(/^(.*)\/ace(-\w+)?\.js(\?|$)/);
         if (m)
             scriptUrl = m[1];
     }
@@ -102,7 +103,7 @@ function init(packaged) {
     for (var key in scriptOptions)
         if (typeof scriptOptions[key] !== "undefined")
             exports.set(key, scriptOptions[key]);
-};
+}
 
 exports.init = init;
 

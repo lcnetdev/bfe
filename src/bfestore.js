@@ -1,4 +1,4 @@
-bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, exports, module) {
+bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     exports.n3store = N3.Store();
   
     exports.store = [];
@@ -16,7 +16,7 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
         success: function (data) {
           bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
             bfestore.store = [];
-            tempstore = bfestore.jsonld2store(expanded);
+            var tempstore = bfestore.jsonld2store(expanded);
             tempstore.forEach(function (nnode) {
               nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
               nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work|Topic).*/, 'id.loc.gov/resources/works/c' + recid);
@@ -28,14 +28,14 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
               } 
-              console.log(nnode);
+              bfeditor.bfelog.addMsg(new Error(), "INFO", nnode);
             });
             callback(loadtemplates);
           });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) { 
-          bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
-          bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+          bfeditor.bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+          bfeditor.bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
         }
       });
     }
@@ -114,14 +114,15 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
                           $("#rdfxml .panel-body pre").text(data);
                       },
                       error: function(XMLHttpRequest, status, err) {
-                          console.log(err);
+                        bfeditor.bfelog.addMsg(new Error(), 'ERROR', err);
                       }
                   });
                 });
               }
             });
         });  
-      });  
+      });
+      callback;
     };
   
     exports.n32store = function (n3, graph, tempstore, callback) {
@@ -297,16 +298,16 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
                         $("#rdfxml .panel-body pre").text(data);
                     },
                     error: function(XMLHttpRequest, status, err) {
-                        console.log(err);
+                      bfeditor.bfelog.addMsg(new Error(), "ERROR", err);
                     }
                 });
             }
         });
       });
     };
-  
+
     exports.store2jsonldcompacted = function (jsonstr, callback) {
-      context = {
+      var context = {
         'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
         'xsd': 'http://www.w3.org/2001/XMLSchema#',
@@ -315,13 +316,23 @@ bfe.define('src/bfestore', ['require', 'exports', 'module'], function (require, 
         'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
         'pmo': 'http://performedmusicontology.org/ontology/',
       };
-  
+
       jsonld.compact(jsonstr, context, function (err, compacted) {
         callback(compacted);
       });
     };
   
     exports.store2jsonldnormalized = function (jsonstr, callback) {
+      var context = {
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+        'xsd': 'http://www.w3.org/2001/XMLSchema#',
+        'bf': 'http://id.loc.gov/ontologies/bibframe/',
+        'bflc': 'http://id.loc.gov/ontologies/bflc/',
+        'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
+        'pmo': 'http://performedmusicontology.org/ontology/',
+      };
+
       jsonld.expand(jsonstr, context, function (err, jsonld) {
         callback(jsonld);
       });
