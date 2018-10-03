@@ -243,7 +243,9 @@ var ie = (function(){
    * base URL of verso in the "config" definition below. 
    */
   var rectoBase = "http://localhost:3000";
-  
+  if (env.RECTOBASE!==undefined)
+    rectobase=env.RECTOBASE;  
+
   var versoURL = rectoBase + "/verso/api";
   
   var config = {
