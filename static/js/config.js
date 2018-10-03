@@ -244,7 +244,7 @@ var ie = (function(){
    */
   var rectoBase = "http://localhost:3000";
   if (env.RECTOBASE!==undefined)
-    rectobase=env.RECTOBASE;  
+    rectoBase=env.RECTOBASE;  
 
   var versoURL = rectoBase + "/verso/api";
   
