@@ -242,7 +242,10 @@ function deleteId(id, csrf, bfelog){
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-var rectoBase = "http://localhost:3000";
+var rectobase = "http://localhost:3000";
+
+if (env.RECTOBASE!==undefined)
+    rectoBase = env.RECTOBASE;
 
 var versoURL = rectoBase + "/verso/api";
 
