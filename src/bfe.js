@@ -2669,7 +2669,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     function openModal (callingformobjectid, loadtemplate, resourceURI, inputID, triples) {
   
       // Modals
-      var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="' + tabIndices++ + '" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
+      var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
               <div class="modal-dialog"> \
                   <div class="modal-content"> \
                       <div class="modal-header"> \
@@ -2831,7 +2831,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
   
       $('#bfeditor-debug').html(JSON.stringify(bfeditor.bfestore.store, undefined, ' '));
-      $('#bfeditor-modal-' + form.formobject.id + " input:not('.tt-hint'):first").focus();
+      $('#bfeditor-modal-' + form.formobject.id).on('shown.bs.modal', function(){
+        $('input:visible:enabled:first', this).focus();
+      });
     }
   
     function setResourceFromModal (formobjectID, modalformid, resourceID, propertyguid, data) {
