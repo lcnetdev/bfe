@@ -19,12 +19,12 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             var tempstore = bfestore.jsonld2store(expanded);
             tempstore.forEach(function (nnode) {
               nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
-              nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work|Topic).*/, 'id.loc.gov/resources/works/c' + recid);
+              nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/c' + recid);
               nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
               nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
               if (nnode.o !== undefined) {
                 nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
-                nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work|Topic).*/, 'id.loc.gov/resources/works/c' + recid);
+                nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/c' + recid);
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
                 nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
               } 
