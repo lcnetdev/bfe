@@ -8,7 +8,7 @@
   ],
   "version": "0.4.0",
   "engines": {
-      "node": ">=10.0.0"
+    "node": ">=10.0.0"
   },
   "homepage": "http://github.com/lcnetdev/bfe",
   "author": "Kirk Hess <khes@loc.gov>",
@@ -37,6 +37,7 @@
     "grunt": "^1.x.x",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify-es": "^3.3.0"
+    "grunt-contrib-uglify-es": "^3.3.0",
+    "grunt-plato": "^1.4.0"
   }
 }

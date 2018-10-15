@@ -2,6 +2,7 @@ tmp
 examples
 node_modules
 builds/*
+documentation/*
 
 *.html
 static/js/config-*.js
