@@ -27,8 +27,8 @@ Getting Started
 ---------------
 `bfe` is currently submodule of [recto](http://github.com/lcnetdev/recto), an express-based webserver, which uses [verso](http://github.com/lcnetdev/verso) a loopback-based server for backend data. The current recommendation is to install recto and verso and use bfe as part of the demonstration environment.
 
-_bfe_'s `RECTOBASE` is now set using an environment variable.
-Note the default `RECTOBASE` is `http://localhost:3000`.
+`bfe`'s `RECTOBASE` is now set using an environment variable.
+Note: default `RECTOBASE` value is `http://localhost:3000`.
 
 ```bash
 ./env.sh > builds/env.js
