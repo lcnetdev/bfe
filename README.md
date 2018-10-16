@@ -27,6 +27,15 @@ Getting Started
 ---------------
 `bfe` is currently submodule of [recto](http://github.com/lcnetdev/recto), an express-based webserver, which uses [verso](http://github.com/lcnetdev/verso) a loopback-based server for backend data. The current recommendation is to install recto and verso and use bfe as part of the demonstration environment.
 
+`bfe`'s `RECTOBASE` is now set using an environment variable.
+Note: default `RECTOBASE` value is `http://localhost:3000`.
+
+```bash
+./env.sh > builds/env.js
+npm install
+grunt
+```
+
 `bfe` can be run as a demo or development version using a simple express-based server - found in the main `bfe` directory - 
 that ships with `bfe`:
 
@@ -110,7 +119,10 @@ v0.4.x
 * Additional features to support LC Bibframe Pilot 2.0
 * Additional features to support requirements for LD4P2
 
-v1.x
+v1.0.0
+* Public release for bibframe.org rollout
+
+v1.1.x
 * Support for LD4P2 requirements
 * Refactor into MVC
 * Implement common javascript framework (React, Angular, etc)
