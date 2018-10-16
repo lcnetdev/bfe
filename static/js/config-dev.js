@@ -13,39 +13,8 @@ if (ie < 10) {
   $("#iealert").addClass("alert alert-danger");
   $("#iealert").html("Sorry, but the BIBFRAME Editor will not work in IE8 or IE9.")
 }
-function myCB(data) {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
-}
 
-function csrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
-  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-function getCSRF(){
-  //eventually you'll have to login       
-  var cookieValue = null;
-  if (document.cookie && document.cookie != '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = jQuery.trim(cookies[i]);
-      var name = "csrftoken";
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }       
-  return cookieValue;            
-}
-
-function setCSRF(xhr, settings, csrf) {
-  if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    xhr.setRequestHeader("X-CSRFToken", csrf);
-  }
-}
-
-function save(data, csrf, bfelog, callback){
+function save(data, bfelog, callback){
   var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
   var url = config.url + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
@@ -54,7 +23,6 @@ function save(data, csrf, bfelog, callback){
     url: url,
     type: "POST",
     data:JSON.stringify(data),
-    csrf: csrf,
     dataType: "json",
     contentType: "application/json; charset=utf-8"
   }).done(function (data) {
@@ -212,18 +180,13 @@ function retrieveLDS(uri, bfestore, loadtemplates, bfelog, callback){
 }
 
 
-function deleteId(id, csrf, bfelog){
+function deleteId(id, bfelog){
   var url = config.url + "/verso/api/bfs/" + id;
-
-  //$.ajaxSetup({
-  //    beforeSend: function(xhr, settings){getCSRF(xhr, settings, csrf);}
-  //});
 
   $.ajax({
     type: "DELETE",                
     url: url,
     dataType: "json",
-    csrf: csrf,
     success: function (data) {
       bfelog.addMsg(new Error(), "INFO", "Deleted " + id);
     },
@@ -497,9 +460,6 @@ var config = {
   "deleteId": {
     "callback": deleteId
   },            
-  "getCSRF":{
-    "callback": getCSRF
-  },
   /*            "load": [
                 {
                 "templateID": ["profile:bf:Work:Monograph", "profile:bf:Instance:Monograph", "profile:bf:Annotation:AdminMeta"],
@@ -513,8 +473,6 @@ var config = {
                 }
                 ],*/
   "return": {
-    "format": "jsonld-expanded",
-    "callback": myCB
+    "format": "jsonld-expanded"
   }
 }
-var bfeditor = bfe.fulleditor(config, "bfeditor");

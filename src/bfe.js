@@ -3702,10 +3702,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       $.ajax({
         type: 'GET',
         async: false,
-        data: {
-          uri: uri
-        },
-        url: config.url + '/profile-edit/server/whichrt',
+        url: uri,
         success: function (data) {
           var returnval = '_:bnode';
           var truthy = false;
