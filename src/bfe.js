@@ -537,7 +537,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
                 $(td).find('#bfeditor-deleteConfirmButton' + rowData.id).click(function () {
                   if (editorconfig.deleteId.callback !== undefined) {
-                    editorconfig.deleteId.callback(rowData.id, editorconfig.getCSRF.callback(), bfelog);
+                    editorconfig.deleteId.callback(rowData.id, bfelog);
                     //var table = $('#table_id').DataTable();
                     // table.row($(this).parents('tr')).remove().draw();
                     bfestore.store = [];
@@ -1225,7 +1225,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 save_json.addedproperties = addedProperties;
   
                 if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
-                  editorconfig.save.callback(save_json, editorconfig.getCSRF.callback(), bfelog, function (save, save_name) {
+                  editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
                     bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
                   });
                 } else {
