@@ -14,6 +14,10 @@ if (ie < 10) {
   $("#iealert").html("Sorry, but the BIBFRAME Editor will not work in IE8 or IE9.")
 }
 
+function myCB(data) {
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
+
 function save(data, bfelog, callback){
   var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
@@ -473,6 +477,7 @@ var config = {
                 }
                 ],*/
   "return": {
-    "format": "jsonld-expanded"
+    "format": "jsonld-expanded",
+    "callback": myCB
   }
 }
