@@ -220,7 +220,7 @@ var config = {
               /* "logging": {
                 "level": "DEBUG",
                 "toConsole": false
-              }, */
+              },*/ 
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
@@ -404,7 +404,6 @@ var config = {
        }
 
      ]}
-
   ],
   "save": {
     "callback": save
