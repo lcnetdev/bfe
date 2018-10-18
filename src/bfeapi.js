@@ -4,7 +4,6 @@ bfe rest api calls
 bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
-    var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
     var url = config.url + "/profile-edit/server/whichrt";
     var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
   
@@ -27,7 +26,7 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
             bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
           } else {
             var q = uri.replace(/.+query=(.+?)&.+/, "$1");
-            $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
+            var $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
             <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
             <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
             $nohits.modal('show');
@@ -35,11 +34,11 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
         } else {
           bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
             bfestore.store = [];
-            tempstore = bfestore.jsonld2store(expanded);
+            bfestore.jsonld2store(expanded);
+            bfestore.storeDedup();
             callback(loadtemplates);
           });
         }
-        //bfestore.n32store(data, url, tempstore, callback);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
         bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
@@ -154,7 +153,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
           bfestore.store = [];
-          tempstore = bfestore.jsonld2store(expanded);
+          bfestore.jsonld2store(expanded);
           bfestore.storeDedup();
           callback(loadtemplates);
         });
@@ -174,7 +173,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
       type: "DELETE",                
       url: url,
       dataType: "json",
-      success: function (data) {
+      success: function () {
         bfelog.addMsg(new Error(), "INFO", "Deleted " + id);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
