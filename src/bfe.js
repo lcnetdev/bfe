@@ -1,7 +1,8 @@
-bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/lib/aceconfig'], function (require, exports) {
+bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/lib/aceconfig'], function (require, exports) {
     var editorconfig = {};
     var bfestore = require('src/bfestore');
     var bfelog = require('src/bfelogging');
+    var bfeapi = require('src/bfeapi');
     // var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
@@ -109,6 +110,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // Set up logging
       bfelog.init(editorconfig);
   
+      //setup callbacks
+      editorconfig.api.forEach(function (apiName){
+        editorconfig[apiName] = {};
+        editorconfig[apiName].callback = bfeapi[apiName];
+      });
+      
       /**
        * Profiles are expected to be in the form provided by Verso:
        * A JSON Array of objects with a "json" property that contains the profile proper
@@ -197,6 +204,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     };
   
     exports.fulleditor = function (config, id) {
+      this.setConfig(config);
       editordiv = document.getElementById(id);
       var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
       var $tabuldiv = $('<div class="tabs"></div>');
@@ -502,7 +510,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 });
   
                 $(td).find('#bfeditor-retrieve' + rowData.id).click(function () {
-                  if (editorconfig.retrieve.callback !== undefined) {
+                  if (editorconfig.retrieve !== undefined) {
                     // loadtemplates = temptemplates;
                     bfestore.loadtemplates = temptemplates;
                     // editorconfig.retrieve.callback(cellData,bfestore, bfelog, cbLoadTemplates);
@@ -536,7 +544,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                               <button type="button" id="bfeditor-deleteConfirmButton' + rowData.id + '" class="btn btn-danger btn-ok" data-dismiss="modal">Delete</button></div></div></div></div></div>'));
   
                 $(td).find('#bfeditor-deleteConfirmButton' + rowData.id).click(function () {
-                  if (editorconfig.deleteId.callback !== undefined) {
+                  if (editorconfig.deleteId !== undefined) {
                     editorconfig.deleteId.callback(rowData.id, bfelog);
                     //var table = $('#table_id').DataTable();
                     // table.row($(this).parents('tr')).remove().draw();
@@ -544,6 +552,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     // table.ajax.reload();
                   } else {
                     // delete disabled
+                    $('#bfeditor-formdiv').empty();
+                    bfeditor.bfestore.store = [];
+                    $('#table_id').DataTable().ajax.reload();
+                    var $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+                    $messagediv.append('<span class="str"><h3>Delete disabled</h3></span>');
+                    $messagediv.insertBefore('.nav-tabs');
+                    $('#bfeditor-previewPanel').remove();
+                    $('[href=#browse]').tab('show');
                   }
                 });
   
@@ -640,7 +656,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           temptemplates.push(loadtemplate);
         });
   
-        if (editorconfig.retrieve.callback !== undefined) {
+        if (editorconfig.retrieve !== undefined) {
           try {
             bfestore.loadtemplates = temptemplates;
             var url = $(this.parentElement).find('#bfeditor-loadworkuriInput').val();
@@ -683,8 +699,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
         } else {
           // retrieve disabled
-          $(this.parentElement).find('#bfeditor-loadworkuriInput').val('This function has been disabled');
-  
+          $('#bfeditor-formdiv').empty();
+          bfeditor.bfestore.store = [];
+          $('#table_id').DataTable().ajax.reload();
+          var $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+          $messagediv.append('<strong>Retrieve disabled</strong>');
+          $messagediv.insertBefore('.nav-tabs');
+          $('#bfeditor-previewPanel').remove();
+          $('.nav-tabs a[href="#browse"]').tab('show')  
         }
       });
   
@@ -752,7 +774,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           temptemplates.push(loadtemplate);
         });
   
-        if (editorconfig.retrieveLDS.callback !== undefined) {
+        if (editorconfig.retrieveLDS !== undefined) {
           try {
             bfestore.loadtemplates = temptemplates;
             var url = $(this.parentElement).find('#bfeditor-loadibcuriInput').val();
@@ -825,8 +847,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $(this.parentElement).find('#bfeditor-loadworkuriInput').val('An error occured: ' + e.message);
           }
         } else {
-          // retrieve disabled
-          $(this.parentElement).find('#bfeditor-loadworkuriInput').val('This function has been disabled');
+          // retrievelds disabled
+          $('#bfeditor-formdiv').empty();
+          bfeditor.bfestore.store = [];
+          $('#table_id').DataTable().ajax.reload();
+          $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+          $messagediv.append('<span class="str"><h3>Retrieve disabled</h3></span>');
+          $messagediv.insertBefore('.nav-tabs');
+          $('#bfeditor-previewPanel').remove();
+          $('[href=#browse]').tab('show');
         }
       });
   
@@ -953,8 +982,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       $containerdiv.append($tabcontentdiv);
   
       $(editordiv).append($containerdiv);
-  
-      this.setConfig(config);
   
       for (var h = 0; h < config.startingPoints.length; h++) {
         var sp = config.startingPoints[h];
@@ -1154,10 +1181,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             var $saveButtonGroup = $('<div class="btn-group" id="save-btn"> \
                            <button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button> \
                            <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
-                           <button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button> \
-                           <button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button> \
                            </div>');
-  
+            if (editorconfig.save !== undefined){
+              $saveButtonGroup.append('<button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button>');
+            }
+            
+            if (editorconfig.publish !== undefined){
+              $saveButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
+            }
+
             var $bfeditor = $('#create > .row');
             var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10 main panel-group">\
                            <div class="panel panel-default"><div class="panel-heading">\
@@ -1192,7 +1224,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
   
             $('#bfeditor-exitsave').click(function () {
-              if (editorconfig.save.callback !== undefined) {
+              if (editorconfig.save !== undefined) {
                 //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
                 // var dirhash = guid();
                 var save_json = {};
@@ -1239,16 +1271,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 $('[href=#browse]').tab('show');
                 bfeditor.bfestore.store = [];
                 $('#table_id').DataTable().ajax.reload();
-  
+                $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
                 $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
-                $('#bfeditor-formdiv').append($messagediv);
+                $messagediv.insertBefore('.nav-tabs');
               }
             });
   
             $('#bfeditor-exitpublish').click(function () {
               // remove problematic nodes
   
-              if (editorconfig.publish.callback !== undefined) {
+              if (editorconfig.publish !== undefined) {
                 if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'})) {
                   //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
                     var rdfxml = $("#rdfxml .panel-body pre").text();
@@ -1303,14 +1335,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   $messagediv.insertBefore('.tabs');
                 }
               } else {
-                // save disabled
+                // publish disabled
                 $('#bfeditor-formdiv').empty();
-                $('[href=#browse]').tab('show');
                 bfeditor.bfestore.store = [];
                 $('#table_id').DataTable().ajax.reload();
-  
-                $messagediv.append('<span class="str"><h3>Publishing disabled</h3></span>');
-                $('#bfeditor-formdiv').append($messagediv);
+                $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+                $messagediv.append('<strong>Publishing disabled</strong>');
+                $messagediv.insertBefore('.nav-tabs');
+                $('[href=#browse]').tab('show');
+                $('#bfeditor-previewPanel').remove();            
+                
               }
             });
   
