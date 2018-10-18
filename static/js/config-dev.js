@@ -245,7 +245,6 @@ var config = {
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Notated Music",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Note",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Place",
-     versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Prints and Photographs",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Publication, Distribution, Manufacturer Activity",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 RWO",
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Rare Materials",
@@ -391,20 +390,6 @@ var config = {
        }
 
      ]},
-    {"menuGroup": "Prints and Photographs",
-     "menuItems": [
-       {
-         label: "Physical Description",
-         type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
-       },
-       {
-         label: "Work",
-         type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
-       }
-
-     ]},
     {"menuGroup": "Rare Materials",
      "menuItems": [
        {
@@ -418,34 +403,6 @@ var config = {
          useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
        }
 
-     ]},
-    {"menuGroup": "Authorities",
-     "menuItems": [
-       {
-         label: "Person",
-         type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
-         useResourceTemplates: [ "profile:bf2:Agent:Person" ]
-       },
-       {
-         label: "Family",
-         type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
-         useResourceTemplates: [ "profile:bf2:Agent:Family" ]
-       },
-       {
-         label: "Corporate Body",
-         type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
-         useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
-       },
-       {
-         label: "Conference",
-         type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
-         useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
-       },                            
-       {
-         label: "Jurisdiction",
-         type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
-         useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
-       }
      ]}
 
   ],

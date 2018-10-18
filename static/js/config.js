@@ -357,20 +357,6 @@ var ie = (function(){
          }
   
        ]},
-      {"menuGroup": "Prints and Photographs",
-       "menuItems": [
-         {
-           label: "Physical Description",
-           type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-           useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
-         },
-         {
-           label: "Work",
-           type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-           useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
-         }
-  
-       ]},
       {"menuGroup": "Rare Materials",
        "menuItems": [
          {
@@ -384,34 +370,6 @@ var ie = (function(){
            useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
          }
   
-       ]},
-      {"menuGroup": "Authorities",
-       "menuItems": [
-         {
-           label: "Person",
-           type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
-           useResourceTemplates: [ "profile:bf2:Agent:Person" ]
-         },
-         {
-           label: "Family",
-           type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
-           useResourceTemplates: [ "profile:bf2:Agent:Family" ]
-         },
-         {
-           label: "Corporate Body",
-           type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
-           useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
-         },
-         {
-           label: "Conference",
-           type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
-           useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
-         },                            
-         {
-           label: "Jurisdiction",
-           type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
-           useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
-         }
        ]}
   
     ],
