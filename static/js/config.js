@@ -190,7 +190,7 @@ var config = {
 
      ]}
   ],
-  "api": ["save", "retrieve", "deleteId"],
+  "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId"],
   "return": {
     "format": "jsonld-expanded",
     "callback": myCB
