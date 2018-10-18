@@ -555,7 +555,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $('#bfeditor-formdiv').empty();
                     bfeditor.bfestore.store = [];
                     $('#table_id').DataTable().ajax.reload();
-                    $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+                    var $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
                     $messagediv.append('<span class="str"><h3>Delete disabled</h3></span>');
                     $messagediv.insertBefore('.nav-tabs');
                     $('#bfeditor-previewPanel').remove();
@@ -702,7 +702,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-formdiv').empty();
           bfeditor.bfestore.store = [];
           $('#table_id').DataTable().ajax.reload();
-          $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
+          var $messagediv = $('<div>', {id: 'bfeditor-messagediv', class: 'alert alert-info'});
           $messagediv.append('<strong>Retrieve disabled</strong>');
           $messagediv.insertBefore('.nav-tabs');
           $('#bfeditor-previewPanel').remove();
