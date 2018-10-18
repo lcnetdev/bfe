@@ -1,7 +1,7 @@
 /*
 bfe rest api calls
 */
-bfe.define('src/bferestapi', ['require', 'exports'], function (require, exports) {
+bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
     var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});

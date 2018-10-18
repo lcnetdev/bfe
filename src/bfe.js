@@ -1,7 +1,8 @@
-bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/lib/aceconfig'], function (require, exports) {
+bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/lib/aceconfig'], function (require, exports) {
     var editorconfig = {};
     var bfestore = require('src/bfestore');
     var bfelog = require('src/bfelogging');
+    var bfeapi = require('src/bfeapi');
     // var store = new rdfstore.Store();
     var profiles = [];
     var resourceTemplates = [];
@@ -109,6 +110,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // Set up logging
       bfelog.init(editorconfig);
   
+      //setup callbacks
+      editorconfig.api.forEach(function (apiName){
+        editorconfig[apiName] = {};
+        editorconfig[apiName].callback = bfeapi[apiName];
+      });
+      
       /**
        * Profiles are expected to be in the form provided by Verso:
        * A JSON Array of objects with a "json" property that contains the profile proper
@@ -197,6 +204,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     };
   
     exports.fulleditor = function (config, id) {
+      this.setConfig(config);
       editordiv = document.getElementById(id);
       var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
       var $tabuldiv = $('<div class="tabs"></div>');
@@ -953,8 +961,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       $containerdiv.append($tabcontentdiv);
   
       $(editordiv).append($containerdiv);
-  
-      this.setConfig(config);
   
       for (var h = 0; h < config.startingPoints.length; h++) {
         var sp = config.startingPoints[h];
