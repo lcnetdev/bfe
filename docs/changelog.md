@@ -5,6 +5,24 @@ Change Log
 This change log pertains to builds.
 
 ----------------
+
+* 1.0.0 (2018-10-18)
+  * Fixes for labels
+  * Set rectoBase using env variable; use env.sh to populate
+  * Updated documentation
+
+* 0.4.0 (2018-09-24)
+  * Fixes for #13, #14, #15, #16, #17, #18, #19
+  * This release is incorporated into Recto lcnetdev/recto as a submodule.
+  * Please change the rectoBase variable in static/js/config.js and static/js/config-dev.js to your path. 
+
+* 0.3.1 (2018-03-26)
+  * Minor profile and code fixes
+
+* 0.3.0 (2018-03-21)
+  * LC BIBFRAME 2.0 Pilot version
+  * Includes BIBFRAME 2.0 Profiles
+
 * 0.2.0 (2015-10-20)
   * Replace dryice with grunt
   * Refactor build w/o request.js (deprecated)

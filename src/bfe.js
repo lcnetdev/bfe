@@ -1127,7 +1127,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-cancel', form.form).attr('tabindex', tabIndices++);
   
           $('#bfeditor-preview', form.form).click(function () {
-            var humanized = bfeditor.bfestore.store2text();
             var jsonstr = bfeditor.bfestore.store2jsonldExpanded();
   
             // bfeditor.bfestore.store2turtle(jsonstr, humanizedPanel);
@@ -1163,7 +1162,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10 main panel-group">\
                            <div class="panel panel-default"><div class="panel-heading">\
                            <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#humanized">Preview</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="humanized"><div class="panel-body"><pre>' + humanized + '</pre></div></div>\
+                           <div class="panel-collapse collapse in" id="humanized"><div class="panel-body"><pre></pre></div></div>\
                            <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld">JSONLD</a></h3></div>\
                            <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre></div></div>\
                            <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#rdfxml">RDF-XML</a></h3></div>\

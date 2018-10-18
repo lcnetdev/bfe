@@ -21,7 +21,6 @@ Twitter's [Bootstrap] and a few additional custom CSS declarations.
 [demo-page]: http://bibframe.org/bibliomata/bfe/index.html
 [ontology]: http://id.loc.gov/ontologies/bibframe/
 [bfi]: http://www.loc.gov/bibframe/
-[profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
 
 Getting Started
 ---------------
@@ -47,10 +46,8 @@ Documentation
 -------------
 
 * [API]
-* [Lookups][lookups-info]
 
 [API]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-api.md
-[lookups-info]: https://github.com/lcnetdev/bfe/blob/master/docs/bfe-lookups.md
 
 
 Demo?
@@ -187,7 +184,6 @@ Specification][profilespec].
 [dryice]: https://github.com/mozilla/dryice
 [ace]: https://github.com/ajaxorg/ace
 [Zepheira]: https://zepheira.com/
-[profilespec]: http://bibframe.org/documentation/bibframe-profilespec/
 
 
 Contributors

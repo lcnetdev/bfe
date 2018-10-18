@@ -62,20 +62,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
   
     exports.store2rdfxml = function (jsonld, callback) {
       exports.store2jsonldnormalized(jsonld, function (expanded) {
-        /*$.ajax({
-          url: config.url + '/profile-edit/server/n3/rdfxml',
-          type: 'POST',
-          data: JSON.stringify(expanded),
-          processData: false,
-          contentType: 'application/json',
-          success: function (rdfxml) {
-            data = new XMLSerializer().serializeToString(rdfxml);
-            callback(data);
-          },
-          error: function (XMLHttpRequest, status, err) {
-            console.log(err);
-          }
-        });*/
         jsonld.toRDF(expanded, {
           format: 'application/nquads'
         }, function(err, nquads) {
@@ -99,7 +85,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                       }
                   });
                   turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
-                  //turtleWriter.addTriples(exports.n3store.getTriples(null, null, null));
                   turtleWriter.end(function(error, result) {                    
                   var input = {};
                   input.n3 = result;
@@ -132,11 +117,9 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
         format: 'N-Quads'
       });
       var store = N3.Store(triples);
-      // writer.addTriples(store.getTriples(null, null, null, null));
       store.getTriples(null, null, null).forEach(function (triple) {
         writer.addTriple(triple.subject.replace('_bnode', ''), triple.predicate, triple.object.replace('_bnode', ''), graph);
       });
-      // writer.addTriple("<http://one.example/subject1> <http://one.example/predicate1> <http://one.example/object1> <http://example.org/graph3>");
       writer.end(function (error, nquads) {
         jsonld.fromRDF(nquads, {
           format: 'application/nquads'
@@ -145,17 +128,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
         });
       });
     };
-    //
-    //    exports.nquads2jsonld = function(nquads){
-    //	jsonld.fromRDF(nquads, {format:'application/nquads'}, function(err, data) {
-    //	 	try {
-    //			return exports.jsonld2store(data);
-    //		} catch (err){
-    //			console.log(err);
-    //		}
-    //        });
-    //    }
-  
+
     exports.jsonld2store = function (jsonld) {
       jsonld.forEach(function (resource) {
         var s = typeof resource['@id'] !== 'undefined' ? resource['@id'] : '_:b' + guid();
@@ -256,7 +229,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       }
       return json;
     };
-  
+
     exports.store2turtle = function (jsonstr, callback) {
       jsonld.toRDF(jsonstr, {
         format: 'application/nquads'
@@ -342,46 +315,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       jsonld.expand(json, function (err, expanded) {
         callback(expanded);
       });
-    };
-  
-    exports.store2text = function () {
-      var nl = '\n';
-      var nlindent = nl + '\t';
-      var nlindentindent = nl + '\t\t';
-      var predata = '';
-      var json = exports.store2jsonldExpanded();
-      json.forEach(function (resource) {
-        predata += nl + 'ID: ' + resource['@id'];
-        if (resource['@type'] !== undefined) {
-          predata += nlindent + 'Type(s)';
-          resource['@type'].forEach(function (t) {
-            // predata += nlindentindent + t["@id"];
-            if (t['@value'] !== undefined) {
-              predata += nlindentindent + t['@value'];
-            } else {
-              predata += nlindentindent + t;
-            }
-          });
-        }
-        for (var t in resource) {
-          if (t !== '@type' && t !== '@id') {
-            var prop = t.replace('http://id.loc.gov/ontologies/bibframe/', 'bf:');
-            prop = prop.replace('http://id.loc.gov/vocabulary/relators/', 'relators:');
-            prop = prop.replace('http://id.loc.gov/ontologies/bibframe-lc/', 'bflc:');
-            prop = prop.replace('http://rdaregistry.info/termList/', 'rda');
-            predata += nlindent + prop;
-            resource[t].forEach(function (o) {
-              if (o['@id'] !== undefined) {
-                predata += nlindentindent + o['@id'];
-              } else {
-                predata += nlindentindent + o['@value'];
-              }
-            });
-          }
-        }
-        predata += nl + nl;
-      });
-      return predata;
     };
   
     /**

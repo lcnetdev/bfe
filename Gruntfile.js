@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                      },
             tests: {
                 files: {
-                    'documentation/plato': ['src/**/*.js', 'static/js/config*.js']
+                    'docs/plato': ['src/**/*.js', 'static/js/config*.js']
                     },
                    },
          },
