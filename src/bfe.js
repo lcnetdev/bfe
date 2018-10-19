@@ -2687,18 +2687,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                       'p': 'http://www.w3.org/2000/01/rdf-schema#label'
                     }).o;
                   });
-                }                 
-                
-              }
-            
-
-              if (displaydata === undefined && data !== undefined && data.o !== undefined) {
-                displaydata = data.o;
+                }                              
               }
             }  
           }
 
-          if (displaydata === '') {
+          if (displaydata === undefined){
+            if( data !== undefined && data.o !== undefined) {
+                displaydata = data.o;
+            } else {
+                //empty template
+                hasTemplate = false;              
+                //displaydata = pd.o;
+            }
+          } else if (displaydata === '') {
             var data = _.where(labeldata, {
               'otype': 'literal'
             });
@@ -2707,8 +2709,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata += data[i].o + ' ';
               }
             }
+          } else {
+            displaydata.trim();
           }
-          displaydata.trim();
       } else if (hasTemplate) {
         displaydata = pd.o;
       }

@@ -78,7 +78,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }
   
       this.searching = setTimeout(function () {
-        if (query.length > 2 && query.substr(0, 1) != '?' && !query.match(/^[Nn][A-z]{0,1}\d/)) {
+        if (query.length > 2 && query.substr(0, 1) != '?' && !query.match(/^[Nn][A-z\s]{0,1}\d/)) {
           var suggestquery = query.normalize();
           bfelog.addMsg(new Error(), 'INFO',query);
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
@@ -95,6 +95,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             }
           });
         } else if (query.length > 2) {
+          if (query.match(/^[Nn][A-z\s]{0,1}\d/)){
+            q = query.replace(/\s+/g,'').normalize();
+          }          
           u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
           $.ajax({
             url: u,
@@ -325,7 +328,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } else if (query.length >= 2 && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
           if (query.match(/^[0-9]{3,}$/))
-            u = scheme + '/suggest/lccn/' + q;
+            u = scheme + '/suggest/lccn/' + query.replace(/\s/g,'');
           else
             u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
           $.ajax({
@@ -434,7 +437,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }
   
       this.searching = setTimeout(function () {
-        if (query.length > 2 && query.substr(0, 1) != '?' && !query.match(/[Ss][A-z]{0,1}\d/)) {
+        if (query.length > 2 && query.substr(0, 1) != '?' && !query.match(/[Ss][A-z\s]{0,2}\d/)) {
           var suggestquery = query.normalize();
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
@@ -449,6 +452,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             }
           });
         } else if (query.length > 2) {
+          if (query.match(/^[Ss][A-z\s]{0,2}\d/)){
+            q = query.replace(/\s+/g,'').normalize();
+          }      
           u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
           $.ajax({
             url: u,
