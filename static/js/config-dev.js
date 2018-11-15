@@ -112,12 +112,12 @@ var config = {
      "menuItems": [
        {
          label: "Instance",
-         type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
+         type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
          useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
        },
        {
          label: "Work",
-         type: ["http://id.loc.gov/ontologies/bibframe/Text"],
+         type: ["http://id.loc.gov/ontologies/bibframe/Work"],
          useResourceTemplates: [ "profile:bf2:Serial:Work" ]
        }
 

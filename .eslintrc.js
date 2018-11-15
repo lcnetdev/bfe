@@ -9,7 +9,8 @@ module.exports = {
         "d3": false,
         "N3": false,
         "jsonld": false,
-        "define": false
+        "define": false,
+        "moment": false
     },
     "env":{
         "browser": true,

@@ -429,20 +429,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'data': 'modified',
               'width': '10%',
               'render': function (data, type, row) {
-                var d = new Date(data);
-                // Month first
-  
-                var hr = d.getHours();
-                var min = d.getMinutes();
-                var ampm = 'a';
-                if (min < 10) { min = '0' + min; }
-                if (hr >= 12) {
-                  ampm = 'p';
-                }
-                if (hr > 12) {
-                  hr -= 12;
-                }
-                return (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + hr + ':' + min + ampm;
+                return moment(data).format("M-DD-YYYY h:mm a");
               }
             },
             //edit
@@ -673,12 +660,29 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bflc/PrimaryContribution'}), function (triple) {
                 bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution'}));
               });
-  
+              // Variant Titles
+              _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle'}), function (triple) {
+                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store,(_.find(bfeditor.bfestore.store, {s: triple.s, o:"http://id.loc.gov/ontologies/bibframe/Title"})))
+              });
               // Text to Work
               _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}), function (triple) {
                 bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}));
+                triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
+                bfeditor.bfestore.store.push(triple);
               });
   
+              //add profile
+              _.each(
+                _.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata'}), function(am){
+                        var adminTriple = {};
+                        adminTriple.s = am.s;
+                        adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
+                        adminTriple.o = bfeditor.bfestore.profile;
+                        adminTriple.otype = 'literal';
+                        bfeditor.bfestore.store.push(adminTriple);
+                }
+              );
+
               bfestore.loadtemplates.data = bfeditor.bfestore.store;
               $('[href=#create]').tab('show');
               $('#bfeditor-formdiv').show();
@@ -719,7 +723,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               class: 'dropdown-item',
               value: 'sp-' + h + '_' + i
             });
-            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance" || sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Serial"){
+            if(sp.menuItems[i].type[0] === "http://id.loc.gov/ontologies/bibframe/Instance"){
               //$a.html(sp.menuItems[i].label);
               $option.html(label);
               jqObject.append($option);
@@ -800,7 +804,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateContribution);
                   }
                 });
-  
+                // Variant Titles
+                _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle'}), function (triple) {
+                  bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store,(_.find(bfeditor.bfestore.store, {s: triple.s, o:"http://id.loc.gov/ontologies/bibframe/Title"})))
+                });
                 // eliminate duplicate type bf:ProvisionActivity
                 _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Publication'}), function (triple) {
                   var duplicateProvActivity = _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/ProvisionActivity'});
@@ -809,16 +816,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }
                 });
   
-                _.each(_.where(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata'}), function (am) {
+                //add profile
+                _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata'}), function (am) {
                   var adminTriple = {};
-                  adminTriple.s = am.o;
+                  adminTriple.s = am.s;
                   adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
                   adminTriple.o = bfeditor.bfestore.profile;
                   adminTriple.otype = 'literal';
                   bfeditor.bfestore.store.push(adminTriple);
   
                   adminTriple = {};
-                  adminTriple.s = am.o;
+                  adminTriple.s = am.s;
                   adminTriple.p = 'http://id.loc.gov/ontologies/bflc/procInfo';
                   adminTriple.o = 'ibc update';
                   adminTriple.otype = 'literal';
@@ -949,10 +957,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bflc/PrimaryContribution'}), function (triple) {
                 bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution'}));
               });
-  
+              // Variant Titles
+              _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle'}), function (triple) {
+                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store,(_.find(bfeditor.bfestore.store, {s: triple.s, o:"http://id.loc.gov/ontologies/bibframe/Title"})))
+              });
               // Text to Work
               _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}), function (triple) {
                 bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, {'s': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text'}));
+                triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
+                bfeditor.bfestore.store.push(triple);
               });
   
               bfestore.loadtemplates.data = bfeditor.bfestore.store;
@@ -1115,6 +1128,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
   
     function cbLoadTemplates (propTemps) {
+      //clear the URL params
+      window.history.replaceState(null, null, window.location.pathname);
+
       $('#bfeditor-loader').width($('#bfeditor-loader').width() + 5 + '%');
       loadtemplatesANDlookupsCounter++;
       var loadtemplates = bfeditor.bfestore.loadtemplates;
@@ -1492,6 +1508,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           'data-uri': rt.defaulturi
         }); // is data-uri used?
         
+        /*var profile = rt.id.split(":");
+        profile.pop(_.lastIndexOf(rt.id.split(":")));
+        var profileLabel = bfeditor.profiles[_.findIndex(
+            _.pluck(bfeditor.profiles, "Profile"), {"id":profile.join(":")}
+          )].Profile.description;
+        */
         // create a popover box to display resource ID of the thing.
         var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
         if (rt.defaulturi.match(/^http/)) {
@@ -1664,6 +1686,24 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           });
         }
   
+       // adding Admin Metadata to Work, instance, Item
+       if (RegExp(/(Work|Instance|Item)/).test(rt.id.split(":")) && !_.some(rt.propertyTemplates, {"propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata"})) {
+        var adminProp = { 
+          "mandatory": "false", 
+          "repeatable": "true", 
+          "type": "resource", 
+          "resourceTemplates": [], 
+          "valueConstraint": { 
+            "valueTemplateRefs": ["profile:bf2:AdminMetadata:BFDB"], 
+            "useValuesFrom": [], 
+            "valueDataType": {}, 
+            "defaults": [] }, 
+          "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata", 
+          "propertyLabel": "Administrative Metadata"
+        };
+        rt.propertyTemplates.push(adminProp);
+      }
+
         rt.propertyTemplates.forEach(function (property) {
           // Each property needs to be uniquely identified, separate from
           // the resourceTemplate.
@@ -1835,6 +1875,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   // Let's treat it special-like.
                   var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
                   var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
+                  $saveLookup.append($('<button id="bfeditor-modalLoadLookup" type="button" class="btn btn-primary" id="bfeditor-modalLoadLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Load</button>'));
                   $formgroup.append($saveLookup);
                   $formgroup.append($spacer);
                 }
@@ -1876,8 +1917,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $resourcediv.append($formgroup);
           forEachFirst = false;
         });
-        // starting the "add property" stuff here
 
+        // starting the "add property" stuff here
         if (rt.embedType == 'page') {
           var substringMatcher = function(strs) {
             return function findMatches(q, cb) {
@@ -2175,7 +2216,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
               }            
               i++;
-            } while (parent_nodes === undefined && i < property.valueConstraint.valueTemplateRefs.length);
+            } while (parent_nodes === undefined || i < property.valueConstraint.valueTemplateRefs.length);
 
             var tempprops = [];
             if (!_.isEmpty(parent_nodes)) {
@@ -2516,11 +2557,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   var title = _.find(labeldata, {
                     'p': 'http://id.loc.gov/ontologies/bibframe/title'
                   });
-                  var mainTitle = _.find(bfeditor.bfestore.store, {
-                    's': title.o,
-                    'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'
-                  });
-                  displaydata = mainTitle.o;
+                  if(!_.isEmpty(title)){
+                    var mainTitle = _.find(bfeditor.bfestore.store, {
+                      's': title.o,
+                      'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'
+                    });
+                    if(!_.isEmpty(mainTitle)){
+                     displaydata = mainTitle.o;
+                    }
+                  }
                 }
                 if (displaydata === 'contribution') {
                   // lookup agent and role;
@@ -2814,7 +2859,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               var adminTriple = {};
               adminTriple.s = resourceURI;
               adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-              adminTriple.o = bfeditor.bfestore.store.profile;
+              adminTriple.o = bfeditor.bfestore.profile;
               adminTriple.otype = 'literal';
               triplespassed.push(adminTriple);
               bfeditor.bfestore.store.push(adminTriple);
