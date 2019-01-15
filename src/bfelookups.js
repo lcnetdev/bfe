@@ -316,7 +316,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         process([]);
       }
       this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
+        if ((query === '' || query === ' ') && !scheme.match(/resources\/[works|instances]/)) {
           var u = scheme + '/suggest/?count=100&q=';
           $.ajax({
             url: u,

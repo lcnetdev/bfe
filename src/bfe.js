@@ -676,12 +676,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               //add profile
               _.each(
                 _.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata'}), function(am){
-                        var adminTriple = {};
-                        adminTriple.s = am.s;
-                        adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-                        adminTriple.o = bfeditor.bfestore.profile;
-                        adminTriple.otype = 'literal';
-                        bfeditor.bfestore.store.push(adminTriple);
+                  bfeditor.bfestore.addProfile(am.s,bfeditor.bfestore.profile);
+                  bfeditor.bfestore.addProcInfo(am.s, 'update work');
                 }
               );
 
@@ -818,21 +814,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }
                 });
   
-                //add profile
+                //add profile, procinfo
                 _.each(_.where(bfeditor.bfestore.store, {'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata'}), function (am) {
-                  var adminTriple = {};
-                  adminTriple.s = am.s;
-                  adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-                  adminTriple.o = bfeditor.bfestore.profile;
-                  adminTriple.otype = 'literal';
-                  bfeditor.bfestore.store.push(adminTriple);
-  
-                  adminTriple = {};
-                  adminTriple.s = am.s;
-                  adminTriple.p = 'http://id.loc.gov/ontologies/bflc/procInfo';
-                  adminTriple.o = 'ibc update';
-                  adminTriple.otype = 'literal';
-                  bfeditor.bfestore.store.push(adminTriple);
+                  bfeditor.bfestore.addProfile(am.s,bfeditor.bfestore.profile);
+                  bfeditor.bfestore.addProcInfo(am.s, 'update instance');
                 });
   
                 //                        _.each(_.where(bfeditor.bfestore.store, {"p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}), function(triple) {
@@ -981,7 +966,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               _.each(bfeditor.bfestore.store, function (el) {
                 if (el.o !== undefined && el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
               });
-  
+              //procinfo
+              _.each(_.where(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata'}), function (am) {
+                //delete old procInfo
+                bfeditor.bfestore.addProcInfo(am.o, 'external marc');
+              });
+
               cbLoadTemplates();
             });
           } catch (e) {
@@ -1247,7 +1237,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // var dirhash = guid();
                 var save_json = {};
                 save_json.name = bfeditor.bfestore.name;
-                save_json.profile = loadtemplates[0].resourceTemplateID;
+                save_json.profile = bfeditor.bfestore.profile;
                 save_json.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
                 save_json.created = bfeditor.bfestore.created;
                 save_json.modified = new Date().toUTCString();
@@ -1304,7 +1294,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     var rdfxml = $("#rdfxml .panel-body pre").text();
                     var save_json = {};
                     save_json.name = mintResource(bfeditor.bfestore.name);
-                    save_json.profile = loadtemplates[0].resourceTemplateID;
+                    save_json.profile = bfeditor.bfestore.profile;
                     save_json.url = bfeditor.bfestore.url;
                     save_json.created = bfeditor.bfestore.created;
                     save_json.modified = new Date().toUTCString();
@@ -1375,9 +1365,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-formdiv').append(form.form);
           $('#bfeditor-debug').html(JSON.stringify(bfeditor.bfestore.store, undefined, ' '));
           $('#bfeditor-debug').html(JSON.stringify(bfelog.getLog(), undefined, ' '));
-  
-          // set state to edit
-          bfeditor.bfestore.store.profile = loadtemplates[0].resourceTemplateID;
 
           bfeditor.bfestore.state = 'edit';
         }
@@ -1392,6 +1379,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
+      bfeditor.bfestore.templateGUID = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
       bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
       bfeditor.bfestore.state = 'create';
@@ -1399,10 +1387,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var loadtemplates = [];
   
       spoints.useResourceTemplates.forEach(function (l) {
-        var useguid = guid();
         var loadtemplate = {};
         var tempstore = [];
-        loadtemplate.templateGUID = useguid;
+        loadtemplate.templateGUID = bfeditor.bfestore.templateGUID;
         loadtemplate.resourceTemplateID = l;
         // loadtemplate.resourceURI = whichrt(loadtemplate, editorconfig.baseURI) + loadTemplate.templateGUID;//editorconfig.baseURI + useguid;
         loadtemplate.embedType = 'page';
@@ -1412,7 +1399,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
   
       bfeditor.bfestore.loadtemplates = loadtemplates;
-  
+      
+      //adminMetadata
+      //adminMetadata
+      var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
+      var procInfo = 'create ' + rt_type
+      bfeditor.bfestore.profile = loadtemplates[0].resourceTemplateID;
+      var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfeditor.bfestore.templateGUID);
+      
+      bfeditor.bfestore.addAdminMetadata(defaulturi, procInfo);
+      bfestore.loadtemplates.data = bfeditor.bfestore.store;
+      
       cbLoadTemplates();
     }
   
@@ -1611,13 +1608,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }       
           
           _.each(_.where(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata'}), function (am) {
-                  var adminTriple = {};
-                  adminTriple.s = am.o;
-                  adminTriple.p = 'http://id.loc.gov/ontologies/bflc/procInfo';
-                  adminTriple.o = 'clone '+ $clonebutton.data().label;
-                  adminTriple.otype = 'literal';
-                  bfeditor.bfestore.store.push(adminTriple);
-                });
+            //delete old procInfo
+            bfeditor.bfestore.addProcInfo(am.o, 'clone '+ $clonebutton.data().label.toLowerCase());
+          });
   
           // reload the newly created template
           cbLoadTemplates();
@@ -2757,7 +2750,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               }
             }
           } else {
-            displaydata.trim();
+            if(_.isArray(displaydata)) {
+              _.first(displaydata).trim()
+            } else {
+              displaydata.trim();
+            }
           }
       } else if (hasTemplate) {
         displaydata = pd.o;
@@ -2854,51 +2851,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             triplepassed.otype = 'uri';
             triplespassed.push(triplepassed);
   
-            if (properties[0].propertyURI === 'http://id.loc.gov/ontologies/bibframe/adminMetadata') {
-              // add name, id triples
-              var mintedId = 'e' + window.ShortUUID('0123456789').fromUUID(bfeditor.bfestore.name);
-              var mintedUri = config.url + '/resources/' + mintedId;
-              var adminTriple = {};
-              adminTriple.s = resourceURI;
-              adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-              adminTriple.o = bfeditor.bfestore.profile;
-              adminTriple.otype = 'literal';
-              triplespassed.push(adminTriple);
-              bfeditor.bfestore.store.push(adminTriple);
-  
-              adminTriple = {};
-              adminTriple.s = resourceURI;
-              adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/creationDate';
-              var d = new Date(bfeditor.bfestore.created);
-              adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-              adminTriple.otype = 'literal';
-              triplespassed.push(adminTriple);
-              bfeditor.bfestore.store.push(adminTriple);
-  
-              adminTriple = {};
-              adminTriple.s = resourceURI;
-              adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/identifiedBy';
-              adminTriple.o = mintedUri;
-              adminTriple.otype = 'uri';
-              triplespassed.push(adminTriple);
-              bfeditor.bfestore.store.push(adminTriple);
-  
-              adminTriple = {};
-              adminTriple.s = mintedUri;
-              adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-              adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Local';
-              adminTriple.otype = 'uri';
-              triplespassed.push(adminTriple);
-              bfeditor.bfestore.store.push(adminTriple);
-  
-              adminTriple = {};
-              adminTriple.s = mintedUri;
-              adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
-              adminTriple.o = mintedId;
-              adminTriple.otype = 'literal';
-              triplespassed.push(adminTriple);
-              bfeditor.bfestore.store.push(adminTriple);
-            }
           }
         });
       } else {
