@@ -1,8 +1,11 @@
 $(function () {
     var cooks = document.cookie;
     if (cooks.match(/access_token=|current_user=/)) {
-    $('#login-logout').attr('href', "#");
-    $('#login-logout').text('Logout');
+        var userEnc = cooks.replace(/.*?current_user=(.+?)(;|$).*/, "$1")
+        var userDec = decodeURIComponent(userEnc);
+        var user = JSON.parse(userDec);
+        $('#login-logout').attr('href', "#");
+        $('#login-logout').text('Logout ' + user.username);
     } else {
         $('#login-logout').text('Login')
     }
