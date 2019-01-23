@@ -346,12 +346,28 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
           groupedProperties[propertyURI].forEach(function (r) {
             if (prop == '@type' && r.otype == 'uri') {
               j[prop].push(r.o);
+            } else if (r.otype == 'list') {//prop == 'http://www.loc.gov/mads/rdf/v1#componentList'){                                                       
+              // overwrite the default if it is not yet set
+              if (!j[prop]['@list']){
+                              j[prop] = {'@list':[]};
+              }                                                              
+              var o = {};
+              if (r.olang !== undefined && r.olang !== '') {
+                              o['@language'] = r.olang;
+              }
+              if (r.p == '@type') {
+                              o = r.o;
+              } else {
+                              o['@value'] = r.o;
+              }
+              j[prop]['@list'].push(o);
+
             } else if (r.otype == 'uri') {
               j[prop].push({
                 '@id': r.o
               });
             } else {
-              var o = {};
+                o = {};
               if (r.olang !== undefined && r.olang !== '') {
                 o['@language'] = r.olang;
               }

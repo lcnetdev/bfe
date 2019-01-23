@@ -1762,7 +1762,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // $formgroup.append($saves);
           }
   
-          if (property.type === 'resource' || property.type === 'lookup' || property.type === 'target') {
+          if (property.type === 'resource' || property.type === 'lookup' || property.type === 'target' || property.type === 'list') {
             if (_.has(property, 'valueConstraint')) {
               if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
                 /*
@@ -2841,6 +2841,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             triplepassed.p = properties[0].propertyURI; // instanceOF
             triplepassed.o = resourceURI;
             triplepassed.otype = 'uri';
+            if (properties[0].type === 'list'){
+              triplepassed.otype = properties[0].type;
+            }
             triplespassed.push(triplepassed);
   
             triplepassed = {};
