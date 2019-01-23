@@ -87,9 +87,25 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
       adminTriple = {};
       adminTriple.guid = useguid;
+      adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
+      adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      adminTriple.o =  'http://id.loc.gov/ontologies/bibframe/DescriptionAuthentication';
+      adminTriple.otype = 'uri';
+      bfeditor.bfestore.store.push(adminTriple);
+
+      adminTriple = {};
+      adminTriple.guid = useguid;
       adminTriple.s = bnode;
       adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionConventions';
       adminTriple.o =  'http://id.loc.gov/vocabulary/descriptionConventions/rda';
+      adminTriple.otype = 'uri';
+      bfeditor.bfestore.store.push(adminTriple);
+
+      adminTriple = {};
+      adminTriple.guid = useguid;
+      adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
+      adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      adminTriple.o =  'http://id.loc.gov/ontologies/bibframe/DescriptionConventions';
       adminTriple.otype = 'uri';
       bfeditor.bfestore.store.push(adminTriple);
 
@@ -103,6 +119,14 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
       adminTriple = {};
       adminTriple.guid = useguid;
+      adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
+      adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      adminTriple.o =  'http://id.loc.gov/ontologies/bibframe/Language';
+      adminTriple.otype = 'uri';
+      bfeditor.bfestore.store.push(adminTriple);
+
+      adminTriple = {};
+      adminTriple.guid = useguid;
       adminTriple.s = bnode;
       adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionModifier';
       adminTriple.o =  'http://id.loc.gov/vocabulary/organizations/dlc';
@@ -110,28 +134,36 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       bfeditor.bfestore.store.push(adminTriple);
 
       adminTriple = {};
-      adminTriple.s = 'http://id.loc.gov/ontologies/bibframe/descriptionAuthentication';
+      adminTriple.guid = useguid;
+      adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
+      adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      adminTriple.o =  'http://id.loc.gov/ontologies/bibframe/DescriptionModifier';
+      adminTriple.otype = 'uri';
+      bfeditor.bfestore.store.push(adminTriple);
+
+      adminTriple = {};
+      adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
       adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
       adminTriple.o =  'pcc';
       adminTriple.otype = 'Literal';
       bfeditor.bfestore.store.push(adminTriple);
 
       adminTriple = {};
-      adminTriple.s = 'http://id.loc.gov/ontologies/bibframe/descriptionConventions';
+      adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
       adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
       adminTriple.o =  'RDA';
       adminTriple.otype = 'literal';
       bfeditor.bfestore.store.push(adminTriple);
 
       adminTriple = {};
-      adminTriple.s = 'http://id.loc.gov/ontologies/bibframe/descriptionLanguage';
+      adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
       adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
       adminTriple.o =  'English';
       adminTriple.otype = 'literal';
       bfeditor.bfestore.store.push(adminTriple);
 
       adminTriple = {};
-      adminTriple.s = 'http://id.loc.gov/ontologies/bibframe/descriptionModifier';
+      adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
       adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
       adminTriple.o =  'DLC';
       adminTriple.otype = 'literal';
@@ -360,7 +392,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
               } else {
                               o['@value'] = r.o;
               }
-              j[prop]['@list'].push(o);
+              j[prop]['@list'].push({"@id":r.o});
 
             } else if (r.otype == 'uri') {
               j[prop].push({
