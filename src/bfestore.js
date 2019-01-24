@@ -4,14 +4,19 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     exports.store = [];
   
     exports.rdfxml2store = function (rdf, loadtemplates, recid, callback) {
-      var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
+      //var url = 'http://rdf-translator.appspot.com/convert/xml/json-ld/content';
+      var url = config.url + "/profile-edit/server/rdfxml/jsonld";
       var bfestore = this;
   
+      var input = {};
+      input.rdf = rdf;    
+
       $.ajax({
-        contentType: 'application/x-www-form-urlencoded',
+        contentType: 'application/json',
+        processData: false,
         type: "POST",
         async: false,
-        data: { content: rdf},
+        data: JSON.stringify(input),
         url: url,
         success: function (data) {
           bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
