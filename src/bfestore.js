@@ -353,17 +353,17 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                     if (o['@language'] !== undefined) {
                       triple.olang = o['@language'];
                     }
-                  }else if (o['@list'] !== undefined) {
-					// we have a @list so use the listCheck to store multiple triples
-					listCheck = []
-					o['@list'].forEach(function(l){
-						// copy this triple into a new obj 
-						var newTriple =  Object.assign(triple, {});
-						newTriple.o = l['@id'];
-						newTriple.otype = 'uri';
-						listCheck.push(newTriple);
-					});
-				  }
+                  } else if (o['@list'] !== undefined) {
+                    // we have a @list so use the listCheck to store multiple triples
+                    listCheck = []
+                    o['@list'].forEach(function (l) {
+                      // copy this triple into a new obj 
+                      var newTriple = Object.assign(triple, {});
+                      newTriple.o = l['@id'];
+                      newTriple.otype = 'uri';
+                      listCheck.push(newTriple);
+                    });
+                  }
                 }
 				// if listCheck it not null then it has a bunch of new triples in it, use that instead of the triple obj
 				if (listCheck){
