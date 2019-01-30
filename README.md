@@ -1,5 +1,6 @@
 [bfe][demo-page]
 =======================
+[![CircleCI](https://circleci.com/gh/lcnetdev/bfe/tree/master.svg?style=svg)](https://circleci.com/gh/lcnetdev/bfe/tree/master)
 
 `bfe` is a standalone Editor for the Library of Congress's [Bibliographic Framework 
 (BIBFRAME) Initiative][bfi].  It can be used more generically as an editor for RDF data. 
