@@ -3312,7 +3312,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     uvfs.forEach(function (uvf) {
       // var lups = _.where(lookups, {"scheme": uvf});
       var lu = lookups[uvf];
-
       if (lu === undefined) {
         lu = buildLookup(uvf);
         lookups[uvf] = lu;
@@ -3323,15 +3322,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       var dshash = {};
       dshash.name = lu.name;
-      dshash.source = function (query, process) {
+      dshash.source = function (query, process,process) {
         lu.load.source(query, process, formobject);
       };
+      dshash.limit = 50;
       dshash.templates = {
         header: '<h3>' + lu.name + '</h3>',
         footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
       };
       // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
-      dshash.displayKey = 'display';
+      dshash.displayKey = 'display';      
       dshashes.push(dshash);
     });
 
@@ -3387,7 +3387,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         dshashes[5]
       );
     }
-    // Need more than 6?  That's crazy talk, man, crazy talk.
+    // Need more than 6?  That's crazy talk, man, crazy talk.   
     $(input).on('typeahead:selected', function (event, suggestionobject, datasetname) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Typeahead selection made');
       var form = $('#' + event.target.id).closest('form').eq(0);
