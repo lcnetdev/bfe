@@ -213,7 +213,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+    //$tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
 
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
@@ -2454,7 +2454,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
     }
 
-    if (pd.otype == 'uri' && hasTemplate) {
+    if (pd.otype == 'uri' || pd.otype == 'list' && hasTemplate) {
       // _.find(resourceTemplates, {resourceURI: _.find(bfestore.store, {s:pd.o, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).o}).id
 
       triples = _.where(bfestore.store, {
@@ -2505,7 +2505,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if (labeldata.length === 1) {
           var tpreflabel;
           var t = labeldata[0];
-          if (t.otype === 'uri') {
+          if (t.otype === 'uri' || pd.otype == 'list') {
             var tsearch = t.o;
             if (t.p === 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') {
               tsearch = t.s;
@@ -2663,6 +2663,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               } else if (!_.isEmpty(placeLabel) && _.isEmpty(agentLabel) && !_.isEmpty(dateLabel)) {
                 displaydata = placeLabel + ', ' + dateLabel;
               }
+            } else if (displaydata === 'v1#componentList') {
+              displaydata = "";
+              _.forEach(labeldata, function (triple) {
+                whichLabel(triple.s, function (label) {
+                  displaydata = label;
+                });
+              });
             }
           }
 
@@ -2984,29 +2991,40 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         var $formgroup = $('#' + propertyguid, callingformobject.form).closest('.form-group');
         var save = $formgroup.find('.btn-toolbar')[0];
-        // console.log(formgroup);
 
         bfelog.addMsg(new Error(), 'DEBUG', 'Selected property from calling form: ' + properties[0].propertyURI);
-        /*var temp = _.find(data, function (t) {
-          // rdf-schema#value/i ???
-          if (t.p.match(/rdf-schema#label/i)) {
-            return t;
-          } else if (t.p.match(/rdf-syntax-ns#value/i)) {
-            return t;
-          }
-        });*/
-
-        //                var tlabel = _.where(temp,{"s":properties[0].propertyURI});
-
+        var tsubject =  _.find(data, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' }).s;
         var tauthlabel = _.find(data, {
+          s: tsubject,
           p: 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel'
         });
         var tlabel = _.find(data, {
+          s: tsubject,
           p: 'http://www.w3.org/2000/01/rdf-schema#label'
         });
         var tvalue = _.find(data, {
+          s: tsubject,
           p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value'
         });
+        //componentlist label
+        if (_.some(data, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })) {
+          var topics = _.where(data, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })
+          var topicLabel;
+          topics.forEach(function (t) {
+            whichLabel(t.o, function (label) {
+              if (_.isEmpty(topicLabel)) {
+                topicLabel = label;
+              } else {
+                topicLabel += '--' + label;
+              }
+            });
+          });
+          tlabel = {};
+          tlabel.s = tsubject;
+          tlabel.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+          tlabel.o = topicLabel;
+          data.push(tlabel);
+        }
         // if there's a label, use it. Otherwise, create a label from the literals, and if no literals, use the uri.
         var displayuri = /[^/]*$/.exec(_.find(data, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' }).o)[0];
         var displaydata = '';
@@ -3464,7 +3482,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 formobject.defaulturi = t.o;
                 // find the bnode
                 bfestore.addTriple(resourceTriple);
-                formobject.store.push(resourceTriple);
+                if (!_.some(formobject.store, {"guid": resourceTriple.guid})){
+                  formobject.store.push(resourceTriple);
+                }
               } else {
                 formobject.store.push(t);
                 bfestore.addTriple(t);
