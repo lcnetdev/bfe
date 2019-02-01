@@ -142,6 +142,11 @@
   background-color: #0097cf;
 }
 
+/* .tt-suggestion strong {
+  font-weight: normal;
+  background-color: lightyellow;
+} */
+
 .tt-suggestion.tt-cursor {
   color: #fff;
   background-color: #0097cf;

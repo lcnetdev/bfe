@@ -3433,6 +3433,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         html = html + '</ul>';
 
       }
+      html = html + '<a target="_blank" href="' + data.uri + '">View on id.loc.gov</a>';
+      
       
       return html
     
@@ -3448,8 +3450,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             theme: 'tooltipster-shadow',
             contentAsHTML: true,
             animation: 'fade',
-            delay: 0,
-            content: '<strong>Load</strong>ing...',
+            updateAnimation: null,
+            interactive: true,            
+            delay: [0,300],
+            content: '<strong>Loading...</strong>',
             // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
             functionBefore: function(instance, helper) {
                 $('.tt-selectable').tooltipster('close');
@@ -3504,17 +3508,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
       });
     });
-    
-    $(input).on('typeahead:open', function (event,x,y,z) {
-      
-/*       var typeaheadSpan = $(this).attr('id');
-      setTimeout(()=>{
-        
-        console.log($("#" + typeaheadSpan).parent().find('.tt-selectable'))
-      
-      },1000);
-       */
-    });
+
     $(input).on('typeahead:cursorchange', function (event,selected,something) {
            
       var v = $($(this).parent().find('.tt-cursor')[0]);

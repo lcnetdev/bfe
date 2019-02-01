@@ -231,7 +231,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     };
     
     exports.extractContextData = function(data){
-      var results = { source: [], variant : [] };
+      var results = { source: [], variant : [], uri: data.uri };
       data.forEach(function(n){
         
         var citation = '';
@@ -256,6 +256,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         dataType: 'json',
         success: function (data) {        
           var id = uri.split('/')[uri.split('/').length-1];
+          data.uri = uri;
           var d = JSON.stringify(exports.extractContextData(data));
           sessionStorage.setItem(id, d);
           if (callback){
