@@ -311,8 +311,29 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       var s = typeof resource['@id'] !== 'undefined' ? resource['@id'] : '_:b' + guid();
       for (var p in resource) {
         if (p !== '@id') {
+          if (p === 'http://www.loc.gov/mads/rdf/v1#componentList'){
+            var list;
+            if (_.isArray(resource[p])){
+              list = resource[p][0]['@list'];
+              if (_.isEmpty(list)){
+                list = resource[p];
+              }
+            } else if (_.isArray(resource[p]['@list'])) {
+              list = resource[p]['@list'];
+            }
 
-          if (p === '@type' && !_.isArray(resource[p])) {
+            list.forEach(function (l) {
+              var tguid = guid();
+              var triple = {};
+              triple.guid = tguid;
+              triple.s = s;
+              triple.p = 'http://www.loc.gov/mads/rdf/v1#componentList';
+              triple.otype = 'list';
+              triple.o = l["@id"]
+              exports.store.push(triple);
+            });
+            
+          } else if (p === '@type' && !_.isArray(resource[p])) {
             var tguid = guid();
             var triple = {};
             triple.guid = tguid;
@@ -325,7 +346,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             resource[p].forEach(function (o) {
               var tguid = guid();
               var triple = {};
-              var listCheck = null;
               triple.guid = tguid;
               if (p === '@type') {
                 triple.s = s;
@@ -353,24 +373,9 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                   if (o['@language'] !== undefined) {
                     triple.olang = o['@language'];
                   }
-                } else if (o['@list'] !== undefined) {
-                  // we have a @list so use the listCheck to store multiple triples
-                  listCheck = []
-                  o['@list'].forEach(function (l) {
-                    // copy this triple into a new obj 
-                    var newTriple = Object.assign(triple, {});
-                    newTriple.o = l['@id'];
-                    newTriple.otype = 'uri';
-                    listCheck.push(newTriple);
-                  });
-                }
+                } 
               }
-              // if listCheck it not null then it has a bunch of new triples in it, use that instead of the triple obj
-              if (listCheck) {
-                listCheck.forEach(function (nt) { exports.store.push(nt); });
-              } else {
-                exports.store.push(triple);
-              }
+              exports.store.push(triple);
             });
           }
         }

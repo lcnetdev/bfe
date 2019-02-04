@@ -4,42 +4,47 @@ bfe rest api calls
 bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
-    var url = config.url + "/profile-edit/server/whichrt";
-    var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
-  
-    $.ajax({
-      dataType: dType,
-      type: "GET",
-      async: false,
-      data: { uri: uri},
-      url: url,
-      success: function (data) {
-        bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI " + uri);
-        bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
-        
-        if (dType == 'xml') {
-          var recCount = $('zs\\:numberOfRecords', data).text();
-          if (recCount != '0') {
-            var rdfrec  = $('zs\\:recordData', data).html();
-            var recid = $('bf\\:Local > rdf\\:value', data).html()
-            recid = recid.padStart(9, '0');
-            bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
-          } else {
-            var q = uri.replace(/.+query=(.+?)&.+/, "$1");
-            var $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
-            <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
-            <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
-            $nohits.modal('show');
-          }
+  var url = config.url + "/profile-edit/server/whichrt";
+  var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
+  var xmlType = (uri.endsWith('.rdf')) ? 'rdf' : 'xml';
+
+  $.ajax({
+    dataType: dType,
+    type: "GET",
+    async: false,
+    data: { uri: uri},
+    url: url,
+    success: function (data) {
+      bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI " + uri);
+      bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+      
+      if (dType == 'xml' && xmlType == 'xml') {
+        var recCount = $('zs\\:numberOfRecords', data).text();
+        if (recCount != '0') {
+          var rdfrec  = $('zs\\:recordData', data).html();
+          var recid = $('bf\\:Local > rdf\\:value', data).html();
+          recid = recid.padStart(9, '0');
+          bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
         } else {
-          bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
-            bfestore.store = [];
-            bfestore.jsonld2store(expanded);
-            bfestore.storeDedup();
-            callback(loadtemplates);
-          });
+          var q = uri.replace(/.+query=(.+?)&.+/, "$1");
+          var $nohits = $('<div class="modal" tabindex="-1" role="dialog" id="nohits"><div class="modal-dialog" role="document"><div class="modal-content"> \
+          <div class="modal-header">No Record Found!</div><div class="modal-body"><p>Query: "' + q + '"</p></div> \
+          <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div></div></div></div>');
+          $nohits.modal('show');
         }
-      },
+      } else if (xmlType == 'rdf') {
+        rdfrec = $('rdf\\:RDF', data).html();
+        recid = $('bf\\:Local > rdf\\:value', data).html();
+        bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
+      } else {
+        bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
+          bfestore.store = [];
+          bfestore.jsonld2store(expanded);
+          bfestore.storeDedup();
+          callback(loadtemplates);
+        });
+      }
+    },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
         bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
