@@ -33,10 +33,10 @@ if (env.RECTOBASE!==undefined)
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-              /* "logging": {
+               "logging": {
                 "level": "DEBUG",
-                "toConsole": false
-              },*/ 
+                "toConsole": true
+              }, 
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",

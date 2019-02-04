@@ -229,8 +229,51 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }
       return typeahead_source;
     };
+    
+    exports.extractContextData = function(data){
+      var results = { source: [], variant : [], uri: data.uri };
+      data.forEach(function(n){
+        
+        var citation = '';
+        var variant = '';
+        
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-source']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-source'].map(function(v){ return v['@value'] + ' '; })} ;
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-note']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-note'].map(function(v){ return v['@value'] + ' '; })} ;
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-status']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-status'].map(function(v){ return v['@value'] + ' '; })} ;
+        if (n['http://www.loc.gov/mads/rdf/v1#variantLabel']){ variant = variant + n['http://www.loc.gov/mads/rdf/v1#variantLabel'].map(function(v){ return v['@value'] + ' '; })} ;
+
+        citation = citation.trim()
+        variant = variant.trim()
+        if (variant != ''){ results.variant.push(variant)}
+        if (citation != ''){ results.source.push(citation)}
+      });    
+      return results;
+    }
+    
+    exports.fetchContextData = function(uri,callback){
+      $.ajax({
+        url: uri + '.json',
+        dataType: 'json',
+        success: function (data) {        
+          var id = uri.split('/')[uri.split('/').length-1];
+          data.uri = uri;
+          var d = JSON.stringify(exports.extractContextData(data));
+          sessionStorage.setItem(id, d);
+          if (callback){
+            callback(d)
+          }
+        }
+      });   
+    };
   
     exports.processSuggestions = function (suggestions, query) {
+      
+      suggestions[3].forEach(function(v,i){
+        if (i<=10){
+          exports.fetchContextData(v)       
+        }      
+      });
+      
       var typeahead_source = [];
       if (suggestions[1] !== undefined) {
         for (var s = 0; s < suggestions[1].length; s++) {
@@ -247,6 +290,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
           typeahead_source.push({
             uri: u,
+            id: id,
             value: li,
             display: d
           });

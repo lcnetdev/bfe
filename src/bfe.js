@@ -26,6 +26,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   // var csrf;
 
   var forms = [];
+      
 
   var lookups = {
     'http://id.loc.gov/authorities/names': {
@@ -3308,6 +3309,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   function setTypeahead(input) {
+    var lcshared = require('src/lookups/lcshared');
+
     // var form = $(input).closest("form").eq(0);
     var formid = $(input).closest('form').eq(0).attr('id');
     var pageid = $(input).siblings('.typeaheadpage').attr('id');
@@ -3338,7 +3341,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     uvfs.forEach(function (uvf) {
       // var lups = _.where(lookups, {"scheme": uvf});
       var lu = lookups[uvf];
-
       if (lu === undefined) {
         lu = buildLookup(uvf);
         lookups[uvf] = lu;
@@ -3349,15 +3351,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       var dshash = {};
       dshash.name = lu.name;
-      dshash.source = function (query, process) {
+      dshash.source = function (query, process,process) {
         lu.load.source(query, process, formobject);
       };
+      dshash.limit = 50;
       dshash.templates = {
         header: '<h3>' + lu.name + '</h3>',
         footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
       };
       // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
-      dshash.displayKey = 'display';
+      dshash.displayKey = 'display';      
       dshashes.push(dshash);
     });
 
@@ -3413,7 +3416,115 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         dshashes[5]
       );
     }
-    // Need more than 6?  That's crazy talk, man, crazy talk.
+    // Need more than 6?  That's crazy talk, man, crazy talk.   
+    
+    var buildContextHTML = function(data){
+      var html = '';
+      if (data.variant.length>0){
+        
+        html = html + '<h5>Variants</h5><ul>';
+        data.variant.forEach(function(c){
+          html = html + '<li>' + c  + '</li>';
+        
+        });
+        html = html + '</ul>';
+
+      }
+      
+      if (data.source.length>0){
+        
+        html = html + '<h5>Sources</h5><ul>';
+        data.source.forEach(function(c){
+          html = html + '<li>' + c  + '</li>';
+        
+        });
+        html = html + '</ul>';
+
+      }
+      html = html + '<a target="_blank" href="' + data.uri + '">View on id.loc.gov</a>';
+      
+      
+      return html
+    
+    }
+    
+    $(input).on('typeahead:render', function (event,x,y,z) {
+    
+      $(this).parent().find('.tt-selectable').each(function(i,v){
+        
+        v = $(v);
+        v.tooltipster({
+            position: 'left', 
+            theme: 'tooltipster-shadow',
+            contentAsHTML: true,
+            animation: 'fade',
+            updateAnimation: null,
+            interactive: true,            
+            delay: [0,300],
+            content: '<strong>Loading...</strong>',
+            // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
+            functionBefore: function(instance, helper) {
+                $('.tt-selectable').tooltipster('close');
+                $instance = $(instance._$origin[0]);
+                
+                var id = $instance.data('ttSelectableObject').id;
+                var stored = sessionStorage.getItem(id);
+                
+                
+                 
+                var $origin = $(helper.origin);
+                
+                // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
+                if ($origin.data('loaded') !== true) {
+
+                    if (stored){
+                    
+                      stored = JSON.parse(stored);
+                      instance.content(buildContextHTML(stored));
+                    
+                    }else{
+                      lcshared.fetchContextData($instance.data('ttSelectableObject').uri, function(data) {
+
+                          // call the 'content' method to update the content of our tooltip with the returned data.
+                          // note: this content update will trigger an update animation (see the updateAnimation option)
+                          data = JSON.parse(data)
+                          
+                          instance.content(buildContextHTML(data));
+
+                          // to remember that the data has been loaded
+                          $origin.data('loaded', true);
+                      });
+                    
+                    }
+                    
+
+                }
+            }
+        });    
+
+    
+        
+        // v.hover(function enter_function(e){
+            
+            // console.log('enter',e);
+            
+        // }, function exit_function(e){
+        
+            // console.log('leave',e);
+        
+        // });
+      
+      });
+    });
+
+    $(input).on('typeahead:cursorchange', function (event,selected,something) {
+           
+      var v = $($(this).parent().find('.tt-cursor')[0]);
+      $('.tt-selectable').tooltipster('close');
+      v.tooltipster('open');   
+
+    });
+
     $(input).on('typeahead:selected', function (event, suggestionobject, datasetname) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Typeahead selection made');
       var form = $('#' + event.target.id).closest('form').eq(0);
