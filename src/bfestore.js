@@ -533,11 +533,53 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     });
   };
 
+  exports.cleanJSONLD = function () {
+    // converter uses bf:person intead of personal name
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person' }), function (triple) {
+      triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
+    });
+    // converter uses bf:organization intead of corporate name
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Organization' }), function (triple) {
+      triple.o = 'http://www.loc.gov/mads/rdf/v1#CorporateName';
+    });
+    // eliminate duplicate type bf:Contributor
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bflc/PrimaryContribution' }), function (triple) {
+      var duplicateContext = { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution' };
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateContext);
+    });
+    // Variant Titles
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle' }), function (triple) {
+      var duplicateContext = { s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://id.loc.gov/ontologies/bibframe/Title"};
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateContext);
+    });
+    // Text to Work
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' }), function (triple) {
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' });
+      triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
+      bfeditor.bfestore.store.push(triple);
+    });          
+    //complex subject http://www.loc.gov/mads/rdf/v1#ComplexSubject
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Topic' }), function (triple) {
+      var complexContext = {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject"};
+      var topicContext = {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://www.loc.gov/mads/rdf/v1#Topic"};
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, complexContext);
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, topicContext);
+    });
+
+    //add profile, procinfo
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
+      bfeditor.bfestore.addProfile(am.s, bfeditor.bfestore.profile);
+      bfeditor.bfestore.addProcInfo(am.s, 'update instance');
+    });
+
+    bfeditor.bfestore.loadtemplates.data = bfeditor.bfestore.store;
+  }
+
   /**
-     * Generates a GUID string.
-     * @returns {String} The generated GUID.
-     * @example GCt1438871386
-     */
+   * Generates a GUID string.
+   * @returns {String} The generated GUID.
+   * @example GCt1438871386
+   */
   function guid() {
     var translator = window.ShortUUID();
     return translator.uuid();
