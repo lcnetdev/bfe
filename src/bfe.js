@@ -3703,9 +3703,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     lu.name = name.substr(name.lastIndexOf('/') + 1);
     lu.load = {};
     lu.load.scheme = name;
-    lu.load.source = function (query, processBoth, processBoth) {
-      console.log("down herer");
-      return lcshared.simpleQuery(query, cache, name, processBoth);
+    lu.load.source = function (query, processSync, processAsync) {
+      return lcshared.simpleQuery(query, cache, name, processSync, processAsync);
     };
 
     lu.load.getResource = function (subjecturi, property, selected, process) {
