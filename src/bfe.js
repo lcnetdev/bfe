@@ -3358,8 +3358,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       var dshash = {};
       dshash.name = lu.name;
-      dshash.source = function (query, process) {
-        lu.load.source(query, process, formobject);
+      dshash.source = function (query, sync, async) {
+        lu.load.source(query, sync, async, formobject);
       };
       dshash.limit = 50;
       dshash.templates = {
@@ -3511,20 +3511,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 }
             }
-        });    
-
-    
-        
-        // v.hover(function enter_function(e){
-            
-            // console.log('enter',e);
-            
-        // }, function exit_function(e){
-        
-            // console.log('leave',e);
-        
-        // });
-      
+        });         
       });
     });
 
@@ -3716,8 +3703,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     lu.name = name.substr(name.lastIndexOf('/') + 1);
     lu.load = {};
     lu.load.scheme = name;
-    lu.load.source = function (query, process) {
-      return lcshared.simpleQuery(query, cache, name, process);
+    lu.load.source = function (query, processBoth, processBoth) {
+      console.log("down herer");
+      return lcshared.simpleQuery(query, cache, name, processBoth);
     };
 
     lu.load.getResource = function (subjecturi, property, selected, process) {
