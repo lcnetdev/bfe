@@ -3464,88 +3464,82 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
     }
     
-    $(input).on('typeahead:render', function (event, suggestions, asyncFlag,dataset) {
-      
-      
+    $(input).on('typeahead:render', function (event, suggestions, asyncFlag, dataset) {
+      bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
+
       if (editorconfig.buildContext) {
 
-        $('.tt-suggestion').each(function(i,v){
+        $('.tt-suggestion').each(function (i, v) {
           v = $(v);
           // already has been tooltipterized
-          if (v.hasClass('tooltipstered')){
+          if (v.hasClass('tooltipstered')) {
             return true
           }
-          
-          
+
           // this grabs the URI for the typeahead and filters it on the url paths defined to have lookup information displayed, if it is > 0 then it passed the filter
-          var shouldBuildContext = editorconfig.buildContextFor.filter(function(f){return v.data().ttSelectableObject.uri.indexOf(f) > -1 });
-          if (shouldBuildContext==0){
+          var shouldBuildContext = editorconfig.buildContextFor.filter(function (f) { return v.data().ttSelectableObject.uri.indexOf(f) > -1 });
+          if (shouldBuildContext == 0) {
             return true
           }
-          
-          
+
           v.tooltipster({
-              position: 'left', 
-              theme: 'tooltipster-shadow',
-              contentAsHTML: true,
-              animation: 'fade',
-              updateAnimation: null,
-              interactive: true,            
-              delay: [0,300],
-              content: '<strong>Loading...</strong>',
-              // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
-              functionBefore: function(instance, helper) {
-                  // close anyone that are open
-                  $('.tt-suggestion').each(function(i,v){
-                    v = $(v);
-                    if (v.hasClass('tooltipstered')){
-                      v.tooltipster('close')
-                    }                    
-                  });
-                  
-                  var $instance = $(instance._$origin[0]);
-                  
-                  var id = $instance.data('ttSelectableObject').id;
-                  var stored = sessionStorage.getItem(id);
-                  
-                  
-                   
-                  var $origin = $(helper.origin);
-                  
-                  // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
-                  if ($origin.data('loaded') !== true) {
+            position: 'left',
+            theme: 'tooltipster-shadow',
+            contentAsHTML: true,
+            animation: 'fade',
+            updateAnimation: null,
+            interactive: true,
+            delay: [0, 300],
+            content: '<strong>Loading...</strong>',
+            // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
+            functionBefore: function (instance, helper) {
+              // close anyone that are open
+              $('.tt-suggestion').each(function (i, v) {
+                v = $(v);
+                if (v.hasClass('tooltipstered')) {
+                  v.tooltipster('close')
+                }
+              });
 
-                      if (stored){
-                      
-                        stored = JSON.parse(stored);
-                        instance.content(buildContextHTML(stored));
-                      
-                      }else{
-                        
-                        var useUri = $instance.data('ttSelectableObject').uri;
-                        if (useUri.indexOf('id.loc.gov/resources/works/')>-1){
-                          useUri = useUri.replace('id.loc.gov/resources/works/',editorconfig.buildContextForWorksEndpoint);
-                        }
-                        lcshared.fetchContextData(useUri, function(data) {
+              var $instance = $(instance._$origin[0]);
+              var id = $instance.data('ttSelectableObject').id;
+              var stored = sessionStorage.getItem(id);
+              var $origin = $(helper.origin);
 
-                            // call the 'content' method to update the content of our tooltip with the returned data.
-                            // note: this content update will trigger an update animation (see the updateAnimation option)
-                            data = JSON.parse(data)
-                            
-                            instance.content(buildContextHTML(data));
+              // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
+              if ($origin.data('loaded') !== true) {
 
-                            // to remember that the data has been loaded
-                            $origin.data('loaded', true);
-                        });
-                      
-                      }
-                      
+                if (stored) {
 
+                  stored = JSON.parse(stored);
+                  instance.content(buildContextHTML(stored));
+
+                } else {
+
+                  var useUri = $instance.data('ttSelectableObject').uri;
+                  if (useUri.indexOf('id.loc.gov/resources/works/') > -1) {
+                    useUri = useUri.replace('id.loc.gov/resources/works/', editorconfig.buildContextForWorksEndpoint);
                   }
+                  lcshared.fetchContextData(useUri, function (data) {
+
+                    // call the 'content' method to update the content of our tooltip with the returned data.
+                    // note: this content update will trigger an update animation (see the updateAnimation option)
+                    data = JSON.parse(data)
+
+                    instance.content(buildContextHTML(data));
+
+                    // to remember that the data has been loaded
+                    $origin.data('loaded', true);
+                  });
+
+                }
+
+
               }
-          });         
+            }
+          });
         });
-        
+
       }
     });
 

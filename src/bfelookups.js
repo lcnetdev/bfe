@@ -462,11 +462,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.simpleQuery = function (query, cache, scheme, processSync, processAsync) {
       bfelog.addMsg(new Error(), 'INFO','q is ' + query);
       var q = encodeURI(query.normalize());
-      console.log(q)
-      console.log(cache)
+
       if (cache[q]) {
-        
-        console.log(cache[q])
         processSync(cache[q]);
         return;
       }
@@ -648,6 +645,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://id.loc.gov/authorities/genreForms';
   
     exports.source = function (query, processSync, processAsync, formobject) {
+      bfelog.addMsg(new Error(), 'DEBUG', formobject);
+      
       var scheme = 'http://id.loc.gov/authorities/genreForms';
       var rdftype = 'rdftype:GenreForm';
   
