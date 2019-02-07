@@ -3427,92 +3427,210 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     
     var buildContextHTML = function(data){
       var html = '';
-      if (editorconfig.buildContext) {
+      
         if (data.variant.length > 0) {
-
+          html = html + '<div class="context-sources-list">';
           html = html + '<h5>Variants</h5><ul>';
-          html = html + '<div class="context-sources-list"><ul>';
-
           data.variant.forEach(function (c) {
             html = html + '<li>' + c + '</li>';
-
           });
           html = html + '</ul>';
-
         }
 
         if (data.source.length > 0) {
-
           html = html + '<h5>Sources</h5><ul>';
           data.source.forEach(function (c) {
             html = html + '<li>' + c + '</li>';
-
           });
-          html = html + '</ul></div>';
-
+          html = html + '</ul>';
         }
-        html = html + '<div style="text-align:right"><a target="_blank" href="' + data.uri + '">View on id.loc.gov</a></div>'
+        
+        if (data.contributor.length > 0) {
+          html = html + '<h5>Contributors</h5><ul>';
+          data.contributor.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }
+        
+        if (data.title) {
+          html = html + '<h5>Main Title</h5><ul>';
+            html = html + '<li>' + data.title + '</li>';
+          html = html + '</ul>';
+        }
+        if (data.date) {
+          html = html + '<h5>Creation Date</h5><ul>';
+            html = html + '<li>' + data.date + '</li>';
+          html = html + '</ul>';
+        }
+        if (data.genreForm) {
+          html = html + '<h5>Genre Form</h5><ul>';
+            html = html + '<li>' + data.genreForm + '</li>';
+          html = html + '</ul>';
+        }
+        
+        
+
+        if (data.nodeMap.birthDate && data.nodeMap.birthDate.length > 0) {
+          html = html + '<h5>Birth Date</h5><ul>';
+          data.nodeMap.birthDate.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }
+        if (data.nodeMap.deathDate && data.nodeMap.deathDate.length > 0) {
+          html = html + '<h5>Birth Date</h5><ul>';
+          data.nodeMap.deathDate.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }
+        
+        if (data.nodeMap.birthPlace && data.nodeMap.birthPlace.length > 0) {
+          html = html + '<h5>Birth Place</h5><ul>';
+          data.nodeMap.birthPlace.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }      
+        if (data.nodeMap.associatedLocale && data.nodeMap.associatedLocale.length > 0) {
+          html = html + '<h5>Associated Locale</h5><ul>';
+          data.nodeMap.associatedLocale.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.fieldOfActivity && data.nodeMap.fieldOfActivity.length > 0) {
+          html = html + '<h5>Field Of Activity</h5><ul>';
+          data.nodeMap.fieldOfActivity.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.gender && data.nodeMap.gender.length > 0) {
+          html = html + '<h5>Gender</h5><ul>';
+          data.nodeMap.gender.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.occupation && data.nodeMap.occupation.length > 0) {
+          html = html + '<h5>Occupation</h5><ul>';
+          data.nodeMap.occupation.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.associatedLanguage && data.nodeMap.associatedLanguage.length > 0) {
+          html = html + '<h5>Associated Language</h5><ul>';
+          data.nodeMap.associatedLanguage.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.hasBroaderAuthority && data.nodeMap.hasBroaderAuthority.length > 0) {
+          html = html + '<h5>Broader</h5><ul>';
+          data.nodeMap.hasBroaderAuthority.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        if (data.nodeMap.hasNarrowerAuthority && data.nodeMap.hasNarrowerAuthority.length > 0) {
+          html = html + '<h5>Narrower</h5><ul>';
+          data.nodeMap.hasNarrowerAuthority.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
+        
+        html = html + '</div><div style="text-align:right"><a target="_blank" href="' + data.uri + '">View on id.loc.gov</a></div>'
         return html;
-      }
+      
     }
     
-    $(input).on('typeahead:render', function () {// (event,x,y,z)
+    $(input).on('typeahead:render', function (event, suggestions, asyncFlag,dataset) {
       
-      $(this).parent().find('.tt-selectable').each(function(i,v){
+      
+      if (editorconfig.buildContext) {
+
+        $('.tt-suggestion').each(function(i,v){
+          v = $(v);
+          // already has been tooltipterized
+          if (v.hasClass('tooltipstered')){
+            return true
+          }
+          
+          
+          // this grabs the URI for the typeahead and filters it on the url paths defined to have lookup information displayed, if it is > 0 then it passed the filter
+          var shouldBuildContext = editorconfig.buildContextFor.filter(function(f){return v.data().ttSelectableObject.uri.indexOf(f) > -1 });
+          if (shouldBuildContext==0){
+            return true
+          }
+          
+          
+          v.tooltipster({
+              position: 'left', 
+              theme: 'tooltipster-shadow',
+              contentAsHTML: true,
+              animation: 'fade',
+              updateAnimation: null,
+              interactive: true,            
+              delay: [0,300],
+              content: '<strong>Loading...</strong>',
+              // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
+              functionBefore: function(instance, helper) {
+                  // close anyone that are open
+                  $('.tt-suggestion').each(function(i,v){
+                    v = $(v);
+                    if (v.hasClass('tooltipstered')){
+                      v.tooltipster('close')
+                    }                    
+                  });
+                  
+                  var $instance = $(instance._$origin[0]);
+                  
+                  var id = $instance.data('ttSelectableObject').id;
+                  var stored = sessionStorage.getItem(id);
+                  
+                  
+                   
+                  var $origin = $(helper.origin);
+                  
+                  // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
+                  if ($origin.data('loaded') !== true) {
+
+                      if (stored){
+                      
+                        stored = JSON.parse(stored);
+                        instance.content(buildContextHTML(stored));
+                      
+                      }else{
+                        
+                        var useUri = $instance.data('ttSelectableObject').uri;
+                        if (useUri.indexOf('id.loc.gov/resources/works/')>-1){
+                          useUri = useUri.replace('id.loc.gov/resources/works/',editorconfig.buildContextForWorksEndpoint);
+                        }
+                        lcshared.fetchContextData(useUri, function(data) {
+
+                            // call the 'content' method to update the content of our tooltip with the returned data.
+                            // note: this content update will trigger an update animation (see the updateAnimation option)
+                            data = JSON.parse(data)
+                            
+                            instance.content(buildContextHTML(data));
+
+                            // to remember that the data has been loaded
+                            $origin.data('loaded', true);
+                        });
+                      
+                      }
+                      
+
+                  }
+              }
+          });         
+        });
         
-        v = $(v);
-        if (v.hasClass('tooltipstered')){
-          return false
-        }
-        v.tooltipster({
-            position: 'left', 
-            theme: 'tooltipster-shadow',
-            contentAsHTML: true,
-            animation: 'fade',
-            updateAnimation: null,
-            interactive: true,            
-            delay: [0,300],
-            content: '<strong>Loading...</strong>',
-            // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
-            functionBefore: function(instance, helper) {
-                $('.tt-selectable').tooltipster('close');
-                var $instance = $(instance._$origin[0]);
-                
-                var id = $instance.data('ttSelectableObject').id;
-                var stored = sessionStorage.getItem(id);
-                
-                
-                 
-                var $origin = $(helper.origin);
-                
-                // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
-                if ($origin.data('loaded') !== true) {
-
-                    if (stored){
-                    
-                      stored = JSON.parse(stored);
-                      instance.content(buildContextHTML(stored));
-                    
-                    }else{
-                      lcshared.fetchContextData($instance.data('ttSelectableObject').uri, function(data) {
-
-                          // call the 'content' method to update the content of our tooltip with the returned data.
-                          // note: this content update will trigger an update animation (see the updateAnimation option)
-                          data = JSON.parse(data)
-                          
-                          instance.content(buildContextHTML(data));
-
-                          // to remember that the data has been loaded
-                          $origin.data('loaded', true);
-                      });
-                    
-                    }
-                    
-
-                }
-            }
-        });         
-      });
+      }
     });
 
     $(input).on('typeahead:cursorchange', function () { //(event,selected,something)
