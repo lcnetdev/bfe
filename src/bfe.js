@@ -671,7 +671,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             // Variant Titles
             _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle' }), function (triple) {
-              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://id.loc.gov/ontologies/bibframe/Title" })))
+              if (!_.isEmpty(_.find(bfeditor.bfestore.store, { s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://id.loc.gov/ontologies/bibframe/Title" }))){
+                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://id.loc.gov/ontologies/bibframe/Title" })))
+              }
             });
             // Text to Work
             _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' }), function (triple) {
@@ -682,7 +684,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             
             //complex subject http://www.loc.gov/mads/rdf/v1#ComplexSubject
             _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Topic' }), function (triple) {
-              bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject" })))
+              if (!_.isEmpty(_.find(bfeditor.bfestore.store, {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject"}))){
+                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject" })))
+              }
             });
 
             //add profile
@@ -816,18 +820,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               });
               // Variant Titles
               _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle' }), function (triple) {
-                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://id.loc.gov/ontologies/bibframe/Title" })))
-              });
-              // eliminate duplicate type bf:ProvisionActivity
-              _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Publication' }), function (triple) {
-                var duplicateProvActivity = _.find(bfeditor.bfestore.store, { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/ProvisionActivity' });
-                if (!_.isEmpty(duplicateProvActivity)) {
-                  bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateProvActivity);
+                if (!_.isEmpty(_.find(bfeditor.bfestore.store, { s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://id.loc.gov/ontologies/bibframe/Title" }))){
+                  bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://id.loc.gov/ontologies/bibframe/Title" })))
                 }
               });
+              // Text to Work
+              _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' }), function (triple) {
+                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, _.find(bfeditor.bfestore.store, { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' }));
+                triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
+                bfeditor.bfestore.store.push(triple);
+              });          
               //complex subject http://www.loc.gov/mads/rdf/v1#ComplexSubject
               _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Topic' }), function (triple) {
-                bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject" })))
+                if (!_.isEmpty(_.find(bfeditor.bfestore.store, {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject"}))){
+                  bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, (_.find(bfeditor.bfestore.store, { s: triple.s, o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject" })))
+                }
               });
               //add profile, procinfo
               _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
@@ -3351,7 +3358,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       var dshash = {};
       dshash.name = lu.name;
-      dshash.source = function (query, process,process) {
+      dshash.source = function (query, process) {
         lu.load.source(query, process, formobject);
       };
       dshash.limit = 50;
@@ -3420,39 +3427,43 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     
     var buildContextHTML = function(data){
       var html = '';
-      if (data.variant.length>0){
-        
-        html = html + '<h5>Variants</h5><ul>';
-        data.variant.forEach(function(c){
-          html = html + '<li>' + c  + '</li>';
-        
-        });
-        html = html + '</ul>';
+      if (editorconfig.buildContext) {
+        if (data.variant.length > 0) {
 
-      }
-      
-      if (data.source.length>0){
-        
-        html = html + '<h5>Sources</h5><ul>';
-        data.source.forEach(function(c){
-          html = html + '<li>' + c  + '</li>';
-        
-        });
-        html = html + '</ul>';
+          html = html + '<h5>Variants</h5><ul>';
+          html = html + '<div class="context-sources-list"><ul>';
 
+          data.variant.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+
+          });
+          html = html + '</ul>';
+
+        }
+
+        if (data.source.length > 0) {
+
+          html = html + '<h5>Sources</h5><ul>';
+          data.source.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+
+          });
+          html = html + '</ul></div>';
+
+        }
+        html = html + '<div style="text-align:right"><a target="_blank" href="' + data.uri + '">View on id.loc.gov</a></div>'
+        return html;
       }
-      html = html + '<a target="_blank" href="' + data.uri + '">View on id.loc.gov</a>';
-      
-      
-      return html
-    
     }
     
-    $(input).on('typeahead:render', function (event,x,y,z) {
-    
+    $(input).on('typeahead:render', function () {// (event,x,y,z)
+      
       $(this).parent().find('.tt-selectable').each(function(i,v){
         
         v = $(v);
+        if (v.hasClass('tooltipstered')){
+          return false
+        }
         v.tooltipster({
             position: 'left', 
             theme: 'tooltipster-shadow',
@@ -3465,7 +3476,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // 'instance' is basically the tooltip. More details in the "Object-oriented Tooltipster" section.
             functionBefore: function(instance, helper) {
                 $('.tt-selectable').tooltipster('close');
-                $instance = $(instance._$origin[0]);
+                var $instance = $(instance._$origin[0]);
                 
                 var id = $instance.data('ttSelectableObject').id;
                 var stored = sessionStorage.getItem(id);
@@ -3517,7 +3528,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
     });
 
-    $(input).on('typeahead:cursorchange', function (event,selected,something) {
+    $(input).on('typeahead:cursorchange', function () { //(event,selected,something)
            
       var v = $($(this).parent().find('.tt-cursor')[0]);
       $('.tt-selectable').tooltipster('close');

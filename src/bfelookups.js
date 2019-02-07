@@ -237,11 +237,18 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         var citation = '';
         var variant = '';
         
-        if (n['http://www.loc.gov/mads/rdf/v1#citation-source']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-source'].map(function(v){ return v['@value'] + ' '; })} ;
-        if (n['http://www.loc.gov/mads/rdf/v1#citation-note']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-note'].map(function(v){ return v['@value'] + ' '; })} ;
-        if (n['http://www.loc.gov/mads/rdf/v1#citation-status']){ citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-status'].map(function(v){ return v['@value'] + ' '; })} ;
-        if (n['http://www.loc.gov/mads/rdf/v1#variantLabel']){ variant = variant + n['http://www.loc.gov/mads/rdf/v1#variantLabel'].map(function(v){ return v['@value'] + ' '; })} ;
-
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-source']) {
+          citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-source'].map(function (v) { return v['@value'] + ' '; })
+        }
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-note']) {
+          citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-note'].map(function (v) { return v['@value'] + ' '; })
+        }
+        if (n['http://www.loc.gov/mads/rdf/v1#citation-status']) {
+          citation = citation + n['http://www.loc.gov/mads/rdf/v1#citation-status'].map(function (v) { return v['@value'] + ' '; })
+        }
+        if (n['http://www.loc.gov/mads/rdf/v1#variantLabel']) {
+          variant = variant + n['http://www.loc.gov/mads/rdf/v1#variantLabel'].map(function (v) { return v['@value'] + ' '; })
+        }
         citation = citation.trim()
         variant = variant.trim()
         if (variant != ''){ results.variant.push(variant)}

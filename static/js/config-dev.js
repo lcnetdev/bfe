@@ -33,14 +33,15 @@ if (env.RECTOBASE!==undefined)
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-               "logging": {
+              /* "logging": {
                 "level": "DEBUG",
-                "toConsole": true
-              }, 
+                "toConsole": false
+              },*/
   "url" : rectoBase,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
   "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
+  "buildContext": false,
   "profiles": [
     //versoURL + "/configs?filter[where][configType]=profile"
      versoURL + "/configs?filter[where][configType]=profile&filter[where][name]=BIBFRAME 2.0 Admin Metadata",

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
     <title>(Bibliographic Framework Initiative Technical Site - BIBFRAME.ORG)</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.ico" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -36,14 +36,14 @@
 
     <script src="static/js/short-uuid.min.js"></script>
     <script src="static/js/typeahead.jquery.corejavascript.fork.js"></script>
-    
+
     <script src="static/js/tooltipster.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/tooltipster.bundle.css">
-    
-    
+
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
 
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 
     <!--static/js/lodash.min.js-->
@@ -66,16 +66,20 @@
                 padding-bottom: 20px;
             }
         }
+
         @media print {
             a[href]:after {
                 content: none;
             }
         }
-        .popover { max-width: none }
-    </style>
-  </head>
 
-  <body>
+        .popover {
+            max-width: none
+        }
+    </style>
+</head>
+
+<body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -91,41 +95,52 @@
             <div class="collapse navbar-collapse visible-print" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="divider"></li>
-                    <li><a href="http://www.loc.gov/bibframe/">&laquo; Back to LC BIBFRAME Site</a></li>
+                    <li>
+                        <a href="http://www.loc.gov/bibframe/">&laquo; Back to LC BIBFRAME Site</a>
+                    </li>
                     <li class="divider"></li>
                 </ul>
             </div>
         </div>
     </nav>
-<!-- Breadcrumbs -->
-<ol class="breadcrumb">
-<li><a href = "../index.html">Home</a></li>
-<li><a href = "/bfe/development.html">Editor</a></li>
-</ol>
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+        <li>
+            <a href="../index.html">Home</a>
+        </li>
+        <li>
+            <a href="/bfe/development.html">Editor</a>
+        </li>
+    </ol>
 
-<div id="bfeditor" class="container-fluid">
-    <div id="iealert"></div>
-</div>
-
-<script type="text/javascript">
-    function reloadJs(src) {
-        src = $('script[src$="' + src + '"]').attr("src");
-        $('script[src$="' + src + '"]').remove();
-        $('<script/>').attr('src', src).appendTo('body');
-    }
-</script>
-<script type="text/javascript" src="builds/env.js"></script>
-<script type="text/javascript" src="static/js/config-dev.js"></script>
-<br/><br/><br/>
-
-<hr>
-   <footer class="bs-footer" role="contentinfo">
-    <div class="container">
-          <p>This is a development view of the Bibliographic Framework Initiative project's editor. For more information, go to  <a href="http://www.loc.gov/bibframe/">www.loc.gov/bibframe</a>.</p>
+    <div id="bfeditor" class="container-fluid">
+        <div id="iealert"></div>
     </div>
-   </footer>
-  </body>
-  <script type="text/javascript">
-  var bfeditor = bfe.fulleditor(config, "bfeditor");
-  </script>
+
+    <script type="text/javascript">
+        function reloadJs(src) {
+            src = $('script[src$="' + src + '"]').attr("src");
+            $('script[src$="' + src + '"]').remove();
+            $('<script/>').attr('src', src).appendTo('body');
+        }
+    </script>
+    <script type="text/javascript" src="builds/env.js"></script>
+    <script type="text/javascript" src="static/js/config-dev.js"></script>
+    <br/>
+    <br/>
+    <br/>
+
+    <hr>
+    <footer class="bs-footer" role="contentinfo">
+        <div class="container">
+            <p>This is a development view of the Bibliographic Framework Initiative project's editor. For more information,
+                go to
+                <a href="http://www.loc.gov/bibframe/">www.loc.gov/bibframe</a>.</p>
+        </div>
+    </footer>
+</body>
+<script type="text/javascript">
+    var bfeditor = bfe.fulleditor(config, "bfeditor");
+</script>
+
 </html>

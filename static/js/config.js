@@ -38,6 +38,7 @@ var config = {
                 "toConsole": false
               },*/ 
   "url" : rectoBase,
+  "buildContext": true,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
   "resourceURI": "http://mlvlp04.loc.gov:8230/resources",

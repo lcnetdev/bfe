@@ -166,3 +166,10 @@
 div#save-btn{
     margin-bottom:10px;
 }
+
+.context-sources-list{
+  max-height:400px;
+  overflow-y:auto;
+  max-width: 500px;
+  overflow-x:auto;
+}
