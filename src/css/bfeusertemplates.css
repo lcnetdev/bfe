@@ -1,0 +1,49 @@
+
+.template-controls{
+  display:inline-block;
+  width:auto;
+  max-width:400px;
+  margin-right:10px;
+
+}
+
+.template-controls select{
+  display: inline-block;
+  width: 210px;
+  z-index:10;
+  position:relative;
+    
+}
+#template-controls-actions{
+  display: inline-block;
+  width: 180px;
+  background-color: whitesmoke;
+  height: 31px;
+  right: -185px;
+  padding: 1px;
+  border: 1px solid lightgray;
+  top: -2px;
+  border-radius: 5px;
+  z-index: 0;
+  font-size: 0.75em;
+  line-height: 25px;
+  position:relative;
+
+}
+#template-controls-actions button{
+  margin-left: 10px;
+}
+.template-property-hover:hover{
+  
+  background-color: rgba(253, 255, 35, 0.45);
+  -webkit-box-shadow: 0px 0px 30px 0px rgba(253, 255, 35, 0.67);
+  -moz-box-shadow:    0px 0px 30px 0px rgba(253, 255, 35, 0.67);
+  box-shadow:         0px 0px 30px 0px rgba(253, 255, 35, 0.67);
+ }
+
+.template-toggle{
+  float:left;
+}
+.template-toggle-hide{
+  display:none;
+}

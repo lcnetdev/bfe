@@ -3,6 +3,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   var bfestore = require('src/bfestore');
   var bfelog = require('src/bfelogging');
   var bfeapi = require('src/bfeapi');
+  var bfeusertemplates = require('src/bfeusertemplates');
   // var store = new rdfstore.Store();
   var profiles = [];
   var resourceTemplates = [];
@@ -110,6 +111,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     // Set up logging
     bfelog.init(editorconfig);
+    
+    // pass the config to the usertemplates so it can disable templates if localstorage is not available
+    bfeusertemplates.setConfig(editorconfig);
+    
 
     //setup callbacks
     editorconfig.api.forEach(function (apiName) {
@@ -612,6 +617,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
     }
 
+    
     getWorkProfileOptions($workmenudiv);
 
     $loadworkdiv.append($loadworkform);
@@ -1066,7 +1072,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
   }
 
-  function cbLoadTemplates(propTemps) {
+  var cbLoadTemplates = exports.cbLoadTemplates = function(propTemps) {
     //clear the URL params
     window.history.replaceState(null, null, window.location.pathname);
 
@@ -1314,6 +1320,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#bfeditor-debug').html(JSON.stringify(bfelog.getLog(), undefined, ' '));
 
         bfeditor.bfestore.state = 'edit';
+            
+        // apply a user template if selected
+        bfeusertemplates.checkActiveTemplate();
+        
       }
     }
   }
@@ -1372,7 +1382,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     */
   function getForm(loadTemplates, pt) {
     var rt, property;
-
     // Create the form object.
     var fguid = guid();
     var fobject = {};
@@ -1454,14 +1463,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         'data-uri': rt.defaulturi
       }); // is data-uri used?
 
-      /*var profile = rt.id.split(":");
+		  /*var profile = rt.id.split(":");
       profile.pop(_.lastIndexOf(rt.id.split(":")));
       var profileLabel = bfeditor.profiles[_.findIndex(
           _.pluck(bfeditor.profiles, "Profile"), {"id":profile.join(":")}
         )].Profile.description;
       */
       // create a popover box to display resource ID of the thing.
-      var $resourcedivheading = $('<h4>' + rt.resourceLabel + ' </h4>');
+      var $resourcedivheading = $('<div>');
+      var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left">' + rt.resourceLabel + ' </h4>');
+      
       if (rt.defaulturi.match(/^http/)) {
         var rid = rt.defaulturi;
         var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
@@ -1470,28 +1481,34 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $resourceInfo.attr('title', 'Resource ID');
         $resourceInfo.attr('id', 'resource-id-popover');
         $resourceInfo.popover({ trigger: "click hover" });
-        $resourcedivheading.append($resourceInfo);
+        $resourcedivheadingh4.append($resourceInfo);
       }
+      $resourcedivheading.append($resourcedivheadingh4);
 
       // create an empty clone button
-      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"><span class="glyphicon glyphicon-duplicate"></span></button>');
+      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
 
       // populate the clone button for Instance or Work descriptions
       if (rt.id.match(/:Instance$/i)) {
         $clonebutton.attr('id', 'clone-instance');
-        $clonebutton.text(' Clone Instance');
+        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
         $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
       } else if (rt.id.match(/:Work$/i)) {
         $clonebutton.attr('id', 'clone-work');
-        $clonebutton.text(' Clone Work');
+        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
         $clonebutton.data({ 'match': 'works', 'label': 'Work' });
       }
 
-
+    
+    
+      var $templateCloneButtonGroup = $('<div>', {
+        class: 'pull-right'
+      });
+    
       // append to the resource heading if there is a clone button id and is not a modal window      
       if ($clonebutton.attr('id') && rt.embedType != 'modal') {
         var newid = mintResource(guid());
-        $resourcedivheading.append($clonebutton);
+        $templateCloneButtonGroup.append($clonebutton);
 
         // ask user to input custom id
         var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
@@ -1518,8 +1535,23 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               </div>\
             </div>');
         $resourcediv.append($cloneinput);
+          
+        // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
+        if (editorconfig.enableUserTemplates){
+          var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
+          $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile));
+        }
+        
+        
       }
+      
+      
+      
 
+
+      $resourcedivheading.append($templateCloneButtonGroup);
+
+      
       $resourcediv.append($resourcedivheading);
 
       $resourcediv.find('#clear-id').click(function () {
@@ -1646,6 +1678,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         };
         rt.propertyTemplates.push(adminProp);
       }
+      
 
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
@@ -1654,16 +1687,33 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         property.guid = pguid;
         property.display = 'true';
         addPropsUsed[property.propertyURI] = 1;
-
+        console.log(property);
         var $formgroup = $('<div>', {
-          class: 'form-group row'
+          class: 'form-group row template-property'
         });
-        var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-        var $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label" title="' + property.remark + '">' + property.propertyLabel + '</label>');
 
-        if ((/^http/).test(property.remark)) {
-          $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label" title="' + property.remark + '"><a href="' + property.remark + '" target="_blank">' + property.propertyLabel + '</a></label>');
+        
+        
+        
+            
+        // add the uri to the data of the element
+        $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
+
+        var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
+        var $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
+          
+        if (rt.embedType != 'modal') {
+          // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
+          $label.append(bfeusertemplates.returnToggleHTML(property.propertyURI+'|'+property.propertyLabel));
         }
+        
+        if ((/^http/).test(property.remark)) {
+          $label.append('<a href="' + property.remark + '" target="_blank">' + property.propertyLabel + '</a>')
+        }else{
+          $label.append("<span>"+ property.propertyLabel + "</span>")        
+        }
+        
+        
         var $input;
         var $button;
 
@@ -1702,12 +1752,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           };
 
           $input.keyup(enterHandler);
-
+          
           $formgroup.append($label);
           $input.append($saves);
           $formgroup.append($input);
           $formgroup.append($button);
           // $formgroup.append($saves);
+          
+
+
+          
+          
+          
         }
 
         if (property.type === 'resource' || property.type === 'lookup' || property.type === 'target' || property.type === 'list') {
@@ -2120,6 +2176,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     forms.push(fobject);
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Newly created formobject.', fobject);
+    
+
     return {
       formobject: fobject,
       form: form
@@ -3055,6 +3113,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else {
       display = 'example';
     }
+    
 
     var $displaybutton = $('<button type="button" class="btn btn-default" title="' + bgvars.tlabelhover + '">' + display + '</button>');
     // check for non-blanknode
