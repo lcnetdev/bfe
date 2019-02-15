@@ -1620,7 +1620,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
       var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
       // var $label = $('<label for="' + rt.useguid + '" class="col-sm-3 control-label" title="'+ rt.defaulturi + '">Set label?</label>');
-      var $resourceinput = $('<div class="col-sm-6"><input type="text" class="form-control" id="' + rt.useguid + '" placeholder="' + rt.defaulturi + '" tabindex="' + tabIndices++ + '"></div>');
+      var $resourceinput = $('<div class="col-sm-6"><input type="text" class="form-control" id="' + rt.useguid + '" tabindex="' + tabIndices++ + '"></div>');
       var $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
       var $linkbutton = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#x1f517;</button></div>');
       var $linkmodal = $('<div class="modal fade" id="linkmodal' + rt.useguid + '" role="dialog"><div class="modal-dialog"><div class="modal-content"> \
@@ -1719,7 +1719,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         if (property.type == 'literal') {
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
-          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
+          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
 
           $input.find('input').keyup(function (e) {
             if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
@@ -1837,7 +1837,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               }
 
               var $inputdiv = $('<div class="col-sm-8"></div>');
-              $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '">');
+              $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" tabindex="' + tabIndices++ + '">');
               var $input_page = $('<input type="hidden" id="' + property.guid + '_page" class="typeaheadpage" value="1">');
 
               $inputdiv.append($input);
