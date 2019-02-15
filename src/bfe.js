@@ -1677,7 +1677,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           "propertyLabel": "Administrative Metadata"
         };
         rt.propertyTemplates.push(adminProp);
-      }
+      }      
       
 
       rt.propertyTemplates.forEach(function (property) {
@@ -1687,7 +1687,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         property.guid = pguid;
         property.display = 'true';
         addPropsUsed[property.propertyURI] = 1;
-        console.log(property);
         var $formgroup = $('<div>', {
           class: 'form-group row template-property'
         });

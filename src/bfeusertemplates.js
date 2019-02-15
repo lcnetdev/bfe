@@ -39,6 +39,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       // first gather settings for each property
       $(".template-property ").each(function(i,el){        
         var data = $(el).data();
+        var enabled = true;
         
         if (Object.keys(data).indexOf('templateEnabled')>-1){
           if (data['templateEnabled'] === false){
