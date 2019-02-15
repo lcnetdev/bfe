@@ -235,18 +235,18 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
           
         if (value == 'your-templates-ignore'){ return true }
                 
-        if (value == 'create-new-template'){           
-          editMode = true;
-          activeTemplate = null;
+        if (value == 'create-new-template'){ 
           editModeTemplate = window.prompt("Please enter a name for your new template.\n-Use the ON/OFF switches to remove fields.\n-Click the 'Save Template' link when done to start using your template.");
           
           // if they don't enter a name or cancel out set the optio back to "Your Templates" and exit
-          if (editModeTemplate === null ||editModeTemplate === "" ){ 
+          if (editModeTemplate === null || editModeTemplate === "" || editModeTemplate === 'null'){ 
             if (editModeTemplate === ""){ alert("Template name cannot be empty");}
             var arrayOfOptions = $(this).find('option');
             $(arrayOfOptions[0]).attr('selected','selected');           
             return false;            
           }          
+          editMode = true;
+          activeTemplate = null;          
           // make fresh profile
           bfe.cbLoadTemplates();          
           // add in the highlight effect
