@@ -16,8 +16,8 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     
     
     // Passed the config obj from the bfe script, it checks to make sure local storage is there and setsup the keys if so, if not disables the feature in the config obj
-    exports.setConfig = function(config){
-      config = config;      
+    exports.setConfig = function(passedConfig){
+      config = passedConfig;      
       // on startup initalize the storage if it is not there disable the feature
       if (!window.localStorage){
         config.enableUserTemplates = false;
@@ -38,7 +38,6 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       var properties = {};      
       // first gather settings for each property
       $(".template-property ").each(function(i,el){        
-        var enabled = true;
         var data = $(el).data();
         
         if (Object.keys(data).indexOf('templateEnabled')>-1){
@@ -104,7 +103,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
         },10)      
       }
      
-      $actions = $('#template-controls-actions');
+      var $actions = $('#template-controls-actions');
       $actions.css('right','-200px');
       
       if (mode === 'editing'){      
@@ -329,9 +328,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     exports.returnToggleHTML = function(uriLabel) {
     
       // template controls
-      $templateSwitch = $('<div class="btn-group btn-toggle template-toggle"></div>');
-      $offButton = $('<button type="button" class="btn btn-xs">OFF</button>')
-      $onButton = $('<button type="button" class="btn btn-xs">ON</button>')
+      var $templateSwitch = $('<div class="btn-group btn-toggle template-toggle"></div>');
+      var $offButton = $('<button type="button" class="btn btn-xs">OFF</button>')
+      var $onButton = $('<button type="button" class="btn btn-xs">ON</button>')
 
       
       var isEnabled = true;
