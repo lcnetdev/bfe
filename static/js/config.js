@@ -41,6 +41,7 @@ var config = {
   "buildContext": true,
   "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/'],
   "buildContextForWorksEndpoint": 'mlvlp04.loc.gov:8230/resources/works/',
+  "enableUserTemplates" :true,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
   "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
