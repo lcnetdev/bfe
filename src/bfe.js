@@ -1073,6 +1073,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   var cbLoadTemplates = exports.cbLoadTemplates = function(propTemps) {
+    console.log("cbLoadTemplates",propTemps)
     //clear the URL params
     window.history.replaceState(null, null, window.location.pathname);
 
@@ -1917,7 +1918,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
 
       // starting the "add property" stuff here
-      if (rt.embedType == 'page') {
+      if (rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
         var substringMatcher = function (strs) {
           return function findMatches(q, cb) {
             strs = _.sortBy(strs, 'display');
@@ -3453,7 +3454,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           html = html + '</ul>';
         }
         if (data.nodeMap.deathDate && data.nodeMap.deathDate.length > 0) {
-          html = html + '<h5>Birth Date</h5><ul>';
+          html = html + '<h5>Death Date</h5><ul>';
           data.nodeMap.deathDate.forEach(function (c) {
             html = html + '<li>' + c + '</li>';
           });
