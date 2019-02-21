@@ -3449,14 +3449,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if (data.nodeMap.birthDate && data.nodeMap.birthDate.length > 0) {
           html = html + '<h5>Birth Date</h5><ul>';
           data.nodeMap.birthDate.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }
         if (data.nodeMap.deathDate && data.nodeMap.deathDate.length > 0) {
           html = html + '<h5>Death Date</h5><ul>';
           data.nodeMap.deathDate.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }
@@ -3464,42 +3464,42 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if (data.nodeMap.birthPlace && data.nodeMap.birthPlace.length > 0) {
           html = html + '<h5>Birth Place</h5><ul>';
           data.nodeMap.birthPlace.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }      
         if (data.nodeMap.associatedLocale && data.nodeMap.associatedLocale.length > 0) {
           html = html + '<h5>Associated Locale</h5><ul>';
           data.nodeMap.associatedLocale.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }  
         if (data.nodeMap.fieldOfActivity && data.nodeMap.fieldOfActivity.length > 0) {
           html = html + '<h5>Field Of Activity</h5><ul>';
           data.nodeMap.fieldOfActivity.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }  
         if (data.nodeMap.gender && data.nodeMap.gender.length > 0) {
           html = html + '<h5>Gender</h5><ul>';
           data.nodeMap.gender.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }  
         if (data.nodeMap.occupation && data.nodeMap.occupation.length > 0) {
           html = html + '<h5>Occupation</h5><ul>';
           data.nodeMap.occupation.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }  
         if (data.nodeMap.associatedLanguage && data.nodeMap.associatedLanguage.length > 0) {
           html = html + '<h5>Associated Language</h5><ul>';
           data.nodeMap.associatedLanguage.forEach(function (c) {
-            html = html + '<li>' + c + '</li>';
+            html = html + '<li>' + c.replace(/^\([a-z]+\)\s/,'') + '</li>';
           });
           html = html + '</ul>';
         }  
