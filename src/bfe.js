@@ -1073,7 +1073,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   var cbLoadTemplates = exports.cbLoadTemplates = function(propTemps) {
-    console.log("cbLoadTemplates",propTemps)
     //clear the URL params
     window.history.replaceState(null, null, window.location.pathname);
 
