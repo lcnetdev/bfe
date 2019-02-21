@@ -13,7 +13,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     var activeProfile = exports.activeProfile = null;
     var activeTemplate = exports.activeTemplate = null;
     
-    
+    exports.getEditMode = function(){
+      return editMode
+    }
     
     // Passed the config obj from the bfe script, it checks to make sure local storage is there and setsup the keys if so, if not disables the feature in the config obj
     exports.setConfig = function(passedConfig){
@@ -225,7 +227,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
           // add it to the list and select it
           $templateSelect.find('select').append($('<option value="'+ editModeTemplate +'" selected>'+editModeTemplate+'</option>'));
       }
-
+      
       // always add in the last "Add new" at the end
       $templateSelect.find('select').append($('<option value="your-templates-ignore" disabled="disabled">----------------------</option>'))
       $templateSelect.find('select').append($('<option value="create-new-template">Create New Template</option>'))
@@ -307,14 +309,17 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
         el = $(el)
         var enabled = true;
         var data = (el).data();
-        
-
-        if (storedProfiles[activeProfile] && storedProfiles[activeProfile][activeTemplate] && typeof storedProfiles[activeProfile][activeTemplate][data.uriLabel] !== undefined){
+          
+        if (storedProfiles[activeProfile] && storedProfiles[activeProfile][activeTemplate] && typeof storedProfiles[activeProfile][activeTemplate][data.uriLabel] !== 'undefined'){
           (el).data('templateEnabled',storedProfiles[activeProfile][activeTemplate][data.uriLabel]);
           if (!storedProfiles[activeProfile][activeTemplate][data.uriLabel]){
             el.css('display','none');
           }
+        }else{
+          // it is probably a "add property" field that was added and is not in the list yet so make it visible
+          (el).data('templateEnabled',true);         
         }
+
       });
       
       // make the currently selected profile the stored ative profile
@@ -327,6 +332,11 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     
     // builds the on off switch displayed in edit mode
     exports.returnToggleHTML = function(uriLabel) {
+      
+      // if we are not in edit mode then we do not need to render these toggle controls
+      if (!editModeTemplate){
+        return "";
+      }
     
       // template controls
       var $templateSwitch = $('<div class="btn-group btn-toggle template-toggle"></div>');
@@ -338,9 +348,14 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       
       // check the storage to see if we have this template (that means we are editing this template)
       var storedProfiles = JSON.parse(window.localStorage.getItem('bfeUserTemplates'));
-      if (storedProfiles[activeProfile] && storedProfiles[activeProfile][editModeTemplate] && typeof storedProfiles[activeProfile][editModeTemplate][uriLabel] !== undefined){
+      if (storedProfiles[activeProfile] && storedProfiles[activeProfile][editModeTemplate] && typeof storedProfiles[activeProfile][editModeTemplate][uriLabel] !== 'undefined'){
         isEnabled = storedProfiles[activeProfile][editModeTemplate][uriLabel];
+      }else if (storedProfiles[activeProfile] && storedProfiles[activeProfile][editModeTemplate] && typeof storedProfiles[activeProfile][editModeTemplate][uriLabel] === 'undefined'){
+        // if it is an "add property" element we don't have it in our template so just mark it as enabled by default
+        isEnabled = true;
+      
       }
+
       
       if (isEnabled){
         $onButton.addClass('btn-primary');
@@ -379,7 +394,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
         
         $(this).find('.btn').toggleClass('btn-default');
         
-        // toggles opacity
+        // toggles opacity on click
         if ($(this).find('.btn-primary').text() == 'OFF'){
           $(this).parent().parent().find('span, a, .col-sm-8, .form-group, .btn-group-md').css('opacity',0.25);
           $(this).parent().parent().data('templateEnabled',false);
