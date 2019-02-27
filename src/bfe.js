@@ -1328,8 +1328,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
   }
 
-  function menuSelect(spid) {
     // store = new rdfstore.Store();
+  function menuSelect(spid) {
     var spnums = spid.replace('sp-', '').split('_');
     var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
     addedProperties = [];
@@ -1340,6 +1340,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfeditor.bfestore.created = new Date().toUTCString();
     bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
     bfeditor.bfestore.state = 'create';
+    
+    // Turn off edit mode of templates if they were in the middle of editing one
+    bfeusertemplates.editMode = false;
+    bfeusertemplates.editModeTemplate = false;
 
     var loadtemplates = [];
 
