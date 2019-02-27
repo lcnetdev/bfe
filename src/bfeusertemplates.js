@@ -5,18 +5,26 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     // the bfe config
     var config = {};
     // editmode means we are activly editing a template
-    var editMode = exports.editMode = false;
+    exports.editMode = false;
     // editModeTemplate is the name of the template we are editing
-    var editModeTemplate = exports.editModeTemplate = null;
+    exports.editModeTemplate = null;
     
     // the currently active profile and template being used
-    var activeProfile = exports.activeProfile = null;
-    var activeTemplate = exports.activeTemplate = null;
+    exports.activeProfile = null;
+    exports.activeTemplate = null;
     
     exports.getEditMode = function(){
-      return editMode
+      return exports.editMode
     }
-    
+    exports.setEditMode = function(val){
+      if (val === true){
+        exports.editMode = true
+      }else if (val === false){
+        exports.editMode = false
+      }else{
+        exports.editMode = false
+      }     
+    }
     // Passed the config obj from the bfe script, it checks to make sure local storage is there and setsup the keys if so, if not disables the feature in the config obj
     exports.setConfig = function(passedConfig){
       config = passedConfig;      
@@ -53,20 +61,20 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       var data = JSON.parse(window.localStorage.getItem('bfeUserTemplates'));
 
       // if the current profile doesn't exist in the storage yet
-      if (!data[activeProfile]){
-        data[activeProfile] = {}
+      if (!data[exports.activeProfile]){
+        data[exports.activeProfile] = {}
       }
-      data[activeProfile][editModeTemplate] = properties;
+      data[exports.activeProfile][exports.editModeTemplate] = properties;
       window.localStorage.setItem('bfeUserTemplates',JSON.stringify(data));
       
       // make it the active template
       var dataActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
-      dataActive[activeProfile] = editModeTemplate;
+      dataActive[exports.activeProfile] = exports.editModeTemplate;
       window.localStorage.setItem('bfeUserTemplatesActive',JSON.stringify(dataActive));
 
-      activeTemplate = editModeTemplate;
-      editModeTemplate = null;
-      editMode = false;
+      exports.activeTemplate = exports.editModeTemplate;
+      exports.editModeTemplate = null;
+      exports.editMode = false;
       // refresh
       bfe.cbLoadTemplates();      
       exports.checkActiveTemplate(); 
@@ -79,17 +87,17 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       var data = JSON.parse(window.localStorage.getItem('bfeUserTemplates'));
       var dataActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
       
-      if (data[activeProfile] && data[activeProfile][activeTemplate]){
-        delete data[activeProfile][activeTemplate];
+      if (data[exports.activeProfile] && data[exports.activeProfile][exports.activeTemplate]){
+        delete data[exports.activeProfile][exports.activeTemplate];
       }      
-      if (dataActive[activeProfile] && dataActive[activeProfile] == activeTemplate){
-        delete dataActive[activeProfile]
+      if (dataActive[exports.activeProfile] && dataActive[exports.activeProfile] == exports.activeTemplate){
+        delete dataActive[exports.activeProfile]
       }
       window.localStorage.setItem('bfeUserTemplates',JSON.stringify(data));
       window.localStorage.setItem('bfeUserTemplatesActive',JSON.stringify(dataActive));
       
       // refresh
-      editMode = false;
+      exports.editMode = false;
       bfe.cbLoadTemplates();        
     } 
     
@@ -138,9 +146,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     // makes the active template into the edit template and get the display ready to be edited
     exports.editTemplate = function() {  
 
-      editMode = true;
-      editModeTemplate = activeTemplate;
-      activeTemplate = null;
+      exports.editMode = true;
+      exports.editModeTemplate = exports.activeTemplate;
+      exports.activeTemplate = null;
       
       // make fresh profile
       bfe.cbLoadTemplates();          
@@ -170,11 +178,11 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     // clear the current template from the storage and the current var
     exports.stopUsingTemplate = function() {  
       var dataActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
-      if (dataActive[activeProfile]){
-        delete dataActive[activeProfile];
+      if (dataActive[exports.activeProfile]){
+        delete dataActive[exports.activeProfile];
       }
       window.localStorage.setItem('bfeUserTemplatesActive',JSON.stringify(dataActive));
-      activeTemplate = null;
+      exports.activeTemplate = null;
       // reload the profile
       bfe.cbLoadTemplates();       
     }
@@ -183,7 +191,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     // this is being called whenever bfe.cbLoadTemplates();  is run 
     exports.returnSelectHTML = function(pt) {      
       // set this has our current active profile
-      activeProfile = pt;      
+      exports.activeProfile = pt;      
       var $templateSelect = $('\
         <div class="template-controls">\
           <div id="template-controls-actions"><span class="glyphicon glyphicon-pencil"></span>Edit Profile</div>\
@@ -198,22 +206,22 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       var storedProfilesActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
       
       // if no template is active it is first load
-      if (activeTemplate === null){
-        if (storedProfilesActive[activeProfile]){
-          activeTemplate = storedProfilesActive[activeProfile];      
+      if (exports.activeTemplate === null){
+        if (storedProfilesActive[exports.activeProfile]){
+          exports.activeTemplate = storedProfilesActive[exports.activeProfile];      
         }
       }
       
       
-      if (storedProfiles[activeProfile]){
-        Object.keys(storedProfiles[activeProfile]).forEach(function(key){          
-          if (key == activeTemplate){
+      if (storedProfiles[exports.activeProfile]){
+        Object.keys(storedProfiles[exports.activeProfile]).forEach(function(key){          
+          if (key == exports.activeTemplate){
             $templateSelect.find('select').append($('<option value="'+key+'" selected>'+key+'</option>'));
           }else{
             $templateSelect.find('select').append($('<option value="'+key+'">'+key+'</option>'));
           }         
         })
-        if (Object.keys(storedProfiles[activeProfile]).length==0){
+        if (Object.keys(storedProfiles[exports.activeProfile]).length==0){
           $templateSelect.find('select').append($('<option value="your-templates-ignore" disabled="disabled">You have no templates for this profile.</option>'))
         }
       }else{
@@ -223,9 +231,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       
       
       // if we are in edit mode then add in the new template name
-      if (editMode){
+      if (exports.editMode){
           // add it to the list and select it
-          $templateSelect.find('select').append($('<option value="'+ editModeTemplate +'" selected>'+editModeTemplate+'</option>'));
+          $templateSelect.find('select').append($('<option value="'+ exports.editModeTemplate +'" selected>'+exports.editModeTemplate+'</option>'));
       }
       
       // always add in the last "Add new" at the end
@@ -238,17 +246,17 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
         if (value == 'your-templates-ignore'){ return true }
                 
         if (value == 'create-new-template'){ 
-          editModeTemplate = window.prompt("Please enter a name for your new template.\n-Use the ON/OFF switches to remove fields.\n-Click the 'Save Template' link when done to start using your template.");
+          exports.editModeTemplate = window.prompt("Please enter a name for your new template.\n-Use the ON/OFF switches to remove fields.\n-Click the 'Save Template' link when done to start using your template.");
           
           // if they don't enter a name or cancel out set the optio back to "Your Templates" and exit
-          if (editModeTemplate === null || editModeTemplate === "" || editModeTemplate === 'null'){ 
-            if (editModeTemplate === ""){ alert("Template name cannot be empty");}
+          if (exports.editModeTemplate === null || exports.editModeTemplate === "" || exports.editModeTemplate === 'null'){ 
+            if (exports.editModeTemplate === ""){ alert("Template name cannot be empty");}
             var arrayOfOptions = $(this).find('option');
             $(arrayOfOptions[0]).attr('selected','selected');           
             return false;            
           }          
-          editMode = true;
-          activeTemplate = null;          
+          exports.editMode = true;
+          exports.activeTemplate = null;          
           // make fresh profile
           bfe.cbLoadTemplates();          
           // add in the highlight effect
@@ -263,7 +271,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
           
           // they picked a template to use, load the template
           // select it in the select dropdown
-          activeTemplate = value;
+          exports.activeTemplate = value;
           // refresh the profile
           bfe.cbLoadTemplates();    
           exports.applyTemplate();
@@ -280,21 +288,21 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     
     // this is the main hook into bfe it kicks off the template load on the editor profile load
     exports.checkActiveTemplate = function() {
-      if (editMode){
+      if (exports.editMode){
         return false;
       }
       var storedProfiles = JSON.parse(window.localStorage.getItem('bfeUserTemplates'));
       var storedProfilesActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
       
       // if no template is active it is first load
-      if (activeTemplate === null){
-        if (storedProfilesActive[activeProfile]){
-          activeTemplate = storedProfilesActive[activeProfile];      
+      if (exports.activeTemplate === null){
+        if (storedProfilesActive[exports.activeProfile]){
+          exports.activeTemplate = storedProfilesActive[exports.activeProfile];      
         }
       }
       
       // see if we can find it
-      if (storedProfiles[activeProfile] && storedProfiles[activeProfile][activeTemplate]){
+      if (storedProfiles[exports.activeProfile] && storedProfiles[exports.activeProfile][exports.activeTemplate]){
         exports.applyTemplate();
         exports.renderActions('using')  
       }      
@@ -310,9 +318,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
         var enabled = true;
         var data = (el).data();
           
-        if (storedProfiles[activeProfile] && storedProfiles[activeProfile][activeTemplate] && typeof storedProfiles[activeProfile][activeTemplate][data.uriLabel] !== 'undefined'){
-          (el).data('templateEnabled',storedProfiles[activeProfile][activeTemplate][data.uriLabel]);
-          if (!storedProfiles[activeProfile][activeTemplate][data.uriLabel]){
+        if (storedProfiles[exports.activeProfile] && storedProfiles[exports.activeProfile][exports.activeTemplate] && typeof storedProfiles[exports.activeProfile][exports.activeTemplate][data.uriLabel] !== 'undefined'){
+          (el).data('templateEnabled',storedProfiles[exports.activeProfile][exports.activeTemplate][data.uriLabel]);
+          if (!storedProfiles[exports.activeProfile][exports.activeTemplate][data.uriLabel]){
             el.css('display','none');
           }
         }else{
@@ -324,7 +332,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       
       // make the currently selected profile the stored ative profile
       var dataActive = JSON.parse(window.localStorage.getItem('bfeUserTemplatesActive'));
-      dataActive[activeProfile] = activeTemplate;
+      dataActive[exports.activeProfile] = exports.activeTemplate;
       window.localStorage.setItem('bfeUserTemplatesActive',JSON.stringify(dataActive));
 
     
@@ -334,7 +342,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     exports.returnToggleHTML = function(uriLabel) {
       
       // if we are not in edit mode then we do not need to render these toggle controls
-      if (!editModeTemplate){
+      if (!exports.editMode){
         return "";
       }
     
@@ -348,9 +356,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       
       // check the storage to see if we have this template (that means we are editing this template)
       var storedProfiles = JSON.parse(window.localStorage.getItem('bfeUserTemplates'));
-      if (storedProfiles[activeProfile] && storedProfiles[activeProfile][editModeTemplate] && typeof storedProfiles[activeProfile][editModeTemplate][uriLabel] !== 'undefined'){
-        isEnabled = storedProfiles[activeProfile][editModeTemplate][uriLabel];
-      }else if (storedProfiles[activeProfile] && storedProfiles[activeProfile][editModeTemplate] && typeof storedProfiles[activeProfile][editModeTemplate][uriLabel] === 'undefined'){
+      if (storedProfiles[exports.activeProfile] && storedProfiles[exports.activeProfile][exports.editModeTemplate] && typeof storedProfiles[exports.activeProfile][exports.editModeTemplate][uriLabel] !== 'undefined'){
+        isEnabled = storedProfiles[exports.activeProfile][exports.editModeTemplate][uriLabel];
+      }else if (storedProfiles[exports.activeProfile] && storedProfiles[exports.activeProfile][exports.editModeTemplate] && typeof storedProfiles[exports.activeProfile][exports.editModeTemplate][uriLabel] === 'undefined'){
         // if it is an "add property" element we don't have it in our template so just mark it as enabled by default
         isEnabled = true;
       
@@ -370,7 +378,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       $templateSwitch.append($onButton);
       
       // hide the toggles unless we are in edit mode      
-      if (!editMode){
+      if (!exports.editMode){
         $templateSwitch.addClass('template-toggle-hide');        
       }
 
