@@ -1455,6 +1455,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       class: 'form-horizontal',
       role: 'form'
     });
+    
+    form.submit(function(e){
+        e.preventDefault();
+    });
+    
     var forEachFirst = true;
     if (pt) {
       fobject.resourceTemplates[0].propertyTemplates = pt;
@@ -1648,6 +1653,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           setRtLabel(fobject.id, rt.useguid, property.guid);
           if ($('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").length) {
             $('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").focus();
+          }else if ($('#' + property.guid).parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
+            $('#' + property.guid).parent().parent().next().find("button").focus();
           } else {
             $('[id^=bfeditor-modalSave]').focus();
           }
@@ -1722,15 +1729,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         if (property.type == 'literal') {
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
-          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '"' + vpattern + '" tabindex="' + tabIndices++ + '"></div>');
-
+          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '"></div>');
+          
+          
           $input.find('input').keyup(function (e) {
             if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
               var text = this.value;
               this.value = text + '\u00A9';
             } else if (e.keyCode == 53 && e.ctrlKey && e.altKey) {
               this.value = this.value + '\u2117';
-            }
+            } 
+            
           });
 
           $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
@@ -1748,6 +1757,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               setLiteral(fobject.id, rt.useguid, property.guid);
               if ($('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").length) {
                 $('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").focus();
+              }else if ($('#' + property.guid).parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
+                  $('#' + property.guid).parent().parent().next().find("button").focus();
               } else {
                 $('[id^=bfeditor-modalSave]').focus();
               }
