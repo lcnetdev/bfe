@@ -391,7 +391,12 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           var l = suggestions[1][s];
           var u = suggestions[3][s];
           var id = u.replace(/.+\/(.+)/, '$1');
-          var d = l + ' (' + id + ')';
+          if (id.length==32){
+            var d = l;
+          }else{
+            var d = l + ' (' + id + ')';
+          }
+          
           if (suggestions.length === 5) {
             var i = suggestions[4][s];
             var li = l + ' (' + i + ')';
