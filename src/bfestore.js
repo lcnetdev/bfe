@@ -256,10 +256,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                 bflc: 'http://id.loc.gov/ontologies/bflc/',
                 madsrdf: "http://www.loc.gov/mads/rdf/v1#",
                 pmo: 'http://performedmusicontology.org/ontology/',
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                rdf: "http://www.w3.org/1999/02/22-rdf-sydntax-ns#",
                 rdfs: "http://www.w3.org/2000/01/rdf-schema#",
                 xsd: "http://www.w3.org/2001/XMLSchema#",
-                datatypes: "http://id.loc.gov/datatypes/"
+                datatypes: "http://id.loc.gov/datatypes/",
+                lclocal: "http://id.loc.gov/ontologies/lclocal/"
               }
             });
             turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
@@ -468,7 +469,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
               rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
               rdfs: "http://www.w3.org/2000/01/rdf-schema#",
               xsd: "http://www.w3.org/2001/XMLSchema#",
-              datatypes: "http://id.loc.gov/datatypes/"
+              datatypes: "http://id.loc.gov/datatypes/",
+              lclocal: "http://id.loc.gov/ontologies/lclocal/",
             }
           });
           turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
@@ -506,7 +508,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       'bflc': 'http://id.loc.gov/ontologies/bflc/',
       'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
       'pmo': 'http://performedmusicontology.org/ontology/',
-      'datatypes': "http://id.loc.gov/datatypes/"
+      'datatypes': 'http://id.loc.gov/datatypes/',
+      'lclocal': 'http://id.loc.gov/ontologies/lclocal/'
     };
 
     jsonld.compact(jsonstr, context, function (err, compacted) {
@@ -523,7 +526,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       'bflc': 'http://id.loc.gov/ontologies/bflc/',
       'madsrdf': 'http://www.loc.gov/mads/rdf/v1#',
       'pmo': 'http://performedmusicontology.org/ontology/',
-      'datatypes': "http://id.loc.gov/datatypes/"
+      'datatypes': 'http://id.loc.gov/datatypes/',
+      'lclocal': 'http://id.loc.gov/ontologies/lclocal/'
     };
 
     jsonld.expand(jsonstr, context, function (err, jsonld) {
