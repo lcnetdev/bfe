@@ -14,7 +14,6 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     exports.activeTemplate = null;
     
     exports.getEditMode = function(){
-      console.log(exports.editMode);
       return exports.editMode
     }
     exports.setEditMode = function(val){
@@ -25,7 +24,6 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       }else{
         exports.editMode = false
       }     
-      console.log(exports.editMode,val);
     }
     // Passed the config obj from the bfe script, it checks to make sure local storage is there and setsup the keys if so, if not disables the feature in the config obj
     exports.setConfig = function(passedConfig){
