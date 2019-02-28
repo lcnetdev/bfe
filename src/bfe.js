@@ -602,6 +602,23 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           });
           dataTable.draw(false);
           
+          var $addTwoWeekPlusDataDiv = $("<div>").text("Only data from the last two weeks is displayed: ").addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
+          var $addTwoWeekPlusDataButton = $("<button>").text("Load all data").addClass('btn btn-basic btn-xs')
+          $addTwoWeekPlusDataButton.click(function(){
+            $addTwoWeekPlusDataDiv.text("This will take a couple of minutes");
+            window.setTimeout(function(){
+              twoWeeksPlusOfData.forEach(function(d){
+                dataTable.row.add(d);
+              });
+              dataTable.draw(false);
+              $addTwoWeekPlusDataDiv.css('display','none');            
+            
+            },500)
+          });
+          $addTwoWeekPlusDataDiv.append($addTwoWeekPlusDataButton);
+          
+          $("#table_id_filter").append($addTwoWeekPlusDataDiv);
+          
         });
           
       });
