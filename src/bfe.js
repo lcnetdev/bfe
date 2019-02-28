@@ -12,6 +12,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   // var startingPoints = [];
   // var formTemplates = [];
   // var lookups = [];
+  
+  // holds the last two weeks of data
+  var twoWeeksOfData = [];
+  // holds the rest of it
+  var twoWeeksPlusOfData = [];
 
   var tabIndices = 1;
 
@@ -253,7 +258,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     if (!$.fn.dataTable.isDataTable('#table_id')) {
       var $datatable = $('<table id="table_id" class="display"><thead><tr><th>id</th><th>title</th><th>LCCN</th><th>comment</th><th>modified</th><th>edit</th></tr></thead></table>');
       $(function () {
-        $('#table_id').DataTable({
+        var dataTable = $('#table_id').DataTable({
           'initComplete': function (settings, json) {
             if (window.location.hash !== '') {
               $('#table_id').DataTable().search(window.location.hash.split('#')[1]).draw();
@@ -270,18 +275,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           },
           'processing': true,
           'paging': true,
-          'ajax': {
-            'url': config.url + '/verso/api/bfs',
-            'dataSrc': '',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              //'Content-Type': 'application/json',
-              //'Accept': 'application/json',
-              'Access-Control-Allow-Methods': 'DELETE, HEAD, GET, OPTIONS, POST, PUT',
-              'Access-Control-Allow-Headers': 'Content-Type, Content-Range, Content-Disposition, Content-Description',
-              'Access-Control-Max-Age': '1728000'
-            }
-          },
+          // 'ajax': {
+            // 'url': config.url + '/verso/api/bfs?filter[limit]=1',
+            // 'dataSrc': '',
+            // 'headers': {
+              // 'Access-Control-Allow-Origin': '*',
+              // // 'Content-Type': 'application/json',
+              // //'Accept': 'application/json',
+              // 'Access-Control-Allow-Methods': 'DELETE, HEAD, GET, OPTIONS, POST, PUT',
+              // 'Access-Control-Allow-Headers': 'Content-Type, Content-Range, Content-Disposition, Content-Description',
+              // 'Access-Control-Max-Age': '1728000'
+            // }
+          // },
           "order": [[4, "desc"]],
           // id
           'columns': [
@@ -573,6 +578,32 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
           ]
         });
+        
+        // the datatable is initialized add a statys message
+        $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+    
+    
+        $.get( config.url + '/verso/api/bfs', function( data ) {
+          $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+          
+          var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
+          twoWeeksOfData = [];
+          twoWeeksPlusOfData = [];
+          
+          data.forEach(function(d){
+            if (new Date(d.modified).getTime()/1000 > twoWeeksAgo){
+              twoWeeksOfData.push(d);
+            }else{
+              twoWeeksPlusOfData.push(d);
+            }         
+          });
+          twoWeeksOfData.forEach(function(d){
+            dataTable.row.add(d);
+          });
+          dataTable.draw(false);
+          
+        });
+          
       });
       $browsediv.append($datatable);
     }
@@ -1486,7 +1517,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $resourceInfo.popover({ trigger: "click hover" });
         $resourcedivheadingh4.append($resourceInfo);
       }
-      $resourcedivheading.append($resourcedivheadingh4);
+      if (rt.embedType != 'modal') {
+        $resourcedivheading.append($resourcedivheadingh4);
+      }
 
       // create an empty clone button
       var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
@@ -2895,6 +2928,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     $('#bfeditor-modalbody-' + form.formobject.id).append(form.form);
     $('#bfeditor-modaltitle-' + form.formobject.id).html(loadtemplate.resourceLabel);
+    if (resourceURI.match(/^http/)) {
+      var rid = resourceURI;
+      var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+      $resourceInfo.attr('data-content', rid);
+      $resourceInfo.attr('data-toggle', 'popover');
+      $resourceInfo.attr('title', 'Resource ID');
+      $resourceInfo.attr('id', 'resource-id-popover');
+      $resourceInfo.popover({ trigger: "click hover" });
+      $('#bfeditor-modaltitle-' + form.formobject.id).append($resourceInfo);
+    }   
+    
     $('#bfeditor-form-' + form.formobject.id + ' > div > h3').remove();
 
     $('#bfeditor-modal-' + form.formobject.id).modal('show');

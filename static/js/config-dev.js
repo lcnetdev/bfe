@@ -25,7 +25,8 @@ function myCB(data) {
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-var rectobase = "http://localhost:3000";
+// var rectobase = "http://localhost:3000";
+var rectobase = "http://mlvlp04.loc.gov:3000";
 
 if (env.RECTOBASE!==undefined)
     rectoBase = env.RECTOBASE;
