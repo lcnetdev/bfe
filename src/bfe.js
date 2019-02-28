@@ -1472,12 +1472,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         'data-uri': rt.defaulturi
       }); // is data-uri used?
 
-		  /*var profile = rt.id.split(":");
-      profile.pop(_.lastIndexOf(rt.id.split(":")));
-      var profileLabel = bfeditor.profiles[_.findIndex(
-          _.pluck(bfeditor.profiles, "Profile"), {"id":profile.join(":")}
-        )].Profile.description;
-      */
       // create a popover box to display resource ID of the thing.
       var $resourcedivheading = $('<div>');
       var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left">' + rt.resourceLabel + ' </h4>');
@@ -1888,7 +1882,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // Let's treat it special-like.
                 var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
                 var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
-                $saveLookup.append($('<button id="bfeditor-modalLoadLookup" type="button" class="btn btn-primary" id="bfeditor-modalLoadLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Load</button>'));
+                //$saveLookup.append($('<button id="bfeditor-modalLoadLookup" type="button" class="btn btn-primary" id="bfeditor-modalLoadLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Load</button>'));
                 $formgroup.append($saveLookup);
                 $formgroup.append($spacer);
               }
