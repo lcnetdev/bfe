@@ -17,7 +17,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   var twoWeeksOfData = [];
   // holds the rest of it
   var twoWeeksPlusOfData = [];
-
+  var dataTable = null;
+  
   var tabIndices = 1;
 
   var loadtemplates = [];
@@ -213,52 +214,62 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
     }
   };
+  
+  exports.loadBrowseData = function($browsediv){
+  
+  
+    var loadData = function(){
 
-  exports.fulleditor = function (config, id) {
-    this.setConfig(config);
-    editordiv = document.getElementById(id);
-    var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
-    var $tabuldiv = $('<div class="tabs"></div>');
-    var $tabul = $('<ul class="nav nav-tabs"></ul>');
-    $tabul.append('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
-    //$tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
-
-    $tabuldiv.append($tabul);
-    $containerdiv.append($tabuldiv);
-
-    var $tabcontentdiv = $('<div class="tab-content"></div>');
-    var $browsediv = $('<div id="browse" class="tab-pane fade in active"><br></div>');
-    var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
-    var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
-    var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
-    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
-
-    var $menudiv = $('<div>', {
-      id: 'bfeditor-menudiv',
-      class: 'col-md-2 sidebar'
-    });
-    var $formdiv = $('<div>', {
-      id: 'bfeditor-formdiv',
-      class: 'col-md-10 main'
-    });
-    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-    var $rowdiv = $('<div>', {
-      class: 'row'
-    });
-
-    var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
-                          <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
-                              <span class="sr-only">80% Complete</span>\
-                          </div>\
-                      </div>');
-    /* eslint-disable no-unused-vars */
+      
+      $.get( config.url + '/verso/api/bfs', function( data ) {
+        $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+        
+        var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
+        twoWeeksOfData = [];
+        twoWeeksPlusOfData = [];
+        
+        data.forEach(function(d){
+          if (new Date(d.modified).getTime()/1000 > twoWeeksAgo){
+            twoWeeksOfData.push(d);
+          }else{
+            twoWeeksPlusOfData.push(d);
+          }         
+        });
+        twoWeeksOfData.forEach(function(d){
+          dataTable.row.add(d);
+        });
+        dataTable.draw(false);
+        
+        var $addTwoWeekPlusDataDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
+        var $addTwoWeekPlusDataButton = $("<button>").text("Load all data").addClass('btn btn-basic btn-xs')
+        $addTwoWeekPlusDataButton.click(function(){
+          $addTwoWeekPlusDataDiv.text("This will take a few moments");
+          window.setTimeout(function(){
+            twoWeeksPlusOfData.forEach(function(d){
+              dataTable.row.add(d);
+            });
+            dataTable.draw(false);
+            $addTwoWeekPlusDataDiv.css('display','none');            
+          
+          },500)
+        });
+        $addTwoWeekPlusDataDiv.append($addTwoWeekPlusDataButton);          
+        $("#table_id_filter").append($addTwoWeekPlusDataDiv);
+      
+      });
+  
+    }
+  
+  
+  
+  
+  
+  
+      /* eslint-disable no-unused-vars */
     if (!$.fn.dataTable.isDataTable('#table_id')) {
       var $datatable = $('<table id="table_id" class="display"><thead><tr><th>id</th><th>title</th><th>LCCN</th><th>comment</th><th>modified</th><th>edit</th></tr></thead></table>');
       $(function () {
-        var dataTable = $('#table_id').DataTable({
+        dataTable = $('#table_id').DataTable({
           'initComplete': function (settings, json) {
             if (window.location.hash !== '') {
               $('#table_id').DataTable().search(window.location.hash.split('#')[1]).draw();
@@ -560,7 +571,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     // delete disabled
                     $('#bfeditor-formdiv').empty();
                     bfeditor.bfestore.store = [];
-                    $('#table_id').DataTable().ajax.reload();
+                    exports.loadBrowseData()
                     var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
                     $messagediv.append('<span class="str"><h3>Delete disabled</h3></span>');
                     $messagediv.insertBefore('.nav-tabs');
@@ -572,61 +583,80 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 $(td).find('#bfeditor-deleteConfirm' + rowData.id).on('hidden.bs.modal', function () {
                   var table = $('#table_id').DataTable();
                   bfestore.store = [];
-                  table.ajax.reload();
+                  // table.ajax.reload();
+                  exports.loadBrowseData()
                 });
               }
             }
           ]
         });
         
-        // the datatable is initialized add a statys message
+        // the datatable is initialized add a status message
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
-    
-    
-        $.get( config.url + '/verso/api/bfs', function( data ) {
-          $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
-          
-          var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
-          twoWeeksOfData = [];
-          twoWeeksPlusOfData = [];
-          
-          data.forEach(function(d){
-            if (new Date(d.modified).getTime()/1000 > twoWeeksAgo){
-              twoWeeksOfData.push(d);
-            }else{
-              twoWeeksPlusOfData.push(d);
-            }         
-          });
-          twoWeeksOfData.forEach(function(d){
-            dataTable.row.add(d);
-          });
-          dataTable.draw(false);
-          
-          var $addTwoWeekPlusDataDiv = $("<div>").text("Only data from the last two weeks is displayed: ").addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
-          var $addTwoWeekPlusDataButton = $("<button>").text("Load all data").addClass('btn btn-basic btn-xs')
-          $addTwoWeekPlusDataButton.click(function(){
-            $addTwoWeekPlusDataDiv.text("This will take a couple of minutes");
-            window.setTimeout(function(){
-              twoWeeksPlusOfData.forEach(function(d){
-                dataTable.row.add(d);
-              });
-              dataTable.draw(false);
-              $addTwoWeekPlusDataDiv.css('display','none');            
-            
-            },500)
-          });
-          $addTwoWeekPlusDataDiv.append($addTwoWeekPlusDataButton);
-          
-          $("#table_id_filter").append($addTwoWeekPlusDataDiv);
-          
-        });
+        loadData();
+        
+        
           
       });
+
       $browsediv.append($datatable);
+    }else{
+      // the table already exists, clear it out
+      dataTable.clear();
+      dataTable.draw(false);  
+      $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+      
+      $("#two-week-plus-div").remove();
+      loadData();
+      
     }
     /* eslint-enable no-unused-vars */
-    $formdiv.append($loader);
+  
+  }
+  
+  exports.fulleditor = function (config, id) {
+    this.setConfig(config);
+    editordiv = document.getElementById(id);
+    var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
+    var $tabuldiv = $('<div class="tabs"></div>');
+    var $tabul = $('<ul class="nav nav-tabs"></ul>');
+    $tabul.append('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
+    //$tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
 
+    $tabuldiv.append($tabul);
+    $containerdiv.append($tabuldiv);
+
+    var $tabcontentdiv = $('<div class="tab-content"></div>');
+    var $browsediv = $('<div id="browse" class="tab-pane fade in active"><br></div>');
+    var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
+    var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
+    var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
+    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
+
+    var $menudiv = $('<div>', {
+      id: 'bfeditor-menudiv',
+      class: 'col-md-2 sidebar'
+    });
+    var $formdiv = $('<div>', {
+      id: 'bfeditor-formdiv',
+      class: 'col-md-10 main'
+    });
+    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+    var $rowdiv = $('<div>', {
+      class: 'row'
+    });
+
+    var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
+                          <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
+                              <span class="sr-only">80% Complete</span>\
+                          </div>\
+                      </div>');
+
+    $formdiv.append($loader);
+    exports.loadBrowseData($browsediv);
     $menudiv.append('<h3>Create Resource</h3>');
     $rowdiv.append($menudiv);
     $rowdiv.append($formdiv);
@@ -735,7 +765,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // retrieve disabled
         $('#bfeditor-formdiv').empty();
         bfeditor.bfestore.store = [];
-        $('#table_id').DataTable().ajax.reload();
+        // $('#table_id').DataTable().ajax.reload();
+        exports.loadBrowseData();
         var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
         $messagediv.append('<strong>Retrieve disabled</strong>');
         $messagediv.insertBefore('.nav-tabs');
@@ -837,7 +868,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // retrievelds disabled
         $('#bfeditor-formdiv').empty();
         bfeditor.bfestore.store = [];
-        $('#table_id').DataTable().ajax.reload();
+        // $('#table_id').DataTable().ajax.reload();
+        exports.loadBrowseData()
         $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
         $messagediv.append('<span class="str"><h3>Retrieve disabled</h3></span>');
         $messagediv.insertBefore('.nav-tabs');
@@ -1158,7 +1190,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           bfeditor.bfestore.store = [];
           window.location.hash = '';
           $('#table_id').DataTable().search('').draw();
-          $('#table_id').DataTable().ajax.reload();
+          // $('#table_id').DataTable().ajax.reload();
+          exports.loadBrowseData();
         });
         $('#bfeditor-cancel', form.form).attr('tabindex', tabIndices++);
 
@@ -1229,7 +1262,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('[href=#browse]').tab('show');
             window.location.hash = '';
             bfeditor.bfestore.store = [];
-            $('#table_id').DataTable().ajax.reload();
+            // $('#table_id').DataTable().ajax.reload();
+            exports.loadBrowseData()
           });
 
           $('#bfeditor-exitsave').click(function () {
@@ -1279,7 +1313,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $('#bfeditor-formdiv').empty();
               $('[href=#browse]').tab('show');
               bfeditor.bfestore.store = [];
-              $('#table_id').DataTable().ajax.reload();
+              // $('#table_id').DataTable().ajax.reload();
+              exports.loadBrowseData()
               $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
               $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
               $messagediv.insertBefore('.nav-tabs');
@@ -1347,7 +1382,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               // publish disabled
               $('#bfeditor-formdiv').empty();
               bfeditor.bfestore.store = [];
-              $('#table_id').DataTable().ajax.reload();
+              // $('#table_id').DataTable().ajax.reload();
+              exports.loadBrowseData()
               $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
               $messagediv.append('<strong>Publishing disabled</strong>');
               $messagediv.insertBefore('.nav-tabs');
@@ -2207,6 +2243,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           triple.o = rt.resourceURI;
           triple.otype = 'uri';
           fobject.store.push(triple);
+          
           //console.log('4');
           bfestore.addTriple(triple);
           rt.guid = rt.useguid;

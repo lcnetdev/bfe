@@ -84,7 +84,8 @@ exports.save = function (data, bfelog, callback){
     $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
     $messagediv.insertBefore('.nav-tabs');
   }).always(function(){                       
-    $('#table_id').DataTable().ajax.reload();
+    // $('#table_id').DataTable().ajax.reload();
+    exports.loadBrowseData()
   });
 }
 
@@ -139,7 +140,8 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
         $messagediv.insertBefore('#bfeditor-previewPanel');
       }).always(function(){
-        $('#table_id').DataTable().ajax.reload();
+        // $('#table_id').DataTable().ajax.reload();
+        exports.loadBrowseData()
       });
   }
   
