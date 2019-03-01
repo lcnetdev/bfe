@@ -57,7 +57,7 @@ Demo?
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/bibliomata/bfe/index.html
+[demo-page]: http://bibframe.org/bfe/index.html
 
 Browser Support
 ---------------
