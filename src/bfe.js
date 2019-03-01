@@ -324,6 +324,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // title
             {
               'data': 'rdf',
+              'className': 'column-title',
               'render': function (data, type, full, meta) {
                 var retval = 'No Title';
                 if (_.some(data, 'http://id.loc.gov/ontologies/bibframe/title')) {
