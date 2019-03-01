@@ -333,7 +333,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   if (text !== undefined) {
                     _.each(text, function (el) {
                       if (el['@id'] !== undefined) {
-                        id = el['@id'];
+                        var id = el['@id'];
                         var title = _.where(data, {
                           '@id': id
                         });
@@ -369,7 +369,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   if (lccns.length === 1) {
                     text = lccns[0]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'];
                   } else {
-                    for (i = 0; i < lccns.length; i++) {
+                    for (var i = 0; i < lccns.length; i++) {
                       if (!lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'].startsWith('n')) { text = lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value']; }
                     }
                   }

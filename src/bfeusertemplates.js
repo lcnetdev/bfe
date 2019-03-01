@@ -315,7 +315,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       // find all the properties and see if they are enabled in this template
       $(".template-property ").each(function(i,el){     
         el = $(el)
-        var enabled = true;
+        //var enabled = true;
         var data = (el).data();
           
         if (storedProfiles[exports.activeProfile] && storedProfiles[exports.activeProfile][exports.activeTemplate] && typeof storedProfiles[exports.activeProfile][exports.activeTemplate][data.uriLabel] !== 'undefined'){

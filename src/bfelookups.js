@@ -394,7 +394,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (id.length==32){
             var d = l;
           }else{
-            var d = l + ' (' + id + ')';
+            d = l + ' (' + id + ')';
           }
           
           if (suggestions.length === 5) {

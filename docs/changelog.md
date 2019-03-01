@@ -5,6 +5,13 @@ Change Log
 This change log pertains to builds.
 
 ----------------
+* 1.1.0 (2018-03-01)
+  * Enter key fixed, no longer refreshes browser in single property modal windows.
+  * Implement lists in bfestore
+  * Fix date rendering
+  * Implement user templates
+  * Fix headings
+  * Speedup jQuery Datatable loading
 
 * 1.0.0 (2018-10-18)
   * Fixes for labels
