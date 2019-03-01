@@ -38,6 +38,10 @@ var config = {
                 "toConsole": false
               },*/ 
   "url" : rectoBase,
+  "buildContext": true,
+  "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/'],
+  "buildContextForWorksEndpoint": 'mlvlp04.loc.gov:8230/resources/works/',
+  "enableUserTemplates" :true,
   "baseURI": "http://id.loc.gov/",
   "basedbURI": "http://mlvlp04.loc.gov:8230",
   "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
@@ -81,12 +85,12 @@ var config = {
      "menuItems": [
        {
          label: "Instance",
-         type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
+         type: ["http://id.loc.gov/ontologies/bibframe/Work"],
          useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
        },
        {
          label: "Work",
-         type: ["http://id.loc.gov/ontologies/bibframe/Text"],
+         type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
          useResourceTemplates: [ "profile:bf2:Serial:Work" ]
        }
 

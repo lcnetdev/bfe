@@ -1,0 +1,7 @@
+{
+ "events": {
+     "start": "grunt"
+   },
+   "ext": "js html css",
+   "watch": "src"
+}
