@@ -39,7 +39,7 @@ var config = {
               },*/ 
   "url" : rectoBase,
   "buildContext": true,
-  "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/'],
+  "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
   "buildContextForWorksEndpoint": 'mlvlp04.loc.gov:8230/resources/works/',
   "enableUserTemplates" :true,
   "baseURI": "http://id.loc.gov/",
