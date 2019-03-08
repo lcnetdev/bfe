@@ -1795,7 +1795,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           
         if (rt.embedType != 'modal') {
           // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
-          $label.append(bfeusertemplates.returnToggleHTML(property.propertyURI+'|'+property.propertyLabel));
+          if (property.mandatory !== true && property.mandatory !== "true"){
+            $label.append(bfeusertemplates.returnToggleHTML(property.propertyURI+'|'+property.propertyLabel));
+          }         
         }
         
         if ((/^http/).test(property.remark)) {
