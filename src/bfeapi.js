@@ -85,7 +85,6 @@ exports.save = function (data, bfelog, callback){
     $messagediv.insertBefore('.nav-tabs');
   }).always(function(){                       
     // $('#table_id').DataTable().ajax.reload();
-    exports.loadBrowseData()
   });
 }
 
@@ -141,7 +140,6 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         $messagediv.insertBefore('#bfeditor-previewPanel');
       }).always(function(){
         // $('#table_id').DataTable().ajax.reload();
-        exports.loadBrowseData()
       });
   }
   

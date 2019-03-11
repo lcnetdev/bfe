@@ -370,7 +370,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     text = lccns[0]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'];
                   } else {
                     for (var i = 0; i < lccns.length; i++) {
-                      if (!lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'].startsWith('n')) { text = lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value']; }
+                      if (!lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'].startsWith('n')){
+                        if (!_.some(lccns[i]['http://id.loc.gov/ontologies/bibframe/status'], {'@id': 'http://id.loc.gov/vocabulary/mstatus/cancinv'}))
+                             text = lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value']; 
+                      }
                     }
                   }
                 }
@@ -626,6 +629,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
     //$tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+    $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
+      <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
 
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
@@ -1301,6 +1306,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
               if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
                 editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
+                  exports.loadBrowseData();
                   bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
                 });
               } else {
@@ -1370,6 +1376,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
                 editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
+                  exports.loadBrowseData();
                   bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
                 });
                 //});
