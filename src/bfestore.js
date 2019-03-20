@@ -54,10 +54,12 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     // add name, id triples
     var mintedId = 'e' + window.ShortUUID('0123456789').fromUUID(bfeditor.bfestore.name);
     var mintedUri = config.url + '/resources/' + mintedId;
-    var useguid = guid();
-    var bnode = '_:bnode' + useguid;
+
+    var bnode = '_:bnode' +  shortUUID(guid());
+    var useguid;
 
     var adminTriple = {};
+    useguid = shortUUID(guid());
     adminTriple.guid = useguid;
     adminTriple.s = resourceURI;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/adminMetadata';
@@ -72,8 +74,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/AdminMetadata';
     adminTriple.otype = 'uri';
     bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
 
     adminTriple = {};
+    useguid = shortUUID(guid());
     adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/creationDate';
@@ -81,8 +85,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
 
     adminTriple = {};
+    useguid = shortUUID(guid());
     adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionAuthentication';
@@ -100,6 +106,16 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
     adminTriple = {};
     adminTriple.guid = useguid;
+    adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
+    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+    adminTriple.o = 'pcc';
+    adminTriple.otype = 'literal';
+    bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
+
+    adminTriple = {};
+    useguid = shortUUID(guid());
+    adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionConventions';
     adminTriple.o = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
@@ -115,6 +131,16 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
+    adminTriple.guid = useguid;
+    adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
+    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+    adminTriple.o = 'RDA';
+    adminTriple.otype = 'literal';
+    bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
+
+    adminTriple = {};
+    useguid = shortUUID(guid());
     adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionLanguage';
@@ -132,6 +158,16 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
     adminTriple = {};
     adminTriple.guid = useguid;
+    adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
+    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+    adminTriple.o = 'English';
+    adminTriple.otype = 'literal';
+    bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
+
+    adminTriple = {};
+    useguid = shortUUID(guid());
+    adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionModifier';
     adminTriple.o = 'http://id.loc.gov/vocabulary/organizations/dlc';
@@ -147,34 +183,16 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'pcc';
-    adminTriple.otype = 'Literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'RDA';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'English';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
+    adminTriple.guid = useguid;
     adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
     adminTriple.o = 'DLC';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
+    useguid = undefined;
 
     adminTriple = {};
+    useguid = shortUUID(guid());
     adminTriple.guid = useguid;
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/identifiedBy';
@@ -183,6 +201,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
+    adminTriple.guid = useguid;
     adminTriple.s = mintedUri;
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Local';
@@ -190,6 +209,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
+    adminTriple.guid = useguid;
     adminTriple.s = mintedUri;
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
     adminTriple.o = mintedId;
@@ -206,6 +226,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/procInfo' }));
 
     var adminTriple = {};
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = resourceURI;
     adminTriple.p = 'http://id.loc.gov/ontologies/bflc/procInfo';
     adminTriple.o = procInfo;
@@ -215,6 +236,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
   exports.addProfile = function (resourceURI, profile) {
     var adminTriple = {};
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = resourceURI;
     adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
     adminTriple.o = profile;
@@ -310,7 +332,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
   exports.jsonld2store = function (jsonld) {
     jsonld.forEach(function (resource) {
-      var s = typeof resource['@id'] !== 'undefined' ? resource['@id'] : '_:b' + guid();
+      var s = typeof resource['@id'] !== 'undefined' ? resource['@id'] : '_:b' + shortUUID(guid());
       for (var p in resource) {
         if (p !== '@id') {
           if (p === 'http://www.loc.gov/mads/rdf/v1#componentList'){
@@ -325,7 +347,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             }
 
             list.forEach(function (l) {
-              var tguid = guid();
+              var tguid = shortUUID(guid());
               var triple = {};
               triple.guid = tguid;
               triple.s = s;
@@ -336,7 +358,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             });
             
           } else if (p === '@type' && !_.isArray(resource[p])) {
-            var tguid = guid();
+            var tguid = shortUUID(guid());
             var triple = {};
             triple.guid = tguid;
             triple.s = s;
@@ -346,7 +368,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             exports.store.push(triple);
           } else {
             resource[p].forEach(function (o) {
-              var tguid = guid();
+              var tguid = shortUUID(guid());
               var triple = {};
               triple.guid = tguid;
               if (p === '@type') {
@@ -591,6 +613,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
   function guid() {
     var translator = window.ShortUUID();
     return translator.uuid();
+  }
+
+  function shortUUID(uuid) {
+    var translator = window.ShortUUID();
+    return translator.fromUUID(uuid);
   }
 
 });

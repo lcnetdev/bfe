@@ -220,7 +220,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
     var loadData = function(){
 
-      
       $.get( config.url + '/verso/api/bfs', function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
@@ -481,7 +480,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'createdCell': function (td, cellData, rowData, row, col) {
                 if (rowData.status === 'success' || rowData.status === 'published') { $(td).find('#bfeditor-delete' + rowData.id).attr('disabled', 'disabled'); }
 
-                var useguid = guid();
+                var useguid = shortUUID(guid());
                 var loadtemplate = {};
                 var tempstore = [];
                 var spoints;
@@ -519,12 +518,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 var temptemplates = [];
                 spoints.useResourceTemplates.forEach(function (l) {
-                  var useguid = guid();
+                  var useguid = shortUUID(guid());
                   var loadtemplate = {};
                   loadtemplate.templateGUID = rowData.name;
                   loadtemplate.resourceTemplateID = l;
-                  // loadtemplate.resourceURI = cellData;
-                  // loadtemplate.resourceURI = whichrt(loadtemplate, editorconfig.baseURI) + loadTemplate.templateGUID;//editorconfig.baseURI + useguid;
                   loadtemplate.embedType = 'page';
                   loadtemplate.data = [];
                   temptemplates.push(loadtemplate);
@@ -735,7 +732,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       spoints.useResourceTemplates.forEach(function (l) {
         var useguid = guid();
         var loadtemplate = {};
-        loadtemplate.templateGUID = useguid;
+        loadtemplate.templateGUID = shortUUID(useguid);
         loadtemplate.resourceTemplateID = l;
         loadtemplate.embedType = 'page';
         loadtemplate.data = [];
@@ -838,7 +835,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       spoints.useResourceTemplates.forEach(function (l) {
         var useguid = guid();
         var loadtemplate = {};
-        loadtemplate.templateGUID = useguid;
+        loadtemplate.templateGUID = shortUUID(useguid);
         loadtemplate.resourceTemplateID = l;
         loadtemplate.embedType = 'page';
         loadtemplate.data = [];
@@ -959,7 +956,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       spoints.useResourceTemplates.forEach(function (l) {
         var useguid = guid();
         var loadtemplate = {};
-        loadtemplate.templateGUID = useguid;
+        loadtemplate.templateGUID = shortUUID(useguid);
         loadtemplate.resourceTemplateID = l;
         loadtemplate.embedType = 'page';
         loadtemplate.data = [];
@@ -1444,7 +1441,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var tempstore = [];
       loadtemplate.templateGUID = bfeditor.bfestore.templateGUID;
       loadtemplate.resourceTemplateID = l;
-      // loadtemplate.resourceURI = whichrt(loadtemplate, editorconfig.baseURI) + loadTemplate.templateGUID;//editorconfig.baseURI + useguid;
       loadtemplate.embedType = 'page';
       loadtemplate.data = tempstore;
       loadtemplates.push(loadtemplate);
@@ -1453,7 +1449,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     bfeditor.bfestore.loadtemplates = loadtemplates;
 
-    //adminMetadata
     //adminMetadata
     var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
     var procInfo = 'create ' + rt_type
@@ -1481,7 +1476,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // Create the form object.
     var fguid = guid();
     var fobject = {};
-    fobject.id = fguid;
+    fobject.id = shortUUID(fguid);
     fobject.store = [];
     fobject.resourceTemplates = [];
     fobject.resourceTemplateIDs = [];
@@ -1760,7 +1755,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       // adding Admin Metadata to Work, instance, Item
-      if (RegExp(/(Work|Instance|Item)/).test(rt.id.split(":")) && !_.some(rt.propertyTemplates, { "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata" })) {
+      if (RegExp(/(Work|Instance|Item)$/).test(rt.id) && !_.some(rt.propertyTemplates, { "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata" })) {
         var adminProp = {
           "mandatory": "false",
           "repeatable": "true",
@@ -1870,31 +1865,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           
         }
 
-        if (property.type === 'resource' || property.type === 'lookup' || property.type === 'target' || property.type === 'list') {
+        if (property.type !== 'literal') {
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
-              /*
-                             *  The below gives you a form like Z produced.   Keep for time being.
-                             */
-              /*
-                            button = $('<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button></div>');
-                            ul = $('<ul class="dropdown-menu" role="menu"></ul>');
-                            vtRefs = property.valueConstraint.valueTemplateRefs;
-                            for ( var v=0; v < vtRefs.length; v++) {
-                                var vtrs = vtRefs[v];
-                                valueTemplates = _.where(resourceTemplates, {"id": vtrs});
-                                if (valueTemplates[0] !== undefined) {
-                                    li = $('<li></li>');
-                                    a = $('<a href="#">' + valueTemplates[0].resourceLabel + '</a>');
-                                    $(a).click(function(){
-                                        openModal(rt.guid, property.guid, valueTemplates[0]);
-                                    });
-                                    li.append(a);
-                                    ul.append(li);
-                                }
-                            }
-                            button.append(ul);
-                            */
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
               var $buttongrp = $('<div class="btn-group btn-group-md"></div>');
               var vtRefs = property.valueConstraint.valueTemplateRefs;
@@ -1907,22 +1880,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   var vt = valueTemplates[0];
                   // console.log(vt);
                   var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
-
-                  var fid = fobject.id;
-                  //var rtid = rt.useguid;
                   var pid = property.guid;
-                  // var mintedURI = editorconfig.baseURI + "resources/" + mintResource(guid());
                   var newResourceURI = '_:bnode' + shortUUID(guid());
                   $b.click({
-                    fobjectid: fid,
+                    fobjectid: fobject.id,
                     newResourceURI: newResourceURI,
                     propertyguid: pid,
                     template: vt
                   }, function (event) {
-                    // console.log(event.data.template);
-                    var theNewResourceURI = '_:bnode' + shortUUID(guid());
-                    // openModal(event.data.fobjectid, event.data.template, event.data.newResourceURI, event.data.propertyguid, []);
-                    openModal(event.data.fobjectid, event.data.template, theNewResourceURI, event.data.propertyguid, []);
+                    openModal(event.data.fobjectid, event.data.template, newResourceURI, event.data.propertyguid, []);
                   });
                   $buttongrp.append($b);
                 }
@@ -1955,23 +1921,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $formgroup.append($label);
               $inputdiv.append($saves);
               $formgroup.append($inputdiv);
-              // formgroup.append(button);
-              // $formgroup.append($saves);
-
-              /*
-                            // If the first conditional is active, is this even necessary?
-                            if (rt.embedType == "modal" && forEachFirst && property.propertyLabel.match(/lookup/i)) {
-                                // This is the first propertty *and* it is a look up.
-                                // Let's treat it special-like.
-                                var $saveLookup = $('<div class="modal-header" style="text-align: right;"><button type="button" class="btn btn-primary" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                                var $spacer = $('<div class="modal-header" style="text-align: center;"><h2>OR</h2></div>');
-                                $formgroup.append($saveLookup);
-                                $formgroup.append($spacer);
-                            } else {
-                                // let's suppress it
-                                $input.prop("disabled", true);
-                            }
-                            */
 
               if (rt.embedType == 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                 // This is the first propertty *and* it is a look up.
@@ -2226,7 +2175,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     rtID: vtrs
                   });
                   triple = {};
-                  triple.guid = guid();
+                  triple.guid = shortUUID(guid());
                   triple.s = fobject.defaulturi; //uri
                   triple.p = property.propertyURI;
                   triple.o = relatedTemplates[0].s;
@@ -2265,7 +2214,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var triple = {};
           triple = t;
           if (triple.guid === undefined) {
-            triple.guid = guid();
+            triple.guid = shortUUID(guid());
           }
           fobject.store.push(triple);
         });
@@ -2294,11 +2243,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var propsdata = _.where(bfestore.store, {
       's': rt.defaulturi,
       'p': property.propertyURI
-    });
-
-    if (propsdata.length === 0) {
-      // propsdata = _.where(bfestore.store, {"p":property.propertyURI});
-    }
+    }); 
 
     if (propsdata.length > 0) {
       // find the right one
@@ -2312,6 +2257,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
 
         if (parent !== undefined) {
+          
           var parent_nodes = [];
           var i = 0;
           do {
@@ -2323,6 +2269,32 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
             i++;
           } while (parent_nodes === undefined || i < property.valueConstraint.valueTemplateRefs.length);
+
+          if (!_.isEmpty(parent_nodes)){
+            for (i in propsdata){
+              if(!propsdata[i].o.startsWith('_:bnode') && !_.some(bfeditor.bfestore.store, {'s':propsdata[i].o})){
+                //add type triple
+                var triple = {};
+                triple.s = propsdata[i].o;
+                triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                triple.o = parent_nodes[0].o;
+                triple.otype = 'uri';
+                triple.guid = propsdata[i].guid;
+                bfestore.addTriple(triple);
+        
+                //add label
+                whichLabel(propsdata[i].o, function (label) {
+                  var labeltriple = {}
+                  labeltriple.s = propsdata[i].o;
+                  labeltriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+                  labeltriple.o = label;
+                  labeltriple.otype = 'literal';
+                  labeltriple.guid = propsdata[i].guid;
+                  bfestore.addTriple(labeltriple);
+                });
+              }
+            }
+          }
 
           var tempprops = [];
           if (!_.isEmpty(parent_nodes)) {
@@ -2340,12 +2312,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           } else if (bfestore.state === 'loaduri' && propsdata[0].o.startsWith('http://id.loc.gov/resources/works')) {
             // try with id.loc.gov
             // var tempuri = rt.defaulturi.replace("mlvlp04.loc.gov:8230", "id.loc.gov");
-            var triple = {};
+            triple = {};
             triple.s = propsdata[0].s;
             triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
             triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
             triple.otype = 'uri';
-            triple.guid = guid();
+            triple.guid = shortUUID(guid());
 
             bfestore.addTriple(triple);
             tempprops = [];
@@ -2408,7 +2380,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           if (property.type === "literal") {
             //the default is the literal
             var literalTriple = {};
-            literalTriple.guid = guid();
+            literalTriple.guid = shortUUID(guid());
             if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
               literalTriple.s = rt.defaulturi;
             } else {
@@ -2418,7 +2390,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
             literalTriple.otype = 'literal';
             label = literalTriple;
-            var displayguid = literalTriple.guid;
+            var displayguid = property.guid;
             fobject.store.push(literalTriple);
             bfestore.addTriple(literalTriple);
 
@@ -2428,8 +2400,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             // is there a type?
             if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
-              var typeTriple = {};
-              typeTriple.guid = guid();
+              var typeTriple = {};              
+              typeTriple.guid = shortUUID(guid());
               typeTriple.s = data;
               typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
               typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
@@ -2440,11 +2412,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             // set the triples
             triple = {};
-            triple.guid = guid();
+            triple.guid = shortUUID(guid());
             if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
               triple.s = rt.defaulturi;
             } else {
-              triple.s = editorconfig.baseURI + rt.useguid;
+              triple.s = editorconfig.baseURI + shortUUID(rt.useguid);
             }
             triple.p = property.propertyURI;
             triple.o = data;
@@ -2454,12 +2426,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             // set the label
             label = {};
+            label.guid = shortUUID(guid());
             if (triple) {
               label.s = triple.o;
               displayguid = triple.guid;
             } else {
               label.s = rt.defaulturi;
-              displayguid = guid();
+              displayguid = label.guid;
             }
 
             label.otype = 'literal';
@@ -2571,11 +2544,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           if (rtype !== '') {
             if (_.has(property, 'valueConstraint')) {
               if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
+                if (!_.some(resourceTemplates, {'resourceURI': rtype})){
+                  //try finding a different type to match
+                  var rtypes = _.where(bfestore.store, {"s": t.s, "p":"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"});
+                  for (var i=0;i<rtypes.length;i++){
+                    if (rtypes[i].o !== rtype){
+                      rtype = rtypes[i].o;
+                    }
+                  }
+                }
+
                 var resourceTs = _.where(resourceTemplates, {
                   'resourceURI': rtype
-                });
-                // console.log("Found resourcetemplates for " + rtype);
-                // console.log(resourceTs);
+                });  
+
                 resourceTs.forEach(function (r) {
                   // console.log("Looking for a match with " + r.id);
                   if (triplesResourceTemplateID === '' && _.indexOf(property.valueConstraint.valueTemplateRefs, r.id) !== -1) {
@@ -2596,6 +2578,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var labeldata = _.where(bfestore.store, {
           's': pd.o
         });
+
+        var parent = _.find(bfestore.store, {'o': pd.o});
+        var parentLabel = _.find(bfeditor.bfestore.store, {'s': parent.s, 'p':'http://www.w3.org/2000/01/rdf-schema#label'});
 
         if (labeldata.length === 1) {
           var tpreflabel;
@@ -2627,15 +2612,30 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var tmainTitle = _.find(labeldata, {
             p: 'http://id.loc.gov/ontologies/bibframe/mainTitle'
           });
+          var titleSortKey = _.find(labeldata, {
+            p: 'http://id.loc.gov/ontologies/bflc/titleSortKey'
+          });
 
           if (tpreflabel !== undefined) {
             displaydata = tpreflabel;
           } else if (tauthlabel !== undefined) {
             displaydata = tauthlabel.o;
+          } else if (tmainTitle !== undefined) {
+            if (!_.isEmpty(titleSortKey))
+              titleSortKey.o = tmainTitle.o;
+
+            if (!_.isEmpty(parentLabel))
+              parentLabel.o = tmainTitle.o;
+
+            if (!_.isEmpty(tlabel)){
+              tlabel.o = tmainTitle.o;
+              displaydata = tmainTitle.o;
+            } else {
+              //create a new label
+              displaydata = tmainTitle.o;
+            }
           } else if (tlabel !== undefined) {
             displaydata = tlabel.o;
-          } else if (tmainTitle !== undefined) {
-            displaydata = tmainTitle.o;
           } else if (tvalue !== undefined) {
             if (tvalue.o.startsWith('http')) {
               whichLabel(tvalue.o, function (label) {
@@ -2955,6 +2955,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
         if (properties[0] !== undefined) {
           var triplepassed = {};
+          triplepassed.guid = shortUUID(guid());
           triplepassed.s = t.defaulturi;
           triplepassed.p = properties[0].propertyURI; // instanceOF
           triplepassed.o = resourceURI;
@@ -2965,13 +2966,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           triplespassed.push(triplepassed);
 
           triplepassed = {};
+          triplepassed.guid = shortUUID(guid());
           triplepassed.s = resourceURI;
           triplepassed.rtID = loadtemplate.id;
           triplepassed.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
           triplepassed.o = loadtemplate.resourceURI;
           triplepassed.otype = 'uri';
           triplespassed.push(triplepassed);
-
         }
       });
     } else {
@@ -3029,7 +3030,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         // Kirk note, at this point, some resources have a URI and others have a blank node that matches the defaulturi.
 
-        setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, inputID, form.formobject.store);
+        setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, inputID, _.uniq(form.formobject.store));
       }
     });
     $('#bfeditor-modalSave-' + form.formobject.id).attr('tabindex', tabIndices++);
@@ -3040,7 +3041,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       var data = form.formobject.store;
 
-      setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, inputID, data);
+      setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, inputID, _.uniq(data));
     });
     $('#bfeditor-modal-' + form.formobject.id).on('hide.bs.modal', function () {
       $(this).empty();
@@ -3074,19 +3075,37 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'id': formobjectID
     });
     callingformobject = callingformobject[0];
-
-    var resourceURI = _.find(_.find(forms, { 'id': modalformid }).resourceTemplates, { defaulturi: resourceID }).resourceURI;
+    var resourcetemplate = _.find(_.find(forms, { 'id': modalformid }).resourceTemplates, { defaulturi: resourceID });
 
     // add the resourceType for the form
     var resourceType = {
-      'guid': guid(),
+      'guid': shortUUID(propertyguid),
       's': resourceSubject,
       'otype': 'uri',
       'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-      'o': resourceURI
+      'o': resourcetemplate.resourceURI
     };
 
-    data.push(resourceType);
+    resourceType.rtID = _.where(callingformobject.resourceTemplates[0].propertyTemplates, {
+      'guid': propertyguid
+    })[0].valueConstraint.valueTemplateRefs[0];
+
+    if(_.some(data, {'p': "http://id.loc.gov/ontologies/bflc/target"})){
+      //targets are converted to resources if they do not have additional properties
+      var target = _.find(data, {'p': "http://id.loc.gov/ontologies/bflc/target"});
+      //ignoring types, are there any other triples?
+      var bnode = target.s;
+      var bnodes = _.where(data, {s: bnode});
+      var tcount = _.reject(bnodes, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).length;
+      if (tcount === 1){
+        //convert to resource
+        data = _.reject(data, {s: bnode});
+        _.find(data, {o: bnode}).o = target.o;
+        resourceType.s = target.o;
+      }
+    }
+    //if(!_.some(data, resourceType))
+      data.push(resourceType);
 
     callingformobject.resourceTemplates.forEach(function (t) {
       var properties = _.where(t.propertyTemplates, {
@@ -3113,8 +3132,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value'
         });
         //componentlist label
-        if (_.some(data, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })) {
-          var topics = _.where(data, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })
+        if (_.some(data, {s: tsubject, p: "http://www.loc.gov/mads/rdf/v1#componentList" })) {
+          var topics = _.where(data, {s: tsubject, p: "http://www.loc.gov/mads/rdf/v1#componentList" })
           var topicLabel;
           topics.forEach(function (t) {
             whichLabel(t.o, function (label) {
@@ -3144,19 +3163,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           displaydata = tvalue.o;
           displayuri = tvalue.s;
         } else {
-          for (var i in data) {
-            // if (data[i].p === "http://www.w3.org/2000/01/rdf-schema#label"){
-            if (data[i].otype === 'literal' && !(/^\d/.test(data[i].o))) {
-              displaydata += data[i].o + ' ';
-              displayuri = data[i].s;
-            }
+          var labeldata = _.where(data, {otype: 'literal'});
+          for (var i in labeldata) {
+            //if (!(/^\d/.test(labeldata[i].o))) {
+              displaydata += labeldata[i].o + ' ';
+              displayuri = labeldata[i].s;
+            //}
           }
           // displayuri = data[0].s;
           if (displaydata === undefined || displaydata === '') {
-            // create label
-            displaydata = displayuri;
+            // create label from type, last portion
+            displayuri = /[^/]*$/.exec(_.find(data, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' }).o)[0];
+            displaydata = displayuri.substr(displayuri.lastIndexOf("/")+1);
             var triple = {
-              'guid': guid(),
+              'guid': shortUUID(guid()),
               'o': displayuri,
               'otype': 'literal',
               'p': 'http://www.w3.org/2000/01/rdf-schema#label',
@@ -3272,7 +3292,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var data = $('#' + inputID).val();
     if (data !== undefined && data !== '') {
       var triple = {};
-      triple.guid = guid();
+      triple.guid = shortUUID(guid());
       triple.s = rt.defaulturi;
       triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
       triple.o = data;
@@ -3307,7 +3327,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var data = $('#' + inputID, formobject.form).val();
     if (data !== undefined && data !== '') {
       var triple = {};
-      triple.guid = guid();
+      triple.guid = shortUUID(guid());
       formobject.resourceTemplates.forEach(function (t) {
         var properties = _.where(t.propertyTemplates, {
           'guid': inputID
@@ -3333,7 +3353,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var save = $(formgroup).find('.btn-toolbar')[0];
 
           var bgvars = {
-            'tguid': triple.guid,
+            'tguid': properties[0].guid,
             'tlabel': data,
             'tlabelhover': data,
             'fobjectid': formobjectID,
@@ -3362,7 +3382,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var data = $('#' + inputID, formobject.form).val();
     if (data !== undefined && data !== '') {
       var triple = {};
-      triple.guid = guid();
+      triple.guid = shortUUID(guid());
       formobject.resourceTemplates.forEach(function (t) {
         var properties = _.where(t.propertyTemplates, {
           'guid': inputID
@@ -3386,7 +3406,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var save = $formgroup.find('.btn-toolbar')[0];
 
           var bgvars = {
-            'tguid': triple.guid,
+            'tguid': properties[0].guid,
             'tlabel': triple.o,
             'tlabelhover': triple.o,
             'fobjectid': formobjectID,
@@ -3771,49 +3791,53 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         var resourceTriple = '';
         var replaceBnode = !!(property.propertyLabel === 'Lookup' || property.type === 'lookup');
+        var target = !!(property.type === 'target');
 
         returntriples.forEach(function (t) {
-          if (t.guid === undefined) {
-            var tguid = guid();
-            t.guid = tguid;
+          if (_.isEmpty(t.guid)) {
+            t.guid = shortUUID(guid());
           }
 
           // if this is the resource, replace the blank node; otherwise push the label
-
-          if (_.some(formobject.store, {
-            s: t.s
-          }) && t.p !== 'http://www.w3.org/2000/01/rdf-schema#label') {
-            resourceTriple = _.find(formobject.store, {
-              o: t.s
-            });
+          if (_.some(formobject.store, {s: t.s}) && t.p !== 'http://www.w3.org/2000/01/rdf-schema#label') {
+            
+            resourceTriple = _.find(formobject.store, {o: t.s});
 
             if (!replaceBnode || _.isEmpty(resourceTriple)) {
               // push the triples
               formobject.store.push(t);
-              bfestore.addTriple(t);
+              //bfestore.addTriple(t);
             } else {
               var resourceType = _.find(formobject.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: formobject.resourceTemplates[0].resourceURI });
 
               resourceType.s = t.o;
-              bfestore.addTriple(resourceType);
+              formobject.store.push(resourceType);
 
-              if (replaceBnode) {
+              if (replaceBnode || target) {
                 resourceTriple.o = t.o;
+
                 formobject.defaulturi = t.o;
                 // find the bnode
-                bfestore.addTriple(resourceTriple);
+                formobject.store.push(resourceTriple);
                 if (!_.some(formobject.store, {"guid": resourceTriple.guid})){
+                  //if (target){
+                    //also push the blank node.
+                  //  t.target = 'true';
+                  //  resourceTriple.target = 'true';
+                  //  formobject.store.push(t);
+                 //   bfestore.addTriple(t);
+                  //}
                   formobject.store.push(resourceTriple);
                 }
               } else {
                 formobject.store.push(t);
-                bfestore.addTriple(t);
+                //bfestore.addTriple(t);
               }
             }
           } else {
             // I don't think this workst.s = resourceTriple.o;
             formobject.store.push(t);
-            bfestore.addTriple(t);
+            //bfestore.addTriple(t);
           }
         });
 
@@ -3851,18 +3875,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   typeTriple.s = _.find(returntriples, {
                     p: 'http://www.w3.org/2000/01/rdf-schema#label'
                   }).s;
-                  typeTriple.guid = guid();
+                  typeTriple.guid = shortUUID(guid());
                   typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
                   typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
                   typeTriple.otype = 'uri';
                   formobject.store.push(typeTriple);
-                  bfeditor.bfestore.store.push(typeTriple);
+                  //bfeditor.bfestore.store.push(typeTriple);
                 }
               }
 
               var bgvars = {
                 'editable': editable,
-                'tguid': guid(),
+                'tguid': property.guid,
                 'tlabel': tlabel,
                 'tlabelhover': tlabel,
                 'fobjectid': formobject.id,
@@ -3969,7 +3993,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
     }
     bfelog.addMsg(new Error(), 'DEBUG', 'Triples represent these resourceTypes', resourceTypes);
-    if (resourceTypes[0] !== undefined && typeof resourceTypes[0] !== undefined && resourceTypes[0].rtID !== undefined) {
+    
+    var thisResourceType = {};
+
+    for (var i in resourceTypes){
+      if (resourceTypes[i].rtID !== undefined){
+        thisResourceType = resourceTypes[i];
+      }
+    }
+
+    if (thisResourceType !== undefined && typeof thisResourceType !== undefined && thisResourceType.rtID !== undefined) {
       // function openModal(callingformobjectid, rtguid, propertyguid, template) {
       var callingformobject = _.where(forms, {
         'id': formobjectID
@@ -3977,12 +4010,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       callingformobject = callingformobject[0];
 
       var templates = _.where(resourceTemplates, {
-        'id': resourceTypes[0].rtID
+        'id': thisResourceType.rtID
       });
       if (templates[0] !== undefined) {
         // The subject of the resource matched with the "type"
         bfelog.addMsg(new Error(), 'DEBUG', 'Opening modal for editing', triples);
-        openModal(callingformobject.id, templates[0], resourceTypes[0].s, inputID, triples);
+        openModal(callingformobject.id, templates[0], thisResourceType.s, inputID, triples);
       }
     } else {
       removeTriples(formobjectID, inputID, tguid, triples);
@@ -3998,16 +4031,33 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid, t);
       // $("#" + t.guid).empty();
       $('#' + t.guid).remove();
-    } else {
-      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + tguid);
-      // $("#" + tguid).empty();
+    } else if ($('#' + tguid).length){
+      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + tguid, null);
       $('#' + tguid).remove();
+    }
+
+    if (!_.isEmpty(t.guid)) {
+      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid);
       formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
-        guid: tguid
+        guid: t.guid
       }));
       bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
-        guid: tguid
+        guid: t.guid
       }));
+    } else {
+      //no guid
+      formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
+        s: t.s, p: t.p, o: t.o
+      }));
+      bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
+        s: t.s, p: t.p, o: t.o
+      }));
+    }
+
+    for (var i=0;i<forms.length;i++){
+      if(_.some(forms[i].store, t)){
+        forms[i].store = _.without(forms[i].store, t);
+      }
     }
 
     var $el = $('#' + inputID, formobject.form);
@@ -4147,8 +4197,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var returnval = /[^/]*$/.exec(uri)[0].split('.')[0];
       callback(returnval);
     } else if (uri.match(/[works|instances]\/\d+#\w+\d+-\d+/) || uri.match(/_:.*/g) ) {      //fake uris
-      var convlabel = _.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o;
-      callback(convlabel);
+      if(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
+        callback(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
+      } else { 
+        callback("");
+      }
     } else {
       $.ajax({
         type: 'GET',
