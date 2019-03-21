@@ -1197,8 +1197,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           exports.loadBrowseData();
         });
         $('#bfeditor-cancel', form.form).attr('tabindex', tabIndices++);
+        
+        bfeditor.bfestore.defaulturi = form.formobject.defaulturi;
 
         $('#bfeditor-preview', form.form).click(function () {
+          //remove orphans
+          bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
+
           var jsonstr = bfeditor.bfestore.store2jsonldExpanded();
 
           // bfeditor.bfestore.store2turtle(jsonstr, humanizedPanel);
@@ -1476,7 +1481,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // Create the form object.
     var fguid = guid();
     var fobject = {};
-    fobject.id = shortUUID(fguid);
+    fobject.id = fguid;
     fobject.store = [];
     fobject.resourceTemplates = [];
     fobject.resourceTemplateIDs = [];
@@ -1888,7 +1893,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     propertyguid: pid,
                     template: vt
                   }, function (event) {
-                    openModal(event.data.fobjectid, event.data.template, newResourceURI, event.data.propertyguid, []);
+                    var theNewResourceURI = '_:bnode' + shortUUID(guid());
+                    openModal(event.data.fobjectid, event.data.template, theNewResourceURI, event.data.propertyguid, []);
                   });
                   $buttongrp.append($b);
                 }
@@ -3986,6 +3992,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var resourceTypes = _.where(triples, {
       'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
     });
+    var bnode = _.find(triples, {guid:tguid});
+
     if (resourceTypes[0] == undefined) {
       // try @type?
       resourceTypes = _.where(triples, {
@@ -3994,13 +4002,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     bfelog.addMsg(new Error(), 'DEBUG', 'Triples represent these resourceTypes', resourceTypes);
     
-    var thisResourceType = {};
+    var thisResourceType = _.find(resourceTypes, {s: bnode.o})
 
-    for (var i in resourceTypes){
+   /* for (var i in resourceTypes){
       if (resourceTypes[i].rtID !== undefined){
         thisResourceType = resourceTypes[i];
       }
-    }
+    }*/
 
     if (thisResourceType !== undefined && typeof thisResourceType !== undefined && thisResourceType.rtID !== undefined) {
       // function openModal(callingformobjectid, rtguid, propertyguid, template) {
@@ -4054,12 +4062,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }));
     }
 
-    for (var i=0;i<forms.length;i++){
-      if(_.some(forms[i].store, t)){
-        forms[i].store = _.without(forms[i].store, t);
-      }
-    }
-
     var $el = $('#' + inputID, formobject.form);
     if ($el.is('input') && $el.hasClass('typeahead')) {
       var $inputs = $('#' + inputID, formobject.form).parent().find("input[data-propertyguid='" + inputID + "']");
@@ -4085,23 +4087,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
       guid: t.guid
     }));
-    /*        if (t.otype === "uri") {
-        // check for a stub & delete it
-           var t2 =  _.where(bfestore.store, {
-                  s: t.o
-           })
- 
-           if (t2 !== undefined && !_.isEmpty(t2) ){
-               if (t2.length === 1) {
-               //removeTriple(formobjectID, inputID, tguid, t2);
-                   bfestore.store = _.without(bfestore.store, t2[0]);
-               }
-           }
-        }
-*/
-    // remove any types
-    // formobject.store = _.without(formobject.store, _.find(formobject.store, {s: t.s, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}));
-    // bfestore.store = _.without(bfestore.store, _.find(bfestore.store, {s: t.s, p:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}));
 
     $('#bfeditor-debug').html(JSON.stringify(bfestore.store, undefined, ' '));
   }

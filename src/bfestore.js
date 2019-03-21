@@ -244,6 +244,14 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
   }
 
+  exports.removeOrphans = function (defaultURI) {
+    _.forEach(exports.store, function(t) {
+      if(!_.some(exports.store, {o:t.s}) && t.s !== defaultURI ){
+        exports.store = _.without(exports.store, t);
+      }
+    })
+  }
+
   exports.storeDedup = function () {
     exports.store = _.uniq(exports.store, function (t) {
       if (t.olang !== undefined) {
