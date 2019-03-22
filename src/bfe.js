@@ -596,8 +596,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
         loadData();
         
-        
-          
       });
 
       $browsediv.append($datatable);
@@ -674,7 +672,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               <input id="bfeditor-loadworkuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
               <div id="bfeditor-loadwork-dropdown" class="dropdown"><select id="bfeditor-loadwork-dropdownMenu" type="select" class="form-control">Select Profile</select> \
               </div></div> \
-              <button id="bfeditor-loadworkuri" type="button" class="btn btn-primary">Submit URL</button> \
+              <button id="bfeditor-loadworkuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
               </form></div>')
 
 
@@ -804,7 +802,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
               <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
               </div></div> \
-              <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary">Submit URL</button> \
+              <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
               </form></div>');
 
     getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'));
@@ -1087,6 +1085,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfelog.addMsg(new Error(), 'INFO', e.type + " " + e.target);
     });
 
+    $(function(){
+      $('#bfeditor-loadworkuri').removeAttr('disabled');
+      $('#bfeditor-loadibcuri').removeAttr('disabled');
+    });
+  
     return {
       'profiles': profiles,
       'div': editordiv,
