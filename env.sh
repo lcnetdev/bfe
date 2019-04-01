@@ -1,3 +1,4 @@
 echo "env = {"
-echo "  RECTOBASE: '$RECTOBASE'"
+echo "  RECTOBASE: '$RECTOBASE',"
+echo "  BASEDBURI: '$BASEDBURI'"
 echo "}"

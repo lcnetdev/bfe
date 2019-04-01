@@ -17,6 +17,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   var twoWeeksOfData = [];
   // holds the rest of it
   var twoWeeksPlusOfData = [];
+  var browseloaded = false;
+
   var dataTable = null;
   
   var tabIndices = 1;
@@ -219,7 +221,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
   
     var loadData = function(){
+      if (browseloaded){
+        return true;
+      }
 
+      browseloaded = true;
       $.get( config.url + '/verso/api/bfs', function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
@@ -239,31 +245,44 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
         dataTable.draw(false);
         
-        var $addTwoWeekPlusDataDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
+        var $addDataStatusDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
         var $addTwoWeekPlusDataButton = $("<button>").text("Load all data").addClass('btn btn-basic btn-xs')
         $addTwoWeekPlusDataButton.click(function(){
-          $addTwoWeekPlusDataDiv.text("This will take a few moments");
+          $addDataStatusDiv.text("This will take a few moments");
           window.setTimeout(function(){
             twoWeeksPlusOfData.forEach(function(d){
               dataTable.row.add(d);
             });
             dataTable.draw(false);
-            $addTwoWeekPlusDataDiv.css('display','none');            
-          
+            $addDataStatusDiv.css('display','none');
           },500)
         });
-        $addTwoWeekPlusDataDiv.append($addTwoWeekPlusDataButton);          
-        $("#table_id_filter").append($addTwoWeekPlusDataDiv);
+        ///verso/api/bfs?filter[where][status][nlike]=success
+        var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-xs');
+        $addUnpostedDataButton.click(function(){
+          $addDataStatusDiv.text('Loading data...');
+          dataTable.clear().draw();
+          $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+          window.setTimeout(function(){
+            twoWeeksOfData.concat(twoWeeksPlusOfData).forEach(function(d){
+              //if(_.isEmpty(d.status) || d.status != 'success')
+              if(d.status === 'published')
+                dataTable.row.add(d);
+            });
+            dataTable.draw(false);
+            $addDataStatusDiv.text("Only unposted displayed:");
+          },500)
+        });
+
+        $addDataStatusDiv.append($addUnpostedDataButton); 
+        $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
+        $addDataStatusDiv.append($addTwoWeekPlusDataButton);          
+        $("#table_id_filter").append($addDataStatusDiv);
       
       });
   
     }
-  
-  
-  
-  
-  
-  
+
       /* eslint-disable no-unused-vars */
     if (!$.fn.dataTable.isDataTable('#table_id')) {
       var $datatable = $('<table id="table_id" class="display"><thead><tr><th>id</th><th>title</th><th>LCCN</th><th>comment</th><th>modified</th><th>edit</th></tr></thead></table>');
@@ -378,42 +397,44 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
                 // console.log(full.id);
                 if (text !== 'N/A' && full.status === 'published' || full.status === 'success') {
-                  var ldsurl = config.basedbURI + '/loc.natlib.instances.e' + text.trim() + '0001';
+                  if(!_.isEmpty(config.basedbURI)){
+                    var ldsurl = config.basedbURI + '/loc.natlib.instances.e' + text.trim() + '0001';
 
-                  if (text.trim().startsWith('n')) {
-                    ldsurl = config.basedbURI + '/loc.natlib.works.' + text.trim().replace(/\s+/g, '');
-                  }
-
-                  var lccn = text.trim();
-                  var table = new $.fn.dataTable.Api(meta.settings);
-                  var cell = table.cell(meta.row, meta.col);
-                  if (full.status === 'success') {
-                    if (full.objid.includes('instances/e')) {
-                      cell.node().innerHTML = '<a href="' + ldsurl + '">' + lccn + '</a>';
-                    } else {
-                      cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                    if (text.trim().startsWith('n')) {
+                      ldsurl = config.basedbURI + '/loc.natlib.works.' + text.trim().replace(/\s+/g, '');
                     }
 
-                    $(cell.node()).css('background-color', 'lightgreen');
-                  } else {
-                    if (new Date(new Date(full.modified).getTime() + 60000) > new Date()) {
-                      $(cell.node()).css('background-color', 'yellow');
+                    var lccn = text.trim();
+                    var table = new $.fn.dataTable.Api(meta.settings);
+                    var cell = table.cell(meta.row, meta.col);
+                    if (full.status === 'success') {
+                      if (full.objid.includes('instances/e')) {
+                        cell.node().innerHTML = '<a href="' + ldsurl + '">' + lccn + '</a>';
+                      } else {
+                        cell.node().innerHTML = '<a href="' + config.basedbURI + '/' + full.objid + '">' + lccn + '</a>';
+                      }
+
+                      $(cell.node()).css('background-color', 'lightgreen');
                     } else {
-                      $(cell.node()).css('background-color', 'lightcoral');
+                      if (new Date(new Date(full.modified).getTime() + 60000) > new Date()) {
+                        $(cell.node()).css('background-color', 'yellow');
+                      } else {
+                        $(cell.node()).css('background-color', 'lightcoral');
+                      }
+                      /* $.ajax({
+                                                type: "HEAD",
+                                                async: true,
+                                                data: { uri: ldsurl },
+                                                url: config.url + "/profile-edit/server/checkuri",
+                                            }).done(function(data){
+                                                cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";
+                                                $(cell.node()).css('background-color', 'lightgreen');
+                                            }).fail(function(data, text){
+                                                if (full.status === "published"){
+                                                    $(cell.node()).css('background-color', 'lightcoral');
+                                                }
+                                            }); */
                     }
-                    /* $.ajax({
-                                              type: "HEAD",
-                                              async: true,
-                                              data: { uri: ldsurl },
-                                              url: config.url + "/profile-edit/server/checkuri",
-                                          }).done(function(data){
-                                              cell.node().innerHTML = "<a href=\""+ldsurl+"\">" + lccn + "</a>";
-                                              $(cell.node()).css('background-color', 'lightgreen');
-                                          }).fail(function(data, text){
-                                              if (full.status === "published"){
-                                                  $(cell.node()).css('background-color', 'lightcoral');
-                                              }
-                                          }); */
                   }
                 } else {
                   // $(cell.node()).css('background-color', 'lightcoral');
@@ -489,7 +510,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 // default
                 // var spoints = editorconfig.startingPoints[0].menuItems[0];
-                if (rowData.profile !== 'profile:bf2:Load:Work' && rowData.profile !== 'profile:bf2:IBC:Instance') {
+                if (rowData.profile !== 'lc:RT:bf2:Load:Work' && rowData.profile !== 'lc:RT:bf2:IBC:Instance') {
                   var menuIndex = _.findIndex(_(editorconfig.startingPoints).chain().find({
                     menuItems: [{
                       useResourceTemplates: [rowData.profile]
@@ -502,17 +523,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                       useResourceTemplates: [rowData.profile]
                     }]
                   }).value().menuItems[menuIndex];
-                } else if (rowData.profile === 'profile:bf2:Load:Work') {
+                } else if (rowData.profile === 'lc:RT:bf2:Load:Work') {
                   spoints = {
                     label: 'Loaded Work',
                     type: ['http://id.loc.gov/ontologies/bibframe/Work'],
-                    useResourceTemplates: ['profile:bf2:Load:Work']
+                    useResourceTemplates: ['lc:RT:bf2:Load:Work']
                   };
-                } else if (rowData.profile === 'profile:bf2:IBC:Instance') {
+                } else if (rowData.profile === 'lc:RT:bf2:IBC:Instance') {
                   spoints = {
                     label: 'IBC',
                     type: ['http://id.loc.gov/ontologies/bibframe/Instance'],
-                    useResourceTemplates: ['profile:bf2:IBC:Instance']
+                    useResourceTemplates: ['lc:RT:bf2:IBC:Instance']
                   };
                 }
 
@@ -595,7 +616,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // the datatable is initialized add a status message
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
         loadData();
-        
+        browseloaded = false;
       });
 
       $browsediv.append($datatable);
@@ -623,10 +644,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
-    //$tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
-    $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
-      <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
 
+    if(!_.isEmpty(editorconfig.basedbURI)){
+      $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
+        <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
+    }
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
 
@@ -938,7 +960,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         spoints = {
           label: 'Loaded Work',
           type: ['http://id.loc.gov/ontologies/bibframe/Work'],
-          useResourceTemplates: ['profile:bf2:Monograph:Work']
+          useResourceTemplates: ['lc:RT:bf2:Monograph:Work']
         };
         bfeditor.bfestore.state = 'loaduri';
       }
@@ -1084,12 +1106,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       $('#bfeditor-messagediv').remove();
       bfelog.addMsg(new Error(), 'INFO', e.type + " " + e.target);
     });
-
+    
     $(function(){
-      $('#bfeditor-loadworkuri').removeAttr('disabled');
-      $('#bfeditor-loadibcuri').removeAttr('disabled');
+      $('#bfeditor-loadworkuri').prop('disabled', false);
+      $('#bfeditor-loadibcuri').prop('disabled', false);
     });
-  
+
     return {
       'profiles': profiles,
       'div': editordiv,
@@ -1770,7 +1792,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           "type": "resource",
           "resourceTemplates": [],
           "valueConstraint": {
-            "valueTemplateRefs": ["profile:bf2:AdminMetadata:BFDB"],
+            "valueTemplateRefs": ["lc:RT:bf2:AdminMetadata:BFDB"],
             "useValuesFrom": [],
             "valueDataType": {},
             "defaults": []
@@ -2320,7 +2342,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             propsdata = tempprops;
           } else if (bfestore.state === 'loaduri' && propsdata[0].o.startsWith('http://id.loc.gov/resources/works')) {
             // try with id.loc.gov
-            // var tempuri = rt.defaulturi.replace("mlvlp04.loc.gov:8230", "id.loc.gov");
             triple = {};
             triple.s = propsdata[0].s;
             triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
@@ -3721,7 +3742,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 } else {
 
                   var useUri = $instance.data('ttSelectableObject').uri;
-                  if (useUri.indexOf('id.loc.gov/resources/works/') > -1) {
+                  if (useUri.indexOf('id.loc.gov/resources/works/') > -1 && !_.isEmpty(editorconfig.buildContextForWorksEndpoint)) {
                     useUri = useUri.replace('id.loc.gov/resources/works/', editorconfig.buildContextForWorksEndpoint);
                   }
                   lcshared.fetchContextData(useUri, function (data) {
@@ -4127,9 +4148,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var uri;
     if (rt.resourceURI.startsWith('http://www.loc.gov/mads/rdf/v1#')) {
       uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', config.url + '/bfe/static/v1.json#');
-    } else if (rt.resourceURI.startsWith('http://id.loc.gov/resources')) {
+    } else if (rt.resourceURI.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
       uri = rt.resourceURI.replace('http://id.loc.gov/resources', config.resourceURI) + '.json';
-    } else if (rt.resourceURI.startsWith('http://mlvlp04.loc.gov:3000/resources')) {
+    } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
       return;
     } else {
       uri = rt.resourceURI + '.json';
@@ -4177,7 +4198,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // for resource templates, determine if they are works, instances, or other
     var jsonuri = uri + '.json';
     // normalize
-    if (uri.startsWith('http://id.loc.gov/resources')) {
+    if (uri.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
       jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
     }
 

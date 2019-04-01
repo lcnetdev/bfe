@@ -26,9 +26,18 @@ function myCB(data) {
  * base URL of verso in the "config" definition below.
  */
 var rectobase = "http://localhost:3000";
+var baseDBURI;
+var resourceURI;
+var workContext;
 
 if (env.RECTOBASE!==undefined)
     rectoBase = env.RECTOBASE;
+
+if (env.BASEDBURI!=undefined) {
+    baseDBURI = env.BASEDBURI;
+    resourceURI = baseDBURI + "/resources";
+    workContext = resourceURI + "/works/";
+}
 
 var versoURL = rectoBase + "/verso/api";
 
@@ -40,11 +49,11 @@ var config = {
   "url" : rectoBase,
   "buildContext": true,
   "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
-  "buildContextForWorksEndpoint": 'mlvlp04.loc.gov:8230/resources/works/',
+  "buildContextForWorksEndpoint": workContext,
   "enableUserTemplates" :true,
   "baseURI": "http://id.loc.gov/",
-  "basedbURI": "http://mlvlp04.loc.gov:8230",
-  "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
+  "basedbURI": baseDBURI,
+  "resourceURI": resourceURI,
   "profiles": [
      versoURL + "/configs?filter[where][configType]=profile"
   ],
@@ -54,12 +63,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:Monograph:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:Monograph:Work" ]
        }
 
      ]},
@@ -68,17 +77,17 @@ var config = {
        {
          label: "Create Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:NotatedMusic:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:NotatedMusic:Work" ]
        },
        {
          label: "Create RDA Expression",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:NotatedMusic:Expression" ]
+         useResourceTemplates: [ "lc:RT:bf2:NotatedMusic:Expression" ]
        },
        {
          label: "Create Instance", 
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:NotatedMusic:Instance" ]
        }
      ]},
     {"menuGroup": "Serial",
@@ -86,12 +95,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:Serial:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:Serial:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:Serial:Work" ]
        }
 
      ]},
@@ -100,12 +109,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:Cartographic:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:Cartographic:Work" ]
        }
 
      ]},
@@ -114,12 +123,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:SoundRecording:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:SoundRecording:Work" ]
        }
 
      ]},
@@ -128,12 +137,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:SoundCDR:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:SoundCDR:Work" ]
        }
 
      ]},
@@ -142,12 +151,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:Analog:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:Analog:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:Analog:Work" ]
        }
 
      ]},
@@ -156,12 +165,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:MIBluRayDVD:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:MIBluRayDVD:Work" ]
        }
 
      ]},
@@ -170,12 +179,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:35mmFeatureFilm:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:35mmFeatureFilm:Work" ]
        }
 
      ]},
@@ -184,12 +193,12 @@ var config = {
        {
          label: "Instance",
          type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-         useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
+         useResourceTemplates: [ "lc:RT:bf2:RareMat:Instance" ]
        },
        {
          label: "Work",
          type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-         useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
+         useResourceTemplates: [ "lc:RT:bf2:RareMat:Work" ]
        }
 
      ]}

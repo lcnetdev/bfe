@@ -56,11 +56,9 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var mintedUri = config.url + '/resources/' + mintedId;
 
     var bnode = '_:bnode' +  shortUUID(guid());
-    var useguid;
 
     var adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = resourceURI;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/adminMetadata';
     adminTriple.o = bnode;
@@ -68,28 +66,24 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/AdminMetadata';
     adminTriple.otype = 'uri';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/creationDate';
     var d = new Date(bfeditor.bfestore.created);
     adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionAuthentication';
     adminTriple.o = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
@@ -97,7 +91,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionAuthentication';
@@ -105,17 +99,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
     adminTriple.o = 'pcc';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionConventions';
     adminTriple.o = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
@@ -123,7 +115,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionConventions';
@@ -131,17 +123,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
     adminTriple.o = 'RDA';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionLanguage';
     adminTriple.o = 'http://id.loc.gov/vocabulary/languages/eng';
@@ -149,7 +139,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Language';
@@ -157,17 +147,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
     adminTriple.o = 'English';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionModifier';
     adminTriple.o = 'http://id.loc.gov/vocabulary/organizations/dlc';
@@ -175,7 +163,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionModifier';
@@ -183,17 +171,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
     adminTriple.o = 'DLC';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
-    useguid = undefined;
 
     adminTriple = {};
-    useguid = shortUUID(guid());
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/identifiedBy';
     adminTriple.o = mintedUri;
@@ -201,7 +187,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = mintedUri;
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Local';
@@ -209,7 +195,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
-    adminTriple.guid = useguid;
+    adminTriple.guid = shortUUID(guid());
     adminTriple.s = mintedUri;
     adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
     adminTriple.o = mintedId;
