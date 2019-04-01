@@ -119,7 +119,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           subjecturi hasAuthority selected.uri
           subjecturi  bf:label selected.value
       */
-    exports.getResource = lcshared.getResourceWithAAP;
+    exports.getResource = lcshared.getResource;
   });
   bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], function (require, exports) {
     // require('https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js');
@@ -149,27 +149,6 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       triples.push(triple);
   
       return process(triples, property);
-    };
-  
-    exports.getResourceWithAAP = function (subjecturi, property, selected, process) {
-      var triples = [];
-  
-      var triple = {};
-      triple.s = subjecturi;
-      triple.p = property.propertyURI;
-      triple.o = selected.uri;
-      triple.otype = 'uri';
-      triples.push(triple);
-  
-      triple = {};
-      triple.s = subjecturi;
-      triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-      triple.o = selected.value;
-      triple.otype = 'literal';
-      triple.olang = 'en';
-      triples.push(triple);
-  
-      process(triples, property);
     };
   
     exports.getResourceLabelLookup = function (subjecturi, propertyuri, selected, process) {
@@ -640,7 +619,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           subjecturi hasAuthority selected.uri
           subjecturi  bf:label selected.value
       */
-    exports.getResource = lcshared.getResourceWithAAP;
+    exports.getResource = lcshared.getResource;
   });
   bfe.define('src/lookups/lcgenreforms', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
@@ -716,7 +695,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }, 300); // 300 ms
     };
   
-    exports.getResource = lcshared.getResourceWithAAP;
+    exports.getResource = lcshared.getResource;
   });
   
   bfe.define('src/lookups/rdaformatnotemus', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
@@ -1124,7 +1103,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       return lcshared.simpleQuery(query, cache, exports.scheme, processSync, processAsync);
     };
   
-    exports.getResource = lcshared.getResourceWithAAP;
+    exports.getResource = lcshared.getResource;
   });
   
   bfe.define('src/lookups/relators', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {

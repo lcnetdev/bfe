@@ -85,14 +85,12 @@ exports.save = function (data, bfelog, callback){
     $messagediv.insertBefore('.nav-tabs');
   }).always(function(){                       
     // $('#table_id').DataTable().ajax.reload();
-    exports.loadBrowseData()
   });
 }
 
 exports.publish = function (data, rdfxml, savename, bfelog, callback){
     var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
-    //var url = "http://mlvlp04.loc.gov:8201/bibrecs/bfe2mets.xqy";
     var url = config.url + "/profile-edit/server/publish";
     var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
   
@@ -141,7 +139,6 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         $messagediv.insertBefore('#bfeditor-previewPanel');
       }).always(function(){
         // $('#table_id').DataTable().ajax.reload();
-        exports.loadBrowseData()
       });
   }
   
