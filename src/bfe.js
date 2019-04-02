@@ -3383,7 +3383,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var save = $(formgroup).find('.btn-toolbar')[0];
 
           var bgvars = {
-            'tguid': properties[0].guid,
+            'tguid': triple.guid,
             'tlabel': data,
             'tlabelhover': data,
             'fobjectid': formobjectID,
@@ -3436,7 +3436,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var save = $formgroup.find('.btn-toolbar')[0];
 
           var bgvars = {
-            'tguid': properties[0].guid,
+            'tguid': triple.guid,
             'tlabel': triple.o,
             'tlabelhover': triple.o,
             'fobjectid': formobjectID,
