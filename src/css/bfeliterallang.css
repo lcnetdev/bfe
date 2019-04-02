@@ -1,0 +1,26 @@
+/*
+  CSS Styles associated with Literal-lang data type interface elements
+*/
+
+
+.literal-input-group{
+  width: 90%;
+}
+
+.literal-input{
+  width:80% !important;
+
+}
+
+.literal-select{
+  width:10% !important;
+  padding: 1px;
+  font-family: monospace;
+
+}
+
+.literal-select-error-start{
+  border-color: red;
+  transition: border-color 1s;
+
+}

@@ -4,6 +4,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   var bfelog = require('src/bfelogging');
   var bfeapi = require('src/bfeapi');
   var bfeusertemplates = require('src/bfeusertemplates');
+  var bfeliterallang = require('src/bfeliterallang');
+
   // var store = new rdfstore.Store();
   var profiles = [];
   var resourceTemplates = [];
@@ -123,6 +125,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // pass the config to the usertemplates so it can disable templates if localstorage is not available
     bfeusertemplates.setConfig(editorconfig);
     
+    bfeliterallang.loadData(editorconfig);
 
     //setup callbacks
     editorconfig.api.forEach(function (apiName) {
@@ -219,7 +222,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
   exports.loadBrowseData = function($browsediv){
   
-  
+    return false
+    
     var loadData = function(){
       if (browseloaded){
         return true;
@@ -1822,9 +1826,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // add the uri to the data of the element
         $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
 
-        var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-        var $label = $('<label for="' + property.guid + '" class="col-sm-3 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
-          
+
+        var $saves = $('<div class="form-group row" style="width:90%;"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
+        var $label = $('<label for="' + property.guid + '" class="col-sm-2 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
+            
         if (rt.embedType != 'modal') {
           // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
           if (property.mandatory !== true && property.mandatory !== "true"){
@@ -1841,51 +1846,147 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         
         var $input;
         var $button;
-
-        if (property.type == 'literal') {
+        var $selectLang
+        var $literalCol
+        
+        if (property.type.indexOf('literal') > -1) {
+        
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
-          $input = $('<div class="col-sm-8"><input type="text" class="form-control" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '"></div>');
+          
+          $literalCol = $('<div class="col-sm-10"></div>');
+          $inputHolder = $('<div class="input-group literal-input-group"></div>');
+          $literalCol.append($inputHolder);
           
           
-          $input.find('input').keyup(function (e) {
-            if (e.keyCode == 54 && e.ctrlKey && e.altKey) {
-              var text = this.value;
-              this.value = text + '\u00A9';
-            } else if (e.keyCode == 53 && e.ctrlKey && e.altKey) {
-              this.value = this.value + '\u2117';
-            } 
+          $input = $('<input type="text" class="form-control literal-input" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '">');
+          
+          $inputHolder.append($input);
+          
+
+          $buttonGroupHolder = $('<div class="input-group-btn"></div>');
+         
+          if (property.type == 'literal') {
+            $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
             
-          });
-
-          $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
-
+            // add in all the languages
+            bfeliterallang.iso6391.forEach(function(l){
+                $selectLang.append($('<option value="'+ l.code + '">'+ l.code + ' (' + l.name + ')' +'</option>'));
+            });
+            
+            $inputHolder.append($selectLang);
+            $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>script</option></select>');
+            // add in all the languages
+            bfeliterallang.iso15924.forEach(function(s){
+                $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
+            });
+            
+            
+            $inputHolder.append($selectScript);
+            
+            // if they go to correct it remove 
+            $selectLang.on('click change',function(){$(this).removeClass('literal-select-error-start')});
+            $selectScript.on('click change',function(){$(this).removeClass('literal-select-error-start')});
+            
+        
+          }
+          
+          $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
+          
+          $buttonGroupHolder.append($button);
+          
+          $inputHolder.append($buttonGroupHolder);
+          
           $button.click(function () {
             if ($input.find(':invalid').length == 1) {
               alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
             } else {
+            
+              // dont allow if the script or lang is blank
+              if (property.type == 'literal') {
+                if ($('#' + property.guid).next().val() == 'lang'){
+                  $('#' + property.guid).next().addClass('literal-select-error-start');
+                  return false;
+                }                
+
+                if ($('#' + property.guid).next().next().val() == 'script'){
+                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  return false;
+                }              
+              }
+            
+            
               setLiteral(fobject.id, rt.useguid, property.guid);
             }
           });
+          
+          
 
           var enterHandler = function (event) {
             if (event.keyCode == 13) {
+
+              if (property.type == 'literal') {
+                if ($('#' + property.guid).next().val() == 'lang'){
+                  $('#' + property.guid).next().addClass('literal-select-error-start');
+                  return false;
+                }                
+
+                if ($('#' + property.guid).next().next().val() == 'script'){
+                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  return false;
+                }              
+              }
+              // this prevents the select boxs from open the dropdown on enter press
+              event.preventDefault();
+            
               setLiteral(fobject.id, rt.useguid, property.guid);
-              if ($('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").length) {
-                $('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").focus();
-              }else if ($('#' + property.guid).parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
-                  $('#' + property.guid).parent().parent().next().find("button").focus();
+              
+              // this trys to auto select the next possible input like a input or button
+              if ($('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").length) {
+                $('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").focus();
+              }else if ($('#' + property.guid).parent().parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
+                  $('#' + property.guid).parent().parent().parent().next().find("button").focus();
               } else {
                 $('[id^=bfeditor-modalSave]').focus();
               }
-            }
+            }else if (event.keyCode == 54 && event.ctrlKey && event.altKey) {
+              var text = this.value;
+              this.value = text + '\u00A9';
+            } else if (event.keyCode == 53 && event.ctrlKey && event.altKey) {
+              this.value = this.value + '\u2117';
+            }else if ($('#' + property.guid)[0].nodeName.toLowerCase() == 'input'){
+              console.log("Yeahh");
+              // send off the text to try to guess the lang or script
+              var results = bfeliterallang.identifyLangScript($(this).val());
+              // if we get results for either set them in the select boxes follow this input
+              console.log(results);
+              if (results.iso6391){
+                $('#' + property.guid).next().val(results.iso6391)
+              }
+              if (results.script){
+                $('#' + property.guid).next().next().val(results.script)
+              }
+              
+            }            
           };
 
           $input.keyup(enterHandler);
           
+          // also handel enter keys press on the select
+          if ($selectLang){
+            console.log("yeahh aerurrr");
+            $selectLang.keypress(enterHandler);
+            $selectScript.keypress(enterHandler);
+          
+          }
+          
+          
+          // this is where the added data shows up, so it will appear below the inputbox
+          $literalCol.append($saves);
+          
           $formgroup.append($label);
-          $input.append($saves);
-          $formgroup.append($input);
-          $formgroup.append($button);
+          $formgroup.append($literalCol);
+
+          
           // $formgroup.append($saves);
           
 
@@ -2951,7 +3052,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     // Modals
     var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
-              <div class="modal-dialog"> \
+              <div class="modal-dialog modal-lg"> \
                   <div class="modal-content"> \
                       <div class="modal-header"> \
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
@@ -3265,7 +3366,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 triples: []
             }
         */
-
+    console.log(bgvars);
     var display, $buttongroup = $('<div>', {
       id: bgvars.tguid,
       class: 'btn-group btn-group-xs'
@@ -3353,9 +3454,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'id': formobjectID
     });
     formobject = formobject[0];
-    // console.log(inputID);
+    console.log(inputID);
     var data = $('#' + inputID, formobject.form).val();
     if (data !== undefined && data !== '') {
+      
+      // check if there there assoicated lang and script values for this input
+      var lang = null;
+      if ($('#' + inputID + '-lang') && $('#' + inputID + '-script')){
+        lang = $('#' + inputID + '-lang').val() + '-' + $('#' + inputID + '-script').val();
+      }
+    
       var triple = {};
       triple.guid = shortUUID(guid());
       formobject.resourceTemplates.forEach(function (t) {
@@ -3373,19 +3481,26 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           triple.p = properties[0].propertyURI;
           triple.o = data;
           triple.otype = 'literal';
+          if (lang){
+            triple.olang = lang;
+          }
           // triple.olang = "";
 
+          
           // bfestore.store.push(triple);
           bfestore.addTriple(triple);
           formobject.store.push(triple);
 
           var formgroup = $('#' + inputID, formobject.form).closest('.form-group');
           var save = $(formgroup).find('.btn-toolbar')[0];
-
+          var buttonLabel = data;
+          if (lang){
+            buttonLabel = buttonLabel + '@' + lang
+          }
           var bgvars = {
             'tguid': properties[0].guid,
-            'tlabel': data,
-            'tlabelhover': data,
+            'tlabel': buttonLabel,
+            'tlabelhover': buttonLabel,
             'fobjectid': formobjectID,
             'inputid': inputID,
             'triples': [triple]
@@ -3394,6 +3509,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
           $(save).append($buttongroup);
           $('#' + inputID, formobject.form).val('');
+          $('#' + inputID + '-lang').val('lang');
+          $('#' + inputID + '-script').val('script');
           if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
             $('#' + inputID, formobject.form).attr('disabled', true);
           }
@@ -3978,7 +4095,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     formobject = formobject[0];
     bfelog.addMsg(new Error(), 'DEBUG', 'Editing triple: ' + t.guid, t);
     $('#' + t.guid).empty();
-
+    
+    
     var $el = $('#' + inputID, formobject.form);
     if ($el.is('input') && $el.hasClass('typeahead')) {
       var $inputs = $('#' + inputID, formobject.form).parent().find("input[data-propertyguid='" + inputID + "']");
@@ -4001,6 +4119,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     if ($el.is('input') && t.otype == 'literal') {
       $el.val(t.o);
+      // if the olang is populated try to split out the lang and script and populate the select fields that should exist
+      if (t.olang && t.olang !== "" && t.olang.indexOf('-')>-1){
+        var lang = t.olang.split('-')[0].toLowerCase();
+        var script =  t.olang.split('-')[1].charAt(0).toUpperCase() + t.olang.split('-')[1].slice(1).toLowerCase();
+        $('#' + inputID + '-lang').val(lang);
+        $('#' + inputID + '-script').val(script);
+      }
     }
     formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
       guid: t.guid
@@ -4058,14 +4183,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var formobject = _.where(forms, {
       'id': formobjectID
     });
+    
     formobject = formobject[0];
     if ($('#' + t.guid).length && t !== undefined) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid, t);
       // $("#" + t.guid).empty();
+      console.log("removing 1");
       $('#' + t.guid).remove();
     } else if ($('#' + tguid).length){
+    
       bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + tguid, null);
-      $('#' + tguid).remove();
+      console.log("removing 2",$('#' + tguid));
+      //$('#' + tguid).remove();
     }
 
     if (!_.isEmpty(t.guid)) {
