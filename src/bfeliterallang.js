@@ -20,7 +20,6 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
         
         // save off each of the data pieces
         data.forEach(function(d){
-          console.log(d.name);
           if (d.name==='literalLangPatterns') this.languagePatterns = d.json;
           if (d.name==='iso6391') this.iso6391 = d.json;
           if (d.name==='iso6392') this.iso6392 = d.json;
@@ -32,7 +31,6 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
         this.languagePatterns.forEach(function(p){
           p.regex = new RegExp(p.regex, "ig");
         });
-        console.log(this);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         bfelog.addMsg(new Error(), 'ERROR', 'FAILED to load external source: ' + config.literalLangDataUrl);

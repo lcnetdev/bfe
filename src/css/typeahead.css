@@ -173,3 +173,7 @@ div#save-btn{
   max-width: 500px;
   overflow-x:auto;
 }
+
+.add-property-input{
+  width:100%;
+}

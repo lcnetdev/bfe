@@ -221,8 +221,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   };
   
   exports.loadBrowseData = function($browsediv){
-  
-    return false
     
     var loadData = function(){
       if (browseloaded){
@@ -1863,9 +1861,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $inputHolder.append($input);
           
 
-          $buttonGroupHolder = $('<div class="input-group-btn"></div>');
+          
          
-          if (property.type == 'literal') {
+          if (property.type == 'literal-lang') {
+            
+            $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
+          
             $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
             
             // add in all the languages
@@ -1888,9 +1889,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $selectScript.on('click change',function(){$(this).removeClass('literal-select-error-start')});
             
         
+          }else{
+            // not building a literal lang input, need to float the + button over to the left
+            $buttonGroupHolder = $('<div class="input-group-btn pull-left" ></div>');
           }
           
-          $button = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
+          $button = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
           
           $buttonGroupHolder.append($button);
           
@@ -1902,7 +1906,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             } else {
             
               // dont allow if the script or lang is blank
-              if (property.type == 'literal') {
+              if (property.type == 'literal-lang') {
                 if ($('#' + property.guid).next().val() == 'lang'){
                   $('#' + property.guid).next().addClass('literal-select-error-start');
                   return false;
@@ -1924,7 +1928,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var enterHandler = function (event) {
             if (event.keyCode == 13) {
 
-              if (property.type == 'literal') {
+              if (property.type == 'literal-lang') {
                 if ($('#' + property.guid).next().val() == 'lang'){
                   $('#' + property.guid).next().addClass('literal-select-error-start');
                   return false;
@@ -1954,11 +1958,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             } else if (event.keyCode == 53 && event.ctrlKey && event.altKey) {
               this.value = this.value + '\u2117';
             }else if ($('#' + property.guid)[0].nodeName.toLowerCase() == 'input'){
-              console.log("Yeahh");
               // send off the text to try to guess the lang or script
               var results = bfeliterallang.identifyLangScript($(this).val());
               // if we get results for either set them in the select boxes follow this input
-              console.log(results);
               if (results.iso6391){
                 $('#' + property.guid).next().val(results.iso6391)
               }
@@ -1973,7 +1975,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           
           // also handel enter keys press on the select
           if ($selectLang){
-            console.log("yeahh aerurrr");
             $selectLang.keypress(enterHandler);
             $selectScript.keypress(enterHandler);
           
@@ -1996,7 +1997,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           
         }
 
-        if (property.type !== 'literal') {
+        if (property.type.indexOf('literal') === -1) {
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
@@ -2123,7 +2124,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           };
         };
         var $addpropdata = $('<div>', { class: 'col-sm-8' });
-        var $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control', placeholder: 'Type for suggestions' });
+        var $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control add-property-input', placeholder: 'Type for suggestions' });
         $addpropinput.click(function () {
           if (addFields.length == 0) {
             $addpropinput.prop('disabled', true);
@@ -2202,7 +2203,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           addedProperties.push(newproperty);
           cbLoadTemplates(rt.propertyTemplates);
         });
-        var $addproplabel = $('<label class="col-sm-3 control-label">Add Property</label>');
+        var $addproplabel = $('<label class="col-sm-2 control-label">Add Property</label>');
         var $addprop = $('<div>', { class: 'form-group row' });
         $addprop.append($addproplabel);
         $addprop.append($addpropdata);
@@ -2508,7 +2509,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
           var data;
           var label;
-          if (property.type === "literal") {
+          if (property.type.indexOf('literal') > -1) {
             //the default is the literal
             var literalTriple = {};
             literalTriple.guid = shortUUID(guid());
@@ -3366,7 +3367,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 triples: []
             }
         */
-    console.log(bgvars);
     var display, $buttongroup = $('<div>', {
       id: bgvars.tguid,
       class: 'btn-group btn-group-xs'
@@ -3454,7 +3454,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'id': formobjectID
     });
     formobject = formobject[0];
-    console.log(inputID);
+    // console.log(inputID);
     var data = $('#' + inputID, formobject.form).val();
     if (data !== undefined && data !== '') {
       
@@ -3462,6 +3462,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var lang = null;
       if ($('#' + inputID + '-lang') && $('#' + inputID + '-script')){
         lang = $('#' + inputID + '-lang').val() + '-' + $('#' + inputID + '-script').val();
+        if (lang==='undefined-undefined'){
+          lang = null;
+        }
       }
     
       var triple = {};
@@ -3499,8 +3502,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
           var bgvars = {
             'tguid': triple.guid,
-            'tlabel': data,
-            'tlabelhover': data,
+            'tlabel': buttonLabel,
+            'tlabelhover': buttonLabel,
             'fobjectid': formobjectID,
             'inputid': inputID,
             'triples': [triple]
@@ -4188,12 +4191,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     if ($('#' + t.guid).length && t !== undefined) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid, t);
       // $("#" + t.guid).empty();
-      console.log("removing 1");
       $('#' + t.guid).remove();
     } else if ($('#' + tguid).length){
     
       bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + tguid, null);
-      console.log("removing 2",$('#' + tguid));
       //$('#' + tguid).remove();
     }
 
