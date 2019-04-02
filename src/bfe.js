@@ -3498,9 +3498,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             buttonLabel = buttonLabel + '@' + lang
           }
           var bgvars = {
-            'tguid': properties[0].guid,
-            'tlabel': buttonLabel,
-            'tlabelhover': buttonLabel,
+            'tguid': triple.guid,
+            'tlabel': data,
+            'tlabelhover': data,
             'fobjectid': formobjectID,
             'inputid': inputID,
             'triples': [triple]
@@ -3553,7 +3553,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var save = $formgroup.find('.btn-toolbar')[0];
 
           var bgvars = {
-            'tguid': properties[0].guid,
+            'tguid': triple.guid,
             'tlabel': triple.o,
             'tlabelhover': triple.o,
             'fobjectid': formobjectID,
