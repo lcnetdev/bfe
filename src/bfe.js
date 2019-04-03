@@ -1852,7 +1852,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
           
           $literalCol = $('<div class="col-sm-10"></div>');
-          $inputHolder = $('<div class="input-group literal-input-group"></div>');
+          var $inputHolder = $('<div class="input-group literal-input-group"></div>');
           $literalCol.append($inputHolder);
           
           
@@ -1865,7 +1865,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
          
           if (property.type == 'literal-lang') {
             
-            $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
+            var $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
           
             $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
             
@@ -1875,7 +1875,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             
             $inputHolder.append($selectLang);
-            $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>script</option></select>');
+            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>script</option></select>');
             // add in all the languages
             bfeliterallang.iso15924.forEach(function(s){
                 $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -1901,8 +1901,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $inputHolder.append($buttonGroupHolder);
           
           $button.click(function () {
-            if ($input.find(':invalid').length == 1) {
+            if (!document.getElementById(property.guid).checkValidity()){
+            //if ($input.find(':invalid').length == 1) {
               alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+              return false;
             } else {
             
               // dont allow if the script or lang is blank
@@ -1927,8 +1929,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
           var enterHandler = function (event) {
             if (event.keyCode == 13) {
-
-              if (property.type == 'literal-lang') {
+              if (!document.getElementById(property.guid).checkValidity()) {
+                    alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+                    return false;
+              } else if (property.type == 'literal-lang') {
                 if ($('#' + property.guid).next().val() == 'lang'){
                   $('#' + property.guid).next().addClass('literal-select-error-start');
                   return false;
