@@ -564,11 +564,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     bfestore.profile = rowData.profile;
                     if (!_.isEmpty(rowData.addedProperties))
                       addedProperties = rowData.addedproperties;
-                    $('[href=#create]').tab('show');
+                    $('[href=\\#create]').tab('show');
                     if ($('#bfeditor-messagediv').length) {
                       $('#bfeditor-messagediv').remove();
                       $('#bfeditor-formdiv').show();
-                      $('#save-btn').remove();
+                      $('#exitButtonGroup').remove();
                       $('#bfeditor-previewPanel').remove();
                     }
                     cbLoadTemplates();
@@ -600,7 +600,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $messagediv.append('<span class="str"><h3>Delete disabled</h3></span>');
                     $messagediv.insertBefore('.nav-tabs');
                     $('#bfeditor-previewPanel').remove();
-                    $('[href=#browse]').tab('show');
+                    $('[href=\\#browse]').tab('show');
                   }
                 });
 
@@ -663,7 +663,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     var $menudiv = $('<div>', {
       id: 'bfeditor-menudiv',
-      class: 'col-md-2 sidebar'
+      class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
     });
     var $formdiv = $('<div>', {
       id: 'bfeditor-formdiv',
@@ -682,12 +682,78 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     $formdiv.append($loader);
     exports.loadBrowseData($browsediv);
-    $menudiv.append('<h3>Create Resource</h3>');
+    //$menudiv.append('<h3>Create Resource</h3>');
+    $menudiv.append('<span id="profileLabel" style="display: none"></span>');
+
+    var $createResourcediv = $('<div class="dropdown pull-left" style="padding-right: 10px">');
+    var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target=".dropdown-collapse">\
+    <span class="glyphicon glyphicon-plus"></span> Create Resource </span></button>');
+    
+    $createResourcediv.append($createResourceButton);
+    $menudiv.append($createResourcediv);
+
     $rowdiv.append($menudiv);
     $rowdiv.append($formdiv);
-    // rowdiv.append(optiondiv);
 
     $creatediv.append($rowdiv);
+
+    var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
+
+    for (var h = 0; h < config.startingPoints.length; h++) {
+      var sp = config.startingPoints[h];
+      //var $menuul = $('<ul>', {
+      //  class: 'nav nav-sidebar'
+      //});
+      
+      //var $menuheadingul = null;
+      var $createResourcesubmenuul = null;
+      if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
+        //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
+        var $createResourcesubmenu =  $('<li class="dropdown-submenu" data-toggle="collapse"  data-target=".dropdown-collapse"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
+        
+        $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
+        //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
+
+        //$menuheading.append($menuheadingul);
+        $createResourcesubmenu.append($createResourcesubmenuul);
+        
+        $createResourcemenuul.append($createResourcesubmenu)
+        //$menuul.append($menuheading);
+      }
+      for (var i = 0; i < sp.menuItems.length; i++) {
+        var $li = $('<li>');
+        var $a = $('<a>', {
+          href: '#',
+          id: 'sp-' + h + '_' + i,
+          class: "test",
+          tabindex: "-1"
+        });
+        $a.html(sp.menuItems[i].label);
+        $a.click(function (event) {
+          var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
+          $('#profileLabel').text(profile + ":" + event.target.text);
+          $('#bfeditor-messagediv').remove();
+          $('#bfeditor-formdiv').show();
+          $('#exitButtonGroup').remove();
+          $('#bfeditor-previewPanel').remove();
+          menuSelect(this.id);
+        });
+        $li.append($a);
+        //if ($menuheadingul !== null) {
+       //   $menuheadingul.append($li);
+       // } else {
+       //   $menuul.append($li);
+      //  }
+
+        if ($createResourcesubmenuul !== null) {
+          $createResourcesubmenuul.append($li)
+        } else {
+          $createResourcemenuul.append($li)
+        }
+      }
+      $createResourcediv.append($createResourcemenuul);
+      //$menudiv.append($menuul);
+    }
 
     var $loadworkform = $('<div class="container"> \
               <form role="form" method="get"> \
@@ -734,6 +800,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // };
 
       var spid = $(this.parentElement).find('#bfeditor-loadwork-dropdownMenu').val();
+      var label = $(this.parentElement).find('#bfeditor-loadwork-dropdownMenu option:selected').text();
+      $('#profileLabel').text(label + ":Work");
 
       var spnums = spid.replace('sp-', '').split('_');
 
@@ -769,7 +837,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfestore.cleanJSONLD();
 
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
-            $('[href=#create]').tab('show');
+            $('[href=\\#create]').tab('show');
             $('#bfeditor-formdiv').show();
             if ($('#bfeditor-messagediv').length) {
               $('#bfeditor-messagediv').remove();
@@ -837,6 +905,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // var loadtemplates = [];
 
       var spid = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu').val();
+      var label = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu option:selected').text();
+      $('#profileLabel').text(label + ":Instance");
 
       var spnums = spid.replace('sp-', '').split('_');
 
@@ -877,7 +947,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             editorconfig.retrieveLDS.callback(url, bfestore, bfestore.loadtemplates, bfelog, function () {
               bfestore.cleanJSONLD();
 
-              $('[href=#create]').tab('show');
+              $('[href=\\#create]').tab('show');
               $('#bfeditor-formdiv').show();
               if ($('#bfeditor-messagediv').length) {
                 $('#bfeditor-messagediv').remove();
@@ -899,7 +969,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $messagediv.append('<span class="str"><h3>Retrieve disabled</h3></span>');
         $messagediv.insertBefore('.nav-tabs');
         $('#bfeditor-previewPanel').remove();
-        $('[href=#browse]').tab('show');
+        $('[href=\\#browse]').tab('show');
       }
     });
 
@@ -955,6 +1025,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       if (this.id == 'bfeditor-loadmarc') {
         var spid = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu').val();
+
+        var label = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu option:selected').text();
+        $('#profileLabel').text(label + ":Work");
+
         var spnums = spid.replace('sp-', '').split('_');
         spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
         bfeditor.bfestore.state = 'loadmarc';
@@ -1014,7 +1088,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
 
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
-            $('[href=#create]').tab('show');
+            $('[href=\\#create]').tab('show');
             $('#bfeditor-formdiv').show();
             if ($('#bfeditor-messagediv').length) {
               $('#bfeditor-messagediv').remove();
@@ -1045,42 +1119,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $containerdiv.append($tabcontentdiv);
 
     $(editordiv).append($containerdiv);
-
-    for (var h = 0; h < config.startingPoints.length; h++) {
-      var sp = config.startingPoints[h];
-      var $menuul = $('<ul>', {
-        class: 'nav nav-sidebar'
-      });
-      var $menuheadingul = null;
-      if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
-        var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
-        $menuheadingul = $('<ul class="dropdown-menu"></ul>');
-        $menuheading.append($menuheadingul);
-        $menuul.append($menuheading);
-      }
-      for (var i = 0; i < sp.menuItems.length; i++) {
-        var $li = $('<li>');
-        var $a = $('<a>', {
-          href: '#',
-          id: 'sp-' + h + '_' + i
-        });
-        $a.html(sp.menuItems[i].label);
-        $a.click(function () {
-          $('#bfeditor-messagediv').remove();
-          $('#bfeditor-formdiv').show();
-          $('#save-btn').remove();
-          $('#bfeditor-previewPanel').remove();
-          menuSelect(this.id);
-        });
-        $li.append($a);
-        if ($menuheadingul !== null) {
-          $menuheadingul.append($li);
-        } else {
-          $menuul.append($li);
-        }
-      }
-      $menudiv.append($menuul);
-    }
 
     // Debug div
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
@@ -1202,11 +1240,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('.typeahead', form.form).each(function () {
           setTypeahead(this);
         });
-        var $exitButtonGroup = $('<div class="btn-group pull-right"> \
-                      <button id="bfeditor-cancel" type="button" class="btn btn-default">Cancel</button> \
-                      <button id="bfeditor-preview" type="button" class="btn btn-primary">Preview</button> \
+        var $exitButtonGroup = $('<div class="btn-group" id="exitButtonGroup"> \
+                      <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
                   </div>');
-        form.form.append($exitButtonGroup);
+
+        if (editorconfig.save !== undefined) {
+          $exitButtonGroup.append('<button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button>');
+        }
+
+        if (editorconfig.publish !== undefined) {
+          $exitButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
+        }
+
+        $exitButtonGroup.append('<button id="bfeditor-preview" type="button" class="btn btn-primary">Preview</button>');
+
+        $('#bfeditor-menudiv').append($exitButtonGroup);
 
         $('<input>', {
           type: 'hidden',
@@ -1214,20 +1262,149 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           value: loadtemplates[0].resourceTemplateID
         }).appendTo(form.form);
 
-        $('#bfeditor-cancel', form.form).click(function () {
+        var exitFunction = function () {
+          $('#cloneButtonGroup').remove();
+          $('#exitButtonGroup').remove();
+          $('#bfeditor-previewPanel').remove();
+          $('#bfeditor-messagediv').remove();
+          $('#bfeditor-formdiv').show();
           $('#bfeditor-formdiv').empty();
-          $('[href=#browse]').tab('show');
-          bfeditor.bfestore.store = [];
+          $('[href=\\#browse]').tab('show');
           window.location.hash = '';
+          bfeditor.bfestore.store = [];
           $('#table_id').DataTable().search('').draw();
-          // $('#table_id').DataTable().ajax.reload();
           exports.loadBrowseData();
+        }
+
+        $('#bfeditor-exitcancel').click(function () {
+          exitFunction();
         });
-        $('#bfeditor-cancel', form.form).attr('tabindex', tabIndices++);
+
+        var $messagediv;
+        $('#bfeditor-exitsave').click(function () {
+          if (editorconfig.save !== undefined) {
+            //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
+            // var dirhash = guid();
+            var save_json = {};
+            save_json.name = bfeditor.bfestore.name;
+            save_json.profile = bfeditor.bfestore.profile;
+            save_json.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
+            save_json.created = bfeditor.bfestore.created;
+            save_json.modified = new Date().toUTCString();
+
+            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+              var modifiedDate = new Date(save_json.modified);
+              var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+
+              if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+                _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+                  cd.o = modifiedDateString;
+                });
+              } else {
+                var adminTriple = {};
+                adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
+                adminTriple.o = modifiedDateString;
+                adminTriple.otype = 'literal';
+                bfeditor.bfestore.store.push(adminTriple);
+              }
+            }
+
+            save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+            save_json.addedproperties = addedProperties;
+
+            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
+              editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
+                exports.loadBrowseData();
+                bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
+              });
+            } else {
+              // title required
+              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+              $messagediv.append('<strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a>');
+              $messagediv.insertBefore('.tabs');
+            }
+          } else {
+            // save disabled
+            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+            $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
+            $messagediv.insertBefore('.nav-tabs');
+          }
+          exitFunction();
+        });
+
+        $('#bfeditor-exitpublish').click(function () {
+          // remove problematic nodes
+
+          if (editorconfig.publish !== undefined) {
+            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
+              //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
+              var rdfxml = $("#rdfxml .panel-body pre").text();
+              var save_json = {};
+              save_json.name = mintResource(bfeditor.bfestore.name);
+              save_json.profile = bfeditor.bfestore.profile;
+              save_json.url = bfeditor.bfestore.url;
+              save_json.created = bfeditor.bfestore.created;
+              save_json.modified = new Date().toUTCString();
+
+              if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+                var modifiedDate = new Date(save_json.modified);
+                var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+
+                if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+                  _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+                    cd.o = modifiedDateString;
+                  });
+                } else {
+                  var adminTriple = {};
+                  adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                  adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
+                  adminTriple.o = modifiedDateString;
+                  adminTriple.otype = 'literal';
+                  bfeditor.bfestore.store.push(adminTriple);
+                }
+              }
+
+              save_json.status = 'published';
+              save_json.objid = 'loc.natlib.instances.' + save_json.name + '0001';
+
+              var lccns = _.where(_.where(bfeditor.bfestore.store, { s: _.where(bfeditor.bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s }), { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' });
+
+              if (!_.isEmpty(lccns)) {
+                for (var i = 0; i < lccns.length; i++) {
+                  if (!lccns[i].o.trim().startsWith('n')) {
+                    save_json.lccn = lccns[i].o.trim();
+                    save_json.objid = 'loc.natlib.instances.e' + save_json.lccn + '0001';
+                  }
+                }
+              }
+
+              save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+              editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
+                exports.loadBrowseData();
+                bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
+              });
+              //});
+            } else {
+              // title required
+              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'col-md-10 main' });
+              $messagediv.append('<div class="alert alert-error"><strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a></div>');
+              $messagediv.insertBefore('.tabs');
+            }
+          } else {
+            // publish disabled
+            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+            $messagediv.append('<strong>Publishing disabled</strong>');
+            $messagediv.insertBefore('.nav-tabs');
+          }
+          exitFunction();
+        });
+
+        $('#bfeditor-exitcancel').attr('tabindex', tabIndices++);
         
         bfeditor.bfestore.defaulturi = form.formobject.defaulturi;
-
-        $('#bfeditor-preview', form.form).click(function () {
+        $('#bfeditor-preview').click(function () {
+          $('#bfeditor-preview').hide();
           //remove orphans
           bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
 
@@ -1255,17 +1432,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
 
           document.body.scrollTop = document.documentElement.scrollTop = 0;
-          var $saveButtonGroup = $('<div class="btn-group" id="save-btn"> \
-                           <button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button> \
-                           <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
-                           </div>');
-          if (editorconfig.save !== undefined) {
-            $saveButtonGroup.append('<button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button>');
-          }
-
-          if (editorconfig.publish !== undefined) {
-            $saveButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
-          }
+          var $backButton = $('<button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button>');
 
           var $bfeditor = $('#create > .row');
           var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10 main panel-group">\
@@ -1279,161 +1446,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                            <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
                            <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
                            </div>');
-          var $messagediv;
-          $bfeditor.append($saveButtonGroup);
+
+          $('#exitButtonGroup').append($backButton);
 
           $('#bfeditor-exitback').click(function () {
-            $('#save-btn').remove();
+            $('#bfeditor-exitback').remove();
+            $('#bfeditor-preview').show();
             $('#bfeditor-previewPanel').remove();
             $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').show();
-          });
-          $('#bfeditor-exitcancel, [href=#browse]').click(function () {
-            $('#save-btn').remove();
-            $('#bfeditor-previewPanel').remove();
-            $('#bfeditor-messagediv').remove();
-            $('#bfeditor-formdiv').show();
-            $('#bfeditor-formdiv').empty();
-            $('[href=#browse]').tab('show');
-            window.location.hash = '';
-            bfeditor.bfestore.store = [];
-            // $('#table_id').DataTable().ajax.reload();
-            exports.loadBrowseData()
-          });
-
-          $('#bfeditor-exitsave').click(function () {
-            if (editorconfig.save !== undefined) {
-              //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
-              // var dirhash = guid();
-              var save_json = {};
-              save_json.name = bfeditor.bfestore.name;
-              save_json.profile = bfeditor.bfestore.profile;
-              save_json.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
-              save_json.created = bfeditor.bfestore.created;
-              save_json.modified = new Date().toUTCString();
-
-              if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-                var modifiedDate = new Date(save_json.modified);
-                var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
-
-                if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                  _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-                    cd.o = modifiedDateString;
-                  });
-                } else {
-                  var adminTriple = {};
-                  adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                  adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-                  adminTriple.o = modifiedDateString;
-                  adminTriple.otype = 'literal';
-                  bfeditor.bfestore.store.push(adminTriple);
-                }
-              }
-
-              save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-              save_json.addedproperties = addedProperties;
-
-              if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-                editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
-                  exports.loadBrowseData();
-                  bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
-                });
-              } else {
-                // title required
-                $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-                $messagediv.append('<strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a>');
-                $messagediv.insertBefore('.tabs');
-              }
-            } else {
-              // save disabled
-              $('#bfeditor-formdiv').empty();
-              $('[href=#browse]').tab('show');
-              bfeditor.bfestore.store = [];
-              // $('#table_id').DataTable().ajax.reload();
-              exports.loadBrowseData()
-              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
-              $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
-              $messagediv.insertBefore('.nav-tabs');
-            }
-          });
-
-          $('#bfeditor-exitpublish').click(function () {
-            // remove problematic nodes
-
-            if (editorconfig.publish !== undefined) {
-              if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-                //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
-                var rdfxml = $("#rdfxml .panel-body pre").text();
-                var save_json = {};
-                save_json.name = mintResource(bfeditor.bfestore.name);
-                save_json.profile = bfeditor.bfestore.profile;
-                save_json.url = bfeditor.bfestore.url;
-                save_json.created = bfeditor.bfestore.created;
-                save_json.modified = new Date().toUTCString();
-
-                if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-                  var modifiedDate = new Date(save_json.modified);
-                  var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
-
-                  if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                    _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-                      cd.o = modifiedDateString;
-                    });
-                  } else {
-                    var adminTriple = {};
-                    adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-                    adminTriple.o = modifiedDateString;
-                    adminTriple.otype = 'literal';
-                    bfeditor.bfestore.store.push(adminTriple);
-                  }
-                }
-
-                save_json.status = 'published';
-                save_json.objid = 'loc.natlib.instances.' + save_json.name + '0001';
-
-                var lccns = _.where(_.where(bfeditor.bfestore.store, { s: _.where(bfeditor.bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s }), { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' });
-
-                if (!_.isEmpty(lccns)) {
-                  for (var i = 0; i < lccns.length; i++) {
-                    if (!lccns[i].o.trim().startsWith('n')) {
-                      save_json.lccn = lccns[i].o.trim();
-                      save_json.objid = 'loc.natlib.instances.e' + save_json.lccn + '0001';
-                    }
-                  }
-                }
-
-                save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-                editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
-                  exports.loadBrowseData();
-                  bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
-                });
-                //});
-              } else {
-                // title required
-                $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'col-md-10 main' });
-                $messagediv.append('<div class="alert alert-error"><strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a></div>');
-                $messagediv.insertBefore('.tabs');
-              }
-            } else {
-              // publish disabled
-              $('#bfeditor-formdiv').empty();
-              bfeditor.bfestore.store = [];
-              // $('#table_id').DataTable().ajax.reload();
-              exports.loadBrowseData()
-              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
-              $messagediv.append('<strong>Publishing disabled</strong>');
-              $messagediv.insertBefore('.nav-tabs');
-              $('[href=#browse]').tab('show');
-              $('#bfeditor-previewPanel').remove();
-
-            }
           });
 
           $('#bfeditor-formdiv').hide();
           $bfeditor.append($preview);
         });
-        $('#bfeditor-exitpreview', form.form).attr('tabindex', tabIndices++);
+        $('#bfeditor-exitpreview').attr('tabindex', tabIndices++);
 
         $('#bfeditor-formdiv').html('');
         $('#bfeditor-formdiv').append(form.form);
@@ -1593,8 +1620,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       // create a popover box to display resource ID of the thing.
       var $resourcedivheading = $('<div>');
-      var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left">' + rt.resourceLabel + ' </h4>');
-      
+      var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left" style="margin-right:5px">');
+      $resourcedivheadingh4.text($('#profileLabel').text());
+
       if (rt.defaulturi.match(/^http/)) {
         var rid = rt.defaulturi;
         var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
@@ -1623,9 +1651,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $clonebutton.data({ 'match': 'works', 'label': 'Work' });
       }
 
-    
-    
       var $templateCloneButtonGroup = $('<div>', {
+        id: 'cloneButtonGroup',
         class: 'pull-right'
       });
     
@@ -1668,14 +1695,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         
         
       }
-      
-      
-      
 
+      $('#bfeditor-menudiv').append($templateCloneButtonGroup);
 
-      $resourcedivheading.append($templateCloneButtonGroup);
-
-      
       $resourcediv.append($resourcedivheading);
 
       $resourcediv.find('#clear-id').click(function () {
