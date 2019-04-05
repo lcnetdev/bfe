@@ -568,6 +568,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     if ($('#bfeditor-messagediv').length) {
                       $('#bfeditor-messagediv').remove();
                       $('#bfeditor-formdiv').show();
+                      $('#cloneButtonGroup').remove();
                       $('#exitButtonGroup').remove();
                       $('#bfeditor-previewPanel').remove();
                     }
@@ -709,7 +710,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var $createResourcesubmenuul = null;
       if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
         //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
-        var $createResourcesubmenu =  $('<li class="dropdown-submenu" data-toggle="collapse"  data-target=".dropdown-collapse"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
+        var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
         
         $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
         //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
@@ -731,9 +732,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $a.html(sp.menuItems[i].label);
         $a.click(function (event) {
           var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
+          $('#createresourcesubmenuul.open').hide();
+          $('#createresourcesubmenuul.open').removeClass('open');
           $('#profileLabel').text(profile + ":" + event.target.text);
           $('#bfeditor-messagediv').remove();
           $('#bfeditor-formdiv').show();
+          $('#cloneButtonGroup').remove();
           $('#exitButtonGroup').remove();
           $('#bfeditor-previewPanel').remove();
           menuSelect(this.id);
@@ -1150,6 +1154,19 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $(function(){
       $('#bfeditor-loadworkuri').prop('disabled', false);
       $('#bfeditor-loadibcuri').prop('disabled', false);
+    });
+
+    $(function(){
+      $('.dropdown-submenu>a').unbind('click').click(function(e){
+          var $openmenu = $('#createresourcesubmenuul.open');
+          $openmenu.hide();
+          $openmenu.removeClass('open');
+          var $dropdown = $(this).next('ul');
+          $dropdown.addClass('open');
+          $dropdown.toggle();
+          e.stopPropagation();
+          e.preventDefault();
+      });
     });
 
     return {
@@ -3307,6 +3324,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           tlabel.p = 'http://www.w3.org/2000/01/rdf-schema#label';
           tlabel.o = topicLabel;
           data.push(tlabel);
+          //update authoritativeLabel
+          if (_.some(data, {s: tlabel.s, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
+            _.find(data, {s: tlabel.s, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"}).o = tlabel.o
+          }
         }
         // if there's a label, use it. Otherwise, create a label from the literals, and if no literals, use the uri.
         var displayuri = /[^/]*$/.exec(_.find(data, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' }).o)[0];
