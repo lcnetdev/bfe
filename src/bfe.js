@@ -652,7 +652,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
-
+    if(editorconfig.enableLoadMarc) {
+      $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+    }
     if(!_.isEmpty(editorconfig.basedbURI)){
       $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
         <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
@@ -848,7 +850,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
             $('[href=\\#create]').tab('show');
             $('#bfeditor-formdiv').show();
-            bfeditor.bfestore.store = [];
             $('#cloneButtonGroup').remove();
             $('#exitButtonGroup').remove();
             $('#bfeditor-previewPanel').remove();
@@ -960,7 +961,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
               $('[href=\\#create]').tab('show');
               $('#bfeditor-formdiv').show();
-              bfeditor.bfestore.store = [];
               $('#cloneButtonGroup').remove();
               $('#exitButtonGroup').remove();
               $('#bfeditor-previewPanel').remove();
@@ -1005,7 +1005,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
               </form></div>'));
 
-    getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'));
+    getWorkProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'));
 
     $loadmarcdiv.find('.dropdown-menu > li > a').click(function () {
       $('#marcdx').html($(this).text() + ' <span class="caret">');
@@ -1020,7 +1020,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       if ($('#marcdx').text().match(/OCLC/i)) {
-        url = 'rectotobibframe';
+        url = config.url + '/profile-edit/server/retrieveOCLC?oclcnum='+ term;
       } else {
         url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1108,7 +1108,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('#bfeditor-previewPanel').remove();
             $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').empty();
-            bfeditor.bfestore.store = [];
             $('#bfeditor-formdiv').show();
 
             // weird bnode prob
@@ -1180,6 +1179,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           e.stopPropagation();
           e.preventDefault();
       });
+    });
+
+    $(window).bind('beforeunload', function(){
+      return 'Are you sure you want to leave?';
     });
 
     return {

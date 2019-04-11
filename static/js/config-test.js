@@ -74,6 +74,7 @@ var config = {
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates" :true,
+    "enableLoadMarc": true,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
     "profiles": [
         versoURL + "/configs?filter[where][configType]=profile"

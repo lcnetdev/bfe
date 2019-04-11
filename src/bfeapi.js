@@ -6,7 +6,7 @@ bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
   var url = config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
-  var xmlType = (uri.endsWith('.rdf')) ? 'rdf' : 'xml';
+  var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';
 
   $.ajax({
     dataType: dType,
@@ -33,8 +33,10 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
           $nohits.modal('show');
         }
       } else if (xmlType == 'rdf') {
-        rdfrec = $('rdf\\:RDF', data).html();
-        recid = $('bf\\:Local > rdf\\:value', data).html();
+        rdfrec = $('<div>').append($('rdf\\:RDF', data).clone()).html();
+        //rdfrec = $('rdf\\:RDF', data).html();
+        if(!uri.match(/OCLC/))
+          recid = $('bf\\:Local > rdf\\:value', data).html();
         bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
       } else {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
