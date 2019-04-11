@@ -14,12 +14,9 @@ if (ie < 10) {
   $("#iealert").html("Sorry, but the BIBFRAME Editor will not work in IE8 or IE9.")
 }
 
-function myCB(data) {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
-}
 
 function setStartingPoints(){
-    var spfile = versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=config";
+    var spfile = versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=config-test";
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -28,10 +25,15 @@ function setStartingPoints(){
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.error('ERROR: Request status: ' + textStatus + '; Error msg: ' + errorThrown);
         },
-        success: function (data) {
+        success: function (data) {            
             config.startingPoints = data[0].json;
         }
     });
+}
+
+
+function myCB(data) {
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 /* Config object profiles
@@ -58,12 +60,13 @@ if (env.BASEDBURI!=undefined) {
 var versoURL = rectoBase + "/verso/api";
 
 var config = {
-              /* "logging": {
-                "level": "DEBUG",
-                "toConsole": false
-              },*/
-    "name": "config-dev",
-    "url" : rectoBase,
+     "logging": {
+      "level": "DEBUG",
+      "toConsole": true
+    }, 
+    "name":"config-test",
+    "url": rectoBase,
+    "buildContext": true,
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
