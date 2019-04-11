@@ -614,7 +614,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   var table = $('#table_id').DataTable();
                   bfestore.store = [];
                   // table.ajax.reload();
-                  exports.loadBrowseData()
+                  exports.loadBrowseData();
                 });
               }
             }
@@ -1314,7 +1314,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
 
         var $messagediv;
+               
         $('#bfeditor-exitsave').click(function () {
+          $('#bfeditor-messagediv').remove();
           if (editorconfig.save !== undefined) {
             //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
             // var dirhash = guid();
@@ -1348,7 +1350,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
               editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
-                exports.loadBrowseData();
+                exitFunction();
                 bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
               });
             } else {
@@ -1363,12 +1365,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
             $messagediv.insertBefore('.nav-tabs');
           }
-          exitFunction();
+          
         });
 
         $('#bfeditor-exitpublish').click(function () {
-          // remove problematic nodes
-
+          $('#bfeditor-messagediv').remove();
           if (editorconfig.publish !== undefined) {
             if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
               //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
@@ -1423,14 +1424,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
               save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
               editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
-                exports.loadBrowseData();
+                exitFunction();
                 bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
               });
               //});
             } else {
               // title required
-              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'col-md-10 main' });
-              $messagediv.append('<div class="alert alert-error"><strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a></div>');
+              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+              $messagediv.append('<strong>No title found:</strong><a href=' + bfeditor.bfestore.url + '>' + mintResource(bfeditor.bfestore.name) + '</a>');
               $messagediv.insertBefore('.tabs');
             }
           } else {
@@ -1438,8 +1439,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
             $messagediv.append('<strong>Publishing disabled</strong>');
             $messagediv.insertBefore('.nav-tabs');
-          }
-          exitFunction();
+          }          
         });
 
         $('#bfeditor-exitcancel').attr('tabindex', tabIndices++);
@@ -1495,7 +1495,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('#bfeditor-exitback').remove();
             $('#bfeditor-preview').show();
             $('#bfeditor-previewPanel').remove();
-            $('#bfeditor-messagediv').remove();
             $('#bfeditor-formdiv').show();
           });
 
@@ -1934,7 +1933,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             
             $inputHolder.append($selectLang);
-            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>no script</option></select>');
+            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>script</option></select>');
             // add in all the languages
             bfeliterallang.iso15924.forEach(function(s){
                 $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -1973,10 +1972,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == 'no script'){
-                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  // return false;
-                // }              
+                if ($('#' + property.guid).next().next().val() == 'script'){
+                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  return false;
+                }              
               }
             
             
@@ -1997,10 +1996,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == 'no script'){
-                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  // return false;
-                // }              
+                if ($('#' + property.guid).next().next().val() == 'script'){
+                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  return false;
+                }              
               }
               // this prevents the select boxs from open the dropdown on enter press
               event.preventDefault();
@@ -3538,22 +3537,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
       // check if there there assoicated lang and script values for this input
       var lang = null;
-      var script = null;
       if ($('#' + inputID + '-lang') && $('#' + inputID + '-script')){
-        lang = $('#' + inputID + '-lang').val()
-        script = $('#' + inputID + '-script').val();
-        
-        if (script != 'no script'){
-          lang = lang + '-' + script
-        }else{
-          lang = lang
-        }
-        
-        if (lang==='undefined-undefined' || lang==='undefined'){
+        lang = $('#' + inputID + '-lang').val() + '-' + $('#' + inputID + '-script').val();
+        if (lang==='undefined-undefined'){
           lang = null;
         }
-        
-        
       }
     
       var triple = {};
@@ -3602,7 +3590,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $(save).append($buttongroup);
           $('#' + inputID, formobject.form).val('');
           $('#' + inputID + '-lang').val('lang');
-          $('#' + inputID + '-script').val('no script');
+          $('#' + inputID + '-script').val('script');
           if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
             $('#' + inputID, formobject.form).attr('disabled', true);
           }
@@ -4229,10 +4217,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var script =  t.olang.split('-')[1].charAt(0).toUpperCase() + t.olang.split('-')[1].slice(1).toLowerCase();
         $('#' + inputID + '-lang').val(lang);
         $('#' + inputID + '-script').val(script);
-      }else if (t.olang && t.olang !== "" && t.olang.indexOf('-')==-1){
-        $('#' + inputID + '-lang').val(t.olang.toLowerCase());
-        $('#' + inputID + '-script').val('no script');
-      
       }
     }
     formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
