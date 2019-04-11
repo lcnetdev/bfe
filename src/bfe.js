@@ -562,16 +562,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     bfestore.created = rowData.created;
                     bfestore.url = rowData.url;
                     bfestore.profile = rowData.profile;
+                    var parent = _.find(bfeditor.profiles, function (post) {
+                      if (_.some(post.Profile.resourceTemplates, { id: bfestore.profile }))
+                      { return post; }
+                    });
+
                     if (!_.isEmpty(rowData.addedProperties))
                       addedProperties = rowData.addedproperties;
+
                     $('[href=\\#create]').tab('show');
-                    if ($('#bfeditor-messagediv').length) {
-                      $('#bfeditor-messagediv').remove();
-                      $('#bfeditor-formdiv').show();
-                      $('#cloneButtonGroup').remove();
-                      $('#exitButtonGroup').remove();
-                      $('#bfeditor-previewPanel').remove();
-                    }
+                    $('#profileLabel').text(parent.Profile.title + ' ' + _.last(bfestore.profile.split(':')));
+                    $('#cloneButtonGroup').remove();
+                    $('#exitButtonGroup').remove();
+                    $('#bfeditor-previewPanel').remove();
+                    $('#bfeditor-messagediv').remove();
+                    $('#bfeditor-formdiv').show();
                     cbLoadTemplates();
                     window.location.hash = mintResource(rowData.name);
                   } else {
@@ -843,9 +848,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
             $('[href=\\#create]').tab('show');
             $('#bfeditor-formdiv').show();
-            if ($('#bfeditor-messagediv').length) {
-              $('#bfeditor-messagediv').remove();
-            }
+            bfeditor.bfestore.store = [];
+            $('#cloneButtonGroup').remove();
+            $('#exitButtonGroup').remove();
+            $('#bfeditor-previewPanel').remove();
+            $('#bfeditor-messagediv').remove();
 
             // weird bnode prob
             _.each(bfeditor.bfestore.store, function (el) {
@@ -953,9 +960,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
               $('[href=\\#create]').tab('show');
               $('#bfeditor-formdiv').show();
-              if ($('#bfeditor-messagediv').length) {
-                $('#bfeditor-messagediv').remove();
-              }
+              bfeditor.bfestore.store = [];
+              $('#cloneButtonGroup').remove();
+              $('#exitButtonGroup').remove();
+              $('#bfeditor-previewPanel').remove();
+              $('#bfeditor-messagediv').remove();
 
               cbLoadTemplates();
             });
@@ -1025,6 +1034,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabcontentdiv.append($loadmarcdiv);
 
     $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
+      
       var spoints = {};
 
       if (this.id == 'bfeditor-loadmarc') {
@@ -1093,10 +1103,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
             $('[href=\\#create]').tab('show');
+            $('#cloneButtonGroup').remove();
+            $('#exitButtonGroup').remove();
+            $('#bfeditor-previewPanel').remove();
+            $('#bfeditor-messagediv').remove();
+            $('#bfeditor-formdiv').empty();
+            bfeditor.bfestore.store = [];
             $('#bfeditor-formdiv').show();
-            if ($('#bfeditor-messagediv').length) {
-              $('#bfeditor-messagediv').remove();
-            }
 
             // weird bnode prob
             _.each(bfeditor.bfestore.store, function (el) {
@@ -1380,6 +1393,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   adminTriple.otype = 'literal';
                   bfeditor.bfestore.store.push(adminTriple);
                 }
+              }
+
+              //update profile
+              if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
+                var profile = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
+                profile.o = bfeditor.bfestore.profile;
+              } else {
+                var admin = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                bfeditor.bfestore.store.addProfile(admin, bfeditor.bfestore.profile);
               }
 
               save_json.status = 'published';
@@ -1843,23 +1865,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         };
         rt.propertyTemplates.push(adminProp);
       }      
-      
 
       rt.propertyTemplates.forEach(function (property) {
         // Each property needs to be uniquely identified, separate from
         // the resourceTemplate.
-        var pguid = guid();
+        var pguid = shortUUID(guid());
         property.guid = pguid;
         property.display = 'true';
         addPropsUsed[property.propertyURI] = 1;
         var $formgroup = $('<div>', {
           class: 'form-group row template-property'
         });
-
-        
-        
-        
-            
+   
         // add the uri to the data of the element
         $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
 
@@ -2552,6 +2569,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
           var data;
           var label;
+          var displayguid;
           if (property.type.indexOf('literal') > -1) {
             //the default is the literal
             var literalTriple = {};
@@ -2565,14 +2583,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
             literalTriple.otype = 'literal';
             label = literalTriple;
-            var displayguid = property.guid;
+            displayguid = literalTriple.guid;
             fobject.store.push(literalTriple);
             bfestore.addTriple(literalTriple);
 
           } else if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
             data = property.valueConstraint.defaults[d].defaultURI;
             bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
-
+            var triples = [];
             // is there a type?
             if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
               var typeTriple = {};              
@@ -2583,6 +2601,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               typeTriple.otype = 'uri';
               fobject.store.push(typeTriple);
               bfestore.addTriple(typeTriple);
+              triples.push(typeTriple)
             }
 
             // set the triples
@@ -2598,23 +2617,23 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             triple.otype = 'uri';
             fobject.store.push(triple);
             bfestore.addTriple(triple);
+            triples.push(triple);
 
             // set the label
             label = {};
             label.guid = shortUUID(guid());
             if (triple) {
               label.s = triple.o;
-              displayguid = triple.guid;
             } else {
               label.s = rt.defaulturi;
-              displayguid = label.guid;
             }
-
+            displayguid = label.guid;
             label.otype = 'literal';
             label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
             label.o = property.valueConstraint.defaults[d].defaultLiteral;
             fobject.store.push(label);
             bfestore.addTriple(label);
+            triples.push(label);
           }
 
           // set the form
@@ -2637,7 +2656,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             'fobjectid': fobject.id,
             'inputid': property.guid,
             'editable': editable,
-            'triples': [label]
+            'triples': triples
           };
           var $buttongroup = editDeleteButtonGroup(bgvars);
           $save.append($buttongroup);
@@ -3137,6 +3156,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           triplepassed.otype = 'uri';
           if (properties[0].type === 'list') {
             triplepassed.otype = properties[0].type;
+            if (_.has(properties[0].valueConstraint.valueDataType, 'dataTypeURI')) {
+              var typeTriple = {};              
+              typeTriple.guid = shortUUID(guid());
+              typeTriple.s = t.defaulturi;
+              typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
+              typeTriple.o = properties[0].valueConstraint.valueDataType.dataTypeURI;
+              typeTriple.otype = 'uri';
+              triplespassed.push(typeTriple)
+            }
           }
           triplespassed.push(triplepassed);
 
@@ -4002,8 +4030,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             if (!replaceBnode || _.isEmpty(resourceTriple)) {
               // push the triples
-              formobject.store.push(t);
-              //bfestore.addTriple(t);
+              if (formobject.resourceTemplates[0].embedType === 'modal'){
+                formobject.store.push(t);
+              } else {
+                bfestore.addTriple(t);
+              }
             } else {
               var resourceType = _.find(formobject.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: formobject.resourceTemplates[0].resourceURI });
 
@@ -4027,14 +4058,19 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   formobject.store.push(resourceTriple);
                 }
               } else {
-                formobject.store.push(t);
-                //bfestore.addTriple(t);
+                if (formobject.resourceTemplates[0].embedType === 'modal'){
+                  formobject.store.push(t);
+                } else {
+                  bfestore.addTriple(t);
+                }
               }
             }
           } else {
-            // I don't think this workst.s = resourceTriple.o;
-            formobject.store.push(t);
-            //bfestore.addTriple(t);
+            if (formobject.resourceTemplates[0].embedType === 'modal'){
+              formobject.store.push(t);
+            } else {
+              bfestore.addTriple(t);
+            }
           }
         });
 
@@ -4076,14 +4112,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
                   typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
                   typeTriple.otype = 'uri';
-                  formobject.store.push(typeTriple);
-                  //bfeditor.bfestore.store.push(typeTriple);
+                  if (formobject.resourceTemplates[0].embedType === 'modal'){
+                    formobject.store.push(typeTriple);
+                  } else {
+                    bfestore.addTriple(typeTriple);
+                    //bfeditor.bfestore.store.push(typeTriple);
+                  }
                 }
               }
 
               var bgvars = {
                 'editable': editable,
-                'tguid': property.guid,
+                'tguid': returntriples[0].guid,
                 'tlabel': tlabel,
                 'tlabelhover': tlabel,
                 'fobjectid': formobject.id,
