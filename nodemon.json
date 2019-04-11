@@ -1,6 +1,6 @@
 {
  "events": {
-     "start": "grunt"
+     "start": "grunt concat:test"
    },
    "ext": "js html css",
    "watch": "src"
