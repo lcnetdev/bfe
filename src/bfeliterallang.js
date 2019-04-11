@@ -63,6 +63,9 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
     // if we got one use it
     if (bestGuess.length>0){
       var usePattern = this.languagePatterns.filter(function(p){return p.name === bestGuess[0][0]})[0];     
+      if (usePattern.script === 'Latn'){
+        usePattern.script = null;
+      }
       return {script: usePattern.script, iso6391: usePattern['iso639-1']}
     }else{
       return {script: null, iso6391: null}

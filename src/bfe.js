@@ -1931,7 +1931,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             
             $inputHolder.append($selectLang);
-            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>script</option></select>');
+            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>no script</option></select>');
             // add in all the languages
             bfeliterallang.iso15924.forEach(function(s){
                 $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -1970,10 +1970,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                if ($('#' + property.guid).next().next().val() == 'script'){
-                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  return false;
-                }              
+                // if ($('#' + property.guid).next().next().val() == 'no script'){
+                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  // return false;
+                // }              
               }
             
             
@@ -1994,10 +1994,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                if ($('#' + property.guid).next().next().val() == 'script'){
-                  $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  return false;
-                }              
+                // if ($('#' + property.guid).next().next().val() == 'no script'){
+                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
+                  // return false;
+                // }              
               }
               // this prevents the select boxs from open the dropdown on enter press
               event.preventDefault();
@@ -3535,11 +3535,22 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
       // check if there there assoicated lang and script values for this input
       var lang = null;
+      var script = null;
       if ($('#' + inputID + '-lang') && $('#' + inputID + '-script')){
-        lang = $('#' + inputID + '-lang').val() + '-' + $('#' + inputID + '-script').val();
-        if (lang==='undefined-undefined'){
+        lang = $('#' + inputID + '-lang').val()
+        script = $('#' + inputID + '-script').val();
+        
+        if (script != 'no script'){
+          lang = lang + '-' + script
+        }else{
+          lang = lang
+        }
+        
+        if (lang==='undefined-undefined' || lang==='undefined'){
           lang = null;
         }
+        
+        
       }
     
       var triple = {};
@@ -3588,7 +3599,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $(save).append($buttongroup);
           $('#' + inputID, formobject.form).val('');
           $('#' + inputID + '-lang').val('lang');
-          $('#' + inputID + '-script').val('script');
+          $('#' + inputID + '-script').val('no script');
           if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
             $('#' + inputID, formobject.form).attr('disabled', true);
           }
@@ -4215,6 +4226,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var script =  t.olang.split('-')[1].charAt(0).toUpperCase() + t.olang.split('-')[1].slice(1).toLowerCase();
         $('#' + inputID + '-lang').val(lang);
         $('#' + inputID + '-script').val(script);
+      }else if (t.olang && t.olang !== "" && t.olang.indexOf('-')==-1){
+        $('#' + inputID + '-lang').val(t.olang.toLowerCase());
+        $('#' + inputID + '-script').val('no script');
+      
       }
     }
     formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
