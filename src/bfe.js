@@ -1282,7 +1282,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $exitButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
         }
 
-        $exitButtonGroup.append('<button id="bfeditor-preview" type="button" class="btn btn-primary">Preview</button>');
+        $exitButtonGroup.append('<button id="bfeditor-preview" type="button" class="btn btn-warning">Preview</button>');
 
         $('#bfeditor-menudiv').append($exitButtonGroup);
 
@@ -1471,7 +1471,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
 
           document.body.scrollTop = document.documentElement.scrollTop = 0;
-          var $backButton = $('<button id="bfeditor-exitback" type="button" class="btn btn-default">&#9664;</button>');
+          var $backButton = $('<button id="bfeditor-exitback" type="button" class="btn btn-warning">&#9664;</button>');
 
           var $bfeditor = $('#create > .row');
           var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10 main panel-group">\
