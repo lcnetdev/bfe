@@ -15,14 +15,17 @@ if (ie < 10) {
 }
 
 
-function setStartingPoints(){
+function setStartingPoints(fileMode){
     var spfile = versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=config-test";
+    if (fileMode){
+        spfile = rectoBase + "/bfe/builds/startingPoints.json";
+    }
     $.ajax({
         type: 'GET',
         dataType: 'json',
         async: false,
         url: spfile,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.error('ERROR: Request status: ' + textStatus + '; Error msg: ' + errorThrown);
         },
         success: function (data) {            
