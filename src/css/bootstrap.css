@@ -4153,3 +4153,20 @@ input[type="search"]::-webkit-search-cancel-button {
     vertical-align: middle;
     width: 0;
 }
+
+@media screen {
+  body {
+      padding-top: 50px;
+      padding-bottom: 20px;
+  }
+}
+
+@media print {
+  a[href]:after {
+      content: none;
+  }
+}
+
+.popover {
+  max-width: none
+}

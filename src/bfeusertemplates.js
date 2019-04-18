@@ -189,11 +189,10 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
     
     // builds the slect html code, is called in the getForm bef rendering process
     // this is being called whenever bfe.cbLoadTemplates();  is run 
-    exports.returnSelectHTML = function(pt) {      
+    exports.returnSelectHTML = function(pt) {
       // set this has our current active profile
-      exports.activeProfile = pt;      
-      var $templateSelect = $('\
-        <div class="template-controls">\
+      exports.activeProfile = pt;
+      var $templateSelect = $('<div class="template-controls">\
           <div id="template-controls-actions"><span class="glyphicon glyphicon-pencil"></span>Edit Profile</div>\
           <select class="form-control">\
           <option value="your-templates-ignore">Your Templates:</option>\

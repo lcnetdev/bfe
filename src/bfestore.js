@@ -227,6 +227,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
   }
 
   exports.addProfile = function (resourceURI, profile) {
+    bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/profile' }));
+
     var adminTriple = {};
     adminTriple.guid = shortUUID(guid());
     adminTriple.s = resourceURI;
@@ -563,7 +565,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     });
   };
 
-  exports.cleanJSONLD = function () {
+  exports.cleanJSONLD = function (procInfoLabel) {
     // converter uses bf:person intead of personal name
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person' }), function (triple) {
       triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
@@ -596,10 +598,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, topicContext);
     });
 
-    //add profile, procinfo
+    //add profile
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
       bfeditor.bfestore.addProfile(am.s, bfeditor.bfestore.profile);
-      bfeditor.bfestore.addProcInfo(am.s, 'update instance');
+      bfeditor.bfestore.addProcInfo(am.s, procInfoLabel);
     });
 
     bfeditor.bfestore.loadtemplates.data = bfeditor.bfestore.store;
