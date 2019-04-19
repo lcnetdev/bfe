@@ -520,7 +520,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '15%',
               'render': function (data, type, full, meta) {
                 
-                if(!full.contribution){
+                if(full.contribution == undefined){
                   full.contribution = bfe.findContribution(data);
                 }
                 return full.contribution;
@@ -536,7 +536,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 var titleString = 'http://id.loc.gov/ontologies/bibframe/title'
                 var mainTitleString = 'http://id.loc.gov/ontologies/bibframe/mainTitle'
-                if (!full.title){
+                if (full.title == undefined){
                   full.title = bfe.findTitle(data);
                 } 
                 return full.title;
@@ -548,7 +548,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '5%',
               'render': function (data, type, full, meta) {
                 var text = 'N/A';
-                if (!full.lccn){
+                if (full.lccn == undefined){
                   full.lccn = bfe.findLccn(data);
                 }
                 
@@ -592,7 +592,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '5%',
               'render': function (data, type, full, meta) {
                 
-                if(!full.catalogerid){
+                if(full.catalogerid == undefined){
                   full.catalogerid = bfe.findCatalogerId(data);
                 }
                 return full.catalogerid.length > 60 ? full.catalogerid.substr(0, 58) + '...' : full.catalogerid;
