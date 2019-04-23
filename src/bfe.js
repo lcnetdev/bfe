@@ -2043,7 +2043,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             
             $inputHolder.append($selectLang);
-            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>no script</option></select>');
+            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
             // add in all the languages
             bfeliterallang.iso15924.forEach(function(s){
                 $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -2082,7 +2082,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == 'no script'){
+                // if ($('#' + property.guid).next().next().val() == ''){
                   // $('#' + property.guid).next().next().addClass('literal-select-error-start');
                   // return false;
                 // }              
@@ -2106,7 +2106,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == 'no script'){
+                // if ($('#' + property.guid).next().next().val() == ''){
                   // $('#' + property.guid).next().next().addClass('literal-select-error-start');
                   // return false;
                 // }              
@@ -3808,7 +3808,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         lang = $('#' + inputID + '-lang').val()
         script = $('#' + inputID + '-script').val();
         
-        if (script != 'no script'){
+        if (script != ''){
           lang = lang + '-' + script
         }
         
@@ -3865,7 +3865,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $(save).append($buttongroup);
           $('#' + inputID, formobject.form).val('');
           $('#' + inputID + '-lang').val('lang');
-          $('#' + inputID + '-script').val('no script');
+          $('#' + inputID + '-script').val('');
           if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
             $('#' + inputID, formobject.form).attr('disabled', true);
           }
@@ -4494,7 +4494,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#' + inputID + '-script').val(script);
       }else if (t.olang && t.olang !== "" && t.olang.indexOf('-')==-1){
         $('#' + inputID + '-lang').val(t.olang.toLowerCase());
-        $('#' + inputID + '-script').val('no script');
+        $('#' + inputID + '-script').val('');
       
       }
     }
