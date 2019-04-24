@@ -694,13 +694,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     if (!_.isEmpty(rowData.addedProperties))
                       addedProperties = rowData.addedproperties;
 
-                    $('[href=\\#create]').tab('show');
                     $('#profileLabel').text(parent.Profile.title + ' ' + _.last(bfestore.profile.split(':')));
-                    $('#cloneButtonGroup').remove();
-                    $('#exitButtonGroup').remove();
-                    $('#bfeditor-previewPanel').remove();
-                    $('#bfeditor-messagediv').remove();
-                    $('#bfeditor-formdiv').show();
+
+                    bfe.exitButtons(editorconfig);
+                    
                     cbLoadTemplates();
                     window.location.hash = mintResource(rowData.name).substring(0,8);
                   } else {
@@ -766,6 +763,35 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
   }
   
+  exports.exitButtons = function (editorconfig){
+
+    //clear form
+    $('[href=\\#create]').tab('show');
+    $('#bfeditor-formdiv').show();
+    $('#cloneButtonGroup').remove();
+    $('#exitButtonGroup').remove();
+    $('#bfeditor-previewPanel').remove();
+    $('#bfeditor-messagediv').remove();
+        
+    //$('#bfeditor-formdiv').empty();
+   
+    var $exitButtonGroup = $('<div class="btn-group" id="exitButtonGroup"> \
+                      <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
+                  </div>');
+
+    if (editorconfig.save !== undefined) {
+      $exitButtonGroup.append('<button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button>');
+    }
+
+    if (editorconfig.publish !== undefined) {
+      $exitButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
+    }
+
+    $exitButtonGroup.append('<button id="bfeditor-preview" type="button" class="btn btn-warning">Preview</button>');
+
+    $('#bfeditor-menudiv').append($exitButtonGroup);
+  }
+
   exports.fulleditor = function (config, id) {
     this.setConfig(config);
     editordiv = document.getElementById(id);
@@ -866,11 +892,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#createresourcesubmenuul.open').hide();
           $('#createresourcesubmenuul.open').removeClass('open');
           $('#profileLabel').text(profile + ":" + event.target.text);
-          $('#bfeditor-messagediv').remove();
-          $('#bfeditor-formdiv').show();
-          $('#cloneButtonGroup').remove();
-          $('#exitButtonGroup').remove();
-          $('#bfeditor-previewPanel').remove();
+          
+          bfe.exitButtons(editorconfig);
+
           menuSelect(this.id);
         });
         $li.append($a);
@@ -972,12 +996,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfestore.cleanJSONLD('update work');
 
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
-            $('[href=\\#create]').tab('show');
-            $('#bfeditor-formdiv').show();
-            $('#cloneButtonGroup').remove();
-            $('#exitButtonGroup').remove();
-            $('#bfeditor-previewPanel').remove();
-            $('#bfeditor-messagediv').remove();
+
+            bfe.exitButtons(editorconfig);
 
             // weird bnode prob
             _.each(bfeditor.bfestore.store, function (el) {
@@ -1083,12 +1103,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             editorconfig.retrieveLDS.callback(url, bfestore, bfestore.loadtemplates, bfelog, function () {
               bfestore.cleanJSONLD('update instance');
 
-              $('[href=\\#create]').tab('show');
-              $('#bfeditor-formdiv').show();
-              $('#cloneButtonGroup').remove();
-              $('#exitButtonGroup').remove();
-              $('#bfeditor-previewPanel').remove();
-              $('#bfeditor-messagediv').remove();
+              bfe.exitButtons(editorconfig);
 
               cbLoadTemplates();
             });
@@ -1204,13 +1219,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfestore.cleanJSONLD('external marc');           
             
             bfestore.loadtemplates.data = bfeditor.bfestore.store;
-            $('[href=\\#create]').tab('show');
-            $('#cloneButtonGroup').remove();
-            $('#exitButtonGroup').remove();
-            $('#bfeditor-previewPanel').remove();
-            $('#bfeditor-messagediv').remove();
+            
+            bfe.exitButtons(editorconfig);
+
             $('#bfeditor-formdiv').empty();
-            $('#bfeditor-formdiv').show();
 
             // weird bnode prob
             _.each(bfeditor.bfestore.store, function (el) {
@@ -1370,22 +1382,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('.typeahead', form.form).each(function () {
           setTypeahead(this);
         });
-        var $exitButtonGroup = $('<div class="btn-group" id="exitButtonGroup"> \
-                      <button id="bfeditor-exitcancel" type="button" class="btn btn-default">Cancel</button> \
-                  </div>');
-
-        if (editorconfig.save !== undefined) {
-          $exitButtonGroup.append('<button id="bfeditor-exitsave" type="button" class="btn btn-primary">Save</button>');
-        }
-
-        if (editorconfig.publish !== undefined) {
-          $exitButtonGroup.append('<button id="bfeditor-exitpublish" type="button" class="btn btn-danger">Post</button>');
-        }
-
-        $exitButtonGroup.append('<button id="bfeditor-preview" type="button" class="btn btn-warning">Preview</button>');
-
-        $('#bfeditor-menudiv').append($exitButtonGroup);
-
+        
         $('<input>', {
           type: 'hidden',
           id: 'profile-id',
