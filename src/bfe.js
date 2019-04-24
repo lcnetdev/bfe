@@ -1788,17 +1788,28 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       //clean up
-      $('#cloneButtonGroup').remove();
+      //$('#cloneButtonGroup').remove();
 
-      var $templateCloneButtonGroup = $('<div>', {
+      var $templateCloneButtonGroup;
+      
+      if ($('#cloneButtonGroup').length > 0){
+        $templateCloneButtonGroup = $('#cloneButtonGroup');
+        if (rt.id.match(/:Instance$/i)) {
+          $clonebutton = $('#clone-instance')
+        } else if (rt.id.match(/:Work$/i)) {
+          $clonebutton = $('#clone-work')
+        }
+      } else {
+        $templateCloneButtonGroup = $('<div>', {
         id: 'cloneButtonGroup',
         class: 'pull-right'
-      });
+        });
+        $templateCloneButtonGroup.append($clonebutton);
+      }
     
       // append to the resource heading if there is a clone button id and is not a modal window      
       if ($clonebutton.attr('id') && rt.embedType != 'modal') {
         var newid = mintResource(guid());
-        $templateCloneButtonGroup.append($clonebutton);
 
         // ask user to input custom id
         var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
@@ -1829,6 +1840,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
         if (editorconfig.enableUserTemplates){
           var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
+          $('.template-controls').remove();
           $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile));
         }
         
@@ -2031,7 +2043,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             
             $inputHolder.append($selectLang);
-            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
+            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>no script</option></select>');
             // add in all the languages
             bfeliterallang.iso15924.forEach(function(s){
                 $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -2070,7 +2082,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == ''){
+                // if ($('#' + property.guid).next().next().val() == 'no script'){
                   // $('#' + property.guid).next().next().addClass('literal-select-error-start');
                   // return false;
                 // }              
@@ -2094,7 +2106,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   return false;
                 }                
 
-                // if ($('#' + property.guid).next().next().val() == ''){
+                // if ($('#' + property.guid).next().next().val() == 'no script'){
                   // $('#' + property.guid).next().next().addClass('literal-select-error-start');
                   // return false;
                 // }              
@@ -3796,7 +3808,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         lang = $('#' + inputID + '-lang').val()
         script = $('#' + inputID + '-script').val();
         
-        if (script != ''){
+        if (script != 'no script'){
           lang = lang + '-' + script
         }
         
@@ -3853,7 +3865,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $(save).append($buttongroup);
           $('#' + inputID, formobject.form).val('');
           $('#' + inputID + '-lang').val('lang');
-          $('#' + inputID + '-script').val('');
+          $('#' + inputID + '-script').val('no script');
           if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
             $('#' + inputID, formobject.form).attr('disabled', true);
           }
@@ -4482,7 +4494,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#' + inputID + '-script').val(script);
       }else if (t.olang && t.olang !== "" && t.olang.indexOf('-')==-1){
         $('#' + inputID + '-lang').val(t.olang.toLowerCase());
-        $('#' + inputID + '-script').val('');
+        $('#' + inputID + '-script').val('no script');
       
       }
     }

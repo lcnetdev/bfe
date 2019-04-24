@@ -184,6 +184,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       window.localStorage.setItem('bfeUserTemplatesActive',JSON.stringify(dataActive));
       exports.activeTemplate = null;
       // reload the profile
+      $('#cloneButtonGroup').remove();
       bfe.cbLoadTemplates();       
     }
     
