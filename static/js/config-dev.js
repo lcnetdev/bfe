@@ -1,37 +1,5 @@
-var ie = (function(){
-  var undef,
-      v = 3,
-      div = document.createElement('div'),
-      all = div.getElementsByTagName('i');
-  while (
-    div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
-    all[0]
-  );
-  return v > 4 ? v : undef;
-}());
-if (ie < 10) {
-  $("#iealert").addClass("alert alert-danger");
-  $("#iealert").html("Sorry, but the BIBFRAME Editor will not work in IE8 or IE9.")
-}
-
 function myCB(data) {
   document.body.scrollTop = document.documentElement.scrollTop = 0;
-}
-
-function setStartingPoints(){
-    var spfile = versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=config";
-    $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        async: false,
-        url: spfile,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.error('ERROR: Request status: ' + textStatus + '; Error msg: ' + errorThrown);
-        },
-        success: function (data) {
-            config.startingPoints = data[0].json;
-        }
-    });
 }
 
 /* Config object profiles
@@ -45,9 +13,11 @@ var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
 var workContext;
+var oclckey;
+var name = "config";
 
 if (env.RECTOBASE!==undefined)
-    rectoBase = env.RECTOBASE;
+rectobase = env.RECTOBASE;
 
 if (env.BASEDBURI!=undefined) {
     baseDBURI = env.BASEDBURI;
@@ -55,15 +25,15 @@ if (env.BASEDBURI!=undefined) {
     workContext = resourceURI + "/works/";
 }
 
-var versoURL = rectoBase + "/verso/api";
+if (env.OCLCKEY!=undefined) {
+    oclckey = env.OCLCKEY;
+}
+
+var versoURL = rectobase + "/verso/api";
 
 var config = {
-              /* "logging": {
-                "level": "DEBUG",
-                "toConsole": false
-              },*/
-    "name": "config-dev",
-    "url" : rectoBase,
+    "name": name,
+    "url" : rectobase,
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
@@ -72,16 +42,16 @@ var config = {
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates" :true,
     "enableLoadMarc": false,
+    "oclckey": oclckey,
+    "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
     "profiles": [
         versoURL + "/configs?filter[where][configType]=profile"
     ],
-    "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId"],
+    "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
     "return": {
         "format": "jsonld-expanded",
         "callback": myCB
     }
 }
-
-setStartingPoints();
 

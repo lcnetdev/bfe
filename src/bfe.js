@@ -498,7 +498,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // name
             {
               'data': 'name',
-              'width': '4%',
+              'width': '85px',
+              'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
                 try {
                   var retval = mintResource(data);
@@ -516,7 +517,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             //contribution
             {
               'data': 'rdf',
-              'className': 'column-title',
+              'className': 'column-contribution',
               'width': '15%',
               'render': function (data, type, full, meta) {
                 
@@ -545,7 +546,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // lccn
             {
               'data': 'rdf',
-              'width': '5%',
+              'width': '85px',
+              'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
                 var text = 'N/A';
                 if (full.lccn == undefined){
@@ -589,7 +591,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             //cataloger id
             {
               'data': 'rdf',
-              'width': '5%',
+              'width': '85px',
+              'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
                 
                 if(full.catalogerid == undefined){
@@ -601,7 +604,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             //modified
             {
               'data': 'modified',
-              'width': '8%',
+              'className': 'column-modified',
+              'width': '110px',
               'render': function (data, type, row) {
                 if (type === 'display') {
                   return moment(data).format("M-DD-YYYY h:mm a");
@@ -613,7 +617,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             //edit
             {
               'data': 'url',
-              'width': '8%',
+              'className': 'column-identifier',
+              'width': '85px',
               'searchable': false,
               'filterable': false,
               'sortable': false,

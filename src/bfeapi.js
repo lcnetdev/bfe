@@ -68,10 +68,10 @@ exports.save = function (data, bfelog, callback){
   }).done(function (data) {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+    var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
     var decimaltranslator = window.ShortUUID("0123456789");
     var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-    $messagediv.append('<div class="alert alert-info"><strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a></div>')
+    $messagediv.append('<strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a>')
     $('#bfeditor-formdiv').empty();
     $('#save-btn').remove();
     $messagediv.insertBefore('.nav-tabs');
@@ -124,8 +124,8 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
       })).done(function (savedata, publishdata) {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
-        var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-        $messagediv.append('<div class="alert alert-info"><strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+publishdata[0].lccn+'</a></div>');
+        var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
+        $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+publishdata[0].lccn+'</a>');
         $('#bfeditor-formdiv').empty();
         $('#save-btn').remove();
         $messagediv.insertBefore('.nav-tabs');
