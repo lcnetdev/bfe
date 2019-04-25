@@ -4,14 +4,13 @@ bfe rest api calls
 bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
-  var url = config.url + "/profile-edit/server/whichrt";
+  var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
   var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';
 
   $.ajax({
     dataType: dType,
     type: "GET",
-    async: false,
     data: { uri: uri},
     url: url,
     success: function (data) {
@@ -48,8 +47,9 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
       }
     },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
-        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + uri);
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + uri));
       }
     });
   }
@@ -151,11 +151,10 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     $.ajax({
       dataType: "json",
       type: "GET",
-      async: false,
       data: { uri: uri},
       url: url,
       success: function (data) {
-        bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
+        bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + uri);
         bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
           bfestore.store = [];
@@ -166,8 +165,9 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         //bfestore.n32store(data, url, tempstore, callback);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + uri);
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + uri));
       }
     });
   }
@@ -189,4 +189,19 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     });
   
   }
+
+  exports.setStartingPoints = function (config, callback){
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: config.startingPointsUrl,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+              bfelog.addMsg(new Error(),"ERROR", 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+        },
+        success: function (data) {            
+            config.startingPoints = data[0].json;
+            callback(config)
+        }
+    });
+}
 });

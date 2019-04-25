@@ -21,14 +21,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       contentType: 'application/json',
       processData: false,
       type: "POST",
-      async: false,
       data: JSON.stringify(input),
       url: url,
       success: function (data) {
         bfestore.store = bfestore.jsonldcompacted2store(data, function (expanded) {
           bfestore.store = [];
           var tempstore = bfestore.jsonld2store(expanded);
-          tempstore.forEach(function (nnode) {
+          var i = 0;
+          tempstore.forEach(function (nnode, index, array) {
+            i++;
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
             nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/' + recid);
             nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
@@ -39,14 +40,17 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
               nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
               nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/' + recid + '0001');
             }
-            bfeditor.bfelog.addMsg(new Error(), "INFO", nnode);
+            bfeditor.bfelog.addMsg(new Error(), "INFO", nnode.s + ' ' + nnode.p + ' ' + nnode.o);
+            if (i == array.length)
+              callback(loadtemplates);
           });
-          callback(loadtemplates);
+          
         });
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         bfeditor.bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
         bfeditor.bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + url));
       }
     });
   }
