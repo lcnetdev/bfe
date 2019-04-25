@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>(Bibliographic Framework Initiative Technical Site - BIBFRAME.ORG)</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.ico" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/url-search-params/1.1.0/url-search-params.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+
+    <script src="https://cdn.jsdelivr.net/g/es6-promise@1.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.4.12/jsonld.min.js"></script>
+
+    <script src="static/js/short-uuid.min.js"></script>
+    <script src="static/js/typeahead.jquery.corejavascript.fork.js"></script>
+
+    <script src="static/js/tooltipster.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/tooltipster.bundle.css">
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+    <!--static/js/lodash.min.js-->
+
+    <script type="text/javascript" src="static/js/n3-browser.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+
+    <script type="text/javascript" src="static/js/jsonld-vis.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/jsonld-vis.css">
+
+    <script type="text/javascript" src="builds/bfe-test.js"></script>
+    <link rel="stylesheet" type="text/css" href="builds/bfe-test.css" />
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/bfe/test.html">BIBFRAME Editor</a>
+            </div>
+            <div class="collapse navbar-collapse visible-print" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="divider"></li>
+                    <li>
+                        <a href="http://www.loc.gov/bibframe/">&laquo; LC BIBFRAME Site</a>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+        <li>
+            <a href="../index.html">Home</a>
+        </li>
+        <li>
+            <a href="/bfe/test.html">Editor</a>
+        </li>
+    </ol>
+
+    <div id="bfeditor" class="container-fluid">
+        <div id="iealert"></div>
+    </div>
+
+    <script type="text/javascript">
+        function reloadJs(src) {
+            src = $('script[src$="' + src + '"]').attr("src");
+            $('script[src$="' + src + '"]').remove();
+            $('<script/>').attr('src', src).appendTo('body');
+        }
+    </script>
+    <script type="text/javascript" src="builds/env.js"></script>
+    <script type="text/javascript" src="static/js/config-test.js"></script>
+    <br/>
+    <br/>
+    <br/>
+
+    <hr>
+    <footer class="bs-footer" role="contentinfo">
+        <div class="container">
+            <p>This is a development view of the Bibliographic Framework Initiative project's editor. For more information,
+                go to
+                <a href="http://www.loc.gov/bibframe/">www.loc.gov/bibframe</a>.</p>
+        </div>
+    </footer>
+    
+<script type="text/javascript">
+    var bfeditor = bfe.fulleditor(config, "bfeditor");
+</script>
+
+</body>
+
+</html>
