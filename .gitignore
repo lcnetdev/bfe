@@ -4,7 +4,6 @@ node_modules
 builds/*
 docs/plato/*
 
-*.html
 static/js/config-*.js
 
 .csslintrc

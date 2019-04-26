@@ -11,36 +11,46 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var input = {};
     input.rdf = rdf;
 
+    if(_.isEmpty(recid)){
+      recid = mintResource(guid());
+    } else {
+      recid = 'c'+recid;
+    }
+
     $.ajax({
       contentType: 'application/json',
       processData: false,
       type: "POST",
-      async: false,
       data: JSON.stringify(input),
       url: url,
       success: function (data) {
         bfestore.store = bfestore.jsonldcompacted2store(data, function (expanded) {
           bfestore.store = [];
           var tempstore = bfestore.jsonld2store(expanded);
-          tempstore.forEach(function (nnode) {
+          var i = 0;
+          tempstore.forEach(function (nnode, index, array) {
+            i++;
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/c' + recid);
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/' + recid);
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/' + recid + '0001');
             if (nnode.o !== undefined) {
               nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/c' + recid);
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/c' + recid + '0001');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/c' + recid + '0001');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/' + recid);
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/' + recid + '0001');
             }
-            bfeditor.bfelog.addMsg(new Error(), "INFO", nnode);
+            bfeditor.bfelog.addMsg(new Error(), "INFO", nnode.s + ' ' + nnode.p + ' ' + nnode.o);
+            if (i == array.length)
+              callback(loadtemplates);
           });
-          callback(loadtemplates);
+          
         });
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         bfeditor.bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
         bfeditor.bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + url));
       }
     });
   }
@@ -221,6 +231,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
   }
 
   exports.addProfile = function (resourceURI, profile) {
+    bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/profile' }));
+
     var adminTriple = {};
     adminTriple.guid = shortUUID(guid());
     adminTriple.s = resourceURI;
@@ -557,7 +569,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     });
   };
 
-  exports.cleanJSONLD = function () {
+  exports.cleanJSONLD = function (procInfoLabel) {
     // converter uses bf:person intead of personal name
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Person' }), function (triple) {
       triple.o = 'http://www.loc.gov/mads/rdf/v1#PersonalName';
@@ -590,10 +602,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, topicContext);
     });
 
-    //add profile, procinfo
+    //add profile
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
       bfeditor.bfestore.addProfile(am.s, bfeditor.bfestore.profile);
-      bfeditor.bfestore.addProcInfo(am.s, 'update instance');
+      bfeditor.bfestore.addProcInfo(am.s, procInfoLabel);
     });
 
     bfeditor.bfestore.loadtemplates.data = bfeditor.bfestore.store;
@@ -612,6 +624,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
   function shortUUID(uuid) {
     var translator = window.ShortUUID();
     return translator.fromUUID(uuid);
+  }
+
+  function mintResource(uuid) {
+    var decimaltranslator = window.ShortUUID('0123456789');
+    return 'e' + decimaltranslator.fromUUID(uuid);
   }
 
 });

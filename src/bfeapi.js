@@ -4,14 +4,13 @@ bfe rest api calls
 bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
-  var url = config.url + "/profile-edit/server/whichrt";
+  var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
-  var xmlType = (uri.endsWith('.rdf')) ? 'rdf' : 'xml';
+  var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';
 
   $.ajax({
     dataType: dType,
     type: "GET",
-    async: false,
     data: { uri: uri},
     url: url,
     success: function (data) {
@@ -33,8 +32,10 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
           $nohits.modal('show');
         }
       } else if (xmlType == 'rdf') {
-        rdfrec = $('rdf\\:RDF', data).html();
-        recid = $('bf\\:Local > rdf\\:value', data).html();
+        rdfrec = $('<div>').append($('rdf\\:RDF', data).clone()).html();
+        //rdfrec = $('rdf\\:RDF', data).html();
+        if(!uri.match(/OCLC/))
+          recid = $('bf\\:Local > rdf\\:value', data).html();
         bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
       } else {
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
@@ -46,8 +47,9 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
       }
     },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
-        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + uri);
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + uri));
       }
     });
   }
@@ -66,10 +68,10 @@ exports.save = function (data, bfelog, callback){
   }).done(function (data) {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-    var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
+    var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
     var decimaltranslator = window.ShortUUID("0123456789");
     var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-    $messagediv.append('<div class="alert alert-info"><strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a></div>')
+    $messagediv.append('<strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a>')
     $('#bfeditor-formdiv').empty();
     $('#save-btn').remove();
     $messagediv.insertBefore('.nav-tabs');
@@ -122,8 +124,8 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
       })).done(function (savedata, publishdata) {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
-        var $messagediv = $('<div>', {id: "bfeditor-messagediv"});
-        $messagediv.append('<div class="alert alert-info"><strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+publishdata[0].lccn+'</a></div>');
+        var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
+        $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+publishdata[0].lccn+'</a>');
         $('#bfeditor-formdiv').empty();
         $('#save-btn').remove();
         $messagediv.insertBefore('.nav-tabs');
@@ -149,11 +151,10 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     $.ajax({
       dataType: "json",
       type: "GET",
-      async: false,
       data: { uri: uri},
       url: url,
       success: function (data) {
-        bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + url);
+        bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + uri);
         bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
         bfestore.store = bfestore.jsonldcompacted2store(data, function(expanded) {
           bfestore.store = [];
@@ -164,8 +165,9 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         //bfestore.n32store(data, url, tempstore, callback);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + url);
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + uri);
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        callback(new Error("ERROR: FAILED to load external source: " + uri));
       }
     });
   }
@@ -187,4 +189,19 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     });
   
   }
+
+  exports.setStartingPoints = function (config, callback){
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: config.startingPointsUrl,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+              bfelog.addMsg(new Error(),"ERROR", 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+        },
+        success: function (data) {            
+            config.startingPoints = data[0].json;
+            callback(config)
+        }
+    });
+}
 });

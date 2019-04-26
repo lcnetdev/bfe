@@ -14,11 +14,11 @@ var baseDBURI;
 var resourceURI;
 var workContext;
 var oclckey;
-var loadmarc=false;
+var loadmarc=true;
 var buildcontext = true;
 var enableusertemplates=true;
 
-var name = "config";
+var name = "config-test";
 
 if (env.RECTOBASE!==undefined){
     rectobase = env.RECTOBASE;
@@ -49,8 +49,12 @@ if (env.ENABLEUSERTEMPLATES!=undefined){
 var versoURL = rectobase + "/verso/api";
 
 var config = {
-    "name": name,
-    "url" : rectobase,
+     "logging": {
+      "level": "DEBUG",
+      "toConsole": true
+    }, 
+    "name":name,
+    "url": rectobase,
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,

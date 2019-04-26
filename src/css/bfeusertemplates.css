@@ -64,5 +64,13 @@
 }
 
 .column-title{
-  min-width:500px;
+  min-width:300px;
+}
+
+.column-contribution{
+  min-width:150px;
+}
+
+.column-identifier {
+  min-width: 80px;
 }

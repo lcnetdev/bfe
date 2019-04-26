@@ -4132,3 +4132,41 @@ input[type="search"]::-webkit-search-cancel-button {
   /*Bootstrap 4 override*/
   -webkit-appearance: searchfield-cancel-button;
 }
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+.caret-right {
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    border-left: 4px solid;
+    margin-left: 10px;
+    display: inline-block;
+    height: 0;
+    vertical-align: middle;
+    width: 0;
+}
+
+@media screen {
+  body {
+      padding-top: 50px;
+      padding-bottom: 20px;
+  }
+}
+
+@media print {
+  a[href]:after {
+      content: none;
+  }
+}
+
+.popover {
+  max-width: none
+}
