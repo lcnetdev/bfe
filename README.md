@@ -58,7 +58,7 @@ Demo?
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/bfe/index.html
+[demo-page]: http://bibframe.org/bibliomata/bfe/index.html
 
 Browser Support
 ---------------
@@ -66,12 +66,11 @@ Browser Support
 * Chrome 34
 * Firefox 24+
 * Safari - 6+
-* Internet Explorer 10+
 * Opera - 12+
 
 **NOTE:** `bfe` has also not been **thoroughly** tested in the browsers for which
 support is currently listed.  It has been developed primarily using Chrome.
-It has been tested in both Chrome and Safari mobile versions.
+It has been tested in both Chrome and Safari mobile versions. IE is no longer supported.
 
 Issues
 ------
@@ -99,33 +98,6 @@ and ask in that forum.
 [Issues]: https://github.com/lcnetdev/bfe/issues
 [khes]: mailto:khes@loc.gov
 [listserv]: http://listserv.loc.gov/cgi-bin/wa?SUBED1=bibframe&A=1
-
-
-Roadmap
-----------
-v0.2.x
-* Support LC Bibframe Pilot
-* Request.js has been deprecated
-* Dryice build has been replaced with Grunt.
-
-v0.3.x
-* Implement BF 2.0 Ontology
-* LC Bibframe Pilot 2.0 support.
-* Implement save/load api
-
-v0.4.x
-* Additional features to support LC Bibframe Pilot 2.0
-* Additional features to support requirements for LD4P2
-
-v1.0.0
-* Public release for bibframe.org rollout
-
-v1.1.x
-* Support for LD4P2 requirements
-* Refactor into MVC
-* Implement common javascript framework (React, Angular, etc)
-* Implement automated testing.
-
 
 Developers
 ----------
@@ -193,6 +165,7 @@ Contributors
 * [Jeremy Nelson](https://github.com/jermnelson)
 * [Kevin Ford](https://github.com/kefo)
 * [Kirk Hess](https://github.com/kirkhess)
+* [Matt Miller](https://github.com/thisismattmiller)
 
 [Index Data](http://indexdata.com/):
 * [Charles Ledvina](https://github.com/cledvina)
