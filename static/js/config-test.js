@@ -14,10 +14,15 @@ var baseDBURI;
 var resourceURI;
 var workContext;
 var oclckey;
+var loadmarc=true;
+var buildcontext = true;
+var enableusertemplates=true;
+
 var name = "config-test";
 
-if (env.RECTOBASE!==undefined)
+if (env.RECTOBASE!==undefined){
     rectobase = env.RECTOBASE;
+}
 
 if (env.BASEDBURI!=undefined) {
     baseDBURI = env.BASEDBURI;
@@ -27,6 +32,18 @@ if (env.BASEDBURI!=undefined) {
 
 if (env.OCLCKEY!=undefined) {
     oclckey = env.OCLCKEY;
+}
+
+if (env.LOADMARC!=undefined) {
+    loadmarc = env.LOADMARC;
+}
+
+if (env.BUILDCONTEXT!=undefined){
+    buildcontext = env.BUILDCONTEXT;
+}
+
+if (env.ENABLEUSERTEMPLATES!=undefined){
+    enableusertemplates=env.ENABLEUSERTEMPLATES;
 }
 
 var versoURL = rectobase + "/verso/api";
@@ -41,11 +58,11 @@ var config = {
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
-    "buildContext": true,
+    "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
-    "enableUserTemplates" :true,
-    "enableLoadMarc": true,
+    "enableUserTemplates" :enableusertemplates,
+    "enableLoadMarc": loadmarc,
     "oclckey": oclckey,
     "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
@@ -58,4 +75,3 @@ var config = {
         "callback": myCB
     }
 }
-

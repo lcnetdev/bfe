@@ -1,23 +1,28 @@
 function myCB(data) {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 /* Config object profiles
- * Editor profiles are read from a WS endpoint
- * The data are expected to be in a JSON array, with each object
- * in the array containing a "json" property that has the profile
- * itself. The "versoURL" variable is a convenience for setting the
- * base URL of verso in the "config" definition below.
- */
+* Editor profiles are read from a WS endpoint
+* The data are expected to be in a JSON array, with each object
+* in the array containing a "json" property that has the profile
+* itself. The "versoURL" variable is a convenience for setting the
+* base URL of verso in the "config" definition below.
+*/
 var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
 var workContext;
 var oclckey;
+var loadmarc=false;
+var buildcontext = true;
+var enableusertemplates=true;
+
 var name = "config";
 
-if (env.RECTOBASE!==undefined)
-rectobase = env.RECTOBASE;
+if (env.RECTOBASE!==undefined){
+    rectobase = env.RECTOBASE;
+}
 
 if (env.BASEDBURI!=undefined) {
     baseDBURI = env.BASEDBURI;
@@ -29,6 +34,18 @@ if (env.OCLCKEY!=undefined) {
     oclckey = env.OCLCKEY;
 }
 
+if (env.LOADMARC!=undefined) {
+    loadmarc = env.LOADMARC;
+}
+
+if (env.BUILDCONTEXT!=undefined){
+    buildcontext = env.BUILDCONTEXT;
+}
+
+if (env.ENABLEUSERTEMPLATES!=undefined){
+    enableusertemplates=env.ENABLEUSERTEMPLATES;
+}
+
 var versoURL = rectobase + "/verso/api";
 
 var config = {
@@ -37,11 +54,11 @@ var config = {
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
-    "buildContext": true,
+    "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
-    "enableUserTemplates" :true,
-    "enableLoadMarc": false,
+    "enableUserTemplates" :enableusertemplates,
+    "enableLoadMarc": loadmarc,
     "oclckey": oclckey,
     "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
@@ -54,4 +71,3 @@ var config = {
         "callback": myCB
     }
 }
-
