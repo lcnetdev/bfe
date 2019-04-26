@@ -1123,7 +1123,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $loadmarcdiv.append($('<div class="container"> \
               <form role="form" method="get"> \
               <div class="form-group"> \
-              <label for="marcdx">Bib ID or LCCN</label> \
+              <label for="marcdx">Identifier</label> \
               <div class="input-group"> \
               <div class="input-group-btn"> \
               <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bib ID <span class="caret"></span></button> \
