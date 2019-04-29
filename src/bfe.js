@@ -1454,62 +1454,62 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('.alert').remove();
           if (editorconfig.publish !== undefined) {
             if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-              //bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
-              var rdfxml = $("#rdfxml .panel-body pre").text();
-              var save_json = {};
-              save_json.name = mintResource(bfeditor.bfestore.name);
-              save_json.profile = bfeditor.bfestore.profile;
-              save_json.url = bfeditor.bfestore.url;
-              save_json.created = bfeditor.bfestore.created;
-              save_json.modified = new Date().toUTCString();
+              bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
+                //var rdfxml = $("#rdfxml .panel-body pre").text();
+                var save_json = {};
+                save_json.name = mintResource(bfeditor.bfestore.name);
+                save_json.profile = bfeditor.bfestore.profile;
+                save_json.url = bfeditor.bfestore.url;
+                save_json.created = bfeditor.bfestore.created;
+                save_json.modified = new Date().toUTCString();
 
-              if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-                var modifiedDate = new Date(save_json.modified);
-                var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+                if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+                  var modifiedDate = new Date(save_json.modified);
+                  var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-                if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                  _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-                    cd.o = modifiedDateString;
-                  });
-                } else {
-                  var adminTriple = {};
-                  adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                  adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-                  adminTriple.o = modifiedDateString;
-                  adminTriple.otype = 'literal';
-                  bfeditor.bfestore.store.push(adminTriple);
-                }
-              }
-
-              //update profile
-              if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
-                var profile = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
-                profile.o = bfeditor.bfestore.profile;
-              } else {
-                var admin = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                bfeditor.bfestore.addProfile(admin, bfeditor.bfestore.profile);
-              }
-
-              save_json.status = 'published';
-              save_json.objid = 'loc.natlib.instances.' + save_json.name + '0001';
-
-              var lccns = _.where(_.where(bfeditor.bfestore.store, { s: _.where(bfeditor.bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s }), { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' });
-
-              if (!_.isEmpty(lccns)) {
-                for (var i = 0; i < lccns.length; i++) {
-                  if (!lccns[i].o.trim().startsWith('n')) {
-                    save_json.lccn = lccns[i].o.trim();
-                    save_json.objid = 'loc.natlib.instances.e' + save_json.lccn + '0001';
+                  if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+                    _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+                      cd.o = modifiedDateString;
+                    });
+                  } else {
+                    var adminTriple = {};
+                    adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
+                    adminTriple.o = modifiedDateString;
+                    adminTriple.otype = 'literal';
+                    bfeditor.bfestore.store.push(adminTriple);
                   }
                 }
-              }
 
-              save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-              editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
-                exitFunction();
-                bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
+                //update profile
+                if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
+                  var profile = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
+                  profile.o = bfeditor.bfestore.profile;
+                } else {
+                  var admin = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                  bfeditor.bfestore.addProfile(admin, bfeditor.bfestore.profile);
+                }
+
+                save_json.status = 'published';
+                save_json.objid = 'loc.natlib.instances.' + save_json.name + '0001';
+
+                var lccns = _.where(_.where(bfeditor.bfestore.store, { s: _.where(bfeditor.bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s }), { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' });
+
+                if (!_.isEmpty(lccns)) {
+                  for (var i = 0; i < lccns.length; i++) {
+                    if (!lccns[i].o.trim().startsWith('n')) {
+                      save_json.lccn = lccns[i].o.trim();
+                      save_json.objid = 'loc.natlib.instances.e' + save_json.lccn + '0001';
+                    }
+                  }
+                }
+
+                save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
+                editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
+                  exitFunction();
+                  bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
+                });
               });
-              //});
             } else {
               // title required
               $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
@@ -3487,8 +3487,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       displaydata = tvalue.o;
       displayuri = tvalue.s;
     } else {
-      displaydata = _.last(parent.p.split('/'));
-      displayuri = parent.o;
+      if (!_.isEmpty(parent))
+        displayuri = parent.o;
       //var labeldata = _.where(data, { otype: 'literal' });
       displaydata = exports.displayDataService(data, displaydata);
     }
@@ -3588,6 +3588,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 literallabel += label.o + ' ';
               });
               if (!_.isEmpty(literallabel)){
+                //add enumeration
+                if(_.some(labeldata, {p: "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology"})){
+                  literallabel += ' ' + _.find(bfeditor.bfestore.store,{s: _.find(labeldata, {p: "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology"}).o, otype: 'literal'}).o
+                }
                 displaydata = literallabel.trim();
               }
             }

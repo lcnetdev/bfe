@@ -265,53 +265,51 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     return exports.store;
   };
 
-  exports.store2rdfxml = function (jsonld, callback) {
-    exports.store2jsonldnormalized(jsonld, function (expanded) {
-      jsonld.toRDF(expanded, {
-        format: 'application/nquads'
-      }, function (err, nquads) {
-        //json2turtle(nquads, callback);
-        var parser = N3.Parser();
-        var turtlestore = N3.Store();
-        parser.parse(nquads, function (error, triple, theprefixes) {
-          if (triple) {
-            turtlestore.addTriple(triple);
-          } else {
-            turtlestore.addPrefixes(theprefixes);
-            var turtleWriter = N3.Writer({
-              prefixes: {
-                bf: 'http://id.loc.gov/ontologies/bibframe/',
-                bflc: 'http://id.loc.gov/ontologies/bflc/',
-                madsrdf: "http://www.loc.gov/mads/rdf/v1#",
-                pmo: 'http://performedmusicontology.org/ontology/',
-                rdf: "http://www.w3.org/1999/02/22-rdf-sydntax-ns#",
-                rdfs: "http://www.w3.org/2000/01/rdf-schema#",
-                xsd: "http://www.w3.org/2001/XMLSchema#",
-                datatypes: "http://id.loc.gov/datatypes/",
-                lclocal: "http://id.loc.gov/ontologies/lclocal/"
+  exports.store2rdfxml = function (expanded, callback) {
+    jsonld.toRDF(expanded, {
+      format: 'application/nquads'
+    }, function (err, nquads) {
+      //json2turtle(nquads, callback);
+      var parser = N3.Parser();
+      var turtlestore = N3.Store();
+      parser.parse(nquads, function (error, triple, theprefixes) {
+        if (triple) {
+          turtlestore.addTriple(triple);
+        } else {
+          turtlestore.addPrefixes(theprefixes);
+          var turtleWriter = N3.Writer({
+            prefixes: {
+              bf: 'http://id.loc.gov/ontologies/bibframe/',
+              bflc: 'http://id.loc.gov/ontologies/bflc/',
+              madsrdf: "http://www.loc.gov/mads/rdf/v1#",
+              pmo: 'http://performedmusicontology.org/ontology/',
+              rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+              rdfs: "http://www.w3.org/2000/01/rdf-schema#",
+              xsd: "http://www.w3.org/2001/XMLSchema#",
+              datatypes: "http://id.loc.gov/datatypes/",
+              lclocal: "http://id.loc.gov/ontologies/lclocal/"
+            }
+          });
+          turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
+          turtleWriter.end(function (error, result) {
+            var input = {};
+            input.n3 = result;
+            $.ajax({
+              url: config.url + "/profile-edit/server/n3/rdfxml",
+              type: "POST",
+              data: JSON.stringify(input),
+              processData: false,
+              contentType: "application/json",
+              success: function (rdfxml) {
+                var data = new XMLSerializer().serializeToString(rdfxml);
+                callback(data);
+              },
+              error: function (XMLHttpRequest, status, err) {
+                bfeditor.bfelog.addMsg(new Error(), 'ERROR', err);
               }
             });
-            turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
-            turtleWriter.end(function (error, result) {
-              var input = {};
-              input.n3 = result;
-              $.ajax({
-                url: config.url + "/profile-edit/server/n3/rdfxml",
-                type: "POST",
-                data: JSON.stringify(input),
-                processData: false,
-                contentType: "application/json",
-                success: function (rdfxml) {
-                  var data = new XMLSerializer().serializeToString(rdfxml);
-                  $("#rdfxml .panel-body pre").text(data);
-                },
-                error: function (XMLHttpRequest, status, err) {
-                  bfeditor.bfelog.addMsg(new Error(), 'ERROR', err);
-                }
-              });
-            });
-          }
-        });
+          });
+        }
       });
     });
     callback;
