@@ -2935,11 +2935,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       's': pd.o
     });
 
-    var titledata = _.where(bfestore.store, {
-      's': pd.o,
-      'p': 'http://id.loc.gov/ontologies/bibframe/title'
-    })
-
     var parent = _.find(bfestore.store, {'o': pd.o});
     var parentLabel = _.find(bfeditor.bfestore.store, {'s': parent.s, 'p':'http://www.w3.org/2000/01/rdf-schema#label'});
 
@@ -3017,25 +3012,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
       } else {
         displaydata = _.last(property.propertyURI.split('/'));
-        /*going away...
-        if (displaydata === 'hasInstance' || displaydata === "instanceOf") {
-          //lookup bf:Title only
-          var title = _.find(labeldata, {
-            'o': 'http://id.loc.gov/ontologies/bibframe/Title'
-          });
-          //find bf:title/bf:Title/bf:mainTitle
-          if (!_.isEmpty(title)) {
-            var mainTitle = _.find(bfeditor.bfestore.store, {
-              's': title.s,
-              'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'
-            });
-            if (!_.isEmpty(mainTitle)) {
-              displaydata = mainTitle.o;
-            }
-          }
-        }*/
         //instance and works
         if (displaydata === 'instanceOf' || displaydata === 'hasInstance'){
+          var titledata = _.where(bfestore.store, {
+            's': pd.o,
+            'p': 'http://id.loc.gov/ontologies/bibframe/title'
+          });
           if (!_.isEmpty(titledata)){
             _.each(titledata, function(title){
               if(_.some(bfeditor.bfestore.store, {s: title.o, o: 'http://id.loc.gov/ontologies/bibframe/Title'}))
@@ -3486,13 +3468,30 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else if (!_.isEmpty(tvalue)) {
       displaydata = tvalue.o;
       displayuri = tvalue.s;
-    } else {
-      if (!_.isEmpty(parent))
+    } else if (!_.isEmpty(parent)){
         displayuri = parent.o;
-      //var labeldata = _.where(data, { otype: 'literal' });
-      displaydata = exports.displayDataService(data, displaydata);
+        var relationship = _.last(parent.p.split('/'));
+        //instance and works
+        if (relationship === 'instanceOf' || relationship === 'hasInstance'){
+          var titledata = _.where(data, {
+            's': displayuri,
+            'p': 'http://id.loc.gov/ontologies/bibframe/title'
+          });
+          if (!_.isEmpty(titledata)){
+            _.each(titledata, function(title){
+              if(_.some(data, {s: title.o, o: 'http://id.loc.gov/ontologies/bibframe/Title'}))
+              {
+                displaydata = _.find(data, {s: title.o, p: 'http://id.loc.gov/ontologies/bibframe/mainTitle'}).o
+              }
+            });
+          }
+        } else {
+          displaydata = exports.displayDataService(data, displaydata)
+        }
+    } else {
+      displaydata = exports.displayDataService(data, displaydata)
     }
-
+    
     return {
       displayuri: displayuri,
       displaydata: displaydata
