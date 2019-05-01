@@ -3265,6 +3265,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Setting resource from modal');
     bfelog.addMsg(new Error(), 'DEBUG', 'modal form id is: ' + modalformid);
+    var tsubject = resourceID;
     var callingformobject = _.where(forms, {
       'id': formobjectID
     });
@@ -3312,7 +3313,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var save = $formgroup.find('.btn-toolbar')[0];
 
         bfelog.addMsg(new Error(), 'DEBUG', 'Selected property from calling form: ' + properties[0].propertyURI);
-        var display = exports.labelMakerModal(data)
+        var display = exports.labelMakerModal(tsubject, data)
 
         data.forEach(function (triple) {
           callingformobject.store.push(triple);
@@ -3384,9 +3385,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $('#bfeditor-debug').html(JSON.stringify(bfeditor.bfestore.store, undefined, ' '));
   }
 
-  exports.labelMakerModal = function (data) {
+  exports.labelMakerModal = function (tsubject, data) {
 
-    var tsubject =  _.find(data, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' }).s;
     var parent = _.find(data, {'o': tsubject});
     var parentLabel;
     if (!_.isEmpty(parent)){
@@ -4697,7 +4697,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else if (uri.match(/[works|instances]\/\d+#\w+\d+-\d+/) || uri.match(/_:.*/g) ) {      //fake uris
       if(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
         callback(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
-      } else { 
+      } else if(_.find(bfestore.store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
+        callback(_.find(bfestore.store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
+      } else if(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
+        callback(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
+      } else {
         callback("");
       }
     } else {
