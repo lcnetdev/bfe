@@ -2566,7 +2566,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 bfestore.addTriple(triple);
         
                 //add label
-                whichLabel(propsdata[i].o, function (label) {
+                bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + propsdata[i].o);
+                whichLabel(propsdata[i].o, null, function (label) {
                   var labeltriple = {}
                   labeltriple.s = propsdata[i].o;
                   labeltriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
@@ -2947,7 +2948,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           tsearch = t.s;
         }
         if (!tsearch.startsWith('_:b')) {
-          whichLabel(tsearch, function (label) {
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + tsearch);
+          whichLabel(tsearch, null, function (label) {
             tpreflabel = label;
           });
         }
@@ -2995,8 +2997,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         displaydata = tlabel.o;
       } else if (!_.isEmpty(tvalue)) {
         if (tvalue.o.startsWith('http')) {
-          whichLabel(tvalue.o, function (label) {
-            bfelog.addMsg(new Error(), 'INFO', label);
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + tvalue.o);
+          whichLabel(tvalue.o, null, function (label) {
             displaydata = label;
           });
         } else {
@@ -3064,7 +3066,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var topics = _.where(labeldata, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })
           var topicLabel;
           topics.forEach(function (t) {
-            whichLabel(t.o, function (label) {
+            bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + t.o);
+            whichLabel(t.o, null, function (label) {
               if (_.isEmpty(topicLabel)) {
                 topicLabel = label;
               } else {
@@ -3418,7 +3421,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var topics = _.where(data, { s: tsubject, p: "http://www.loc.gov/mads/rdf/v1#componentList" })
       var topicLabel;
       topics.forEach(function (t) {
-        whichLabel(t.o, function (label) {
+        bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + t.o);
+        whichLabel(t.o, data, function (label) {
           if (_.isEmpty(topicLabel)) {
             topicLabel = label;
           } else {
@@ -3538,7 +3542,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
         } else {
           // try looking up
-          whichLabel(agent.o, function (label) {
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + agent.o);
+          whichLabel(agent.o, null, function (label) {
             if (!_.isEmpty(label)) 
               { displaydata = label; }
           });
@@ -3558,7 +3563,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               displaydata = displaydata + ', ' + roleLabel.o; 
           }
         } else {
-          whichLabel(role.o, function (label) {
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + role.o);
+          whichLabel(role.o, null, function (label) {
             if (!_.isEmpty(label) && displaydata !== 'contribution') 
               { if (displaydata.endsWith(','))
                   displaydata = displaydata + ' ' + label; 
@@ -3615,7 +3621,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           }).o;
         } else {
-          whichLabel(place.o, function (label) {
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + place.o);
+          whichLabel(place.o, null, function (label) {
             placeLabel = label;
           });
         }
@@ -3630,7 +3637,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           }).o;
         } else {
-          whichLabel(agent.o, function (label) {
+          bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + agent.o);
+          whichLabel(agent.o, null, function (label) {
             agentLabel = label;
           });
         }
@@ -3655,7 +3663,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else if (displaydata === 'v1#componentList' || displaydata === 'genreForm') {
       displaydata = "";
       _.forEach(labeldata, function (triple) {
-        whichLabel(triple.s, function (label) {
+        bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + triple.s);
+        whichLabel(triple.s, null, function (label) {
           displaydata = label;
         });
       });
@@ -3663,7 +3672,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       //target
       var targets = _.where(labeldata, { p: "http://id.loc.gov/ontologies/bflc/target" })
       targets.forEach(function (t) {
-        whichLabel(t.o, function (label) {
+        bfelog.addMsg(new Error(), 'INFO', 'whichLabel from: ' + t.o);
+        whichLabel(t.o, null, function (label) {
           displaydata = label;
         });
       });
@@ -4683,7 +4693,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // return returnval;
   }
 
-  function whichLabel(uri, callback) {
+  function whichLabel(uri, store, callback) {
+
+    if(_.isEmpty(store)){
+      store = bfestore.store;
+    }
     // for resource templates, determine if they are works, instances, or other
     var jsonuri = uri + '.json';
     // normalize
@@ -4695,12 +4709,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var returnval = /[^/]*$/.exec(uri)[0].split('.')[0];
       callback(returnval);
     } else if (uri.match(/[works|instances]\/\d+#\w+\d+-\d+/) || uri.match(/_:.*/g) ) {      //fake uris
-      if(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
-        callback(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
-      } else if(_.find(bfestore.store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
-        callback(_.find(bfestore.store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
-      } else if(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
-        callback(_.find(bfestore.store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
+      if(_.some(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
+        callback(_.find(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
+      } else if(_.some(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
+        callback(_.find(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
+      } else if(_.some(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
+        callback(_.find(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
       } else {
         callback("");
       }
