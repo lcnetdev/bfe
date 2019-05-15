@@ -88,7 +88,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.s = bnode;
     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/creationDate';
     var d = new Date(bfeditor.bfestore.created);
-    adminTriple.o = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    adminTriple.o = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    adminTriple.otype = 'literal';
+    bfeditor.bfestore.store.push(adminTriple);
+
+    adminTriple = {};
+    adminTriple.s = bnode;
+    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
+    var modifiedDate = new Date().toUTCString();
+    adminTriple.o = new Date(modifiedDate).toJSON().split(/\./)[0];
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
 
@@ -184,7 +192,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.guid = shortUUID(guid());
     adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
     adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'DLC';
+    adminTriple.o = 'dlc';
     adminTriple.otype = 'literal';
     bfeditor.bfestore.store.push(adminTriple);
 
