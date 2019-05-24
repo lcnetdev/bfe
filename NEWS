@@ -1,0 +1,48 @@
+--- 1.2.1 (2019-05-24)
+
+•   Work posting & Table updates: Stopped assuming works had LCCNs, N/A doesn’t prevent linking to LDS work
+•   unposted description: pick the right work when there was more than one (stubs, etc.)
+•   Issues displaying Classification numbers: Classification was split into two profiles, moving the resource templates into a single profile fixed this
+•   Posting not working w/o preview: Preview was generating the RDF+XML, fixed it so RDF+XML happens outside of preview
+•   BFE lookup: add pop-up to children's subjects: added
+•   Load error handling: Load features now fail gracefully if you input an invalid string in the load box
+•   Script dropdown issues: For the lit-lang, script is blank and allows no script, which would be common for latin script languages (e.g. @en)
+•   IBC description drops LCCN: Fixed situation where the table load process clears out the bfestore
+•   Resource templates can be non-repeatable, set this way with generated AdminMetadta
+•   madsrdf and rdfs:label text regenerated when subjects are edited
+•   Added NEWS file
+
+--- v1.2.0 (2019-04-26)
+
+•   Configuration modifications
+•   Starting points have been moved to be served from a file or from verso
+•   Config methods have been pushed into src/bfe.js
+•   properties have been externalized into env variables
+•   Support for Literal Languages added
+•   OCLC is now an allowed type of lookup for loading MARC from Worldcat in addition to bibids and LCCN from catalog.loc.gov via metaproxy
+•   Many types of labels have been modified to display more consistently
+•   Based on user feedback Primary contribution has been added to the table
+•   UI improved to remove static menu sidebar and replace it with a creation button, along with a consistent toolbar
+•   Modal windows modified to be movable & do not close when clicking outside of window.
+•   Various other bug fixes
+
+--- v1.1.1 (2019-04-01)
+
+•   Add option to link to external database, externalize database urls.
+•   Various bug fixes
+
+--- v1.1.0 (2019-03-01)
+
+•   Admin Metadata enhancements
+•   Enter key fixed, no longer refreshes browser in single property modal windows.
+•   Implement lists in bfestore
+•   Fix date rendering
+•   Implement user templates
+•   Fix headings
+•   Speedup jQuery Datatable loading
+
+--- v1.0.0 (2018-10-18)
+
+•   Fixes for labels
+•   Set rectoBase using env variable; use env.sh to populate
+•   Updated documentation
