@@ -632,8 +632,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 var loadtemplate = {};
                 var tempstore = [];
                 var spoints;
-                bfestore.store = [];
-                bfestore.loadtemplates = [];
+                //bfestore.store = [];
+                //bfestore.loadtemplates = [];
 
                 // default
                 // var spoints = editorconfig.startingPoints[0].menuItems[0];
@@ -988,7 +988,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
-      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
 
@@ -1060,7 +1060,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
-      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
 
@@ -1187,7 +1187,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
       bfeditor.bfestore.created = new Date().toUTCString();
-      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       // bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
 
@@ -1612,7 +1612,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfeditor.bfestore.name = guid();
     bfeditor.bfestore.templateGUID = guid();
     bfeditor.bfestore.created = new Date().toUTCString();
-    bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D';
+    bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
     bfeditor.bfestore.state = 'create';
     
     // Turn off edit mode of templates if they were in the middle of editing one
@@ -1964,7 +1964,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       if (RegExp(/(Work|Instance|Item)$/).test(rt.id) && !_.some(rt.propertyTemplates, { "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata" })) {
         var adminProp = {
           "mandatory": "false",
-          "repeatable": "true",
+          "repeatable": "false",
           "type": "resource",
           "resourceTemplates": [],
           "valueConstraint": {
@@ -2756,7 +2756,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $el.prop('disabled', true);
             } else {
               // console.log(property.propertyLabel);
-              var $buttons = $('div.btn-group', $el).find('button');
+              var $buttons = $('div.btn-group-md', $el).find('button');
               $buttons.each(function () {
                 $(this).prop('disabled', true);
               });
@@ -2918,7 +2918,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $el.prop('disabled', true);
         } else {
           // console.log(property.propertyLabel);
-          var $buttons = $('div.btn-group', $el).find('button');
+          var $buttons = $('div.btn-group-md', $el).find('button');
           $buttons.each(function () {
             $(this).prop('disabled', true);
           });
@@ -3374,7 +3374,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $(save).append($buttongroup);
         // $("#" + propertyguid, callingformobject.form).val("");
         if (properties[0].repeatable !== undefined && properties[0].repeatable == 'false') {
-          $('#' + propertyguid, callingformobject.form).attr('disabled', true);
+          //$('#' + propertyguid, callingformobject.form).attr('disabled', true);
+          $('#' + propertyguid + ' div.btn-group-md button', callingformobject.form).attr('disabled', true);
         }
       }
     });
