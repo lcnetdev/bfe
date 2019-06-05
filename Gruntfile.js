@@ -41,22 +41,12 @@ module.exports = function(grunt) {
                       'builds/bfe.min.css': ['builds/bfe.css']
                  }
             }
-         },
-         plato: {
-            options: {
-                     },
-            tests: {
-                files: {
-                    'docs/plato': ['src/**/*.js', 'static/js/config*.js']
-                    },
-                   },
-         },
+         }
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-uglify-es');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-plato');
 
-	grunt.registerTask('default', ['concat:dist','uglify', 'cssmin', 'plato']);
+	grunt.registerTask('default', ['concat:dist','uglify', 'cssmin']);
 };
