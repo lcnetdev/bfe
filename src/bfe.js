@@ -2015,10 +2015,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var $button;
         var $selectLang
         var $literalCol
-        
-        if (property.type.indexOf('literal') > -1) {
-        
-          var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
+        //default property type is literal
+        if (property.type.startsWith('literal') || _.isEmpty(property.type)) {
+          var vpattern = '';
+          if(_.has(property, "valueConstraint")){
+              vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
+          }
           
           $literalCol = $('<div class="col-sm-10"></div>');
           var $inputHolder = $('<div class="input-group literal-input-group"></div>');
@@ -2028,9 +2030,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $input = $('<input type="text" class="form-control literal-input" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '">');
           
           $inputHolder.append($input);
-          
-
-          
          
           if (property.type == 'literal-lang') {
             
@@ -2161,7 +2160,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         }
 
-        if (property.type.indexOf('literal') === -1) {
+        if (!(property.type.startsWith('literal')) && !_.isEmpty(property.type)) {
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
@@ -2503,6 +2502,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // Populate form with pre-loaded data.
       bfelog.addMsg(new Error(), 'DEBUG', 'Populating form with pre-loaded data, if any');
       rt.propertyTemplates.forEach(function (property) {
+        if(!_.has(property, "valueConstraint")){
+          property.valueConstraint = {};
+        }
         preloadData(property, rt, form, fobject);
       });
     });
@@ -2525,9 +2527,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'p': property.propertyURI
     }); 
 
-    if (propsdata.length > 0) {
-      // find the right one
-      if (property.valueConstraint.valueTemplateRefs[0] !== undefined) {
+    if (propsdata.length > 0 && _.has(property, 'valueConstraint')) {
+      if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
         var parent = _.find(bfeditor.profiles, function (post) {
           for (var i = 0; i < property.valueConstraint.valueTemplateRefs.length; i++) {
             if (_.some(post.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] }))
@@ -2659,7 +2660,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var data;
           var label;
           var displayguid;
-          if (property.type.indexOf('literal') > -1) {
+          if (property.type.startsWith('literal') || _.isEmpty(property.type)) {
             //the default is the literal
             var literalTriple = {};
             literalTriple.guid = shortUUID(guid());
@@ -2900,6 +2901,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     triples.push(pd);
 
     if (hasTemplate) {
+      if (!_.has(property.valueConstraint, "editable")) {
+        property.valueConstraint.editable = true;
+      }
       var bgvars = {
         'tguid': pd.guid,
         'tlabelhover': displaydata,
