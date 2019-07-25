@@ -1374,6 +1374,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }).appendTo(form.form);
 
         var exitFunction = function () {
+          document.body.style.cursor = 'default';
           $('#cloneButtonGroup').remove();
           $('#exitButtonGroup').remove();
           $('#bfeditor-previewPanel').remove();
@@ -1448,6 +1449,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         $('#bfeditor-exitpublish').click(function () {
           $('.alert').remove();
+          document.body.style.cursor = 'wait';
           if (editorconfig.publish !== undefined) {
             if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
               bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
