@@ -3292,7 +3292,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'guid': propertyguid
     })[0].valueConstraint.valueTemplateRefs[0];
 
-    if(_.some(data, {'p': "http://id.loc.gov/ontologies/bflc/target"})){
+    if( resourcetemplate.propertyTemplates[0].type === 'target'){
+      //_.some(data, {'p': "http://id.loc.gov/ontologies/bflc/target"}) 
       //targets are converted to resources if they do not have additional properties
       var target = _.find(data, {'p': "http://id.loc.gov/ontologies/bflc/target"});
       //ignoring types, are there any other triples?
@@ -3304,9 +3305,29 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         data = _.reject(data, {s: bnode});
         _.find(data, {o: bnode}).o = target.o;
         resourceType.s = target.o;
+      } 
+    } else if (resourcetemplate.propertyTemplates[0].type === 'lookup') {
+      var lookup = _.find(data, {'p': resourcetemplate.resourceURI});
+      if (!_.isEmpty(lookup)){
+        bnode = lookup.s;
+        bnodes = _.where(data, {s: bnode});
+        tcount = _.reject(bnodes, {p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}).length;
+        if (tcount === 1 || lookup.o.match(/resource/)){
+        //convert to resource
+          data = _.reject(data, {s: bnode});
+          _.find(data, {o: bnode}).o = lookup.o;
+          resourceType.s = lookup.o;
+        } else {
+          //stick with bnode
+          data = _.reject(data, {s:lookup.o});
+          data = _.reject(data, {p: resourcetemplate.resourceURI});
+          bfestore.store = _.reject(bfestore.store, {s:lookup.o});
+          bfestore.store = _.reject(bfestore.store, {p: resourcetemplate.resourceURI});
+        }
       }
     }
-    //if(!_.some(data, resourceType))
+
+    if(!_.some(data, {p: resourceType.p, o: resourceType.o}))
       data.push(resourceType);
 
     callingformobject.resourceTemplates.forEach(function (resourceTemplate) {
