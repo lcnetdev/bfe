@@ -474,6 +474,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               var url = urlParams.get('url');
               $('#bfeditor-' + action + 'uriInput').val(url)
             }
+            $("#table_id_length > label > select").attr("class", "selectpicker");
+            $("#table_id_length > label > select").attr("data-width", "fit");
           },
           'processing': true,
           'paging': true,
@@ -2753,7 +2755,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var $buttongroup = editDeleteButtonGroup(bgvars);
           $save.append($buttongroup);
 
-          if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
+          if (property.repeatable === 'false') {
             var $el = $('#' + property.guid, form);
             if ($el.is('input')) {
               $el.prop('disabled', true);
@@ -2918,7 +2920,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var $buttongroup = editDeleteButtonGroup(bgvars);
 
       $save.append($buttongroup);
-      if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
+      if (property.repeatable === 'false') {
         var $el = $('#' + property.guid, form);
         if ($el.is('input')) {
           $el.prop('disabled', true);
@@ -4457,7 +4459,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $('#' + pguid, formobject.form).typeahead('val', '');
               $('#' + pguid, formobject.form).typeahead('close');
 
-              if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
+              if (property.repeatable === 'false') {
                 var $el = $('#' + pguid, formobject.form);
                 if ($el.is('input')) {
                   $el.prop('disabled', true);
