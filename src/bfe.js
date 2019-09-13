@@ -329,9 +329,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
 
     if (_.isEmpty(contributionval)){
-      if(!_.isEmpty(altretval))
-      contributionval = altretval;
-      else 
+      //if(!_.isEmpty(altretval))
+      // contributionval = altretval;
+      //else 
       contributionval = '';
     }
     return contributionval;
@@ -2908,30 +2908,35 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       if (!_.has(property.valueConstraint, "editable")) {
         property.valueConstraint.editable = true;
       }
-      var bgvars = {
-        'tguid': pd.guid,
-        'tlabelhover': displaydata,
-        'tlabel': displaydata,
-        'fobjectid': fobject.id,
-        'inputid': property.guid,
-        'editable': property.valueConstraint.editable,
-        'triples': triples
-      };
-      var $buttongroup = editDeleteButtonGroup(bgvars);
+      whichLabel(pd.o, null, function (label) {
+        if (_.isEmpty(displaydata))
+          displaydata = label;
+      
+        var bgvars = {
+          'tguid': pd.guid,
+          'tlabelhover': displaydata,
+          'tlabel': displaydata,
+          'fobjectid': fobject.id,
+          'inputid': property.guid,
+          'editable': property.valueConstraint.editable,
+          'triples': triples
+        };
+        var $buttongroup = editDeleteButtonGroup(bgvars);
 
-      $save.append($buttongroup);
-      if (property.repeatable === 'false') {
-        var $el = $('#' + property.guid, form);
-        if ($el.is('input')) {
-          $el.prop('disabled', true);
-        } else {
-          // console.log(property.propertyLabel);
-          var $buttons = $('div.btn-group-md', $el).find('button');
-          $buttons.each(function () {
-            $(this).prop('disabled', true);
-          });
+        $save.append($buttongroup);
+        if (property.repeatable === 'false') {
+          var $el = $('#' + property.guid, form);
+          if ($el.is('input')) {
+            $el.prop('disabled', true);
+          } else {
+            // console.log(property.propertyLabel);
+            var $buttons = $('div.btn-group-md', $el).find('button');
+            $buttons.each(function () {
+              $(this).prop('disabled', true);
+            });
+          }
         }
-      }
+      });
     }
   }
 
@@ -3067,20 +3072,22 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       //list, target & note
       if (displaydata === _.last(property.propertyURI.split('/'))) {
         displaydata = displaydata+'+';
-        var tsubject = labeldata[0].o;
-        if (_.some(labeldata, {  p: "http://www.loc.gov/mads/rdf/v1#componentList" })) {
-          var topics = _.where(labeldata, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })
-          var topicLabel;
-          topics.forEach(function (t) {
-            bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + t.o);
-            whichLabel(t.o, null, function (label) {
-              if (_.isEmpty(topicLabel)) {
-                topicLabel = label;
-              } else {
-                topicLabel += '--' + label;
-              }
+        if(!_.isEmpty(labeldata)){
+          var tsubject = labeldata[0].o;
+          if (_.some(labeldata, {  p: "http://www.loc.gov/mads/rdf/v1#componentList" })) {
+            var topics = _.where(labeldata, { p: "http://www.loc.gov/mads/rdf/v1#componentList" })
+            var topicLabel;
+            topics.forEach(function (t) {
+              bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + t.o);
+              whichLabel(t.o, null, function (label) {
+                if (_.isEmpty(topicLabel)) {
+                  topicLabel = label;
+                } else {
+                  topicLabel += '--' + label;
+                }
+              });
             });
-          });
+          } 
           if(!_.isEmpty(tlabel)) {
             _.find(labeldata, {s: tlabel.s, p: "http://www.w3.org/2000/01/rdf-schema#label"}).o = topicLabel;
           } else {
@@ -3098,6 +3105,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
       }
     }
+
     return displaydata;
 
   }
@@ -4745,7 +4753,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // for resource templates, determine if they are works, instances, or other
     var jsonuri = uri + '.json';
     // normalize
-    if (uri.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
+    if (uri.startsWith('http://id.loc.gov/resources') && !_.isEmpty(config.resourceURI)) {
       jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
     }
 
@@ -4787,6 +4795,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             if (!_.isEmpty(labels)) {
               returnval = labels[0][2];
+            } else if (_.has(data, "@graph")) {
+              returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
             } else {
               returnval = uri;
             }
