@@ -60,7 +60,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     if (triple.rtid !== undefined) { exports.n3store.addTriple(triple.s, triple.p, triple.o, triple.rtID); } else { exports.n3store.addTriple(triple.s, triple.p, triple.o); }
   };
 
-  exports.addAdminMetadata = function (resourceURI, procInfo) {
+  exports.addAdminMetadata = function (resourceURI, procInfo, catalogerId) {
     // add name, id triples
     var mintedId = 'e' + window.ShortUUID('0123456789').fromUUID(bfeditor.bfestore.name);
     var mintedUri = config.url + '/resources/' + mintedId;
@@ -82,6 +82,16 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/AdminMetadata';
     adminTriple.otype = 'uri';
     bfeditor.bfestore.store.push(adminTriple);
+
+    if (!_.isEmpty(catalogerId)){
+      adminTriple = {};
+      adminTriple.guid = shortUUID(guid());
+      adminTriple.s = bnode;
+      adminTriple.p = 'http://id.loc.gov/ontologies/bflc/catalogerId';
+      adminTriple.o = catalogerId;
+      adminTriple.otype = 'literal';
+      bfeditor.bfestore.store.push(adminTriple);
+    }
 
     adminTriple = {};
     adminTriple.guid = shortUUID(guid());
@@ -607,7 +617,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, complexContext);
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, topicContext);
     });
-
+    // converter uses madsrdf:genreForm intead of bf:genreForm
+    /*_.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/GenreForm' }), function (triple) {
+      var bfgenre = {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: 'http://www.loc.gov/mads/rdf/v1#GenreForm'};
+      bfeditor.bfestore.store.push(bfgenre);
+    });*/
     //add profile
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
       bfeditor.bfestore.addProfile(am.s, bfeditor.bfestore.profile);

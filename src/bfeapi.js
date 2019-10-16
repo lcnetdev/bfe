@@ -54,7 +54,7 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
     });
   }
 
-exports.save = function (data, bfelog, callback){
+exports.save = function (data, close, bfelog, callback){
   var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
   var url = config.url + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
@@ -65,20 +65,22 @@ exports.save = function (data, bfelog, callback){
     data:JSON.stringify(data),
     dataType: "json",
     contentType: "application/json; charset=utf-8"
-  }).done(function (data) {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  }).done(function (data) {  
     bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-    var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
-    var decimaltranslator = window.ShortUUID("0123456789");
-    var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-    $messagediv.append('<strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a>')
-    $('#bfeditor-formdiv').empty();
-    $('#save-btn').remove();
-    $messagediv.insertBefore('.nav-tabs');
-    $('#bfeditor-previewPanel').remove();
-    $('.nav-tabs a[href="#browse"]').tab('show')
-    bfeditor.bfestore.store = [];
-    window.location.hash = "";
+    if (close){
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
+      var decimaltranslator = window.ShortUUID("0123456789");
+      var resourceName = "e" + decimaltranslator.fromUUID(data.name);
+      $messagediv.append('<strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a>')
+      $('#bfeditor-formdiv').empty();
+      $('#save-btn').remove();
+      $messagediv.insertBefore('.nav-tabs');
+      $('#bfeditor-previewPanel').remove();
+      $('.nav-tabs a[href="#browse"]').tab('show')
+      bfeditor.bfestore.store = [];
+      window.location.hash = "";
+    }
     callback(true, data.name);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
     bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
