@@ -20,37 +20,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }
       // console.log("type is " + type);
   
-      var scheme = 'http://id.loc.gov/authorities/names';
-      hits = _.where(triples, {
-        'p': 'http://id.loc.gov/ontologies/bibframe/authoritySource'
-      });
-      if (hits[0] !== undefined) {
-        bfelog.addMsg(new Error(), 'INFO',hits[0]);
-        scheme = hits[0].o;
-      }
-      // console.log("scheme is " + scheme);
+      var scheme = exports.scheme;
   
-      var rdftype = '';
-      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName') {
-        rdftype = 'rdftype:PersonalName';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
-        rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#place') {
-        rdftype = 'rdftype:Geographic';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#organization') {
-        rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#family') {
-        // rdftype = "rdftype:FamilyName";
-        rdftype = 'rdftype:PersonalName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#meeting') {
-        rdftype = 'rdftype:ConferenceName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#jurisdiction') {
-        rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/genreForm') {
-        rdftype = 'rdftype:GenreForm';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/role') {
-        rdftype = 'rdftype:Role';
-      }
+      var rdftype = lcshared.rdfType(type);
   
       var q = '';
       if (scheme !== '' && rdftype !== '') {
@@ -132,21 +104,28 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
 
     exports.getResource = function (subjecturi, property, selected, process) {
       var triples = [];
-  
       var triple = {};
-      triple.s = subjecturi;
-      triple.p = property.propertyURI;
-      triple.o = selected.uri;
-      triple.otype = 'uri';
-      triples.push(triple);
-  
-      triple = {};
-      triple.s = selected.uri;
-      triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-      triple.o = selected.value;
-      triple.otype = 'literal';
-      triple.olang = 'en';
-      triples.push(triple);
+      if (selected.id == 'literal'){
+        triple.s = subjecturi;
+        triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+        triple.o = selected.value;
+        triple.otype = 'literal';
+        triples.push(triple);
+      } else {
+        triple.s = subjecturi;
+        triple.p = property.propertyURI;
+        triple.o = selected.uri;
+        triple.otype = 'uri';
+        triples.push(triple);
+    
+        triple = {};
+        triple.s = selected.uri;
+        triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+        triple.o = selected.value;
+        triple.otype = 'literal';
+        //triple.olang = 'en';
+        triples.push(triple);
+      }
   
       return process(triples, property);
     };
@@ -206,9 +185,42 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           value: '[No suggestions found for ' + query + '.]'
         };
       }
+      exports.addLiteralOption(typeahead_source, query);
+      return typeahead_source;
+    };
+
+    exports.processQASuggestions = function (suggestions, query) {
+      var typeahead_source = [];
+      if (suggestions[1] !== undefined) {
+        for (var s = 0; s < suggestions.length; s++) {
+          var l = suggestions[s]["label"];
+          var u = suggestions[s]["uri"];
+          var id = suggestions[s]["id"];
+          var d = l + ' (' + id + ')';
+  
+          typeahead_source.push({
+            uri: u,
+            id: id,
+            value: l,
+            display: d
+          });
+        }
+      }
+      if (typeahead_source.length === 0) {
+        typeahead_source[0] = {
+          uri: '',
+          display: '[No suggestions found for ' + query + '.]'
+        };
+      }
+      exports.addLiteralOption(typeahead_source, query);
+
       return typeahead_source;
     };
     
+    exports.addLiteralOption = function (data, query){
+      data.push({uri: "_:b1", id: "literal", value: query, display: query + "(Literal Value)"});
+    }
+
     exports.extractContextData = function(data){
       var results = { source: [], variant : [], uri: data.uri, title: null, contributor:[], date:null, genreForm: null, nodeMap:{}};
       
@@ -281,9 +293,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           })        
         })
       })
-        
 
-      
       data.forEach(function(n){
         
         var citation = '';
@@ -325,19 +335,11 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             results.genreForm = n['rdf-schema:label'];
           }
         }
-        
-        
-        
-        
       });    
-        
-
       return results;
     }
-    
+
     exports.fetchContextData = function(uri,callback){
-    
-    
       $.ajax({
         url: uri + '.jsonld',
         dataType: 'json',
@@ -355,6 +357,30 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       });   
     };
   
+    exports.rdfType = function(type){
+      var rdftype = '';
+      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName') {
+        rdftype = 'rdftype:PersonalName';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
+        rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place') {
+        rdftype = 'rdftype:Geographic';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization') {
+        rdftype = 'rdftype:CorporateName';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family') {
+        rdftype = "rdftype:FamilyName";
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting') {
+        rdftype = 'rdftype:ConferenceName';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction') {
+        rdftype = 'rdftype:CorporateName';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/GenreForm' || type == 'http://www.loc.gov/mads/rdf/v1#GenreForm') {
+        rdftype = 'rdftype:GenreForm';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Role') {
+        rdftype = 'rdftype:Role';
+      }
+      return rdftype;
+    }
+
     exports.processSuggestions = function (suggestions, query) {
 
       // was trying to pre-fetch some of the results, just causes a lot of slow down, not really needed
@@ -397,8 +423,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           display: '[No suggestions found for ' + query + '.]'
         };
       }
-      // console.log(typeahead_source);
-      // $("#dropdown-footer").text('Total Results:' + suggestions.length);
+      exports.addLiteralOption(typeahead_source, query);
+
       return typeahead_source;
     };
   
@@ -442,10 +468,43 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       // console.log(typeahead_source);
       return typeahead_source;
     };
-  
+
     exports.simpleQuery = function (query, cache, scheme, processSync, processAsync) {
+      return exports.complexQuery (query, cache, scheme, "ID" , processSync, processAsync, null)
+    }
+
+    exports.complexQuery = function (query, cache, scheme, resultType, processSync, processAsync, formobject) {
       bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query.normalize());
+
+      if (!_.isEmpty(formobject)){
+        var triples = formobject.store;
+    
+        var type = '';
+        var hits = _.where(triples, {
+          'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+        });
+        if (hits[0] !== undefined) {
+          type = hits[0].o;
+        }
+    
+        var rdftype = exports.rdfType(type);
+        var q = '';
+        if (scheme !== '' && rdftype !== '') {
+          q = 'cs:' + scheme + ' AND ' + rdftype;
+        } else if (rdftype !== '') {
+          q = rdftype;
+        } else if (scheme !== '') {
+          q = 'cs:' + scheme;
+        }
+
+        if (q !== '') {
+          q = q + ' AND ' + query.replace('?', '').normalize() + '*'; 
+        } else {
+          q = query.normalize();
+        }
+      } else {
+        q = query.normalize();
+      }
 
       if (cache[q]) {
         processSync(cache[q]);
@@ -456,23 +515,35 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         processSync([]);
       }
       this.searching = setTimeout(function () {
-        if ((query === '' || query === ' ') && !scheme.match(/resources\/[works|instances]/)) {
+        if ((query === '' || query === ' ') && resultType == "ID" && !(scheme.match(/resources\/[works|instances]/) || scheme.match(/authorities/) || scheme.match(/entities/))) {
           var u = scheme + '/suggest/?count=100&q=';
           $.ajax({
-            url: u,
+            url: encodeURI(u),
             dataType: 'jsonp',
             success: function (data) {
               var parsedlist = exports.processSuggestions(data, '');
               return processAsync(parsedlist);
             }
           });
-        } else if (query.length >= 2 && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
-          if (query.match(/^[0-9]{3,}$/))
+        } else if (query.length > 2 && query.substr(0, 1) == '?' && resultType == "ID") {          
+            u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'jsonp',
+              success: function (data) {
+                var parsedlist = exports.processATOM(data, query);
+                cache[q] = parsedlist;
+                return processAsync(parsedlist);
+              }
+            });
+        } else if (query.length >= 2 && resultType == "ID" && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
+          if (query.match(/^[0-9]{3,}$/)) {
             u = scheme + '/suggest/lccn/' + query.replace(/\s/g,'');
-          else
+          } else {
             u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
+          }
           $.ajax({
-            url: u,
+            url: encodeURI(u),
             dataType: 'json',
             success: function (data) {
               var parsedlist = exports.processSuggestions(data, query);
@@ -484,22 +555,52 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             }
           });
         } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
-          u = scheme + '/suggest/?count=50&q=' + q;
-          $.ajax({
-            url: u,
-            dataType: 'jsonp',
-            success: function (data) {
-              var parsedlist = exports.processSuggestions(data, query);
+          if (resultType == "ID"){
+            u = scheme + '/suggest/?count=50&q=' + query;
+          
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'jsonp',
+              success: function (data) {
+                var parsedlist;
+
+                if (resultType == "QA"){
+                  parsedlist = exports.processQASuggestions(data, query);
+                } else if (resultType == "RDA") {
+                  parsedlist = exports.processJSONLDSuggestions(data, query);
+                } else {
+                  parsedlist = exports.processSuggestions(data, query);
+                }
+
+                cache[q] = parsedlist;
+                return processAsync(parsedlist);
+              }
+            });
+          } else {
+            u = config.url + "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'json',
+              success: function (data) {
+              var parsedlist;
+
+              if (resultType == "QA"){
+                parsedlist = exports.processQASuggestions(data, query);
+              } else if (resultType == "RDA") {
+                parsedlist = exports.processJSONLDSuggestions(data, query);
+              } else {
+                return [];
+              }
               cache[q] = parsedlist;
               return processAsync(parsedlist);
             }
           });
-        } else {
-          return [];
+        }
         }
       }, 300); // 300 ms
     };
   });
+
   bfe.define('src/lookups/lcsubjects', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -521,35 +622,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       }
       // console.log("type is " + type);
   
-      var scheme = 'http://id.loc.gov/authorities/subjects';
-      hits = _.where(triples, {
-        'p': 'http://id.loc.gov/ontologies/bibframe/authoritySource'
-      });
-      if (hits[0] !== undefined) {
-        // console.log(hits[0]);
-        scheme = hits[0].o;
-      }
-      // console.log("scheme is " + scheme);
+      var scheme = exports.scheme;
   
-      var rdftype = '';
-      if (type == 'http://www.loc.gov/mads/rdf/v1#Person') {
-        rdftype = 'rdftype:PersonalName';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
-        rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place') {
-        rdftype = 'rdftype:Geographic';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization') {
-        rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family') {
-        // rdftype = "rdftype:FamilyName";
-        rdftype = 'rdftype:PersonalName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting') {
-        rdftype = 'rdftype:ConferenceName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction') {
-        rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/GenreForm') {
-        rdftype = 'rdftype:GenreForm';
-      }
+      var rdftype = lcshared.rdfType(type);
   
       var q = '';
       if (scheme !== '' && rdftype !== '') {
@@ -560,12 +635,12 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         q = 'cs:' + scheme;
       }
       if (q !== '') {
-        q = q + ' AND (' + query + ' OR ' + query + '* OR *' + query + '*)';
+        q = q + ' AND ' + query.normalize() + '*';
       } else {
-        q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
+        q = query.normalize();
       }
       // console.log('q is ' + q);
-      q = encodeURI(q);
+      //q = encodeURI(q);
   
       if (cache[q]) {
         processSync(cache[q]);
@@ -583,7 +658,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery;
           $.ajax({
-            url: u,
+            url: encodeURI(u),
             dataType: 'jsonp',
             success: function (data) {
               var parsedlist = lcshared.processSuggestions(data, query);
@@ -595,9 +670,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (query.match(/^[Ss][A-z\s]{0,2}\d/)){
             q = query.replace(/\s+/g,'').normalize();
           }      
-          u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
+          u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
           $.ajax({
-            url: u,
+            url: encodeURI(u),
             dataType: 'jsonp',
             success: function (data) {
               var parsedlist = lcshared.processATOM(data, query);
@@ -629,70 +704,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://id.loc.gov/authorities/genreForms';
   
     exports.source = function (query, processSync, processAsync, formobject) {
-      bfelog.addMsg(new Error(), 'DEBUG', formobject);
-      
-      var scheme = 'http://id.loc.gov/authorities/genreForms';
-      var rdftype = 'rdftype:GenreForm';
-  
-      var q = '';
-      if (scheme !== '' && rdftype !== '') {
-        q = 'cs:' + scheme + ' AND ' + rdftype;
-      } else if (rdftype !== '') {
-        q = rdftype;
-      } else if (scheme !== '') {
-        q = 'cs:' + scheme;
-      }
-      if (q !== '') {
-        q = q + ' AND (' + query + ' OR ' + query + '* OR *' + query + '*)';
-      } else {
-        q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
-      }
-      bfelog.addMsg(new Error(), 'INFO','q is ' + q);
-      q = encodeURI(q);
-  
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        bfelog.addMsg(new Error(), 'INFO','searching defined');
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-      // lcgft
-      this.searching = setTimeout(function () {
-        if (query.length > 2 && !query.match(/[Gg][A-z]?\d/)) {
-          var suggestquery = query;
-          if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
-  
-          var u = scheme + '/suggest/?q=' + suggestquery;
-  
-          // u = "http://id.loc.gov/authorities/genreForms/suggest/?q=" + query;
-          $.ajax({
-            url: u,
-            dataType: 'jsonp',
-            success: function (data) {
-              var parsedlist = lcshared.processSuggestions(data, query);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-  
-          });
-        } /* else if (query.length > 2 && query.match(/[Gg][A-z]?\d/)) {
-          u = 'http://id.loc.gov/search/?q=cs:http://id.loc.gov/authorities/genreForms%20AND%20(' + query + ')&start=1&format=atom';
-          $.ajax({
-            url: u,
-            dataType: 'jsonp',
-            success: function (data) {
-              parsedlist = lcshared.processATOM(data, query);
-              cache[q] = parsedlist;
-              return process(parsedlist);
-            }
-          });
-        } */ else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "ID", processSync, processAsync, formobject);
     };
   
     exports.getResource = lcshared.getResource;
@@ -705,44 +718,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/FormatNoteMus';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
@@ -754,44 +731,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/RDAMediaType';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
@@ -803,44 +744,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/ModeIssue';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
@@ -852,44 +757,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/RDACarrierType';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
@@ -901,48 +770,13 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/RDAContentType';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
   });
+
   bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -950,44 +784,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/frequency';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync);
     };
   
     exports.getResource = lcshared.getResource;
@@ -999,44 +797,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/AspectRatio';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
@@ -1048,74 +810,22 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.scheme = 'http://rdaregistry.info/termList/RDAGeneration';
   
     exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-      var q = encodeURI(query);
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-  
-      this.searching = setTimeout(function () {
-        if (query === '' || query === ' ') {
-          var u = exports.scheme + '.json-ld';
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 1) {
-          u = exports.scheme + '.json-ld';
-          bfelog.addMsg(new Error(), 'INFO',u);
-          $.ajax({
-            url: u,
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = lcshared.processJSONLDSuggestions(data, query, exports.scheme);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else {
-          return [];
-        }
-      }, 300); // 300 ms
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "RDA", processSync, processAsync, null);
     };
   
     exports.getResource = lcshared.getResource;
   });
-  
-  bfe.define('src/lookups/lcorganizations', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
+
+  bfe.define('src/lookups/qagetty', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
     var cache = [];
+    exports.scheme = 'https://lookup.ld4l.org/authorities/search/linked_data/getty_aat_ld4l_cache';
   
-    exports.scheme = 'http://id.loc.gov/vocabulary/organizations';
-  
-    exports.source = function (query, processSync, processAsync) {
+    exports.source = function (query, processSync, processAsync, formobject) {
       bfelog.addMsg(new Error(), 'INFO', query);
-      return lcshared.simpleQuery(query, cache, exports.scheme, processSync, processAsync);
-    };
-  
-    exports.getResource = lcshared.getResource;
-  });
-  
-  bfe.define('src/lookups/relators', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
-    var lcshared = require('src/lookups/lcshared');
-    var bfelog = require('src/bfelogging');
-    var cache = [];
-    
-    exports.scheme = 'http://id.loc.gov/vocabulary/relators';
-  
-    exports.source = function (query, processSync, processAsync) {
-      bfelog.addMsg(new Error(), 'INFO', query);
-      return lcshared.simpleQuery(query, cache, exports.scheme, processSync, processAsync);
+      return lcshared.complexQuery(query, cache, exports.scheme, "QA", processSync, processAsync, formobject);
     };
   
     exports.getResource = lcshared.getResource;

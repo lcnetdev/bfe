@@ -4450,9 +4450,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               if ($origin.data('loaded') !== true) {
 
                 if (stored) {
-
                   stored = JSON.parse(stored);
-                  instance.content(buildContextHTML(stored));
+                  if (!instance.__destroyed)
+                    instance.content(buildContextHTML(stored));
 
                 } else {
 
@@ -4465,21 +4465,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     // call the 'content' method to update the content of our tooltip with the returned data.
                     // note: this content update will trigger an update animation (see the updateAnimation option)
                     data = JSON.parse(data)
-
-                    instance.content(buildContextHTML(data));
+                    if (!instance.__destroyed)
+                      instance.content(buildContextHTML(data));
 
                     // to remember that the data has been loaded
                     $origin.data('loaded', true);
                   });
-
                 }
-
-
               }
             }
           });
         });
-
       }
     });
 
