@@ -1675,6 +1675,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         $('#bfeditor-formdiv').html('');
         $('#bfeditor-formdiv').append(form.form);
+        bfe.borderColor($('#bfeditor-formdiv')[0], loadtemplates[0].resourceTemplateID);
         $('#bfeditor-debug').html(JSON.stringify(bfeditor.bfestore.store, undefined, ' '));
         $('#bfeditor-debug').html(JSON.stringify(bfelog.getLog(), undefined, ' '));
 
@@ -2275,6 +2276,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }, function (event) {
                     var theNewResourceURI = '_:bnode' + shortUUID(guid());
                     openModal(event.data.fobjectid, event.data.template, theNewResourceURI, event.data.propertyguid, []);
+                    bfe.borderColor($(".modal-content:last")[0], event.data.template.id);
                   });
                   $buttongrp.append($b);
                 }
@@ -3239,6 +3241,24 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
   }
 
+  exports.borderColor = function (selector, bftype) {
+
+    //Works sea green
+    if (bftype.endsWith("Work")) {
+      selector.style.border = "3px solid seagreen"
+    //Instances DarkBlue
+    } else if (bftype.endsWith("Instance")){
+      selector.style.border = "3px solid DarkBlue"
+    //Items SandyBrown
+    } else if (bftype.endsWith("Item")) {
+      selector.style.border = "3px solid SandyBrown"
+    //No border
+    } else {
+      selector.style.border = "1px solid rgba(0,0,0,.2);"
+    }
+
+  }
+
   // callingformobjectid is as described
   // loadtemplate is the template objet to load.
   // resourceURI is the resourceURI to assign or to edit
@@ -3861,7 +3881,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           agentLabel = _.find(bfestore.store, {
             's': agent.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-          }).o;
+          });
+          if (!_.isEmpty(agentLabel)) {
+            displaydata = agentLabel.o;
+          }
         } else if (agent.o.startsWith('//mlvlp06.loc.gov')) {
           var newagent = agent.o.replace(/\/\/mlvlp06.loc.gov:8288\/bfentities/, 'http://id.loc.gov/entities');
           
@@ -4784,6 +4807,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // The subject of the resource matched with the "type"
         bfelog.addMsg(new Error(), 'DEBUG', 'Opening modal for editing', triples);
         openModal(callingformobject.id, templates[0], thisResourceType.s, inputID, triples);
+        bfe.borderColor($(".modal-content:last")[0], thisResourceType.rtID);
       }
     } else {
       removeTriples(formobjectID, inputID, tguid, triples);
