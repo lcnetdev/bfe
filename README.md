@@ -19,7 +19,7 @@ Twitter's [Bootstrap] and a few additional custom CSS declarations.
 
 <!-- section links -->
 
-[demo-page]: http://bibframe.org/bibliomata/bfe/index.html
+[demo-page]: http://bibframe.org/bfe/index.html
 [ontology]: http://id.loc.gov/ontologies/bibframe/
 [bfi]: http://www.loc.gov/bibframe/
 
