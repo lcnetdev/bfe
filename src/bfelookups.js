@@ -13,6 +13,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
       var type = '';
       var hits = _.where(triples, {
+        's': formobject.defaulturi,
         'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
       });
       if (hits[0] !== undefined) {
@@ -26,14 +27,14 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
       var q = '';
       if (scheme !== '' && rdftype !== '') {
-        q = 'cs:' + scheme + ' AND ' + rdftype;
+        q = '&cs:' + scheme + '&rdftype=' + rdftype;
       } else if (rdftype !== '') {
-        q = rdftype;
+        q = '&rdftype=' + rdftype;
       } else if (scheme !== '') {
-        q = 'cs:' + scheme;
+        q = '&cs:' + scheme;
       }
       if (q !== '') {
-        q = q + ' AND (' + query + ' OR ' + query + '* OR *' + query + '*)';
+        q = '(' + query + ' OR ' + query + '* OR *' + query + '*)' + q;
       } else {
         q = '(' + query + ' OR ' + query + '* OR *' + query + '*)';
       }
@@ -340,8 +341,15 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     }
 
     exports.fetchContextData = function(uri,callback){
+
+      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabularies)/)) {
+        var jsonuri = uri + '.madsrdf_raw.jsonld';
+      } else {
+        jsonuri = uri + '.jsonld';
+      }
+
       $.ajax({
-        url: uri + '.jsonld',
+        url: jsonuri,
         dataType: 'json',
         success: function (data) {    
           
@@ -359,20 +367,22 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.rdfType = function(type){
       var rdftype = '';
-      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName') {
+      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName' || type == 'http://id.loc.gov/ontologies/bibframe/Person') {
         rdftype = 'rdftype:PersonalName';
       } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
         rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place') {
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place' || type == 'http://id.loc.gov/ontologies/bibframe/Place' || type == 'http://www.loc.gov/mads/rdf/v1#Geographic') {
         rdftype = 'rdftype:Geographic';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization') {
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Temporal'){
+        rdftype= 'rdftype:Temporal'; 
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization' || type == 'http://id.loc.gov/ontologies/bibframe/Organization') {
         rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family') {
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family' || type == 'http://id.loc.gov/ontologies/bibframe/Family') {
         rdftype = "rdftype:FamilyName";
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting') {
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting' || type == 'http://id.loc.gov/ontologies/bibframe/Meeting') {
         rdftype = 'rdftype:ConferenceName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction') {
-        rdftype = 'rdftype:CorporateName';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction' || type == 'http://id.loc.gov/ontologies/bibframe/Jurisdiction') {
+        rdftype = 'rdftype:Geographic';
       } else if (type == 'http://id.loc.gov/ontologies/bibframe/GenreForm' || type == 'http://www.loc.gov/mads/rdf/v1#GenreForm') {
         rdftype = 'rdftype:GenreForm';
       } else if (type == 'http://id.loc.gov/ontologies/bibframe/Role') {
@@ -615,6 +625,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
       var type = '';
       var hits = _.where(triples, {
+        's': formobject.defaulturi,
         'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
       });
       if (hits[0] !== undefined) {
@@ -628,14 +639,15 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
       var q = '';
       if (scheme !== '' && rdftype !== '') {
-        q = 'cs:' + scheme + ' AND ' + rdftype;
+        q = '&cs:' + scheme + '&rdftype=' + rdftype;
       } else if (rdftype !== '') {
-        q = rdftype;
+        q = '&rdftype=' + rdftype;
       } else if (scheme !== '') {
-        q = 'cs:' + scheme;
+        q = '&cs:' + scheme;
       }
+
       if (q !== '') {
-        q = q + ' AND ' + query.normalize() + '*';
+        q = query.normalize() + '*' + q;
       } else {
         q = query.normalize();
       }

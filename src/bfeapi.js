@@ -72,14 +72,16 @@ exports.save = function (data, close, bfelog, callback){
       var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
       var decimaltranslator = window.ShortUUID("0123456789");
       var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-      $messagediv.append('<strong>Description saved:</strong><a href='+data.url+'>'+resourceName+'</a>')
-      $('#bfeditor-formdiv').empty();
-      $('#save-btn').remove();
+      var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
+      $messagediv.append('<strong>Description saved:</strong><a href='+linkUrl+'>'+resourceName.substring(0,8)+'</a>');
+      $messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
       $messagediv.insertBefore('.nav-tabs');
-      $('#bfeditor-previewPanel').remove();
-      $('.nav-tabs a[href="#browse"]').tab('show')
-      bfeditor.bfestore.store = [];
-      window.location.hash = "";
+      //$('#bfeditor-formdiv').empty();
+      //$('#save-btn').remove();
+      //$('#bfeditor-previewPanel').remove();
+      //$('.nav-tabs a[href="#browse"]').tab('show')
+      //bfeditor.bfestore.store = [];
+      //window.location.hash = "";
     }
     callback(true, data.name);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
@@ -124,18 +126,18 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         dataType: "json",
         contentType: "application/json; charset=utf-8"
       })).done(function (savedata, publishdata) {
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        //document.body.scrollTop = document.documentElement.scrollTop = 0;
         bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
         var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
         var displayText = publishdata[0].lccn !== undefined ? publishdata[0].lccn : publishdata[0].objid;
         $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
-        $('#bfeditor-formdiv').empty();
-        $('#save-btn').remove();
+        /*$('#bfeditor-formdiv').empty();
+        $('#save-btn').remove();*/
         $messagediv.insertBefore('.nav-tabs');
-        $('#bfeditor-previewPanel').remove();
+        /*$('#bfeditor-previewPanel').remove();
         $('.nav-tabs a[href="#browse"]').tab('show')
         bfeditor.bfestore.store = [];
-        window.location.hash = "";
+        window.location.hash = "";*/
         callback(true, data.name);                
       }).fail(function (XMLHttpRequest, textStatus, errorThrown){
         bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
