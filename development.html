@@ -46,9 +46,23 @@
 
     <script type="text/javascript" src="static/js/jsonld-vis.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/jsonld-vis.css">
+    
+    
 
-    <script type="text/javascript" src="builds/bfe.js"></script>
-    <link rel="stylesheet" type="text/css" href="builds/bfe.css" />
+    <script type="text/javascript" src="src/lib/mini_require.js"></script>
+    <script type="text/javascript" src="src/bfe.js"></script>
+    <script type="text/javascript" src="src/bfestore.js"></script>
+    <script type="text/javascript" src="src/bfelogging.js"></script>
+    <script type="text/javascript" src="src/bfeusertemplates.js"></script>
+    <script type="text/javascript" src="src/bfeliterallang.js"></script>
+    <script type="text/javascript" src="src/bfelookups.js"></script>
+    <script type="text/javascript" src="src/bfeapi.js"></script>
+    <script type="text/javascript" src="src/lib/aceconfig.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="src/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/typeahead.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/bfeusertemplates.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/bfeliterallang.css" />
 
 </head>
 
@@ -85,7 +99,7 @@
         </li>
     </ol>
 
-    <div id="bfeditor" class="container-fluid">
+    <div id="lcapplication" class="container-fluid">
         <div id="iealert"></div>
     </div>
 
@@ -111,9 +125,9 @@
         </div>
     </footer>
     
-<script type="text/javascript">
-    var bfeditor = bfe.fulleditor(config, "bfeditor");
-</script>
+    <script type="text/javascript">
+        var bfeditor = bfe.lcapplication(config, "lcapplication");
+    </script>
 
 </body>
 
