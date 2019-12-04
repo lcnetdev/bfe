@@ -1,7 +1,9 @@
 /*
 bfe rest api calls
 */
-bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
+bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (require, exports) {
+
+var bfelog = require('src/bfelogging');
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
