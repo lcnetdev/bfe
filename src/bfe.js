@@ -37,7 +37,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   // var csrf;
 
   var forms = [];
-      
+
 
   var lookups = {
     'http://id.loc.gov/authorities/names': {
@@ -792,6 +792,499 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     $('#bfeditor-menudiv').append($exitButtonGroup);
   }
+
+  exports.lcapplication = function (config, id) {
+    this.setConfig(config);
+    editordiv = document.getElementById(id);
+    var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
+    var $tabuldiv = $('<div class="tabs"></div>');
+    var $tabul = $('<ul class="nav nav-tabs"></ul>');
+    $tabul.append('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
+    $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
+    if(editorconfig.enableLoadMarc) {
+      $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+    }
+    if(!_.isEmpty(editorconfig.basedbURI)){
+      $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
+        <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
+    }
+    $tabuldiv.append($tabul);
+    $containerdiv.append($tabuldiv);
+
+    var $tabcontentdiv = $('<div class="tab-content"></div>');
+    var $browsediv = $('<div id="browse" class="tab-pane fade in active"><br></div>');
+    var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
+    var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
+    var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
+    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
+
+    var $menudiv = $('<div>', {
+      id: 'bfeditor-menudiv',
+      class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
+    });
+    var $formdiv = $('<div>', {
+      id: 'bfeditor-formdiv',
+      class: 'col-md-10 main'
+    });
+    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
+    var $rowdiv = $('<div>', {
+      class: 'row'
+    });
+
+    var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
+                          <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
+                              <span class="sr-only">80% Complete</span>\
+                          </div>\
+                      </div>');
+
+    $formdiv.append($loader);
+    exports.loadBrowseData($browsediv);
+    //$menudiv.append('<h3>Create Resource</h3>');
+    $menudiv.append('<span id="profileLabel" style="display: none"></span>');
+
+    var $createResourcediv = $('<div class="dropdown pull-left" style="padding-right: 10px">');
+    var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target=".dropdown-collapse">\
+    <span class="glyphicon glyphicon-plus"></span> Create Resource </span></button>');
+    
+    $createResourcediv.append($createResourceButton);
+    $menudiv.append($createResourcediv);
+
+    $rowdiv.append($menudiv);
+    $rowdiv.append($formdiv);
+
+    $creatediv.append($rowdiv);
+
+    var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
+
+    var $loadworkform = $('<div class="container"> \
+              <form role="form" method="get"> \
+              <div class="form-group"> \
+              <label for="url">URL for Bibframe JSON Work</label> \
+              <input id="bfeditor-loadworkuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
+              <div id="bfeditor-loadwork-dropdown" class="dropdown"><select id="bfeditor-loadwork-dropdownMenu" type="select" class="form-control">Select Profile</select> \
+              </div></div> \
+              <button id="bfeditor-loadworkuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
+              </form></div>')
+
+    var $loadibcform = $('<div class="container"> \
+              <form role="form" method="get"> \
+              <div class="form-group"> \
+              <label for="url">URL for Bibframe JSON</label> \
+              <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
+              <div id="bfeditor-loadibc-dropdown" class="dropdown"><select id="bfeditor-loadibc-dropdownMenu" type="select" class="form-control">Select Profile</select> \
+              </div></div> \
+              <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
+              </form></div>');
+    
+    editorconfig.setStartingPoints.callback(config, function (config) {
+      for (var h = 0; h < config.startingPoints.length; h++) {
+        var sp = config.startingPoints[h];
+        //var $menuul = $('<ul>', {
+        //  class: 'nav nav-sidebar'
+        //});
+        
+        //var $menuheadingul = null;
+        var $createResourcesubmenuul = null;
+        if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
+          //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
+          var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
+          
+          $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
+          //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
+
+          //$menuheading.append($menuheadingul);
+          $createResourcesubmenu.append($createResourcesubmenuul);
+          
+          $createResourcemenuul.append($createResourcesubmenu)
+          //$menuul.append($menuheading);
+        }
+        for (var i = 0; i < sp.menuItems.length; i++) {
+          var $li = $('<li>');
+          var $a = $('<a>', {
+            href: '#',
+            id: 'sp-' + h + '_' + i,
+            class: "test",
+            tabindex: "-1"
+          });
+          $a.html(sp.menuItems[i].label);
+          $a.click(function (event) {
+            var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
+            $('#createresourcesubmenuul.open').hide();
+            $('#createresourcesubmenuul.open').removeClass('open');
+            $('#profileLabel').text(profile + ":" + event.target.text);
+            
+            bfe.exitButtons(editorconfig);
+
+            menuSelect(this.id);
+          });
+          $li.append($a);
+
+          if ($createResourcesubmenuul !== null) {
+            $createResourcesubmenuul.append($li)
+          } else {
+            $createResourcemenuul.append($li)
+          }
+        }
+        $createResourcediv.append($createResourcemenuul);
+
+      }
+
+      var getProfileOptions = 
+       function (jqObject, elementType) {
+        for (var h = 0; h < config.startingPoints.length; h++) {
+          var sp = config.startingPoints[h];
+          var label = sp.menuGroup
+          for (var i = 0; i < sp.menuItems.length; i++) {
+            var $option = $('<option>', {
+              class: 'dropdown-item',
+              value: 'sp-' + h + '_' + i
+            });
+            if (sp.menuItems[i].type[0] === elementType) {
+              $option.html(label);
+              jqObject.append($option);
+            }
+          }
+        }
+      }
+      $(function(){
+        $('.dropdown-submenu>a').unbind('click').click(function(e){
+          var $openmenu = $('#createresourcesubmenuul.open');
+          $openmenu.hide();
+          $openmenu.removeClass('open');
+          var $dropdown = $(this).next('ul');
+          $dropdown.addClass('open');
+          $dropdown.toggle();
+          e.stopPropagation();
+          e.preventDefault();
+        });
+      });
+
+      getProfileOptions($loadworkform.find('#bfeditor-loadwork-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
+      getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
+      getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Instance");
+
+    });
+
+    $loadworkdiv.append($loadworkform);
+
+    $loadworkdiv.find('#bfeditor-loadworkuri').click(function () {
+      // var loadtemplates = [];
+
+      // var spoints = { label: 'Loaded Work',
+      //   type: ['http://id.loc.gov/ontologies/bibframe/Work'],
+      //   useResourceTemplates: ['profile:bf2:Monograph:Work']
+      // };
+
+      var spid = $(this.parentElement).find('#bfeditor-loadwork-dropdownMenu').val();
+      var label = $(this.parentElement).find('#bfeditor-loadwork-dropdownMenu option:selected').text();
+      $('#profileLabel').text(label + ":Work");
+
+      var spnums = spid.replace('sp-', '').split('_');
+
+      var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+
+      bfeditor.bfestore.store = [];
+      bfeditor.bfestore.name = guid();
+      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
+      bfeditor.bfestore.state = 'loaduri';
+      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
+
+      var temptemplates = [];
+      spoints.useResourceTemplates.forEach(function (l) {
+        var useguid = guid();
+        var loadtemplate = {};
+        loadtemplate.templateGUID = shortUUID(useguid);
+        loadtemplate.resourceTemplateID = l;
+        loadtemplate.embedType = 'page';
+        loadtemplate.data = [];
+        temptemplates.push(loadtemplate);
+      });
+
+      if (editorconfig.retrieve !== undefined) {
+        try {
+          bfestore.loadtemplates = temptemplates;
+          var url = $(this.parentElement).find('#bfeditor-loadworkuriInput').val();
+          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (result) {
+            if (result instanceof Error){
+              var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+              $messagediv.append('<strong>'+result.message+'</strong>');
+              $messagediv.insertBefore('.tabs');
+            } else {
+              bfestore.cleanJSONLD('update work');
+
+              bfestore.loadtemplates.data = bfeditor.bfestore.store;
+
+              bfe.exitButtons(editorconfig);
+
+              // weird bnode prob
+              _.each(bfeditor.bfestore.store, function (el) {
+                if (el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
+              });
+
+              cbLoadTemplates();
+            }
+          });
+        } catch (e) {
+          $(this.parentElement).find('#bfeditor-loadworkuriInput').val('An error occured: ' + e.message);
+        }
+      } else {
+        // retrieve disabled
+        $('#bfeditor-formdiv').empty();
+        bfeditor.bfestore.store = [];
+        // $('#table_id').DataTable().ajax.reload();
+        exports.loadBrowseData();
+        var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+        $messagediv.append('<strong>Retrieve disabled</strong>');
+        $messagediv.insertBefore('.nav-tabs');
+        $('#bfeditor-previewPanel').remove();
+        $('.nav-tabs a[href="#browse"]').tab('show')
+      }
+    });
+
+    $loadibcdiv.append($loadibcform);
+
+    $loadibcdiv.find('#bfeditor-loadibcuri').click(function () {
+      // var loadtemplates = [];
+
+      var spid = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu').val();
+      var label = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu option:selected').text();
+      $('#profileLabel').text(label + ":Instance");
+
+      var spnums = spid.replace('sp-', '').split('_');
+
+      var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+
+      bfeditor.bfestore.store = [];
+      bfeditor.bfestore.name = guid();
+      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
+      bfeditor.bfestore.state = 'loaduri';
+      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
+
+      var temptemplates = [];
+      spoints.useResourceTemplates.forEach(function (l) {
+        var useguid = guid();
+        var loadtemplate = {};
+        loadtemplate.templateGUID = shortUUID(useguid);
+        loadtemplate.resourceTemplateID = l;
+        loadtemplate.embedType = 'page';
+        loadtemplate.data = [];
+        temptemplates.push(loadtemplate);
+      });
+
+      if (editorconfig.retrieveLDS !== undefined) {
+        try {
+          bfestore.loadtemplates = temptemplates;
+          var url = $(this.parentElement).find('#bfeditor-loadibcuriInput').val();
+
+          if (!url.trim().includes('instance')) {
+            var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'main' });
+            $messagediv.append('<div class="alert alert-danger" role="alert"><strong>Please choose an instance to load</strong></a></div>');
+            $messagediv.insertBefore('.nav-tabs');
+          } else {
+            editorconfig.retrieveLDS.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (result) {
+              if (result instanceof Error){
+                var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                $messagediv.append('<strong>'+result.message+'</strong>');
+                $messagediv.insertBefore('.tabs');
+              } else {
+                bfestore.cleanJSONLD('update instance');
+
+                bfe.exitButtons(editorconfig);
+
+                cbLoadTemplates();
+              }
+            });
+          }
+        } catch (e) {
+          $(this.parentElement).find('#bfeditor-loadworkuriInput').val('An error occured: ' + e.message);
+        }
+      } else {
+        // retrievelds disabled
+        $('#bfeditor-formdiv').empty();
+        bfeditor.bfestore.store = [];
+        // $('#table_id').DataTable().ajax.reload();
+        exports.loadBrowseData()
+        $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+        $messagediv.append('<span class="str"><h3>Retrieve disabled</h3></span>');
+        $messagediv.insertBefore('.nav-tabs');
+        $('#bfeditor-previewPanel').remove();
+        $('[href=\\#browse]').tab('show');
+      }
+    });
+
+    $loadmarcdiv.append($('<div class="container"> \
+              <form role="form" method="get"> \
+              <div class="form-group"> \
+              <label for="marcdx">Identifier</label> \
+              <div class="input-group"> \
+              <div class="input-group-btn"> \
+              <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bib ID <span class="caret"></span></button> \
+              <ul class="dropdown-menu"> \
+              <li><a href="#" id="bibid">Bib ID</a></li> \
+              <li><a href="#" id="lccn">LCCN</a></li> \
+              <li><a href="#" id="oclc">OCLC</a></li> \
+              </ul></div> \
+              <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID, LCCN or OCLC number" type="text" name="url"></div> \
+              <input type="hidden" id="loadmarc-uri"></hidden>\
+              <label for="bfeditor-loadmarc-dropdown">Choose Profile</label> \
+              <div id="bfeditor-loadmarc-dropdown" class="dropdown"><select id="bfeditor-loadmarc-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
+              <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
+              </form></div>'));
+
+    
+
+    $loadmarcdiv.find('.dropdown-menu > li > a').click(function () {
+      $('#marcdx').html($(this).text() + ' <span class="caret">');
+    });
+    $loadmarcdiv.find('#bfeditor-loadmarc').click(function () {
+      var term = $('#bfeditor-loadmarcterm').val();
+      var dx = 'rec.id';
+      var url;
+
+      if ($('#marcdx').text().match(/LCCN/i)) {
+        dx = 'bath.lccn';
+      }
+
+      if ($('#marcdx').text().match(/OCLC/i)) {
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+      } else {
+        url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
+      }
+      $('#loadmarc-uri').attr('value', url);
+    });
+
+    $tabcontentdiv.append($browsediv);
+    $tabcontentdiv.append($creatediv);
+    $tabcontentdiv.append($loadworkdiv);
+    $tabcontentdiv.append($loadibcdiv);
+    $tabcontentdiv.append($loadmarcdiv);
+
+    $tabcontentdiv.find('#bfeditor-loaduri, #bfeditor-loadmarc').click(function () {
+      var spoints = {};
+
+      if (this.id == 'bfeditor-loadmarc') {
+        var spid = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu').val();
+
+        var label = $(this.parentElement).find('#bfeditor-loadmarc-dropdownMenu option:selected').text();
+        $('#profileLabel').text(label + ":Work");
+
+        var spnums = spid.replace('sp-', '').split('_');
+        spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+        bfeditor.bfestore.state = 'loadmarc';
+      } else {
+        spoints = {
+          label: 'Loaded Work',
+          type: ['http://id.loc.gov/ontologies/bibframe/Work'],
+          useResourceTemplates: ['lc:RT:bf2:Monograph:Work']
+        };
+        bfeditor.bfestore.state = 'loaduri';
+      }
+
+      bfeditor.bfestore.store = [];
+      bfeditor.bfestore.name = guid();
+      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
+      // bfeditor.bfestore.state = 'loaduri';
+      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
+
+      var temptemplates = [];
+      spoints.useResourceTemplates.forEach(function (l) {
+        var useguid = guid();
+        var loadtemplate = {};
+        loadtemplate.templateGUID = shortUUID(useguid);
+        loadtemplate.resourceTemplateID = l;
+        loadtemplate.embedType = 'page';
+        loadtemplate.data = [];
+        temptemplates.push(loadtemplate);
+      });
+
+      if (editorconfig.retrieve.callback !== undefined) {
+        try {
+          bfestore.loadtemplates = temptemplates;
+          var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
+          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, bfelog, function (result) {
+            if (result instanceof Error){
+              var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+              $messagediv.append('<strong>'+result.message+'</strong>');
+              $messagediv.insertBefore('.tabs');
+            } else {
+              bfestore.cleanJSONLD('external marc');           
+              
+              bfestore.loadtemplates.data = bfeditor.bfestore.store;
+              
+              bfe.exitButtons(editorconfig);
+
+              $('#bfeditor-formdiv').empty();
+
+              // weird bnode prob
+              _.each(bfeditor.bfestore.store, function (el) {
+                if (el.o !== undefined && el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
+              });
+
+              cbLoadTemplates();
+            }
+          });
+        } catch (e) {
+          $(this.parentElement).find('#bfeditor-loaduriInput').val('An error occured: ' + e.message);
+        }
+      } else {
+        // retrieve disabled
+        $(this.parentElement).find('#bfeditor-loaduriInput').val('This function has been disabled');
+      }
+    });
+
+
+    $containerdiv.append($tabcontentdiv);
+
+    $(editordiv).append($containerdiv);
+
+    // Debug div
+    if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
+      var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12 main panel-group">\
+                           <div class="panel panel-default"><div class="panel-heading">\
+                           <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#debuginfo">Debug output</a></h3></div>\
+                           <div class="panel-collapse collapse in" id="debuginfo"><div class="panel-body"><pre id="bfeditor-debug"></pre></div></div></div>\
+                           </div>');
+      $(editordiv).append($debugdiv);
+      var $debugpre = $('#bfeditor-debug');
+      $debugpre.html(JSON.stringify(profiles, undefined, ' '));
+    }
+
+    var $footer = $('<footer>', {
+      class: 'footer'
+    });
+    $(editordiv).append($footer);
+
+    if (loadtemplatesANDlookupsCount === 0) {
+      // There was nothing to load, so we need to get rid of the loader.
+      $formdiv.html('');
+    }
+
+    $('a[data-toggle="tab"]').click(function (e) {
+      $('.alert').remove();
+      bfelog.addMsg(new Error(), 'INFO', e.type + " " + e.target);
+    });
+    
+    $(function(){
+      $('#bfeditor-loadworkuri').prop('disabled', false);
+      $('#bfeditor-loadibcuri').prop('disabled', false);
+    });
+
+    $(window).bind('beforeunload', function(){
+      return 'Are you sure you want to leave?';
+    });
+
+    return {
+      'profiles': profiles,
+      'div': editordiv,
+      'bfestore': bfestore,
+      'bfelog': bfelog
+    };
+  };
 
   exports.fulleditor = function (config, id) {
     this.setConfig(config);
