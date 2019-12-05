@@ -821,46 +821,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
     
     exports.loadBrowseData($browsediv);
-    
-    /*
-    var $menudiv = $('<div>', {
-      id: 'bfeditor-menudiv',
-      class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
-    });
-    var $formdiv = $('<div>', {
-      id: 'bfeditor-formdiv',
-      class: 'col-md-10 main'
-    });
-    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-    var $rowdiv = $('<div>', {
-      class: 'row'
-    });
-
-    var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
-                          <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
-                              <span class="sr-only">80% Complete</span>\
-                          </div>\
-                      </div>');
-
-    $formdiv.append($loader);
-
-    //$menudiv.append('<h3>Create Resource</h3>');
-    $menudiv.append('<span id="profileLabel" style="display: none"></span>');
-
-    var $createResourcediv = $('<div class="dropdown pull-left" style="padding-right: 10px">');
-    var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target=".dropdown-collapse">\
-    <span class="glyphicon glyphicon-plus"></span> Create Resource </span></button>');
-    
-    $createResourcediv.append($createResourceButton);
-    $menudiv.append($createResourcediv);
-
-    $rowdiv.append($menudiv);
-    $rowdiv.append($formdiv);
-
-    $creatediv.append($rowdiv);
-    var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
-        
-    */
 
     var $loadworkform = $('<div class="container"> \
               <form role="form" method="get"> \
@@ -882,6 +842,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
               </form></div>');
 
+    // Can this be moved out of there somehow?  It's repeated in fulleditor too.
     editorconfig.setStartingPoints.callback(config, function (config) {
         var getProfileOptions = 
            function (jqObject, elementType) {
@@ -1233,7 +1194,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'bfelog': bfelog
     };
   };
-
 
 
 
