@@ -3,7 +3,8 @@ bfe rest api calls
 */
 bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (require, exports) {
 
-var bfelog = require('src/bfelogging');
+    var bfelog = require('src/bfelogging');
+    var startingPoints = null;
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
@@ -194,17 +195,23 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
   }
 
   exports.setStartingPoints = function (config, callback){
-    $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: config.startingPointsUrl,
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-              bfelog.addMsg(new Error(),"ERROR", 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
-        },
-        success: function (data) {            
-            config.startingPoints = data[0].json;
-            callback(config)
-        }
-    });
+    if ( startingPoints === null ) {
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: config.startingPointsUrl,
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                  bfelog.addMsg(new Error(),"ERROR", 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+            },
+            success: function (data) {  
+                startingPoints = data[0].json
+                config.startingPoints = startingPoints;
+                callback(config)
+            }
+        });
+    } else {
+        config.startingPoints = startingPoints;
+        callback(config);
+    }
 }
 });
