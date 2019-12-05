@@ -20,15 +20,27 @@ Contents
 
 The defined, Javascript namespace for `bfe` when loaded.
 
+#### bfe.lcapplication(Object configObject, String divid) 
+
+Invokes the "LC Application." This mode includes an entire tab-mased menu to load records
+from various LC-specific sources, such as LC's bibframe database, OCLC, etc.
+*This mode will not work for any user but LC.*  It will also include all of the 
+`fulleditor` mode.  See [below](#configuring-bfe) for more about the `configObject`.  
+`id` is the identifier of the HTML element into which the editor will be loaded. 
+Use a `div`.
+
+```javascript
+var bfeditor = bfe.fulleditor(Object configObject, divid);
+```
 
 #### bfe.fulleditor(Object configObject, String divid) 
 
 Invokes the "full editor," meaning a left-side navigation menu will be included.
-See [below](#configuring-bfe) for more about the `config` object.  `id` is the 
+See [below](#configuring-bfe) for more about the `configObject`.  `id` is the 
 identifier of the HTML element into which the editor will be loaded.  Use a `div`.
 
 ```javascript
-var bfeditor = bfe.fulleditor(configObject, divid);
+var bfeditor = bfe.fulleditor(Object configObject, divid);
 ```
 
 
@@ -36,7 +48,7 @@ var bfeditor = bfe.fulleditor(configObject, divid);
 
 Invokes only the `form` component of the "editor," meaning a left-side navigation 
 menu will *not* be included. See [below](#configuring-bfe) for more about the 
-`config` object.  `id` is the identifier of the HTML element into which the editor 
+`configObject`.  `id` is the identifier of the HTML element into which the editor 
 will be loaded.  Use a `div`.
 
 ```javascript
@@ -63,6 +75,10 @@ Required
 * `baseURI`: (String) the base URI to use when minting new identifiers.  Defaults 
   to `http://example.org/`.
 
+* `literalLangDataUrl`: (String) Url to a JSON structure that contains config information
+  for language and scripts to handle non-latin cataloging.  QUESTION: Why is this 
+  handled this way?  It's inherent functionality.
+
 * `profiles`: (Array) locations (URLs) of Profiles to be
   loaded. Profiles should be in the form of a JSON array with one or
   more objects that contain a "name" and a "json" property with the
@@ -85,14 +101,17 @@ Required
   the data should be formatted/serialized.  Only "jsonld-expanded" is supported 
   presently.  `callback` is the name of the callback function, which expects one 
   parameter, the returned data formatted according to the `format` instruction.
-* `startingPoints` (only for fulleditor): (Array) Each member of the array is an object representing 
+
+* `startingPoints` (only for fulleditor or lcapplication): (Array) Each member of the 
+  array is an object representing 
   a menu group, which consists of a heading (`menuGroup`) and an array of 
   items (`menuItems`). Each item has a `label` and an array of applicable 
   resource templates (`useResourceTemplates`) to be used when rendering that item.
   `useResourceTemplates` expects the identifier value of a resource template (not 
   the identifer for a Profile).  If more than one resource template identifier is 
-  listed, then the multiple resource templates are combine into one form for 
-  editing.  
+  listed, then the multiple resource templates are combined into one form for 
+  editing.  This property must be present OR `startingPointsUrl` must be present.
+
 ```json
 "startingPoints": [
     {"menuGroup": "Monograph",
@@ -112,8 +131,54 @@ Required
    ]
 ```
 
+* `startingPointsUrl` (only for fulleditor or lcapplication): (Array) A URL
+  that provides a JSON object that contains the `startingPoints` array as described
+  above.  This property must be present OR `startingPoints` must be present.
+  The JSON should be structured as follows:
+
+```json
+[
+    {
+        "id":"d1ab69a1-fe18-40d6-b596-40039a1144ae",
+        "name":"config",
+        "configType":"startingPoints",
+        "json": [
+            {
+                "menuGroup": "Monograph",
+                "menuItems": [
+                    {
+                     label: "Instance",
+                     type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
+                     useResourceTemplates: [ "profile:bf2:Monograph:Instance" ]
+                    },
+                    {
+                     label: "Work",
+                     type: ["http://id.loc.gov/ontologies/bibframe/Work"],
+                     useResourceTemplates: [ "profile:bf2:Monograph:Work" ]
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
 Optional
-* `basedbURI`: URI for posting triples for publication in a triplestore
+* `basedbURI`: URI for posting triples for publication in a triplestore QUESTION: Is this an accurate 
+  description of this property?  From the code this seems simply like a means to 
+  direct a user to the BF Database? 
+* `buildContext`: (Boolean) True to build typeahead side panels, which provide more 
+  information - context - about the highlighted drop down option to assist with selection. 
+  Defaults to `false`. 
+* `buildContextFor`: (Array) An array of strings that, when tested against a URI, will return `True` if a context panel
+  should be generated for that particular URI.  For example, this array - `['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/']`- 
+  would generate a context panel for any Names or Subjects URI/Resource.
+* `buildContextForWorksEndpoint`: (String) This is a custom override for LC to redirect context panel requests from resources
+  at ID.LOC.GOV to an internal source.  QUESTOIN: Is this necessary still or could we use the ID data?
+* `enableUserTemplates`: (Boolean)  This will permit users to generate their own "templates," which is a means to hide not-required fields in
+  a chosen profile.
+* `enableLoadMarc`: (Boolean) This option - really only useful to LC - will enable the "Load MARC" tab in the `lcapplication` (see above).
+* `oclckey`: (String) This holds the OCLC developer's key and is used to fetch MARC records from OCLC.  Used by `lcapplication` (see above).
 * `resourceURI`: Base URI for resources in the triplestore.
 * `logging`: (Object) with two properties.  `level` indicates the level of logging 
   desired.  INFO and DEBUG are the two options.  DEBUG is verbose.  Default is 
@@ -124,7 +189,8 @@ Optional
   property template which is part of a profile's resource template. Each object consists of 
   two properties. name is a label/identifier for the lookup. It is used by the typeahead library. 
   load is the location of the Javascript file the contains the functions required to populate 
-  the typeahead drop down selection list and then to process the selected item. 
+  the typeahead drop down selection list and then to process the selected item.  QUESTION: It
+  is really hard to tell if this would even work any more.  Will it?
 
 <!-- section links -->
 ----------------
