@@ -819,7 +819,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
     var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
     var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
-
+    
+    exports.loadBrowseData($browsediv);
+    
+    /*
     var $menudiv = $('<div>', {
       id: 'bfeditor-menudiv',
       class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
@@ -840,7 +843,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                       </div>');
 
     $formdiv.append($loader);
-    exports.loadBrowseData($browsediv);
+
     //$menudiv.append('<h3>Create Resource</h3>');
     $menudiv.append('<span id="profileLabel" style="display: none"></span>');
 
@@ -855,8 +858,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $rowdiv.append($formdiv);
 
     $creatediv.append($rowdiv);
-
     var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
+        
+    */
 
     var $loadworkform = $('<div class="container"> \
               <form role="form" method="get"> \
@@ -877,94 +881,41 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               </div></div> \
               <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
               </form></div>');
-    
+
     editorconfig.setStartingPoints.callback(config, function (config) {
-      for (var h = 0; h < config.startingPoints.length; h++) {
-        var sp = config.startingPoints[h];
-        //var $menuul = $('<ul>', {
-        //  class: 'nav nav-sidebar'
-        //});
-        
-        //var $menuheadingul = null;
-        var $createResourcesubmenuul = null;
-        if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
-          //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
-          var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
-          
-          $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
-          //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
-
-          //$menuheading.append($menuheadingul);
-          $createResourcesubmenu.append($createResourcesubmenuul);
-          
-          $createResourcemenuul.append($createResourcesubmenu)
-          //$menuul.append($menuheading);
-        }
-        for (var i = 0; i < sp.menuItems.length; i++) {
-          var $li = $('<li>');
-          var $a = $('<a>', {
-            href: '#',
-            id: 'sp-' + h + '_' + i,
-            class: "test",
-            tabindex: "-1"
-          });
-          $a.html(sp.menuItems[i].label);
-          $a.click(function (event) {
-            var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
-            $('#createresourcesubmenuul.open').hide();
-            $('#createresourcesubmenuul.open').removeClass('open');
-            $('#profileLabel').text(profile + ":" + event.target.text);
-            
-            bfe.exitButtons(editorconfig);
-
-            menuSelect(this.id);
-          });
-          $li.append($a);
-
-          if ($createResourcesubmenuul !== null) {
-            $createResourcesubmenuul.append($li)
-          } else {
-            $createResourcemenuul.append($li)
-          }
-        }
-        $createResourcediv.append($createResourcemenuul);
-
-      }
-
-      var getProfileOptions = 
-       function (jqObject, elementType) {
-        for (var h = 0; h < config.startingPoints.length; h++) {
-          var sp = config.startingPoints[h];
-          var label = sp.menuGroup
-          for (var i = 0; i < sp.menuItems.length; i++) {
-            var $option = $('<option>', {
-              class: 'dropdown-item',
-              value: 'sp-' + h + '_' + i
-            });
-            if (sp.menuItems[i].type[0] === elementType) {
-              $option.html(label);
-              jqObject.append($option);
+        var getProfileOptions = 
+           function (jqObject, elementType) {
+            for (var h = 0; h < editorconfig.startingPoints.length; h++) {
+              var sp = editorconfig.startingPoints[h];
+              var label = sp.menuGroup
+              for (var i = 0; i < sp.menuItems.length; i++) {
+                var $option = $('<option>', {
+                  class: 'dropdown-item',
+                  value: 'sp-' + h + '_' + i
+                });
+                if (sp.menuItems[i].type[0] === elementType) {
+                  $option.html(label);
+                  jqObject.append($option);
+                }
+              }
             }
           }
-        }
-      }
-      $(function(){
-        $('.dropdown-submenu>a').unbind('click').click(function(e){
-          var $openmenu = $('#createresourcesubmenuul.open');
-          $openmenu.hide();
-          $openmenu.removeClass('open');
-          var $dropdown = $(this).next('ul');
-          $dropdown.addClass('open');
-          $dropdown.toggle();
-          e.stopPropagation();
-          e.preventDefault();
-        });
-      });
+          $(function(){
+            $('.dropdown-submenu>a').unbind('click').click(function(e){
+              var $openmenu = $('#createresourcesubmenuul.open');
+              $openmenu.hide();
+              $openmenu.removeClass('open');
+              var $dropdown = $(this).next('ul');
+              $dropdown.addClass('open');
+              $dropdown.toggle();
+              e.stopPropagation();
+              e.preventDefault();
+            });
+          });
 
       getProfileOptions($loadworkform.find('#bfeditor-loadwork-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
       getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
       getProfileOptions($loadibcform.find('#bfeditor-loadibc-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Instance");
-
     });
 
     $loadworkdiv.append($loadworkform);
@@ -1241,6 +1192,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $containerdiv.append($tabcontentdiv);
 
     $(editordiv).append($containerdiv);
+    
+    exports.fulleditor(config, "create");
 
     // Debug div
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
@@ -1258,11 +1211,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       class: 'footer'
     });
     $(editordiv).append($footer);
-
-    if (loadtemplatesANDlookupsCount === 0) {
-      // There was nothing to load, so we need to get rid of the loader.
-      $formdiv.html('');
-    }
 
     $('a[data-toggle="tab"]').click(function (e) {
       $('.alert').remove();
@@ -1285,6 +1233,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'bfelog': bfelog
     };
   };
+
+
+
+
 
   exports.fulleditor = function (config, id) {
     this.setConfig(config);
@@ -1329,24 +1281,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     editorconfig.setStartingPoints.callback(config, function (config) {
       for (var h = 0; h < config.startingPoints.length; h++) {
         var sp = config.startingPoints[h];
-        //var $menuul = $('<ul>', {
-        //  class: 'nav nav-sidebar'
-        //});
-        
-        //var $menuheadingul = null;
         var $createResourcesubmenuul = null;
         if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
-          //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
           var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
           
           $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
-          //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
-
-          //$menuheading.append($menuheadingul);
           $createResourcesubmenu.append($createResourcesubmenuul);
-          
           $createResourcemenuul.append($createResourcesubmenu)
-          //$menuul.append($menuheading);
         }
         for (var i = 0; i < sp.menuItems.length; i++) {
           var $li = $('<li>');
