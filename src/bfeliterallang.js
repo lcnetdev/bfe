@@ -11,6 +11,7 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
   exports.languagePatterns = [];
 
   exports.loadData = function(config){
+      bfelog.addMsg(new Error(), 'DEBUG', "Literal Lang URL: " + config.literalLangDataUrl);
     $.ajax({
       context: this,
       url: config.literalLangDataUrl,
