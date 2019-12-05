@@ -195,7 +195,11 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
   }
 
   exports.setStartingPoints = function (config, callback){
-    if ( startingPoints === null ) {
+    if ( startingPoints !== null ) {
+        config.startingPoints = startingPoints;
+        callback(config);
+    } else if (config.startingPointsUrl) {
+        bfelog.addMsg(new Error(), 'DEBUG', 'Starting Points URL: ' + config.startingPointsUrl);
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -209,8 +213,11 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
                 callback(config)
             }
         });
+    } else if (config.startingPoints) {
+        startingPoints = config.startingPoints;
+        callback(config);
     } else {
-        config.startingPoints = startingPoints;
+        bfelog.addMsg(new Error(), "ERROR", "No startings points URL or staring points defined.");
         callback(config);
     }
 }
