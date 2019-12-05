@@ -32,6 +32,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   // var lookupstore = [];
   // var lookupcache = [];
 
+  var entryfunc = null;
   var editordiv;
 
   // var csrf;
@@ -139,6 +140,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
      **/
     for (var i = 0; i < config.profiles.length; i++) {
       var file = config.profiles[i];
+      bfelog.addMsg(new Error(), 'DEBUG', 'Attempting to load profile: ' + file);
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -794,6 +796,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   exports.lcapplication = function (config, id) {
+    this.enteredfunc = "lcapplication";
     this.setConfig(config);
     editordiv = document.getElementById(id);
     var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
@@ -1199,6 +1202,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
 
   exports.fulleditor = function (config, id) {
+    if (this.enteredfunc === null) {
+        this.enteredfunc = "fulleditor";
+    }
     this.setConfig(config);
     editordiv = document.getElementById(id);
     
@@ -1352,6 +1358,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   };
 
   exports.editor = function (config, id) {
+    this.enteredfunc = "editor";
     this.setConfig(config);
 
     editordiv = document.getElementById(id);
@@ -1839,42 +1846,38 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $resourcedivheading.append($resourcedivheadingh4);
       }
 
-      // create an empty clone button
-      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
-
-      // populate the clone button for Instance or Work descriptions
-      if (rt.id.match(/:Instance$/i)) {
-        $clonebutton.attr('id', 'clone-instance');
-        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
-        $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
-      } else if (rt.id.match(/:Work$/i)) {
-        $clonebutton.attr('id', 'clone-work');
-        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
-        $clonebutton.data({ 'match': 'works', 'label': 'Work' });
-      }
-
       //clean up
       //$('#cloneButtonGroup').remove();
-
-      var $templateCloneButtonGroup;
       
+      var $templateCloneButtonGroup;
       if ($('#cloneButtonGroup').length > 0){
         $templateCloneButtonGroup = $('#cloneButtonGroup');
         if (rt.id.match(/:Instance$/i)) {
-          $clonebutton = $('#clone-instance')
+            $clonebutton = $('#clone-instance')
         } else if (rt.id.match(/:Work$/i)) {
-          $clonebutton = $('#clone-work')
+            $clonebutton = $('#clone-work')
         }
       } else {
-        $templateCloneButtonGroup = $('<div>', {
-        id: 'cloneButtonGroup',
-        class: 'pull-right'
-        });
-        $templateCloneButtonGroup.append($clonebutton);
+        $templateCloneButtonGroup = $('<div>', {id: 'cloneButtonGroup', class: 'pull-right'});
+        // create an empty clone button
+        if (this.enteredfunc == "lcapplication") {
+            var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
+            // populate the clone button for Instance or Work descriptions
+            if (rt.id.match(/:Instance$/i)) {
+                $clonebutton.attr('id', 'clone-instance');
+                $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
+                $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
+            } else if (rt.id.match(/:Work$/i)) {
+                $clonebutton.attr('id', 'clone-work');
+                $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
+                $clonebutton.data({ 'match': 'works', 'label': 'Work' });
+            }
+            $templateCloneButtonGroup.append($clonebutton);
+        }
       }
     
       // append to the resource heading if there is a clone button id and is not a modal window      
-      if ($clonebutton.attr('id') && rt.embedType != 'modal') {
+      if ($clonebutton && $clonebutton.attr('id') && rt.embedType != 'modal') {
         var newid = mintResource(guid());
 
         // ask user to input custom id
@@ -1902,16 +1905,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               </div>\
             </div>');
         $resourcediv.append($cloneinput);
-          
-        // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
-        if (editorconfig.enableUserTemplates){
-          var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
-          $('.template-controls').remove();
-          $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile));
-        }
-        
-        
       }
+      
+    // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
+    if (editorconfig.enableUserTemplates){
+        var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
+        $('.template-controls').remove();
+        $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile));
+    }
 
       $('#bfeditor-menudiv').append($templateCloneButtonGroup);
 
@@ -4047,7 +4048,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       bfelog.addMsg(new Error(), 'DEBUG', 'Setting typeahead scheme: ' + uvf);
-      bfelog.addMsg(new Error(), 'DEBUG', 'Lookup is', lu);
+      bfelog.addMsg(new Error(), 'DEBUG', 'Lookup is', lu.name);
 
       var dshash = {};
       dshash.name = lu.name;
