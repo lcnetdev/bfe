@@ -49,6 +49,10 @@ if (env.ENABLEUSERTEMPLATES!=undefined){
 var versoURL = rectobase + "/verso/api";
 
 var config = {
+     "logging": {
+      "level": "DEBUG",
+      "toConsole": true
+     }, 
     "name": name,
     "url" : rectobase,
     "baseURI": "http://id.loc.gov/",
