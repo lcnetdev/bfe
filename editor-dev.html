@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>(Bibliographic Framework Initiative Technical Site - BIBFRAME.ORG)</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.ico" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/url-search-params/1.1.0/url-search-params.js"></script> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-migrate-1.2.1.js"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.js"></script> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css"> -->
+
+    <!-- <script src="https://cdn.jsdelivr.net/g/es6-promise@1.0.0"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.4.12/jsonld.min.js"></script>
+
+    <script src="static/js/short-uuid.min.js"></script>
+    <script src="static/js/typeahead.jquery.corejavascript.fork.js"></script>
+
+    <script src="static/js/tooltipster.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/tooltipster.bundle.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+    <script type="text/javascript" src="static/js/n3-browser.min.js"></script>
+
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+    <script type="text/javascript" src="static/js/jsonld-vis.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/jsonld-vis.css">
+    -->
+    
+    <script type="text/javascript" src="src/lib/mini_require.js"></script>
+    <script type="text/javascript" src="src/bfe.js"></script>
+    <script type="text/javascript" src="src/bfestore.js"></script>
+    <script type="text/javascript" src="src/bfelogging.js"></script>
+    <script type="text/javascript" src="src/bfeusertemplates.js"></script>
+    <script type="text/javascript" src="src/bfeliterallang.js"></script>
+    <script type="text/javascript" src="src/bfelookups.js"></script>
+    <script type="text/javascript" src="src/bfeapi.js"></script>
+    <script type="text/javascript" src="src/lib/aceconfig.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="src/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/typeahead.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/bfeusertemplates.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/bfeliterallang.css" />
+
+</head>
+
+<body>
+    <div id="editor" class="container-fluid">
+        <div id="iealert"></div>
+    </div>
+    <script type="text/javascript" src="builds/env.js"></script>
+    <script type="text/javascript" src="static/js/config-fulleditor-dev.js"></script>
+    <script type="text/javascript">
+        var bfeditor = bfe.editor(config, "editor");
+    </script>
+</body>
+
+</html>
