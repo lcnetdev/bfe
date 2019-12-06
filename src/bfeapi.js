@@ -5,6 +5,117 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
 
     var bfelog = require('src/bfelogging');
     var startingPoints = null;
+    
+    exports.load = function(config, bfestore, callback) {
+        if (config.toload !== undefined) {
+            bfe.loadtemplatesANDlookupsCount = bfe.loadtemplatesANDlookupsCount + config.toload.templates.length;
+            
+            bfestore.store = [];
+            bfestore.name = guid();
+            bfestore.templateGUID = guid();
+            bfestore.created = new Date().toUTCString();
+            bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+            bfestore.state = 'create';
+    
+            // Turn off edit mode of templates if they were in the middle of editing one
+            //bfeusertemplates.editMode = false;
+            //bfeusertemplates.editModeTemplate = false;
+
+            var loadtemplates = [];
+
+            config.toload.templates.forEach(function(l){
+                var useguid = guid();
+                var loadtemplate = {};
+                var tempstore = [];
+                loadtemplate.templateGUID = useguid;
+                loadtemplate.resourceTemplateID = l.templateID;
+                loadtemplate.resourceURI = l.defaulturi;
+                loadtemplate.embedType = "page";
+                loadtemplate.data = tempstore;
+                loadtemplates.push(loadtemplate);
+            });
+            bfestore.loadtemplates = loadtemplates;
+            bfe.loadtemplates = loadtemplates;
+            
+            if (config.toload.source !== undefined && config.toload.source.location !== undefined && config.toload.source.requestType !== undefined) {
+                    $.ajax({
+                        url: config.toload.source.location,
+                        dataType: config.toload.source.requestType,
+                        success: function (data) {
+                            bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + config.toload.source.location);
+                            bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                            /*
+                                OK, so I would /like/ to just use rdfstore here
+                                but it is treating literals identified using @value
+                                within JSON objects as resources.  It gives them blank nodes.
+                                This does not seem right and I don't have time to
+                                investigate.
+                                So, will parse the JSONLD myself, dagnabbit. 
+                                NOTE: it totally expects JSONLD expanded form.
+                            */
+                            tempstore = bfestore.jsonld2store(data);
+                            tempstore.forEach(function(t){
+                                if (t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.otype == "uri" && t.s == config.toload.defaulturi.replace('ml38281/', '')) {
+                                    t.rtID = config.toload.templateID;
+                                }
+                            });
+                            bfestore.store = tempstore;
+                            callback();
+                            /*
+                            store.load('application/ld+json', data, function(success){
+                                if (success) console.log("Loaded data for " + l.defaulturi);
+                                var useguid = guid();
+                                var loadtemplate = {};
+                                var query = 'SELECT * WHERE { <' + l.defaulturi.replace('ml38281/', '') + '> ?p ?o}';
+                                console.log("Query is " + query);
+                                store.execute(query, function(success, results) {
+                                    // process results
+                                    if (success) {
+                                        console.log(results);
+                                        var tempstore = [];
+                                        results.forEach(function(t){
+                                            var tguid = guid();
+                                            var triple = {};
+                                            triple.guid = tguid;
+                                            if (t.o.value == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                                                triple.rtID = rt.id;
+                                            }
+                                            triple.s = l.defaulturi.replace('ml38281/', '');
+                                            triple.p = t.p.value;
+                                            triple.o = t.o.value;
+                                            if (t.o.token == "uri") {
+                                                triple.otype = "uri";
+                                            } else if (t.o.token == "blank") {
+                                                triple.otype = "uri";
+                                            } else {
+                                                triple.otype = "literal";
+                                                triple.olang = "en";
+                                            }
+                                            //console.log(triple);
+                                            tempstore.push(triple);
+                                        });
+                                        loadtemplate.id = useguid;
+                                        loadtemplate.rtID = l.templateID;
+                                        loadtemplate.defaulturi = l.defaulturi.replace('ml38281/', '');
+                                        loadtemplate.data = tempstore;
+                                        loadtemplates.push(loadtemplate);
+                                        console.log("finished query store");
+                                        cbLoadTemplates();
+                                    }
+                                });
+                            });
+                            */
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + config.toload.source.location);
+                            bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                        }
+                    });
+                } else {
+                    callback();
+                }
+        }
+    }
 
 exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
@@ -80,7 +191,7 @@ exports.save = function (data, bfelog, callback){
     $messagediv.insertBefore('.nav-tabs');
     $('#bfeditor-previewPanel').remove();
     $('.nav-tabs a[href="#browse"]').tab('show')
-    bfeditor.bfestore.store = [];
+    bfestore.store = [];
     window.location.hash = "";
     callback(true, data.name);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
@@ -135,7 +246,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         $messagediv.insertBefore('.nav-tabs');
         $('#bfeditor-previewPanel').remove();
         $('.nav-tabs a[href="#browse"]').tab('show')
-        bfeditor.bfestore.store = [];
+        bfestore.store = [];
         window.location.hash = "";
         callback(true, data.name);                
       }).fail(function (XMLHttpRequest, textStatus, errorThrown){
@@ -221,4 +332,10 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         callback(config);
     }
 }
+
+  function guid() {
+    var translator = window.ShortUUID();
+    return translator.uuid();
+  }
+  
 });
