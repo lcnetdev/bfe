@@ -1589,15 +1589,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             $('#jsonld .panel-body pre').text(JSON.stringify(data, undefined, ' '));
 
-            /*
-            bfestore.store2jsonldnormalized(data, function (expanded) {
-              d3.jsonldVis(expanded, '#jsonld-vis .panel-body', {
-                w: 800,
-                h: 600,
-                maxLabelWidth: 250
-              });
-            });
-            */
+            if (typeof d3 !== "undefined") {
+                bfestore.store2jsonldnormalized(data, function (expanded) {
+                    d3.jsonldVis(expanded, '#jsonld-vis .panel-body', {
+                        w: 800,
+                        h: 600,
+                        maxLabelWidth: 250
+                    });
+                });
+            }
           }
 
           document.body.scrollTop = document.documentElement.scrollTop = 0;
