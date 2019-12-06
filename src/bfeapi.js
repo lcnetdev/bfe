@@ -61,50 +61,6 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
                             });
                             bfestore.store = tempstore;
                             callback();
-                            /*
-                            store.load('application/ld+json', data, function(success){
-                                if (success) console.log("Loaded data for " + l.defaulturi);
-                                var useguid = guid();
-                                var loadtemplate = {};
-                                var query = 'SELECT * WHERE { <' + l.defaulturi.replace('ml38281/', '') + '> ?p ?o}';
-                                console.log("Query is " + query);
-                                store.execute(query, function(success, results) {
-                                    // process results
-                                    if (success) {
-                                        console.log(results);
-                                        var tempstore = [];
-                                        results.forEach(function(t){
-                                            var tguid = guid();
-                                            var triple = {};
-                                            triple.guid = tguid;
-                                            if (t.o.value == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
-                                                triple.rtID = rt.id;
-                                            }
-                                            triple.s = l.defaulturi.replace('ml38281/', '');
-                                            triple.p = t.p.value;
-                                            triple.o = t.o.value;
-                                            if (t.o.token == "uri") {
-                                                triple.otype = "uri";
-                                            } else if (t.o.token == "blank") {
-                                                triple.otype = "uri";
-                                            } else {
-                                                triple.otype = "literal";
-                                                triple.olang = "en";
-                                            }
-                                            //console.log(triple);
-                                            tempstore.push(triple);
-                                        });
-                                        loadtemplate.id = useguid;
-                                        loadtemplate.rtID = l.templateID;
-                                        loadtemplate.defaulturi = l.defaulturi.replace('ml38281/', '');
-                                        loadtemplate.data = tempstore;
-                                        loadtemplates.push(loadtemplate);
-                                        console.log("finished query store");
-                                        cbLoadTemplates();
-                                    }
-                                });
-                            });
-                            */
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown) { 
                             bfelog.addMsg(new Error(), "ERROR", "FAILED to load external source: " + config.toload.source.location);
