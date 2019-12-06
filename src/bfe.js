@@ -735,7 +735,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
   
   exports.exitButtons = function (editorconfig){
-
     //clear form
     $('[href=\\#create]').tab('show');
     $('#bfeditor-formdiv').show();
@@ -1210,7 +1209,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else {
         $(editordiv).append($rowdiv);    
     }
-    
 
     var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
     
@@ -1325,28 +1323,33 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     };
   };
 
+
   exports.editor = function (config, id) {
     entryfunc = "editor";
     this.setConfig(config);
 
     editordiv = document.getElementById(id);
 
+    var $menudiv = $('<div>', {
+      id: 'bfeditor-menudiv',
+      class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
+    });
     var $formdiv = $('<div>', {
       id: 'bfeditor-formdiv',
-      class: 'col-md-12'
+      class: 'col-md-10 main'
     });
-
-    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-
+    
     var $rowdiv = $('<div>', {
       class: 'row'
     });
 
+    $rowdiv.append($menudiv);
     $rowdiv.append($formdiv);
-    // rowdiv.append(optiondiv);
-
-    $(editordiv).append($rowdiv);
-
+    
+    var $creatediv = $('<div id="create"><br></div>');
+    $creatediv.append($rowdiv);
+    $(editordiv).append($creatediv);
+    
     // Debug div
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
       var $debugdiv = $('<div>', {
