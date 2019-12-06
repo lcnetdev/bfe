@@ -764,7 +764,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   exports.lcapplication = function (config, id) {
-    this.enteredfunc = "lcapplication";
+    entryfunc = "lcapplication";
     this.setConfig(config);
     editordiv = document.getElementById(id);
     var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
@@ -1164,8 +1164,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
 
   exports.fulleditor = function (config, id) {
-    if (this.enteredfunc === null) {
-        this.enteredfunc = "fulleditor";
+    if (entryfunc === null) {
+        entryfunc = "fulleditor";
     }
     this.setConfig(config);
     editordiv = document.getElementById(id);
@@ -1202,7 +1202,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $rowdiv.append($menudiv);
     $rowdiv.append($formdiv);
 
-    $(editordiv).append($rowdiv);
+    if ( entryfunc == "fulleditor" ) {
+        // Preview is dependent on a div with an id=create.
+        var $creatediv = $('<div id="create"><br></div>');
+        $creatediv.append($rowdiv);
+        $(editordiv).append($creatediv);
+    } else {
+        $(editordiv).append($rowdiv);    
+    }
+    
 
     var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
     
@@ -1318,7 +1326,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   };
 
   exports.editor = function (config, id) {
-    this.enteredfunc = "editor";
+    entryfunc = "editor";
     this.setConfig(config);
 
     editordiv = document.getElementById(id);
@@ -1561,11 +1569,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         
         bfestore.defaulturi = form.formobject.defaulturi;
         $('#bfeditor-preview').click(function () {
+            console.log("Bfestore.store");
           $('#bfeditor-preview').hide();
           //remove orphans
           bfestore.removeOrphans(bfestore.defaulturi);
 
           var jsonstr = bfestore.store2jsonldExpanded();
+          console.log(jsonstr);
 
           // bfestore.store2turtle(jsonstr, humanizedPanel);
           bfestore.store2jsonldcompacted(jsonstr, jsonPanel);
@@ -1579,6 +1589,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
             $('#jsonld .panel-body pre').text(JSON.stringify(data, undefined, ' '));
 
+            /*
             bfestore.store2jsonldnormalized(data, function (expanded) {
               d3.jsonldVis(expanded, '#jsonld-vis .panel-body', {
                 w: 800,
@@ -1586,6 +1597,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 maxLabelWidth: 250
               });
             });
+            */
           }
 
           document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -1614,8 +1626,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           });
 
           $('#bfeditor-formdiv').hide();
-          $append($preview);
+          $bfeditor.append($preview);
         });
+        
         $('#bfeditor-exitpreview').attr('tabindex', tabIndices++);
 
         $('#bfeditor-formdiv').html('');
