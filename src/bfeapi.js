@@ -3,7 +3,7 @@ bfe rest api calls
 */
 bfe.define('src/bfeapi', ['require', 'exports'], function (require, exports) {
 
-exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
+exports.retrieve = function (uri, bfestore, loadtemplates, record_id, bfelog, callback){
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
   var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';
@@ -16,12 +16,17 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
     success: function (data) {
       bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI " + uri);
       bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
-      
+      var recid = record_id;
       if (dType == 'xml' && xmlType == 'xml') {
         var recCount = $('zs\\:numberOfRecords', data).text();
-        if (recCount != '0') {
-          var rdfrec  = $('zs\\:recordData', data).html();
-          var recid = $('bf\\:Local > rdf\\:value', data).html();
+        if (recCount == ""){
+          var rdfrec  = $(data.documentElement).html();
+          //recid = $('bf\\:AdminMetadata > bf\\:identifiedBy > bf\\:Local > rdf\\:value', data.documentElement).html()
+          recid = record_id;
+          bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
+        } else if (recCount != '0') {
+          rdfrec  = $('zs\\:recordData', data).html();
+          recid = $('bf\\:Local > rdf\\:value', data).html();
           recid = recid.padStart(9, '0');
           bfestore.rdfxml2store(rdfrec, loadtemplates, recid, callback);
         } else {

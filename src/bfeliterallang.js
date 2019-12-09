@@ -100,7 +100,9 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
       {"t": {name: "Tse lower", val: "ц", code:0x0446 }},
       {"o": {name: "Acute", val: "", code:0x0301}},
       {"`": {name: "Grave", val: "", code:0x0300}},
-      {"h": {name: "Hook right", val: "", code:0x0328}}
+      {"h": {name: "Hook right", val: "", code:0x0328}},
+      {"<": {name: "Non-sort beg", val: "", code:0x0098}},
+      {">": {name: "Non-sort end", val: "", code:0x009C}}
     ]
 
     var returnChar = _.find(charMap, chr);

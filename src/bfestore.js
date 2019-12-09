@@ -128,6 +128,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var d = new Date(bfeditor.bfestore.created);
     adminTriple.o = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
     adminTriple.otype = 'literal';
+    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#date';
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
@@ -136,6 +137,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var modifiedDate = new Date().toUTCString();
     adminTriple.o = new Date(modifiedDate).toJSON().split(/\./)[0];
     adminTriple.otype = 'literal';
+    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#dateTime';
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
@@ -296,6 +298,25 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     })
   }
 
+  exports.removeInstanceOfs = function () {
+    var duplicateInstance = _.filter(
+      _.where(exports.store, {"p":"http://id.loc.gov/ontologies/bibframe/instanceOf"}), function(bnode)
+        { if (bnode.o.startsWith("_:b"))
+          { return bnode} 
+      });
+
+      if (!_.isEmpty(duplicateInstance)) { 
+        if (duplicateInstance.length == 1) {
+           _.where(exports.store, {s: duplicateInstance[0].o}); 
+           exports.store = _.reject(exports.store, duplicateInstance[0])
+        } else {
+          bfeditor.bfelog.addMsg(new Error(), "DEBUG", "More than one duplicate instance found.");
+        }
+      } else { 
+        bfeditor.bfelog.addMsg(new Error(), "DEBUG", "No duplicate instance found ");
+      }
+  }
+
   exports.storeDedup = function () {
     exports.store = _.uniq(exports.store, function (t) {
       if (t.olang !== undefined) {
@@ -441,11 +462,13 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                   triple.o = o['@id'];
                   triple.otype = 'uri';
                 } else if (o['@value'] !== undefined) {
-
                   triple.o = o['@value'];
                   triple.otype = 'literal';
                   if (o['@language'] !== undefined) {
                     triple.olang = o['@language'];
+                  }
+                  if(o['@type'] !== undefined){
+                    triple.odatatype = o['@type'];
                   }
                 } 
               }
@@ -502,8 +525,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             });
           } else {
             o = {};
-            if (r.olang !== undefined && r.olang !== '') {
+            if (!_.isEmpty(r.olang)) {
               o['@language'] = r.olang;
+            }
+            if (!_.isEmpty(r.odatatype)) {
+              o['@type'] = r.odatatype;
             }
             if (r.p == '@type') {
               o = r.o;

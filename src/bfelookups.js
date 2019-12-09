@@ -106,7 +106,13 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.getResource = function (subjecturi, property, selected, process) {
       var triples = [];
       var triple = {};
-      if (selected.id == 'literal'){
+      if (selected.id == 'literalLookup'){
+        triple.s = subjecturi;
+        triple.p = property.propertyURI;
+        triple.o = selected.value;
+        triple.otype = 'literal';
+        triples.push(triple);
+      } else if (selected.id == 'literal'){
         triple.s = subjecturi;
         triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
         triple.o = selected.value;
@@ -204,6 +210,31 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             id: id,
             value: l,
             display: d
+          });
+        }
+      }
+      if (typeahead_source.length === 0) {
+        typeahead_source[0] = {
+          uri: '',
+          display: '[No suggestions found for ' + query + '.]'
+        };
+      }
+      exports.addLiteralOption(typeahead_source, query);
+
+      return typeahead_source;
+    };
+
+    exports.processNoteTypeSuggestions = function (suggestions, query) {
+      var typeahead_source = [];
+      if (suggestions[0].json !== undefined) {
+        for (var s = 0; s < suggestions[0].json.length; s++) {
+          var l = suggestions[0].json[s];
+  
+          typeahead_source.push({
+            uri: null,
+            id: 'literalLookup',
+            value: l,
+            display: l
           });
         }
       }
@@ -525,7 +556,18 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         processSync([]);
       }
       this.searching = setTimeout(function () {
-        if ((query === '' || query === ' ') && resultType == "ID" && !(scheme.match(/resources\/[works|instances]/) || scheme.match(/authorities/) || scheme.match(/entities/))) {
+        if ((query === '' || query === ' ') && resultType == "NoteType") {
+          u = config.url + "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+          $.ajax({
+            url: encodeURI(u),
+            dataType: 'json',
+            success: function (data) {
+              var parsedlist = exports.processNoteTypeSuggestions(data, query);
+              cache[q] = parsedlist;
+              return processAsync(parsedlist);
+            }
+          });
+        } else if ((query === '' || query === ' ') && resultType == "ID" && !(scheme.match(/resources\/[works|instances]/) || scheme.match(/authorities/) || scheme.match(/entities/))) {
           var u = scheme + '/suggest/?count=100&q=';
           $.ajax({
             url: encodeURI(u),
@@ -838,6 +880,20 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.source = function (query, processSync, processAsync, formobject) {
       bfelog.addMsg(new Error(), 'INFO', query);
       return lcshared.complexQuery(query, cache, exports.scheme, "QA", processSync, processAsync, formobject);
+    };
+  
+    exports.getResource = lcshared.getResource;
+  });
+
+  bfe.define('src/lookups/notetype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
+    var lcshared = require('src/lookups/lcshared');
+    var bfelog = require('src/bfelogging');
+    var cache = [];
+    exports.scheme = 'http://mlvlp04.loc.gov:3000/verso/api/configs?filter[where][configType]=noteTypes&filter[fields][json]=true';
+  
+    exports.source = function (query, processSync, processAsync, formobject) {
+      bfelog.addMsg(new Error(), 'INFO', query);
+      return lcshared.complexQuery(query, cache, exports.scheme, "NoteType", processSync, processAsync, formobject);
     };
   
     exports.getResource = lcshared.getResource;
