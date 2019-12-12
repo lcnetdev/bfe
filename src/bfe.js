@@ -3826,10 +3826,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
           }
         } else {
-          displaydata = exports.displayDataService(data, displaydata)
+          displaydata = exports.displayDataService(data, relationship);
         }
     } else {
-      displaydata = exports.displayDataService(data, displaydata)
+      displaydata = exports.displayDataService(data, relationship);
     }
     
     return {

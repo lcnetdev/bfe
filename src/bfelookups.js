@@ -226,16 +226,19 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
 
     exports.processNoteTypeSuggestions = function (suggestions, query) {
       var typeahead_source = [];
+      var substrMatch = new RegExp('^' + query, 'i');
       if (suggestions[0].json !== undefined) {
         for (var s = 0; s < suggestions[0].json.length; s++) {
           var l = suggestions[0].json[s];
   
-          typeahead_source.push({
-            uri: null,
-            id: 'literalLookup',
-            value: l,
-            display: l
-          });
+          if(substrMatch.test(l) || _.isEmpty(query)){
+            typeahead_source.push({
+              uri: "",
+              id: 'literalLookup',
+              value: l,
+              display: l
+            });
+          }
         }
       }
       if (typeahead_source.length === 0) {
@@ -556,8 +559,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         processSync([]);
       }
       this.searching = setTimeout(function () {
-        if ((query === '' || query === ' ') && resultType == "NoteType") {
-          u = config.url + "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+        if (resultType == "NoteType") {
+          u = config.url + "/profile-edit/server/whichrt?uri=" + scheme;
           $.ajax({
             url: encodeURI(u),
             dataType: 'json',
