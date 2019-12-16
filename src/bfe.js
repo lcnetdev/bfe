@@ -2841,7 +2841,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }).o
       });
     }
-
     if (propsTemplateIds !== undefined && !_.isEmpty(propsTemplateIds) && bfestore.state !== 'edit') {
       // if (_.indexOf(property.valueConstraint.valueTemplateRefs, propsTemplateId) < 0)
       var found = false;
@@ -2853,7 +2852,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           found = true;
         }
       });
-      if (!found) {
+      // kefo note - I added property.type !== "lookup".
+      // If the property is used with a resource template - that is, any resource template the editor has knowledge of - 
+      // this block - from if (propsTemplateIds... - assumes that the active profile uses 
+      // one of those existing resource templates.  But there may be a time when 
+      // the property is a simple 'lookup' and not a modal.  
+      // My addition will filter based on it being a 'lookup.'
+      // I really wanted to add this condition higher up.  For example, there is no 
+      // reason to process this block of code at all if it is a lookup.  BUT, I'm 
+      // not sure I can make that assumption so this represents a more conservative
+      // change. 
+      if (!found && property.type !== "lookup") {
         bfelog.addMsg(new Error(), 'INFO', property.propertyLabel + ' did not match' + pd.o);
         hasTemplate = false;
       }
