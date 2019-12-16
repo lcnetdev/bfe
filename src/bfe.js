@@ -1572,13 +1572,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         
         bfestore.defaulturi = form.formobject.defaulturi;
         $('#bfeditor-preview').click(function () {
-            console.log("Bfestore.store");
           $('#bfeditor-preview').hide();
           //remove orphans
           bfestore.removeOrphans(bfestore.defaulturi);
 
           var jsonstr = bfestore.store2jsonldExpanded();
-          console.log(jsonstr);
 
           // bfestore.store2turtle(jsonstr, humanizedPanel);
           bfestore.store2jsonldcompacted(jsonstr, jsonPanel);
@@ -1685,7 +1683,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var procInfo = 'create ' + rt_type
     bfestore.profile = loadtemplates[0].resourceTemplateID;
     var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
-
     bfestore.addAdminMetadata(defaulturi, procInfo);
     bfestore.loadtemplates.data = bfestore.store;
 
@@ -1748,7 +1745,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }
 
                 } else {
-                  
                   var rt = fobject.resourceTemplates[urt];
                   // add type
                   var triple = {};
@@ -2203,7 +2199,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         if (property.type.indexOf('literal') === -1) {
           if (_.has(property, 'valueConstraint')) {
-            if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
+            if (
+                _.has(property.valueConstraint, 'valueTemplateRefs') && 
+                !_.isEmpty(property.valueConstraint.valueTemplateRefs) && 
+                property.valueConstraint.valueTemplateRefs.length > 0 
+              ) {
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
               var $buttongrp = $('<div class="btn-group btn-group-md"></div>');
               var vtRefs = property.valueConstraint.valueTemplateRefs;
@@ -2900,7 +2900,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         //label
         displaydata = exports.labelMaker(pd, property);
       }
-
+      
       if (displaydata === undefined) {
         if (data !== undefined && data.o !== undefined) {
           displaydata = data.o;
@@ -2921,6 +2921,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           for (var i = 0; i < data.length; i++) {
             displaydata += data[i].o + ' ';
           }
+        } else if (pd.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+            displaydata = pd.o;
         }
       } else {
         if (_.isArray(displaydata)) {
@@ -3264,7 +3266,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         //	        form.formobject.store.push(triple);
 
         // Kirk note, at this point, some resources have a URI and others have a blank node that matches the defaulturi.
-
         setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, inputID, _.uniq(form.formobject.store));
       }
     });
@@ -4342,7 +4343,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       // do we have new resourceURI?
-
       lu.getResource(resourceURI, p, suggestionobject, function (returntriples, property) {
         bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", returntriples);
 
@@ -4706,6 +4706,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       uri = rt.resourceURI.replace('http://id.loc.gov/resources', config.resourceURI) + '.json';
     } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
       return;
+    } else if (rt.resourceURI == "http://id.loc.gov/ontologies/bflc/Hub") {
+      returnval = baseURI + 'resources/hubs/';
+      return callback(returnval);
     } else {
       uri = rt.resourceURI + '.json';
     }
