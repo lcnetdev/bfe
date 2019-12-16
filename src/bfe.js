@@ -3011,7 +3011,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       } else {
         displaydata = t.o;
       }
+      
     } else {
+        // labeldata is an array.
       var tauthlabel = _.find(labeldata, {
         p: 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel'
       });
@@ -3029,11 +3031,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         p: 'http://id.loc.gov/ontologies/bflc/titleSortKey'
       });
 
+
       if (!_.isEmpty(tpreflabel)) {
         displaydata = tpreflabel;
+          
       } else if (!_.isEmpty(tauthlabel)) {
+        // Found an authoritative label'
         displaydata = tauthlabel.o;
+          
       } else if (!_.isEmpty(tmainTitle)) {
+        // Found a main title
         if (!_.isEmpty(titleSortKey))
           titleSortKey.o = tmainTitle.o;
 
@@ -3047,8 +3054,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           //create a new label
           displaydata = tmainTitle.o;
         }
+          
       } else if (!_.isEmpty(tlabel)) {
+        // found rdfs:label
         displaydata = tlabel.o;
+          
       } else if (!_.isEmpty(tvalue)) {
         if (tvalue.o.startsWith('http')) {
           bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + tvalue.o);
@@ -3066,10 +3076,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             displaydata = tvalue.o;
           }
         }
+      
+          
       } else {
+          // No label was found, including an authoritativeLabel, rdfs:label,
+          // rdf:value, or bf:mainTitle.
         displaydata = _.last(property.propertyURI.split('/'));
+        
         //instance and works
-        if (displaydata === 'instanceOf' || displaydata === 'hasInstance'){
+        if (displaydata === 'instanceOf' || displaydata === 'hasInstance') {
           var titledata = _.where(bfestore.store, {
             's': pd.o,
             'p': 'http://id.loc.gov/ontologies/bibframe/title'
@@ -3083,6 +3098,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
           }
         } else {
+            // Not an Instance or Work.
           displaydata = exports.displayDataService(labeldata, displaydata)
         }
       }
@@ -3585,47 +3601,42 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
 
       if (!_.isEmpty(agent)) {
-        if (agent.o.match(/#Agent/) || agent.o.startsWith('_:b')) {
-          var agentLabel = _.find(bfestore.store, {
+         var agentLabel = _.find(bfestore.store, {
             's': agent.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           });
-
-          if (!_.isEmpty(agentLabel)) {
+          if (_.isEmpty(agentLabel)) {
+            // No label found; try looking up
+            bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel for agent from: ' + agent.o);
+            whichLabel(agent.o, null, function (label) {
+                if (!_.isEmpty(label)) { displaydata = label; }
+            });
+          } else {
             displaydata = agentLabel.o;
           }
-        } else {
-          // try looking up
-          bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + agent.o);
-          whichLabel(agent.o, null, function (label) {
-            if (!_.isEmpty(label)) 
-              { displaydata = label; }
-          });
-        }
       }
+      
       if (!_.isEmpty(role)) {
-        if (role.o.match(/#Role/) || role.o.startsWith('_:b')) {
-          var roleLabel = _.find(bfestore.store, {
+        var roleLabel = _.find(bfestore.store, {
             's': role.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-          });
-
-          if (!_.isEmpty(roleLabel) && displaydata !== 'contribution') {
-            if (displaydata.endsWith(','))
-              displaydata = displaydata + ' ' + roleLabel.o;
-            else
-              displaydata = displaydata + ', ' + roleLabel.o; 
-          }
+        });
+        var foundRoleLabel = '';
+        if (_.isEmpty(roleLabel)) {
+            // No label found; try looking up
+            bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel for role from: ' + role.o);
+            whichLabel(role.o, null, function (label) {
+                if (!_.isEmpty(label)) { foundRoleLabel = label; } 
+            });
         } else {
-          bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + role.o);
-          whichLabel(role.o, null, function (label) {
-            if (!_.isEmpty(label) && displaydata !== 'contribution') 
-              { if (displaydata.endsWith(','))
-                  displaydata = displaydata + ' ' + label; 
-                else
-                  displaydata = displaydata + ', ' + label; 
-              }
-          });
+            foundRoleLabel = roleLabel.o;
+        } 
+        if (displaydata !== 'contribution') {
+            if (displaydata.endsWith(',')) {
+              displaydata = displaydata + ' ' + foundRoleLabel;
+            } else {
+              displaydata = displaydata + ', ' + foundRoleLabel;
+            }
         }
       }
     } else if (displaydata === 'hasItem') {
