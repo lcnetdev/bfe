@@ -7,7 +7,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
     var startingPoints = null;
     
     exports.load = function(config, bfestore, callback) {
-        if (config.toload !== undefined) {
+        if (config.toload !== undefined && config.toload.templates) {
             bfe.loadtemplatesANDlookupsCount = bfe.loadtemplatesANDlookupsCount + config.toload.templates.length;
             
             bfestore.store = [];
