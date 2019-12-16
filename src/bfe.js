@@ -45,6 +45,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'name': 'LCNAF',
       'load': require('src/lookups/lcnames')
     },
+    'http://id.loc.gov/rwo/agents': {
+      'name': 'LC-Agents',
+      'load': require('src/lookups/agents')
+    },
     'http://id.loc.gov/authorities/subjects': {
       'name': 'LCSH',
       'load': require('src/lookups/lcsubjects')
@@ -1575,7 +1579,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-preview').hide();
           //remove orphans
           bfestore.removeOrphans(bfestore.defaulturi);
-
           var jsonstr = bfestore.store2jsonldExpanded();
 
           // bfestore.store2turtle(jsonstr, humanizedPanel);
@@ -2051,7 +2054,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var $button;
         var $selectLang
         var $literalCol
-        
         if (property.type.indexOf('literal') > -1) {
         
           var vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
@@ -2308,7 +2310,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
 
       // starting the "add property" stuff here
-      if (rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
+      if (
+          rt.embedType == 'page' && 
+          bfeusertemplates.getEditMode() !== true &&
+          (
+              editorconfig.enableAddProperty === undefined || 
+              editorconfig.enableAddProperty === true
+          )
+        ){
         var substringMatcher = function (strs) {
           return function findMatches(q, cb) {
             strs = _.sortBy(strs, 'display');
@@ -2418,7 +2427,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // OK now we need to populate the form with data, if appropriate.
     fobject.resourceTemplates.forEach(function (rt) {
       // check for match...maybe do this earlier
-
       if (_.where(bfestore.store, {
         'o': rt.resourceURI
       }).length > 0) {
@@ -2510,10 +2518,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
           }
         });
-      } else {
+      } else { 
         fobject.defaulturi = rt.defaulturi;
         // the rt needs a type
-        if (bfestore.state === 'create') {
+        if (
+            bfestore.state === 'create' && 
+            _.where(bfestore.store, {
+                's': rt.defaulturi,
+                'o': rt.resourceURI
+            }).length === 0
+           ) {
           triple = {};
           triple.guid = rt.useguid;
           triple.rtID = rt.id;
