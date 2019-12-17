@@ -2852,9 +2852,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           found = true;
         }
       });
-      // kefo note - I added property.type !== "lookup".
+      // kefo note - I added `property.type !== "lookup"``.
       // If the property is used with a resource template - that is, any resource template the editor has knowledge of - 
-      // this block - from if (propsTemplateIds... - assumes that the active profile uses 
+      // this block - from `if (propsTemplateIds...`` - assumes that the active profile uses 
       // one of those existing resource templates.  But there may be a time when 
       // the property is a simple 'lookup' and not a modal.  
       // My addition will filter based on it being a 'lookup.'
