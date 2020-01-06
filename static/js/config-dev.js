@@ -37,6 +37,9 @@ if (env.OCLCKEY!=undefined) {
 
 if (env.LOADMARC!=undefined) {
     loadmarc = env.LOADMARC;
+}
+
+if (loadmarc){
     metaproxyURI = env.METAPROXYURI;
 }
 
