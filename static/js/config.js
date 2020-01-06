@@ -3,15 +3,16 @@ function myCB(data) {
 }
 
 /* Config object profiles
-* Editor profiles are read from a WS endpoint
-* The data are expected to be in a JSON array, with each object
-* in the array containing a "json" property that has the profile
-* itself. The "versoURL" variable is a convenience for setting the
-* base URL of verso in the "config" definition below.
-*/
+ * Editor profiles are read from a WS endpoint
+ * The data are expected to be in a JSON array, with each object
+ * in the array containing a "json" property that has the profile
+ * itself. The "versoURL" variable is a convenience for setting the
+ * base URL of verso in the "config" definition below.
+ */
 var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
+var metaproxyURI;
 var workContext;
 var oclckey;
 var loadmarc=false;
@@ -38,6 +39,10 @@ if (env.LOADMARC!=undefined) {
     loadmarc = env.LOADMARC;
 }
 
+if (loadmarc){
+    metaproxyURI = env.METAPROXYURI;
+}
+
 if (env.BUILDCONTEXT!=undefined){
     buildcontext = env.BUILDCONTEXT;
 }
@@ -54,6 +59,7 @@ var config = {
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
+    "metaproxyURI": metaproxyURI,
     "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,

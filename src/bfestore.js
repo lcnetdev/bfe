@@ -60,7 +60,25 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     if (triple.rtid !== undefined) { exports.n3store.addTriple(triple.s, triple.p, triple.o, triple.rtID); } else { exports.n3store.addTriple(triple.s, triple.p, triple.o); }
   };
 
-  exports.addAdminMetadata = function (resourceURI, procInfo) {
+  exports.addModalAdminMetadata = function (resourceURI, rtID) {
+    var catalogerId, encodingLevel,procInfo;
+
+    if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/catalogerId"})){
+      catalogerId = _.find(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/catalogerId"}).o
+    }
+
+    if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/encodingLevel"})){
+      encodingLevel = _.find(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/encodingLevel"}).o
+    }
+
+    if (_.some(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/profile"})){
+      procInfo = _.find(bfeditor.bfestore.store, {"p": "http://id.loc.gov/ontologies/bflc/procInfo"}).o
+    }
+
+    bfeditor.bfestore.addAdminMetadata(resourceURI, procInfo, rtID, encodingLevel, catalogerId);
+  }
+
+  exports.addAdminMetadata = function (resourceURI, procInfo, rtID, encodingLevel, catalogerId) {
     // add name, id triples
     var mintedId = 'e' + window.ShortUUID('0123456789').fromUUID(bfeditor.bfestore.name);
     var mintedUri = config.url + '/resources/' + mintedId;
@@ -83,6 +101,26 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     adminTriple.otype = 'uri';
     bfeditor.bfestore.store.push(adminTriple);
 
+    if (!_.isEmpty(catalogerId)){
+      adminTriple = {};
+      adminTriple.guid = shortUUID(guid());
+      adminTriple.s = bnode;
+      adminTriple.p = 'http://id.loc.gov/ontologies/bflc/catalogerId';
+      adminTriple.o = catalogerId;
+      adminTriple.otype = 'literal';
+      bfeditor.bfestore.store.push(adminTriple);
+    }
+
+    if (!_.isEmpty(encodingLevel)){
+      adminTriple = {};
+      adminTriple.guid = shortUUID(guid());
+      adminTriple.s = bnode;
+      adminTriple.p = 'http://id.loc.gov/ontologies/bflc/encodingLevel';
+      adminTriple.o = encodingLevel;
+      adminTriple.otype = 'uri';
+      bfeditor.bfestore.store.push(adminTriple);
+    }
+
     adminTriple = {};
     adminTriple.guid = shortUUID(guid());
     adminTriple.s = bnode;
@@ -90,6 +128,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var d = new Date(bfeditor.bfestore.created);
     adminTriple.o = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
     adminTriple.otype = 'literal';
+    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#date';
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
@@ -98,6 +137,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var modifiedDate = new Date().toUTCString();
     adminTriple.o = new Date(modifiedDate).toJSON().split(/\./)[0];
     adminTriple.otype = 'literal';
+    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#dateTime';
     bfeditor.bfestore.store.push(adminTriple);
 
     adminTriple = {};
@@ -221,7 +261,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     bfeditor.bfestore.store.push(adminTriple);
 
     this.addProcInfo(bnode, procInfo);
-    this.addProfile(bnode, bfeditor.bfestore.profile);
+    this.addProfile(bnode, rtID);
 
   }
 
@@ -256,6 +296,25 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
         exports.store = _.without(exports.store, t);
       }
     })
+  }
+
+  exports.removeInstanceOfs = function () {
+    var duplicateInstance = _.filter(
+      _.where(exports.store, {"p":"http://id.loc.gov/ontologies/bibframe/instanceOf"}), function(bnode)
+        { if (bnode.o.startsWith("_:b"))
+          { return bnode} 
+      });
+
+      if (!_.isEmpty(duplicateInstance)) { 
+        if (duplicateInstance.length == 1) {
+           _.where(exports.store, {s: duplicateInstance[0].o}); 
+           exports.store = _.reject(exports.store, duplicateInstance[0])
+        } else {
+          bfeditor.bfelog.addMsg(new Error(), "DEBUG", "More than one duplicate instance found.");
+        }
+      } else { 
+        bfeditor.bfelog.addMsg(new Error(), "DEBUG", "No duplicate instance found ");
+      }
   }
 
   exports.storeDedup = function () {
@@ -301,7 +360,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
           turtleWriter.addTriples(turtlestore.getTriples(null, null, null));
           turtleWriter.end(function (error, result) {
             var input = {};
-            input.n3 = result;
+            input.n3 = result.normalize("NFC");
             $.ajax({
               url: config.url + "/profile-edit/server/n3/rdfxml",
               type: "POST",
@@ -403,11 +462,13 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                   triple.o = o['@id'];
                   triple.otype = 'uri';
                 } else if (o['@value'] !== undefined) {
-
                   triple.o = o['@value'];
                   triple.otype = 'literal';
                   if (o['@language'] !== undefined) {
                     triple.olang = o['@language'];
+                  }
+                  if(o['@type'] !== undefined){
+                    triple.odatatype = o['@type'];
                   }
                 } 
               }
@@ -464,8 +525,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             });
           } else {
             o = {};
-            if (r.olang !== undefined && r.olang !== '') {
+            if (!_.isEmpty(r.olang)) {
               o['@language'] = r.olang;
+            }
+            if (!_.isEmpty(r.odatatype)) {
+              o['@type'] = r.odatatype;
             }
             if (r.p == '@type') {
               o = r.o;
@@ -513,7 +577,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             callback(result);
           });
           var input = {};
-          input.n3 = $("#humanized .panel-body pre").text();
+          input.n3 = $("#humanized .panel-body pre").text().normalize("NFC");
           $.ajax({
             url: config.url + "/profile-edit/server/n3/rdfxml",
             type: "POST",
@@ -607,7 +671,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, complexContext);
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, topicContext);
     });
-
+    // converter uses madsrdf:genreForm intead of bf:genreForm
+    /*_.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/GenreForm' }), function (triple) {
+      var bfgenre = {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: 'http://www.loc.gov/mads/rdf/v1#GenreForm'};
+      bfeditor.bfestore.store.push(bfgenre);
+    });*/
     //add profile
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/AdminMetadata' }), function (am) {
       bfeditor.bfestore.addProfile(am.s, bfeditor.bfestore.profile);
