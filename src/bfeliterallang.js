@@ -1,5 +1,5 @@
 /*eslint no-console: 0*/
-/*eslint no-usless-escape: 0*/
+/*eslint no-useless-escape: "error"*/
 bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], function(require, exports) {
   
   
