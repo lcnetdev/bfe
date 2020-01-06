@@ -1113,7 +1113,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       if ($('#marcdx').text().match(/OCLC/i)) {
         url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
       } else {
-        url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
+        url = config.metaproxyURI + dx + '=' + term + '&recordSchema=bibframe2a-dev&maximumRecords=1';
       }
       $('#loadmarc-uri').attr('value', url);
     });
@@ -3910,6 +3910,55 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           });
         }
       }
+    } else if (displaydata === 'relationship') {
+      // lookup agent and role;
+      var relation = _.find(labeldata, {
+        'p': 'http://id.loc.gov/ontologies/bflc/relation'
+      });
+      var relatedTo = _.find(labeldata, {
+        'p': 'http://id.loc.gov/ontologies/bibframe/relatedTo'
+      });
+
+      if (!_.isEmpty(relatedTo)) {
+        if (relatedTo.o.match(/#Work/) || relatedTo.o.startsWith('_:b')) {
+          var workLabel = _.find(bfeditor.bfestore.store, {
+            's': relatedTo.o,
+            'p': 'http://www.w3.org/2000/01/rdf-schema#label'
+          });
+
+          if (!_.isEmpty(workLabel)) {
+            displaydata = workLabel.o;
+          }
+        } else {
+          // try looking up
+          bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + relatedTo.o);
+          whichLabel(relatedTo.o, null, function (label) {
+            if (!_.isEmpty(label)) 
+              { displaydata = label; }
+          });
+        }
+      }
+      if (!_.isEmpty(relation)) {
+        if (relation.o.match(/#Relation/) || relation.o.startsWith('_:b')) {
+          var relationLabel = _.find(bfeditor.bfestore.store, {
+            's': relation.o,
+            'p': 'http://www.w3.org/2000/01/rdf-schema#label'
+          });
+
+          if (!_.isEmpty(relationLabel) && displaydata !== 'relationship') {
+            displaydata = relationLabel.o + ' ' + displaydata;
+          }
+        } else {
+          bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + relation.o);
+          whichLabel(relation.o, null, function (label) {
+            if (!_.isEmpty(label) && displaydata !== 'relationship') 
+              { 
+                  displaydata = label + ' ' + displaydata;
+              }
+          });
+        }
+      }
+
     } else if (displaydata === 'hasItem') {
       displaydata = "Item";
       if(_.some(labeldata, {
@@ -4035,6 +4084,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else if (_.some(labeldata, { p: "http://id.loc.gov/ontologies/bibframe/note" })) {
       var notes = _.where(labeldata, { p: "http://id.loc.gov/ontologies/bibframe/note" })
       notes.forEach(function (n) {
+        //null check?
         displaydata = displaydata + _.find(bfeditor.bfestore.store, {
           's': n.o,
           'p': 'http://www.w3.org/2000/01/rdf-schema#label'

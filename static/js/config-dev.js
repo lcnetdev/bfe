@@ -1,5 +1,5 @@
 function myCB(data) {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 /* Config object profiles
@@ -12,6 +12,7 @@ function myCB(data) {
 var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
+var metaproxyURI;
 var workContext;
 var oclckey;
 var loadmarc=false;
@@ -36,6 +37,7 @@ if (env.OCLCKEY!=undefined) {
 
 if (env.LOADMARC!=undefined) {
     loadmarc = env.LOADMARC;
+    metaproxyURI = env.METAPROXYURI;
 }
 
 if (env.BUILDCONTEXT!=undefined){
@@ -54,6 +56,7 @@ var config = {
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
+    "metaproxyURI": metaproxyURI,
     "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
