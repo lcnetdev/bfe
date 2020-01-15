@@ -5119,7 +5119,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // for resource templates, determine if they are works, instances, or other
     var jsonuri = uri + '.json';
     // normalize
-    if (uri.startsWith('http://id.loc.gov/resources') && !_.isEmpty(config.resourceURI)) {
+    if (uri.startsWith('http://id.loc.gov/resources/works') || uri.startsWith('http://id.loc.gov/resources/instances')&& !_.isEmpty(config.resourceURI)) {
       jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
     } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
       jsonuri = uri + '.madsrdf_raw.json';
@@ -5148,26 +5148,35 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         url: config.url + '/profile-edit/server/whichrt',
         success: function (data) {
           var returnval;
-          var labelelements = _.where(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel');
-
-          if (labelelements !== undefined && !_.isEmpty(labelelements)) {
-            returnval = _.find(labelelements, { '@id': uri })['http://www.loc.gov/mads/rdf/v1#authoritativeLabel']
-            if (!_.isEmpty(returnval)){
-              returnval = returnval[0]['@value'];
-            } else {
-              _.find(labelelements, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'][0]["@value"]
-            }
+          var labelElements;
+          var authoritativeLabelElements;
+          var aapElements;
+          if(_.some(_.find(data, { '@id': uri }))) {
+            labelElements = _.find(data, { '@id': uri })['http://www.w3.org/2000/01/rdf-schema#label']
+            authoritativeLabelElements = _.find(data, { '@id': uri })['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'];
+            aapElements = _.find(data, { '@id': uri })['http://id.loc.gov/ontologies/bflc/aap'];
+          } 
+          if (!_.isEmpty(labelElements)) {
+            returnval = labelElements[0]["@value"];
+          } else if (!_.isEmpty(aapElements)) {
+            returnval = aapElements[0]["@value"]
+          } else if (!_.isEmpty(authoritativeLabelElements)) {
+            returnval = authoritativeLabelElements[0]["@value"]
           } else {
             // look for a rdfslabel
             var labels = _.filter(data[2], function (prop) { if (prop[0] === 'rdfs:label') return prop; });
+            returnval = uri;
 
             if (!_.isEmpty(labels)) {
               returnval = labels[0][2];
             } else if (_.has(data, "@graph")) {
-              returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
-            } else {
-              returnval = uri;
-            }
+                if (_.some(data["@graph"], {"@id": uri})) {
+                  returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
+                } else if ( _.some(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})) {
+                  returnval = _.find(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})["rdf-schema:label"]
+                }
+            } 
+
           }
 
           callback(returnval);
