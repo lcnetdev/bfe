@@ -31,14 +31,21 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
           tempstore.forEach(function (nnode, index, array) {
             i++;
             nnode.s = nnode.s.replace(/^_:N/, '_:bnode');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/' + recid);
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
-            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/' + recid + '0001');
+            nnode.s = nnode.s.replace(/^_:b/, '_:bnode');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#(Work)/, 'id.loc.gov/resources/works/' + recid);
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Instance/, 'id.loc.gov/resources/instances/' + recid + '0001');
+            nnode.s = nnode.s.replace(/bibframe.example.org\/.+#Item/, 'id.loc.gov/resources/items/' + recid + '0001');
+            //nnode.s = nnode.s.replace(/example.org\/.+#(Work)/, 'id.loc.gov/resources/works/' + recid);
+            //nnode.s = nnode.s.replace(/example.org\/.+#Instance/, 'id.loc.gov/resources/instances/' + recid + '0001');
+            //nnode.s = nnode.s.replace(/example.org\/.+#Item/, 'id.loc.gov/resources/items/' + recid + '0001');
             if (nnode.o !== undefined) {
               nnode.o = nnode.o.replace(/^_:N/, '_:bnode');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work).*/, 'id.loc.gov/resources/works/' + recid);
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance.*/, 'id.loc.gov/resources/instances/' + recid + '0001');
-              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item.*/, 'id.loc.gov/resources/items/' + recid + '0001');
+              nnode.o = nnode.o.replace(/^_:b/, '_:bnode');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#(Work)/, 'id.loc.gov/resources/works/' + recid);
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Instance/, 'id.loc.gov/resources/instances/' + recid + '0001');
+              nnode.o = nnode.o.replace(/bibframe.example.org\/.+#Item/, 'id.loc.gov/resources/items/' + recid + '0001');
+              //nnode.o = nnode.o.replace(/example.org\/.+#(Work)/, 'id.loc.gov/resources/works/' + recid);
+              //nnode.o = nnode.o.replace(/example.org\/.+#Instance/, 'id.loc.gov/resources/instances/' + recid + '0001');
             }
             bfeditor.bfelog.addMsg(new Error(), "INFO", nnode.s + ' ' + nnode.p + ' ' + nnode.o);
             if (i == array.length)
@@ -314,6 +321,66 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
         }
       } else { 
         bfeditor.bfelog.addMsg(new Error(), "DEBUG", "No duplicate instance found ");
+      }
+  }
+
+  exports.addSerialTypes = function () {
+    var serialInstance = _.find(exports.store, {"o":"http://id.loc.gov/vocabulary/issuance/serl"});
+
+      if (!_.isEmpty(serialInstance)) {
+        var serialWork = _.find(exports.store, {"s": serialInstance.s, "p":"http://id.loc.gov/ontologies/bibframe/instanceOf"});
+        var serialType = _.where(exports.store, {"s": serialInstance.s, "p": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" })
+        if (serialType.length == 1 ) {
+          if (serialType[0].o == "http://id.loc.gov/ontologies/bibframe/Instance") {
+            if (_.some(bfeditor.bfestore.store, {"s": serialInstance.s, "p": "http://id.loc.gov/ontologies/bibframe/carrier" })){
+              //var carrier = _.find(bfeditor.bfestore.store, {"s": serialInstance, "p": "http://id.loc.gov/ontologies/bibframe/carrier" });
+              _.forEach(_.where(exports.store, {"s": serialInstance.s, "p": "http://id.loc.gov/ontologies/bibframe/media" }), function(mediaType){
+                var serlType;
+                var serlElectronic = "http://id.loc.gov/ontologies/bibframe/Electronic";
+                var serlPrint = "http://id.loc.gov/ontologies/bibframe/Print";
+                if (mediaType.o == "http://id.loc.gov/vocabulary/mediaTypes/h") {
+                  serlType = serlPrint;
+                } else if (mediaType.o == "http://id.loc.gov/vocabulary/mediaTypes/c") {
+                  serlType =serlElectronic;
+                } else if (mediaType.o == "http://id.loc.gov/vocabulary/mediaTypes/n") {
+                  serlType = serlPrint;
+                } else {
+                  return;
+                }
+
+                if (!_.isEmpty(serlType)){
+                  //add a triple for the type
+                  var tguid = shortUUID(guid());
+                  var triple = {};
+                  triple.guid = tguid;
+                  triple.s = serialInstance.s;
+                  triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                  triple.otype = 'uri';
+                  triple.o = serlType
+                  exports.store.push(triple);
+
+                  if (!_.isEmpty(serialWork)){
+                    //add a Text triple
+                    tguid = shortUUID(guid());
+                    triple = {};
+                    triple.guid = tguid;
+                    triple.s = serialWork.o;
+                    triple.p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                    triple.otype = 'uri';
+                    triple.o = "http://id.loc.gov/ontologies/bibframe/Text";
+                    exports.store.push(triple);
+                  }
+                } else {
+                  bfeditor.bfelog.addMsg(new Error(), "DEBUG", "No type added.");
+                }
+              })
+            }
+          }
+        } else {
+          bfeditor.bfelog.addMsg(new Error(), "DEBUG", "More than one serial issuance found.");
+        }
+      } else { 
+        bfeditor.bfelog.addMsg(new Error(), "DEBUG", "No serial issuance found ");
       }
   }
 
@@ -653,17 +720,21 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       var duplicateContext = { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Contribution' };
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateContext);
     });
+    // ItemOfs
+    _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/itemOf'}), function (triple) {
+      bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, triple);
+    });
     // Variant Titles
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/VariantTitle' }), function (triple) {
       var duplicateContext = { s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://id.loc.gov/ontologies/bibframe/Title"};
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, duplicateContext);
     });
-    // Text to Work
+    /*// Text to Work
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' }), function (triple) {
       bfeditor.bfestore.store = _.reject(bfeditor.bfestore.store, { 's': triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Text' });
       triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
       bfeditor.bfestore.store.push(triple);
-    });          
+    });*/          
     //complex subject http://www.loc.gov/mads/rdf/v1#ComplexSubject
     _.each(_.where(bfeditor.bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': 'http://id.loc.gov/ontologies/bibframe/Topic' }), function (triple) {
       var complexContext = {s: triple.s, 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: "http://www.loc.gov/mads/rdf/v1#ComplexSubject"};

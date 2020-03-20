@@ -1574,6 +1574,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
 
         $('#bfeditor-exitpublish').click(function () {
+          bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
+          bfeditor.bfestore.addSerialTypes();
           document.body.style.cursor = 'wait';
           $('.alert').remove();
           if (editorconfig.publish !== undefined) {
@@ -1668,6 +1670,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-preview').hide();
           //remove orphans
           bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
+          bfeditor.bfestore.addSerialTypes();
           if (_.where(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/instanceOf"}).length == 2) {
             bfeditor.bfestore.removeInstanceOfs();
           }
