@@ -84,7 +84,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
-  
+            u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -99,6 +99,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             q = query.replace(/\s+/g,'').normalize();
           }          
           u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -161,8 +162,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       triple.otype = 'uri';
       triples.push(triple);
       // add label
+      url = selected.uri.replace(/^(http:)/,"");
       $.ajax({
-        url: selected.uri + '.jsonp',
+        url: url + '.jsonp',
         dataType: 'jsonp',
         success: function (data) {
           data.forEach(function (resource) {
@@ -336,8 +338,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     }
     
     exports.fetchContextData = function(uri,callback){
-    
-    
+        uri = uri.replace(/^(http:)/,"");
       $.ajax({
         url: uri + '.jsonld',
         dataType: 'json',
@@ -458,6 +459,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       this.searching = setTimeout(function () {
         if ((query === '' || query === ' ') && !scheme.match(/resources\/[works|instances]/)) {
           var u = scheme + '/suggest/?count=100&q=';
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -467,10 +469,12 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             }
           });
         } else if (query.length >= 2 && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
-          if (query.match(/^[0-9]{3,}$/))
+          if (query.match(/^[0-9]{3,}$/)) {
             u = scheme + '/suggest/lccn/' + query.replace(/\s/g,'');
-          else
+          } else {
             u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
+          }
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'json',
@@ -485,6 +489,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
           u = scheme + '/suggest/?count=50&q=' + q;
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -597,6 +602,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             q = query.replace(/\s+/g,'').normalize();
           }      
           u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -681,6 +687,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } /* else if (query.length > 2 && query.match(/[Gg][A-z]?\d/)) {
           u = 'http://id.loc.gov/search/?q=cs:http://id.loc.gov/authorities/genreForms%20AND%20(' + query + ')&start=1&format=atom';
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -699,6 +706,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     exports.getResource = lcshared.getResource;
   });
   
+  // IS this even used?
   bfe.define('src/lookups/rdaformatnotemus', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -748,6 +756,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdamediatype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -797,6 +807,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdamodeissue', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -846,6 +858,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdacarriertype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -895,6 +909,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdacontenttype', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -944,6 +960,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdafrequency', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -993,6 +1011,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdaaspectration', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -1042,6 +1062,8 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
+  // Seems active, but HTTPS not supported.
   bfe.define('src/lookups/rdageneration', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
@@ -1091,6 +1113,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+  
   
   bfe.define('src/lookups/lcorganizations', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
