@@ -582,6 +582,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery;
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -666,7 +667,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = scheme + '/suggest/?q=' + suggestquery;
-  
+            u = u.replace(/^(http:)/,"");
           // u = "http://id.loc.gov/authorities/genreForms/suggest/?q=" + query;
           $.ajax({
             url: u,
