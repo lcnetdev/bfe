@@ -4669,6 +4669,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else {
       uri = rt.resourceURI + '.json';
     }
+	uri = uri.replace('http://', 'https://');
     $.ajax({
       type: 'GET',
       async: false,

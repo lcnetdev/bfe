@@ -9,7 +9,7 @@ function myCB(data) {
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-var rectobase = "http://localhost:3000";
+var rectobase = "https://editor.id.loc.gov";
 var baseDBURI;
 var resourceURI;
 var workContext;
