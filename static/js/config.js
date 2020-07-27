@@ -10,8 +10,10 @@ function myCB(data) {
 * base URL of verso in the "config" definition below.
 */
 var rectobase = "https://editor.id.loc.gov";
+
 var baseDBURI;
 var resourceURI;
+var metaproxyURI;
 var workContext;
 var oclckey;
 var loadmarc=false;
@@ -38,6 +40,10 @@ if (env.LOADMARC!=undefined) {
     loadmarc = env.LOADMARC;
 }
 
+if (loadmarc){
+    metaproxyURI = env.METAPROXYURI;
+}
+
 if (env.BUILDCONTEXT!=undefined){
     buildcontext = env.BUILDCONTEXT;
 }
@@ -54,6 +60,7 @@ var config = {
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
+    "metaproxyURI": metaproxyURI,
     "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,

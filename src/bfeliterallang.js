@@ -1,4 +1,5 @@
 /*eslint no-console: 0*/
+/*eslint no-useless-escape: "error"*/
 bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], function(require, exports) {
   
   
@@ -73,6 +74,48 @@ bfe.define('src/bfeliterallang', ['require', 'exports','src/bfelogging' ], funct
     }
     
   
+  }
+
+  exports.characterShortcuts = function (chr) {
+    //chr + meta key (aka ⊞ Win) + alt key
+    var charMap = [
+      {"g": {name: "Soft Sign", val: "ʹ", code:0x02b9 }},
+      {"G": {name: "Hard Sign", val: "ʺ", code:0x02ba }},
+      {"k": {name: "Ligature Left", val: "", code:0xfe20 }},
+      {"l": {name: "Ligature Right", val: "", code:0xfe21 }},
+      {".": {name: "Breve", val: "", code:0x0306 }},
+      {"N": {name: "Dot above", val: "", code:0x0307 }},
+      {"f": {name: "Macron", val: "", code:0x0304 }},
+      {"m": {name: "Umlaut", val: "", code:0x0308 }},
+      {"p": {name: "Hachek", val: "", code:0x0161 }},
+      {"U": {name: "Dyet upper", val: "Đ", code:0x0110 }},
+      {"u": {name: "Dyet lower", val: "đ", code:0x0111 }},
+      {"A": {name: "Ya upper", val: "Я", code:0x042F }},
+      {"a": {name: "Ya lower", val: "я", code:0x044F }},
+      {"I": {name: "Yat upper", val: "Ѣ", code:0x0462 }},
+      {"i": {name: "Yat lower", val: "ѣ", code:0x0463 }},
+      {"R": {name: "Yu upper", val: "Ю", code:0x042F }},
+      {"r": {name: "Yu lower", val: "ю", code:0x0444E }},
+      {"T": {name: "Tse upper", val: "Ц", code:0x0426 }},
+      {"t": {name: "Tse lower", val: "ц", code:0x0446 }},
+      {"o": {name: "Acute", val: "", code:0x0301}},
+      {"`": {name: "Grave", val: "", code:0x0300}},
+      {"h": {name: "Hook right", val: "", code:0x0328}},
+      {"<": {name: "Non-sort beg", val: "˜", code:0x0098}},
+      {">": {name: "Non-sort end", val: "œ", code:0x009C}}
+    ]
+
+    var returnChar = _.find(charMap, chr);
+
+    if(_.isEmpty(returnChar)) {
+      return ""
+    } else {
+      if (!_.isEmpty(returnChar[chr].val)) {
+        return returnChar[chr].val;
+      } else {
+        return String.fromCodePoint(returnChar[chr].code)
+      }
+    }
   }
   
 });
