@@ -1144,3 +1144,4 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
     exports.getResource = lcshared.getResource;
   });
+

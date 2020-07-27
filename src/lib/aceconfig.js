@@ -1,3 +1,4 @@
+/*eslint no-prototype-builtins: "off"*/
 /*
     This file is needed to define the javascript bfe namespace.
     @deprecated 0.2.0 does not use dryice.
