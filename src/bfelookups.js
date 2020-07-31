@@ -713,7 +713,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           var suggestquery = query.normalize();
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
-          var u = exports.scheme + '/suggest/?q=' + suggestquery;
+          var u = exports.scheme + '/suggest/?count=20&q=' + suggestquery;
           $.ajax({
             url: encodeURI(u),
             dataType: 'jsonp',

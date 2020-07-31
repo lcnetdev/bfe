@@ -576,13 +576,22 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // console.log(full.id);
                 if (full.status === 'published' || full.status === 'success') {
                   if(!_.isEmpty(config.basedbURI)){
-                    if(_.isEmpty(full.objid) || text !== 'N/A'){
-                      full.objid  = 'loc.natlib.instances.e' + text.trim() + '0001';
-                      if (text.trim().startsWith('n')) {
-                        full.objid = 'loc.natlib.works.' + text.trim().replace(/\s+/g, '');
+                    //if(_.isEmpty(full.objid) || text !== 'N/A'){
+                    //  full.objid  = 'loc.natlib.instances.e' + text.trim() + '0001';
+                    //  if (text.trim().startsWith('n')) {
+                    //    full.objid = 'loc.natlib.works.' + text.trim().replace(/\s+/g, '');//
+                    //  }
+                    //}
+                    if (full.objid){
+                        
+                      if (full.objid.charAt(0)=='/'){
+                        ldsanchor = '<a href="' + config.basedbURI + full.objid + '">' + text + '</a>';
+
+                      }else{
+                        ldsanchor = '<a href="' + config.basedbURI + '/' + full.objid + '">' + text + '</a>';
+                        
                       }
                     }
-                    ldsanchor = '<a href="' + config.basedbURI + '/' + full.objid + '">' + text + '</a>';
                   } 
 
                   var table = new $.fn.dataTable.Api(meta.settings);

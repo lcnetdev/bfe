@@ -140,7 +140,8 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
           $messagediv.addClass("alert-danger");
           $messagediv.append('<strong>Description failed to post:</strong>'+ publishdata[0].publish.message);
         } else {
-          $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+          //$messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+          $messagediv.append('<strong>Description submitted for posting:</strong>'+displayText);
         }
         /*$('#bfeditor-formdiv').empty();
         $('#save-btn').remove();*/
