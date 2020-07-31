@@ -135,7 +135,14 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
         bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
         var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
         var displayText = publishdata[0].lccn !== undefined ? publishdata[0].lccn : publishdata[0].objid;
-        $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+        if (publishdata[0].publish.status == "error"){
+          $messagediv.removeClass("alert-info");
+          $messagediv.addClass("alert-danger");
+          $messagediv.append('<strong>Description failed to post:</strong>'+ publishdata[0].publish.message);
+        } else {
+          //$messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+          $messagediv.append('<strong>Description submitted for posting:</strong>'+displayText);
+        }
         /*$('#bfeditor-formdiv').empty();
         $('#save-btn').remove();*/
         $messagediv.insertBefore('.nav-tabs');
