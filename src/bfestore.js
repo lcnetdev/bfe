@@ -646,7 +646,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
           var input = {};
           input.n3 = $("#humanized .panel-body pre").text().normalize("NFC");
           $.ajax({
-            url: config.url + "/profile-edit/server/n3/rdfxml",
+            url: "/profile-edit/server/n3/rdfxml",
             type: "POST",
             data: JSON.stringify(input),
             processData: false,

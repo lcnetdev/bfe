@@ -833,6 +833,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
     var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
     var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
+    var $loadmergediv = $('<div id="loadmerge" class="tab-pane fade"><br></div>');
 
     var $menudiv = $('<div>', {
       id: 'bfeditor-menudiv',
