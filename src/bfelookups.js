@@ -57,7 +57,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
-  
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -147,8 +147,9 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       triple.otype = 'uri';
       triples.push(triple);
       // add label
+      url = selected.uri.replace(/^(http:)/,"");
       $.ajax({
-        url: selected.uri + '.jsonp',
+        url: url + '.jsonp',
         dataType: 'jsonp',
         success: function (data) {
           data.forEach(function (resource) {
@@ -376,11 +377,13 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
 
     exports.fetchContextData = function(uri,callback){
 
-      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabularies)/)) {
+      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
         var jsonuri = uri + '.madsrdf_raw.jsonld';
+        jsonuri = jsonuri.replace(/^(http:)/,"https:");
       } else {
         jsonuri = uri + '.jsonld';
       }
+      
 
       $.ajax({
         url: jsonuri,
@@ -572,6 +575,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } else if ((query === '' || query === ' ') && resultType == "ID" && !(scheme.match(/resources\/[works|instances]/) || scheme.match(/authorities/) || scheme.match(/entities/))) {
           var u = scheme + '/suggest/?count=100&q=';
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: encodeURI(u),
             dataType: 'jsonp',
@@ -582,6 +586,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } else if (query.length > 2 && query.substr(0, 1) == '?' && resultType == "ID") {          
             u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+            u = u.replace(/^(http:)/,"");
             $.ajax({
               url: encodeURI(u),
               dataType: 'jsonp',
@@ -597,6 +602,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           } else {
             u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
           }
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: encodeURI(u),
             dataType: 'json',
@@ -612,7 +618,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
         } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
           if (resultType == "ID"){
             u = scheme + '/suggest/?count=50&q=' + query;
-          
+            u = u.replace(/^(http:)/,"");
             $.ajax({
               url: encodeURI(u),
               dataType: 'jsonp',
@@ -632,7 +638,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
               }
             });
           } else {
-            u = config.url + "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+            u = "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
             $.ajax({
               url: encodeURI(u),
               dataType: 'json',
@@ -714,6 +720,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = exports.scheme + '/suggest/?count=20&q=' + suggestquery;
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: encodeURI(u),
             dataType: 'jsonp',
@@ -728,6 +735,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             q = query.replace(/\s+/g,'').normalize();
           }      
           u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: encodeURI(u),
             dataType: 'jsonp',
