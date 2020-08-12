@@ -84,7 +84,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
-            u = u.replace(/^(http:)/,"");
+          u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
             dataType: 'jsonp',
@@ -338,9 +338,15 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     }
     
     exports.fetchContextData = function(uri,callback){
-        uri = uri.replace(/^(http:)/,"");
+        if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
+            var jsonuri = uri + '.madsrdf_raw.jsonld';
+            jsonuri = jsonuri.replace(/^(http:)/,"https:");
+        } else {
+            jsonuri = uri + '.jsonld';
+        }
+      
       $.ajax({
-        url: uri + '.jsonld',
+        url: jsonuri,
         dataType: 'json',
         success: function (data) {    
           
@@ -468,7 +474,21 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
               return processAsync(parsedlist);
             }
           });
-        } else if (query.length >= 2 && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
+
+        } else if (query.length > 2 && query.substr(0, 1) == '?' && resultType == "ID") {          
+            u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+            u = u.replace(/^(http:)/,"");
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'jsonp',
+              success: function (data) {
+                var parsedlist = exports.processATOM(data, query);
+                cache[q] = parsedlist;
+                return processAsync(parsedlist);
+              }
+            });
+        } else if (query.length >= 2 && resultType == "ID" && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
+
           if (query.match(/^[0-9]{3,}$/)) {
             u = scheme + '/suggest/lccn/' + query.replace(/\s/g,'');
           } else {
@@ -488,13 +508,44 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
             }
           });
         } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
-          u = scheme + '/suggest/?count=50&q=' + q;
-          u = u.replace(/^(http:)/,"");
-          $.ajax({
-            url: u,
-            dataType: 'jsonp',
-            success: function (data) {
-              var parsedlist = exports.processSuggestions(data, query);
+
+          if (resultType == "ID"){
+            u = scheme + '/suggest/?count=50&q=' + query;
+            u = u.replace(/^(http:)/,"");
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'jsonp',
+              success: function (data) {
+                var parsedlist;
+
+                if (resultType == "QA"){
+                  parsedlist = exports.processQASuggestions(data, query);
+                } else if (resultType == "RDA") {
+                  parsedlist = exports.processJSONLDSuggestions(data, query);
+                } else {
+                  parsedlist = exports.processSuggestions(data, query);
+                }
+
+                cache[q] = parsedlist;
+                return processAsync(parsedlist);
+              }
+            });
+          } else {
+            u = "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+            $.ajax({
+              url: encodeURI(u),
+              dataType: 'json',
+              success: function (data) {
+              var parsedlist;
+
+              if (resultType == "QA"){
+                parsedlist = exports.processQASuggestions(data, query);
+              } else if (resultType == "RDA") {
+                parsedlist = exports.processJSONLDSuggestions(data, query);
+              } else {
+                return [];
+              }
+
               cache[q] = parsedlist;
               return processAsync(parsedlist);
             }
@@ -602,7 +653,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           if (query.match(/^[Ss][A-z\s]{0,2}\d/)){
             q = query.replace(/\s+/g,'').normalize();
           }      
-          u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
+          u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
           u = u.replace(/^(http:)/,"");
           $.ajax({
             url: u,
