@@ -509,47 +509,47 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
           });
         } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
 
-          if (resultType == "ID"){
-            u = scheme + '/suggest/?count=50&q=' + query;
-            u = u.replace(/^(http:)/,"");
-            $.ajax({
-              url: encodeURI(u),
-              dataType: 'jsonp',
-              success: function (data) {
-                var parsedlist;
-
-                if (resultType == "QA"){
-                  parsedlist = exports.processQASuggestions(data, query);
-                } else if (resultType == "RDA") {
-                  parsedlist = exports.processJSONLDSuggestions(data, query);
-                } else {
-                  parsedlist = exports.processSuggestions(data, query);
-                }
-
-                cache[q] = parsedlist;
-                return processAsync(parsedlist);
-              }
-            });
-          } else {
-            u = "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
-            $.ajax({
-              url: encodeURI(u),
-              dataType: 'json',
-              success: function (data) {
-              var parsedlist;
-
-              if (resultType == "QA"){
-                parsedlist = exports.processQASuggestions(data, query);
-              } else if (resultType == "RDA") {
-                parsedlist = exports.processJSONLDSuggestions(data, query);
+              if (resultType == "ID") {
+                u = scheme + '/suggest/?count=50&q=' + query;
+                u = u.replace(/^(http:)/,"");
+                $.ajax({
+                  url: encodeURI(u),
+                  dataType: 'jsonp',
+                  success: function (data) {
+                    var parsedlist;
+    
+                    if (resultType == "QA"){
+                      parsedlist = exports.processQASuggestions(data, query);
+                    } else if (resultType == "RDA") {
+                      parsedlist = exports.processJSONLDSuggestions(data, query);
+                    } else {
+                      parsedlist = exports.processSuggestions(data, query);
+                    }
+    
+                    cache[q] = parsedlist;
+                    return processAsync(parsedlist);
+                  }
+                });
               } else {
-                return [];
-              }
-
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
+                u = "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
+                $.ajax({
+                    url: encodeURI(u),
+                    dataType: 'json',
+                    success: function (data) {
+                        var parsedlist;
+                        if (resultType == "QA"){
+                            parsedlist = exports.processQASuggestions(data, query);
+                          } else if (resultType == "RDA") {
+                            parsedlist = exports.processJSONLDSuggestions(data, query);
+                          } else {
+                            return [];
+                          }
+                          cache[q] = parsedlist;
+                          return processAsync(parsedlist);
+                    }
+                });
+            } 
+            
         } else {
           return [];
         }
