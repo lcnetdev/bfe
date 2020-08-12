@@ -1535,7 +1535,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             save_json.addedproperties = addedProperties;
 
             if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-              editorconfig.save.callback(save_json, bfelog, function (save, save_name) {
+              editorconfig.save.callback(save_json, true, bfelog, function (save, save_name) {
                 exitFunction();
                 bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
               });
