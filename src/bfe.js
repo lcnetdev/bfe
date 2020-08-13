@@ -369,9 +369,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       if (browseloaded){
         return true;
       }
-      var url = config.url + '/verso/api/bfs';
       browseloaded = true;
-      $.get( url, function( data ) {
+
+        var d = new Date();
+        d.setDate(d.getDate()-30);
+        oneMonthAgo = d.toISOString();
+
+      $.get( config.url + '/verso/api/bfs?filter[where][modified][gt]=' + oneMonthAgo, function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
         var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
@@ -396,8 +400,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         dataTable.draw(false);
         
         var $addDataStatusDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
-        var $addLastTwoWeeksDataButton = $("<button>").text("Last Two Weeks").addClass('btn btn-basic btn-xs');
-        var $addTwoWeekPlusDataButton = $("<button>").text("All Descriptions").addClass('btn btn-basic btn-xs');
+        var $addLastTwoWeeksDataButton = $("<button>").text("Show Last Two Weeks").addClass('btn btn-basic btn-xs');
+        var $addTwoWeekPlusDataButton = $("<button>").text("Show Last Month of Descriptions").addClass('btn btn-basic btn-xs');
         var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-xs');
 
         var lastTwoWeeksClick = function(){
