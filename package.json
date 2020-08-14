@@ -18,7 +18,7 @@
     "url": "http://github.com/lcnetdev/bfe.git"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
+    "eslint": ">=6.0.0",
     "express": "^4.17.1",
     "serve-static": "^1.13.2"
   },
@@ -37,6 +37,7 @@
     "grunt": "^1.x.x",
     "grunt-contrib-concat": "^1.x.x",
     "grunt-contrib-cssmin": "^3.x.x",
-    "grunt-contrib-uglify-es": "^3.x.x"
+    "grunt-contrib-uglify-es": "^3.x.x",
+    "lodash": "^4.17.19"
   }
 }
