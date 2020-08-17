@@ -132,6 +132,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   exports.require = require;
 
   exports.setConfig = function (config) {
+      
+        if (config.enableUserTemplates === undefined) {
+            config.enableUserTemplates = true;
+        }
+        if (config.enableCloning === undefined) {
+            config.enableCloning = true;
+        }
+        if (config.enableAddProperty === undefined) {
+            config.enableAddProperty = true;
+        }
+        
     editorconfig = config;
 
     // Set up logging
@@ -745,7 +756,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     bfestore.profile = rowData.profile;
 
                     // Taking postingchanges here.  decouplement had just "(profiles, ..."
-                    var parent = _.find(bfeditor.profiles, function (post) {
+                    var parent = _.find(profiles, function (post) {
                       if (_.some(post.Profile.resourceTemplates, { id: bfestore.profile }))
                       { return post; }
                     });
@@ -1171,7 +1182,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               bfe.exitButtons(editorconfig);
 
               // weird bnode prob
-              _.each(bfeditor.bfestore.store, function (el) {
+              _.each(bfestore.store, function (el) {
 >>>> >>> aws
 */
                 if (el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
@@ -1555,7 +1566,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $('#bfeditor-formdiv').empty();
 
               // weird bnode prob
-              _.each(bfeditor.bfestore.store, function (el) {
+              _.each(bfestore.store, function (el) {
 >>> >>>> aws
 */
                 if (el.o !== undefined && el.o.startsWith('_:_:')) { el.o = '_:' + el.o.split('_:')[2]; }
@@ -1760,6 +1771,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
 >>> >>>> aws
 */
+
     // Debug div
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
       var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12 main panel-group">\
@@ -1893,7 +1905,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     loadtemplatesANDlookupsCounter++;
     var loadtemplates = bfeditor.bfestore.loadtemplates;
 
-    //        if (bfeditor.loadtemplates !== undefined && bfestore.loadtemplates[0].resourceTemplateID === "profile:bf2:Load:Work"){
+    //        if (loadtemplates !== undefined && bfestore.loadtemplates[0].resourceTemplateID === "profile:bf2:Load:Work"){
     //            loadtemplates = bfeditor.bfestore.loadtemplates;
     //        }
 >>>> >>> aws
@@ -1969,17 +1981,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             save_json.created = bfeditor.bfestore.created;
             save_json.modified = new Date().toUTCString();
 
-            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
               var modifiedDate = new Date(save_json.modified);
               var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-              if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+              if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+                _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
                   cd.o = modifiedDateString;
                 });
               } else {
                 var adminTriple = {};
-                adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
                 adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
                 adminTriple.o = modifiedDateString;
                 adminTriple.otype = 'literal';
@@ -1990,7 +2002,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
             save_json.addedproperties = addedProperties;
 
-            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
+            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
               editorconfig.save.callback(save_json, true, bfelog, function (save, save_name) {
                 $('#bfeditor-exitpublish').prop('disabled',false);
                 $('#bfeditor-exitsave').prop('disabled',false);
@@ -2005,7 +2017,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               $('#bfeditor-exitsave').prop('disabled',false);
               document.body.style.cursor = 'default';
               $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfeditor.bfestore.name));
+              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
               $messagediv.insertBefore('.nav-tabs');
               document.body.style.cursor = 'default';
             }
@@ -2019,7 +2031,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
 
         $('#bfeditor-exitpublish').click(function () {
-          bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
+          bfeditor.bfestore.removeOrphans(bfestore.defaulturi);
           bfeditor.bfestore.addSerialTypes();
           document.body.style.cursor = 'wait';
           $('.alert').remove();
@@ -2027,27 +2039,27 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('#bfeditor-exitpublish').prop('disabled',true);
             $('#bfeditor-exitsave').prop('disabled',true);
             $('.alert').remove();
-            if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-              bfeditor.bfestore.store2rdfxml(bfeditor.bfestore.store2jsonldExpanded(), function (rdfxml) {
+            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
+              bfeditor.bfestore.store2rdfxml(bfestore.store2jsonldExpanded(), function (rdfxml) {
                 //var rdfxml = $("#rdfxml .panel-body pre").text();
                 var save_json = {};
-                save_json.name = mintResource(bfeditor.bfestore.name);
+                save_json.name = mintResource(bfestore.name);
                 save_json.profile = bfeditor.bfestore.profile;
                 save_json.url = bfeditor.bfestore.url;
                 save_json.created = bfeditor.bfestore.created;
                 save_json.modified = new Date().toUTCString();
 
-                if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+                if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
                   var modifiedDate = new Date(save_json.modified);
                   var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-                  if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                    _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+                  if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+                    _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
                       cd.o = modifiedDateString;
                     });
                   } else {
                     var adminTriple = {};
-                    adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                    adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
                     adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
                     adminTriple.o = modifiedDateString;
                     adminTriple.otype = 'literal';
@@ -2056,24 +2068,24 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
 
                 //update profile
-                if (_.some(bfeditor.bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
-                  var profile = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
+                if (_.some(bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
+                  var profile = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
                   profile.o = bfeditor.bfestore.profile;
                 } else {
-                  var admin = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                  var admin = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
                   bfeditor.bfestore.addProfile(admin, bfeditor.bfestore.profile);
                 }
                 //works or instances
-                var profileType = _.last(bfeditor.bfestore.profile.split(':')) ==='Work' ? 'works' : 'instances';
+                var profileType = _.last(bfestore.profile.split(':')) ==='Work' ? 'works' : 'instances';
 
                 save_json.status = 'published';
                 save_json.objid = 'loc.natlib.' + profileType + '.' + save_json.name + '0001';
 
                 var lccns;
 
-                if (_.some(bfeditor.bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })) {
-                  var lccnType = _.where(bfeditor.bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s
-                  lccns = _.where(bfeditor.bfestore.store, { s: lccnType, p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' })
+                if (_.some(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })) {
+                  var lccnType = _.where(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s
+                  lccns = _.where(bfestore.store, { s: lccnType, p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' })
                 }
 
                 if (!_.isEmpty(lccns)) {
@@ -2094,7 +2106,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             } else {
               // title required
               $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfeditor.bfestore.name));
+              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
               $messagediv.insertBefore('.tabs');
               document.body.style.cursor = 'default';
               $('#bfeditor-exitpublish').prop('disabled',false);
@@ -2114,9 +2126,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#bfeditor-preview').click(function () {
           $('#bfeditor-preview').hide();
           //remove orphans
-          bfeditor.bfestore.removeOrphans(bfeditor.bfestore.defaulturi);
+          bfeditor.bfestore.removeOrphans(bfestore.defaulturi);
           bfeditor.bfestore.addSerialTypes();
-          if (_.where(bfeditor.bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/instanceOf"}).length == 2) {
+          if (_.where(bfestore.store, {"p":"http://id.loc.gov/ontologies/bibframe/instanceOf"}).length == 2) {
             bfeditor.bfestore.removeInstanceOfs();
           }
 
@@ -2226,7 +2238,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
     var procInfo = 'create ' + rt_type
     bfeditor.bfestore.profile = loadtemplates[0].resourceTemplateID;
-    var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfeditor.bfestore.templateGUID);
+    var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
     var catalogerId;
     if (config.enableLoadMarc && !_.isEmpty(window.localStorage.bfeUser)){
       catalogerId = JSON.parse(window.localStorage.bfeUser)["bflc:catalogerId"];
@@ -2365,82 +2377,87 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $resourcedivheading.append($resourcedivheadingh4);
       }
 
-      // create an empty clone button
-      var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
+      if (config.enableCloning) {
+          // create an empty clone button
+          var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
 
-      // populate the clone button for Instance or Work descriptions
-      if (rt.id.match(/:Instance$/i)) {
-        $clonebutton.attr('id', 'clone-instance');
-        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
-        $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
-      } else if (rt.id.match(/:Work$/i)) {
-        $clonebutton.attr('id', 'clone-work');
-        $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
-        $clonebutton.data({ 'match': 'works', 'label': 'Work' });
-      }
-
-      //clean up
-      //$('#cloneButtonGroup').remove();
-
-      var $templateCloneButtonGroup;
-      
-      if ($('#cloneButtonGroup').length > 0){
-        $templateCloneButtonGroup = $('#cloneButtonGroup');
-        if (rt.id.match(/:Instance$/i)) {
-          $clonebutton = $('#clone-instance')
-        } else if (rt.id.match(/:Work$/i)) {
-          $clonebutton = $('#clone-work')
-        }
-      } else {
-        $templateCloneButtonGroup = $('<div>', {
-        id: 'cloneButtonGroup',
-        class: 'pull-right'
-        });
-        $templateCloneButtonGroup.append($clonebutton);
-      }
+          // populate the clone button for Instance or Work descriptions
+          if (rt.id.match(/:Instance$/i)) {
+            $clonebutton.attr('id', 'clone-instance');
+            $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
+            $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
+          } else if (rt.id.match(/:Work$/i)) {
+            $clonebutton.attr('id', 'clone-work');
+            $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
+            $clonebutton.data({ 'match': 'works', 'label': 'Work' });
+          }
     
-      // append to the resource heading if there is a clone button id and is not a modal window      
-      if ($clonebutton.attr('id') && rt.embedType != 'modal') {
-        var newid = mintResource(guid());
-
-        // ask user to input custom id
-        var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
-              <div class="modal-dialog" role="document">\
-                <div class="modal-content">\
-                  <div class="modal-header">\
-                    <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
-                    <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
-                  </div>\
-                  <div class="modal-body">\
-                      <div class="input-group col-xs-12">\
-                        <span class="input-group-addon">New Resource ID:</span>\
-                        <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
-                        <span class="input-group-btn">\
-                          <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
-                        </span>\
-                      </div>\
-                  </div>\
-                  <div class="modal-footer">\
-                    <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
-                  </div>\
-                </div>\
-              </div>\
-            </div>');
-        $resourcediv.append($cloneinput);
+          //clean up
+          //$('#cloneButtonGroup').remove();
+    
+          var $templateCloneButtonGroup;
           
-        // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
-        if (editorconfig.enableUserTemplates){
-          var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
-          $('.template-controls').remove();
-          $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile, editorconfig));
+          if ($('#cloneButtonGroup').length > 0){
+            $templateCloneButtonGroup = $('#cloneButtonGroup');
+            if (rt.id.match(/:Instance$/i)) {
+              $clonebutton = $('#clone-instance')
+            } else if (rt.id.match(/:Work$/i)) {
+              $clonebutton = $('#clone-work')
+            }
+          } else {
+            $templateCloneButtonGroup = $('<div>', {
+            id: 'cloneButtonGroup',
+            class: 'pull-right'
+            });
+            $templateCloneButtonGroup.append($clonebutton);
+          }
+        
+          // append to the resource heading if there is a clone button id and is not a modal window      
+          if ($clonebutton.attr('id') && rt.embedType != 'modal') {
+            var newid = mintResource(guid());
+    
+            // ask user to input custom id
+            var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+                  <div class="modal-dialog" role="document">\
+                    <div class="modal-content">\
+                      <div class="modal-header">\
+                        <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
+                        <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
+                      </div>\
+                      <div class="modal-body">\
+                          <div class="input-group col-xs-12">\
+                            <span class="input-group-addon">New Resource ID:</span>\
+                            <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                            <span class="input-group-btn">\
+                              <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                            </span>\
+                          </div>\
+                      </div>\
+                      <div class="modal-footer">\
+                        <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                      </div>\
+                    </div>\
+                  </div>\
+                </div>');
+            $resourcediv.append($cloneinput);
+          }
         }
         
-        
+        // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
+        if (editorconfig.enableUserTemplates) {
+            if (!editorconfig.enableCloning) {
+                $templateCloneButtonGroup = $('<div>', { id: 'cloneButtonGroup', class: 'pull-right' });
+            }
+            var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
+            $('.template-controls').remove();
+            $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile, editorconfig));
+        }
+
+      if ($templateCloneButtonGroup !== undefined) {
+          $('#bfeditor-menudiv').append($templateCloneButtonGroup);
       }
-
-      $('#bfeditor-menudiv').append($templateCloneButtonGroup);
-
+      
       $resourcediv.append($resourcedivheading);
 
       $resourcediv.find('#clear-id').click(function () {
@@ -3146,7 +3163,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     if (propsdata.length > 0 && _.has(property, 'valueConstraint')) {
       if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
-        var parent = _.find(bfeditor.profiles, function (post) {
+        var parent = _.find(profiles, function (post) {
           for (var i = 0; i < property.valueConstraint.valueTemplateRefs.length; i++) {
             if (_.some(post.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] }))
             //                            return _.find(post.Profile.resourceTemplates, {id: property.valueConstraint.valueTemplateRefs[i]})
@@ -3173,7 +3190,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           if (!_.isEmpty(parent_nodes)){
             for (i in propsdata){
               bfelog.addMsg(new Error(), 'DEBUG', 'Matching ' + propsdata[i].o);
-              if(!propsdata[i].o.startsWith('_:bnode') && !_.some(bfeditor.bfestore.store, {'s':propsdata[i].o})){
+              if(!propsdata[i].o.startsWith('_:bnode') && !_.some(bfestore.store, {'s':propsdata[i].o})){
                 //add type triple
                 var triple = {};
                 triple.s = propsdata[i].o;
@@ -4056,17 +4073,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       save_json.created = bfeditor.bfestore.created;
       save_json.modified = new Date().toUTCString();
 
-      if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+      if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
         var modifiedDate = new Date(save_json.modified);
         var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
 
-        if (_.some(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-          _.each(_.where(bfeditor.bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+        if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+          _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
             cd.o = modifiedDateString;
           });
         } else {
           var adminTriple = {};
-          adminTriple.s = _.find(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+          adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
           adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
           adminTriple.o = modifiedDateString;
           adminTriple.otype = 'literal';
@@ -4077,7 +4094,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
       save_json.addedproperties = addedProperties;
 
-      if (_.some(bfeditor.bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
+      if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
         editorconfig.save.callback(save_json, false, bfelog, function (save, save_name) {
           bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
           $('#bfeditor-exitcancel').text("Close");
@@ -4211,24 +4228,24 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         if((connector[0].p === 'http://id.loc.gov/ontologies/bibframe/title' || connector[0].p === 'http://id.loc.gov/ontologies/bibframe/instanceOf')  && resourceTemplate.embedType === 'page' ){
           //lookup bf:Title only
-          var title = _.find(bfeditor.bfestore.store, {
+          var title = _.find(bfestore.store, {
             's': connector[0].o,
             'o': 'http://id.loc.gov/ontologies/bibframe/Title'
           });
           //if empty
           if(_.isEmpty(title)){
-            var titles = _.where(bfeditor.bfestore.store, {
+            var titles = _.where(bfestore.store, {
               's': connector[0].o,
               'p': 'http://id.loc.gov/ontologies/bibframe/title'
             });
             //work title
             for(var i=0;i<titles.length;i++){
               var searchTitle = titles[i];
-              if (_.some(bfeditor.bfestore.store, {
+              if (_.some(bfestore.store, {
                 's': searchTitle.o,
                 'o': 'http://id.loc.gov/ontologies/bibframe/Title'
               }) ) {
-                title = _.find(bfeditor.bfestore.store, {
+                title = _.find(bfestore.store, {
                   's': searchTitle.o,
                   'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'
                 });
@@ -4237,7 +4254,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
           //find bf:title/bf:Title/bf:mainTitle
           if (!_.isEmpty(title)) {
-            var mainTitle = _.find(bfeditor.bfestore.store, {
+            var mainTitle = _.find(bfestore.store, {
               's': title.s,
               'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle'
             });
@@ -4285,7 +4302,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $('#bfeditor-modalSave-' + modalformid).off('click');
     $('#bfeditor-modal-' + modalformid).modal('hide');
 
-    $('#bfeditor-debug').html(JSON.stringify(bfeditor.bfestore.store, undefined, ' '));
+    $('#bfeditor-debug').html(JSON.stringify(bfestore.store, undefined, ' '));
   }
 
   exports.labelMakerModal = function (tsubject, data, lookupLabel) {
@@ -4435,7 +4452,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       if (!_.isEmpty(agent)) {
         if (agent.o.match(/#Agent/) || agent.o.startsWith('_:b')) {
-          var agentLabel = _.find(bfeditor.bfestore.store, {
+          var agentLabel = _.find(bfestore.store, {
             's': agent.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           });
@@ -4454,7 +4471,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
       if (!_.isEmpty(role)) {
         if (role.o.match(/#Role/) || role.o.startsWith('_:b')) {
-          var roleLabel = _.find(bfeditor.bfestore.store, {
+          var roleLabel = _.find(bfestore.store, {
             's': role.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           });
@@ -4488,7 +4505,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       if (!_.isEmpty(relatedTo)) {
         if (relatedTo.o.match(/#Work/) || relatedTo.o.startsWith('_:b')) {
-          var workLabel = _.find(bfeditor.bfestore.store, {
+          var workLabel = _.find(bfestore.store, {
             's': relatedTo.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           });
@@ -4509,7 +4526,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
       if (!_.isEmpty(relation)) {
         if (relation.o.match(/#Relation/) || relation.o.startsWith('_:b')) {
-          var relationLabel = _.find(bfeditor.bfestore.store, {
+          var relationLabel = _.find(bfestore.store, {
             's': relation.o,
             'p': 'http://www.w3.org/2000/01/rdf-schema#label'
           });
@@ -4536,8 +4553,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         _.each(_.where(labeldata, {
           'p': 'http://id.loc.gov/ontologies/bibframe/identifiedBy'
         }), function(id) {
-            if(_.some(bfeditor.bfestore.store, {s: id.o, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: 'http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc' })){
-              var shelfmarkdata = _.where(bfeditor.bfestore.store, {s: id.o});
+            if(_.some(bfestore.store, {s: id.o, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: 'http://id.loc.gov/ontologies/bibframe/ShelfMarkLcc' })){
+              var shelfmarkdata = _.where(bfestore.store, {s: id.o});
               //look for literals and concatenate them
               var literallabel = '';
               _.each(_.where(shelfmarkdata, {otype: 'literal'}), function(label){
@@ -4549,7 +4566,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               if (!_.isEmpty(literallabel)){
                 //add enumeration
                 if(_.some(labeldata, {p: "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology"})){
-                  literallabel += ' ' + _.find(bfeditor.bfestore.store,{s: _.find(labeldata, {p: "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology"}).o, otype: 'literal'}).o
+                  literallabel += ' ' + _.find(bfestore.store,{s: _.find(labeldata, {p: "http://id.loc.gov/ontologies/bibframe/enumerationAndChronology"}).o, otype: 'literal'}).o
                 }
                 displaydata = literallabel.trim();
               }
@@ -4654,7 +4671,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       var notes = _.where(labeldata, { p: "http://id.loc.gov/ontologies/bibframe/note" })
       notes.forEach(function (n) {
         //null check?
-        displaydata = displaydata + _.find(bfeditor.bfestore.store, {
+        displaydata = displaydata + _.find(bfestore.store, {
           's': n.o,
           'p': 'http://www.w3.org/2000/01/rdf-schema#label'
         }).o;
