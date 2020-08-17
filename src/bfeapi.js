@@ -3,7 +3,7 @@ bfe rest api calls
 */
 bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (require, exports) {
 
-    //var bfelog = require('src/bfelogging');
+    var bfelog = require('src/bfelogging');
     var startingPoints = null;
     
     exports.load = function(config, bfestore, callback) {
