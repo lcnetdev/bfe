@@ -176,10 +176,8 @@ Optional
 * `buildContextForWorksEndpoint`: (String) This is a custom override for LC to redirect context panel requests from resources
   at ID.LOC.GOV to an internal source.  QUESTOIN: Is this necessary still or could we use the ID data?
 * `enableUserTemplates`: (Boolean)  This will permit users to generate their own "templates," which is a means to hide not-required fields in
-  a chosen profile.
+  a chosen profile.  Default "true".
 * `enableLoadMarc`: (Boolean) This option - really only useful to LC - will enable the "Load MARC" tab in the `lcapplication` (see above).
-* `oclckey`: (String) This holds the OCLC developer's key and is used to fetch MARC records from OCLC.  Used by `lcapplication` (see above).
-* `resourceURI`: Base URI for resources in the triplestore.
 * `logging`: (Object) with two properties.  `level` indicates the level of logging 
   desired.  INFO and DEBUG are the two options.  DEBUG is verbose.  Default is 
   INFO.  `toConsole` is a boolean value.  "True" will write the output to the 
@@ -191,6 +189,24 @@ Optional
   load is the location of the Javascript file the contains the functions required to populate 
   the typeahead drop down selection list and then to process the selected item.  QUESTION: It
   is really hard to tell if this would even work any more.  Will it?
+* `oclckey`: (String) This holds the OCLC developer's key and is used to fetch MARC records from OCLC.  Used by `lcapplication` (see above).
+* `resourceURI`: Base URI for resources in the triplestore.
+* `toload`: Object that contains the template to load and the resource to load (i.e. populate the form)
+```json
+{
+    "defaulturi": "http://id.loc.gov/resources/hubs/f60eb10317b7c78642d32f7e2851653b",
+    "templates": [
+        {
+            "templateID": "lc:RT:bf2:Hub:Hub"
+        }
+    ],
+    "source": {
+        "location": "https://id.loc.gov/resources/hubs/f60eb10317b7c78642d32f7e2851653b.bibframe_edit.json?test",
+        "requestType": "json",
+        "data": "UNUSED, BUT REMEMBER IT"
+    }
+}
+```
 
 <!-- section links -->
 ----------------
