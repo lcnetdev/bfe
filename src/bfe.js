@@ -404,7 +404,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         d.setDate(d.getDate()-30);
         oneMonthAgo = d.toISOString();
 
-      $.get( config.url + '/verso/api/bfs?filter[where][modified][gt]=' + oneMonthAgo, function( data ) {
+      $.get( config.versobase + '/verso/api/bfs?filter[where][modified][gt]=' + oneMonthAgo, function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
         var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
@@ -1130,7 +1130,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1229,7 +1229,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1507,7 +1507,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       // bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1977,7 +1977,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             var save_json = {};
             save_json.name = bfeditor.bfestore.name;
             save_json.profile = bfeditor.bfestore.profile;
-            save_json.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
+            save_json.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
             save_json.created = bfeditor.bfestore.created;
             save_json.modified = new Date().toUTCString();
 
@@ -2212,7 +2212,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfestore.name = guid();
     bfestore.templateGUID = guid();
     bfestore.created = new Date().toUTCString();
-    bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+    bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
     bfestore.state = 'create';
     
     // Turn off edit mode of templates if they were in the middle of editing one
@@ -2912,7 +2912,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $addpropinput.prop('disabled', true);
             $addpropinput.attr('placeholder', 'Loading field choices...');
             $.ajax({
-              url: config.url + '/verso/api/configs?filter[where][configType]=ontology',
+              url: config.versobase + '/verso/api/configs?filter[where][configType]=ontology',
               success: function (data) {
                 if (data.length == 0) {
                   $addpropinput.attr('placeholder', 'No ontologies defined...');
@@ -4054,71 +4054,55 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   exports.saveNoExit = function(){
-    $('.alert').remove();
-    var $savingInfo = $('<span id=savingicon style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
-    $('#bfeditor-exitcancel').text("Cancel");
-    $('#resource-id-popover #savemessage').remove();
-    $('#resource-id-popover #savingicon').remove();
-    $('#resource-id-popover').append($savingInfo);
-    $('#bfeditor-exitpublish').prop('disabled',true);
-    $('#bfeditor-exitsave').prop('disabled',true);
-
-    if (editorconfig.save !== undefined && !bfeditor.bfestore.profile.match(/[T|t]est/)) {
-      // to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
-      // var dirhash = guid();
-      var save_json = {};
-      save_json.name = bfeditor.bfestore.name;
-      save_json.profile = bfeditor.bfestore.profile;
-      save_json.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
-      save_json.created = bfeditor.bfestore.created;
-      save_json.modified = new Date().toUTCString();
-
-      if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-        var modifiedDate = new Date(save_json.modified);
-        var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
-
-        if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-          _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-            cd.o = modifiedDateString;
-          });
-        } else {
-          var adminTriple = {};
-          adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-          adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-          adminTriple.o = modifiedDateString;
-          adminTriple.otype = 'literal';
-          bfeditor.bfestore.store.push(adminTriple);
-        }
-      }
-
-      save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-      save_json.addedproperties = addedProperties;
-
-      if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-        editorconfig.save.callback(save_json, false, bfelog, function (save, save_name) {
-          bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
-          $('#bfeditor-exitcancel').text("Close");
-          var $successInfo = $('<span id=savemessage style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
-          $('#resource-id-popover #savingicon').remove();
-          $('#resource-id-popover #savemessage').remove();
-          $('#bfeditor-exitpublish').prop('disabled',false);
-          $('#bfeditor-exitsave').prop('disabled',false);
-          $('#resource-id-popover').append($successInfo);
-        });
-      } else {
-        // title required
-        var $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
-        $('#resource-id-popover #savingicon').remove();
+    if (editorconfig.save !== undefined ) {
+        $('.alert').remove();
+        var $savingInfo = $('<span id=savingicon style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+        $('#bfeditor-exitcancel').text("Cancel");
         $('#resource-id-popover #savemessage').remove();
+        $('#resource-id-popover #savingicon').remove();
+        $('#resource-id-popover').append($savingInfo);
+        $('#bfeditor-exitpublish').prop('disabled',true);
+        $('#bfeditor-exitsave').prop('disabled',true);
+
+        if (entryfunc == "lcapplication") {
+            // These conditions need to be true if this is the lcapplication.
+            if (
+                    _.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) && 
+                    !bfeditor.bfestore.profile.match(/[T|t]est/)
+                ) {
+                bfestore.addedProperties = addedProperties;
+                editorconfig.save.callback(bfestore, bfelog, function (success, data) {
+                    alert(JSON.stringify(data));
+                    bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
+                    $('#bfeditor-exitcancel').text("Close");
+                    var $successInfo = $('<span id=savemessage style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                    $('#resource-id-popover #savemessage').remove();
+                    $('#resource-id-popover').append($successInfo);
+                });
+            } else {
+                // title required
+                var $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+                $('#resource-id-popover #savemessage').remove();
+                $('#resource-id-popover').append($failInfo);
+            }
+        } else {
+            bfestore.addedProperties = addedProperties;
+            editorconfig.save.callback(bfestore, bfelog, function (success, data) {
+                alert(JSON.stringify(data));
+                bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
+                $('#bfeditor-exitcancel').text("Close");
+                var $successInfo = $('<span id=savemessage style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                $('#resource-id-popover #savemessage').remove();
+                $('#resource-id-popover').append($successInfo);
+            });
+            // save disabled
+            $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+            $('#resource-id-popover').append($failInfo);
+        }
+
+        $('#resource-id-popover #savingicon').remove()
         $('#bfeditor-exitpublish').prop('disabled',false);
         $('#bfeditor-exitsave').prop('disabled',false);
-        $('#resource-id-popover').append($failInfo);
-      }
-    } else {
-      // save disabled
-      $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
-      $('#resource-id-popover #savingicon').remove()
-      $('#resource-id-popover').append($failInfo);
     }
   }
 
