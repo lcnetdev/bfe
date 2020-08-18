@@ -9,7 +9,7 @@ function myCB(data) {
  * itself. The "versoURL" variable is a convenience for setting the
  * base URL of verso in the "config" definition below.
  */
-var rectobase = "https://editor.id.loc.gov";
+var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
 var metaproxyURI;
@@ -50,8 +50,10 @@ if (env.BUILDCONTEXT!=undefined){
 if (env.ENABLEUSERTEMPLATES!=undefined){
     enableusertemplates=env.ENABLEUSERTEMPLATES;
 }
-
-var versoURL = rectobase + "/verso/api";
+if (env.VERSOBASE!==undefined){
+    versobase = env.VERSOBASE;
+}
+var versoURL = versobase + "/verso/api";
 
 var config = {
      "logging": {
@@ -65,6 +67,7 @@ var config = {
     "resourceURI": resourceURI,
     "metaproxyURI": metaproxyURI,
     "buildContext": buildcontext,
+    "versobase": versobase,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates" :enableusertemplates,
