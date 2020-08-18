@@ -14,7 +14,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
             bfestore.name = guid();
             bfestore.templateGUID = guid();
             bfestore.created = new Date().toUTCString();
-            bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+            bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
             bfestore.state = 'create';
     
             // Turn off edit mode of templates if they were in the middle of editing one
@@ -124,6 +124,58 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
     });
   }
 
+exports.save = function (bfestore, bfelog, callback){
+  //var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
+  
+  var data = createSaveJson(bfestore);
+
+  var url = config.versobase + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
+
+    alert(JSON.stringify(data));
+    
+    return callback(true, data);
+  $.ajax({
+    url: url,
+    type: "POST",
+    data:JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=utf-8"
+  }).done(function (data) {  
+    bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
+    savedata = {};
+    savedata.save_name = "This was saved";
+    return callback(true, savedata);
+    
+    if (close){
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
+      var decimaltranslator = window.ShortUUID("0123456789");
+      var resourceName = "e" + decimaltranslator.fromUUID(data.name);
+      var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
+      $messagediv.append('<strong>Description saved:</strong><a href='+linkUrl+'>'+resourceName.substring(0,8)+'</a>');
+      $messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
+      $messagediv.insertBefore('.nav-tabs');
+      //$('#bfeditor-formdiv').empty();
+      //$('#save-btn').remove();
+      //$('#bfeditor-previewPanel').remove();
+      //$('.nav-tabs a[href="#browse"]').tab('show')
+      //bfeditor.bfestore.store = [];
+      //window.location.hash = "";
+    }
+
+  }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+        data = { "errorText": textStatus, "errorThrown": errorThrown }
+        bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
+        bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+        return callback(false, data);
+        $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
+        $messagediv.insertBefore('.nav-tabs');
+  }).always(function(){                       
+    // $('#table_id').DataTable().ajax.reload();
+  });
+};
+
+/*
 exports.save = function (data, close, bfelog, callback){
   var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
 
@@ -163,11 +215,12 @@ exports.save = function (data, close, bfelog, callback){
     // $('#table_id').DataTable().ajax.reload();
   });
 };
+*/
 
 exports.publish = function (data, rdfxml, savename, bfelog, callback){
     var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
-    var url = config.url + "/profile-edit/server/publish";
+    var url = config.versobase + "/profile-edit/server/publish";
     var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
   
     var savedata = {};
@@ -221,7 +274,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
   
   exports.retrieveLDS =function (uri, bfestore, loadtemplates, bfelog, callback){
 
-    var url = config.url + "/profile-edit/server/retrieveLDS";
+    var url = config.versobase + "/profile-edit/server/retrieveLDS";
   
     $.ajax({
       dataType: "json",
@@ -248,7 +301,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
   }
 
   exports.deleteId = function(id, bfelog){
-    var url = config.url + "/verso/api/bfs/" + id;
+    var url = config.versobase + "/verso/api/bfs/" + id;
   
     $.ajax({
       type: "DELETE",                
@@ -293,6 +346,37 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     }
 }
 
+    function createSaveJson(bfestore) {
+      var save_json = {};
+      save_json.name = bfestore.name;
+      save_json.profile = bfestore.profile;
+      save_json.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      save_json.created = bfestore.created;
+      save_json.modified = new Date().toUTCString();
+
+      if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
+        var modifiedDate = new Date(save_json.modified);
+        var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+
+        if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
+          _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
+            cd.o = modifiedDateString;
+          });
+        } else {
+          var adminTriple = {};
+          adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+          adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
+          adminTriple.o = modifiedDateString;
+          adminTriple.otype = 'literal';
+          bfestore.store.push(adminTriple);
+        }
+      }
+
+      save_json.rdf = bfestore.store2jsonldExpanded();
+      save_json.addedproperties = bfestore.addedProperties;
+      return save_json;
+    };
+  
   function guid() {
     var translator = window.ShortUUID();
     return translator.uuid();
