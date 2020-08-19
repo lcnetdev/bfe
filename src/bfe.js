@@ -4056,7 +4056,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   exports.saveNoExit = function(){
     if (editorconfig.save !== undefined ) {
         $('.alert').remove();
-        var $savingInfo = $('<span id=savingicon style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+        var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
         $('#bfeditor-exitcancel').text("Cancel");
         $('#resource-id-popover #savemessage').remove();
         $('#resource-id-popover #savingicon').remove();
@@ -4064,39 +4064,31 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#bfeditor-exitpublish').prop('disabled',true);
         $('#bfeditor-exitsave').prop('disabled',true);
 
+        var good_to_save = true;
         if (entryfunc == "lcapplication") {
-            // These conditions need to be true if this is the lcapplication.
+            // If there is no mainTitle OR the profile contains the word "test", then do not save.
             if (
-                    _.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) && 
-                    !bfeditor.bfestore.profile.match(/[T|t]est/)
+                    _.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false || 
+                    bfeditor.bfestore.profile.match(/[T|t]est/)
                 ) {
-                bfestore.addedProperties = addedProperties;
-                editorconfig.save.callback(bfestore, bfelog, function (success, data) {
-                    alert(JSON.stringify(data));
-                    bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
-                    $('#bfeditor-exitcancel').text("Close");
-                    var $successInfo = $('<span id=savemessage style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
-                    $('#resource-id-popover #savemessage').remove();
-                    $('#resource-id-popover').append($successInfo);
-                });
-            } else {
-                // title required
-                var $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
-                $('#resource-id-popover #savemessage').remove();
-                $('#resource-id-popover').append($failInfo);
+                    var good_to_save = false;
+                    // title required
             }
-        } else {
+        }
+        if (good_to_save) {
             bfestore.addedProperties = addedProperties;
             editorconfig.save.callback(bfestore, bfelog, function (success, data) {
                 alert(JSON.stringify(data));
                 bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
                 $('#bfeditor-exitcancel').text("Close");
-                var $successInfo = $('<span id=savemessage style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                var $successInfo = $('<span id="savemessage" style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
                 $('#resource-id-popover #savemessage').remove();
                 $('#resource-id-popover').append($successInfo);
             });
-            // save disabled
-            $failInfo = $('<span id=savemessage style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+        } else {
+            // Not saved.
+            var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+            $('#resource-id-popover #savemessage').remove();
             $('#resource-id-popover').append($failInfo);
         }
 
