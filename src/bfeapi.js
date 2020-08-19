@@ -130,10 +130,7 @@ exports.save = function (bfestore, bfelog, callback){
   var data = createSaveJson(bfestore);
 
   var url = config.versobase + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
-
-    alert(JSON.stringify(data));
     
-    return callback(true, data);
   $.ajax({
     url: url,
     type: "POST",
@@ -141,35 +138,14 @@ exports.save = function (bfestore, bfelog, callback){
     dataType: "json",
     contentType: "application/json; charset=utf-8"
   }).done(function (data) {  
-    bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-    savedata = {};
-    savedata.save_name = "This was saved";
-    return callback(true, savedata);
-    
-    if (close){
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-      var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
-      var decimaltranslator = window.ShortUUID("0123456789");
-      var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-      var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
-      $messagediv.append('<strong>Description saved:</strong><a href='+linkUrl+'>'+resourceName.substring(0,8)+'</a>');
-      $messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
-      $messagediv.insertBefore('.nav-tabs');
-      //$('#bfeditor-formdiv').empty();
-      //$('#save-btn').remove();
-      //$('#bfeditor-previewPanel').remove();
-      //$('.nav-tabs a[href="#browse"]').tab('show')
-      //bfeditor.bfestore.store = [];
-      //window.location.hash = "";
-    }
-
+        bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
+        data["status"] = "success";
+        return callback(true, data);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
-        data = { "errorText": textStatus, "errorThrown": errorThrown }
+        data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown }
         bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
         return callback(false, data);
-        $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
-        $messagediv.insertBefore('.nav-tabs');
   }).always(function(){                       
     // $('#table_id').DataTable().ajax.reload();
   });

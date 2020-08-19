@@ -1968,13 +1968,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $('#bfeditor-exitsave').click(function () {
             if (editorconfig.save !== undefined ) {
                 $('.alert').remove();
-                //var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
                 $('#bfeditor-exitcancel').text("Close");
-                //$('#resource-id-popover #savemessage').remove();
-                //$('#resource-id-popover #savingicon').remove();
-                //$('#resource-id-popover').append($savingInfo);
                 $('#bfeditor-exitpublish').prop('disabled',true);
                 $('#bfeditor-exitsave').prop('disabled',true);
+    
+                $('#resource-id-popover #savemessage').remove();
+                $('#resource-id-popover #savingicon').remove();
+    
                 document.body.style.cursor = 'wait';
 
                 var good_to_save = true;
@@ -1989,14 +1989,37 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     }
                 }
                 if (good_to_save) {
+                    
+                    var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+                    $('#bfeditor-exitcancel').text("Cancel");
+                    $('#resource-id-popover').append($savingInfo);
+            
                     bfestore.addedProperties = addedProperties;
                     editorconfig.save.callback(bfestore, bfelog, function (success, data) {
                         alert(JSON.stringify(data));
-                        bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
-                        $('#bfeditor-exitcancel').text("Cancel");
+                        if (data.status == "success") {
+                            bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
+                            document.body.scrollTop = document.documentElement.scrollTop = 0;
+                        
+                            var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
+                            var decimaltranslator = window.ShortUUID("0123456789");
+                            var resourceName = "e" + decimaltranslator.fromUUID(data.name);
+                            var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
+                            $messagediv.append('<strong>Description saved:</strong><a href='+linkUrl+'>'+resourceName.substring(0,8)+'</a>');
+                            $messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
+                            $messagediv.insertBefore('.nav-tabs');
+                        
+                            $('#bfeditor-exitcancel').text("Cancel");
+                        } else {
+                            
+                            var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>' + data.errorThrown + '</span>');
+                            $messagediv.insertBefore('.nav-tabs');
+                            
+                        }
                     });
                 } else {
-                    // Not saved.
+                    // Not good to save.
                     // What happens in this situation?
                     var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
                     $('#resource-id-popover #savemessage').remove();
@@ -2004,7 +2027,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
 
                 document.body.style.cursor = 'default';
-                $('#resource-id-popover #savingicon').remove()
+                $('#resource-id-popover #savingicon').remove();
                 $('#bfeditor-exitpublish').prop('disabled',false);
                 $('#bfeditor-exitsave').prop('disabled',false);
             } else {
@@ -4042,16 +4065,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   exports.saveNoExit = function(){
+    $('.alert').remove();
+    $('#bfeditor-exitpublish').prop('disabled',true);
+    $('#bfeditor-exitsave').prop('disabled',true);
+    
+    $('#resource-id-popover #savemessage').remove();
+    $('#resource-id-popover #savingicon').remove();
+        
     if (editorconfig.save !== undefined ) {
-        $('.alert').remove();
-        var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
-        $('#bfeditor-exitcancel').text("Cancel");
-        $('#resource-id-popover #savemessage').remove();
-        $('#resource-id-popover #savingicon').remove();
-        $('#resource-id-popover').append($savingInfo);
-        $('#bfeditor-exitpublish').prop('disabled',true);
-        $('#bfeditor-exitsave').prop('disabled',true);
-
         var good_to_save = true;
         if (entryfunc == "lcapplication") {
             // If there is no mainTitle OR the profile contains the word "test", then do not save.
@@ -4064,25 +4085,41 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
         }
         if (good_to_save) {
+        
+            var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+            $('#bfeditor-exitcancel').text("Cancel");
+            $('#resource-id-popover').append($savingInfo);
+            
             bfestore.addedProperties = addedProperties;
             editorconfig.save.callback(bfestore, bfelog, function (success, data) {
-                alert(JSON.stringify(data));
-                bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
-                $('#bfeditor-exitcancel').text("Close");
-                var $successInfo = $('<span id="savemessage" style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                $('#resource-id-popover #savingicon').remove()
                 $('#resource-id-popover #savemessage').remove();
-                $('#resource-id-popover').append($successInfo);
+                
+                if (data.status == "success") {
+                    bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.name);
+                    var $successInfo = $('<span id="savemessage" style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                    $('#resource-id-popover').append($successInfo);
+                } else {
+                    var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+                    $('#resource-id-popover').append($failInfo);
+                    
+                    var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                    $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>' + data.errorThrown + '</span>');
+                    $messagediv.insertBefore('.nav-tabs');
+                }   
+                $('#bfeditor-exitcancel').text("Close");
             });
         } else {
             // Not saved.
-            var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
             $('#resource-id-popover #savemessage').remove();
+            
+            var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
             $('#resource-id-popover').append($failInfo);
         }
-
-        $('#resource-id-popover #savingicon').remove()
+        
         $('#bfeditor-exitpublish').prop('disabled',false);
         $('#bfeditor-exitsave').prop('disabled',false);
+        
     }
   }
 
