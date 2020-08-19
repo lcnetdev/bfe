@@ -1966,68 +1966,56 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var $messagediv;
                
         $('#bfeditor-exitsave').click(function () {
-          $('.alert').remove();
-          if (editorconfig.save !== undefined) {
-            $('#bfeditor-exitpublish').prop('disabled',true);
-            $('#bfeditor-exitsave').prop('disabled',true);
-            $('#bfeditor-exitcancel').text("Close");
-            document.body.style.cursor = 'wait';
-            //        to_json= {'name': dirhash,'dir' : savedir,'url' : jsonurl,'rdf' : jsonobj}
-            // var dirhash = guid();
-            var save_json = {};
-            save_json.name = bfeditor.bfestore.name;
-            save_json.profile = bfeditor.bfestore.profile;
-            save_json.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
-            save_json.created = bfeditor.bfestore.created;
-            save_json.modified = new Date().toUTCString();
+            if (editorconfig.save !== undefined ) {
+                $('.alert').remove();
+                //var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+                $('#bfeditor-exitcancel').text("Close");
+                //$('#resource-id-popover #savemessage').remove();
+                //$('#resource-id-popover #savingicon').remove();
+                //$('#resource-id-popover').append($savingInfo);
+                $('#bfeditor-exitpublish').prop('disabled',true);
+                $('#bfeditor-exitsave').prop('disabled',true);
+                document.body.style.cursor = 'wait';
 
-            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-              var modifiedDate = new Date(save_json.modified);
-              var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
+                var good_to_save = true;
+                if (entryfunc == "lcapplication") {
+                    // If there is no mainTitle OR the profile contains the word "test", then do not save.
+                    if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false ) {
+                            var good_to_save = false;
+                            // title required
+                            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
+                            $messagediv.insertBefore('.nav-tabs');
+                    }
+                }
+                if (good_to_save) {
+                    bfestore.addedProperties = addedProperties;
+                    editorconfig.save.callback(bfestore, bfelog, function (success, data) {
+                        alert(JSON.stringify(data));
+                        bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
+                        $('#bfeditor-exitcancel').text("Cancel");
+                    });
+                } else {
+                    // Not saved.
+                    // What happens in this situation?
+                    var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+                    $('#resource-id-popover #savemessage').remove();
+                    $('#resource-id-popover').append($failInfo);
+                }
 
-              if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-                  cd.o = modifiedDateString;
-                });
-              } else {
-                var adminTriple = {};
-                adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-                adminTriple.o = modifiedDateString;
-                adminTriple.otype = 'literal';
-                bfeditor.bfestore.store.push(adminTriple);
-              }
-            }
-
-            save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-            save_json.addedproperties = addedProperties;
-
-            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-              editorconfig.save.callback(save_json, true, bfelog, function (save, save_name) {
+                document.body.style.cursor = 'default';
+                $('#resource-id-popover #savingicon').remove()
                 $('#bfeditor-exitpublish').prop('disabled',false);
                 $('#bfeditor-exitsave').prop('disabled',false);
-                $('#bfeditor-exitcancel').text("Cancel");
-                document.body.style.cursor = 'default';
-                //exitFunction();
-                bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + save_name);
-              });
             } else {
-              // title required
-              $('#bfeditor-exitpublish').prop('disabled',false);
-              $('#bfeditor-exitsave').prop('disabled',false);
-              document.body.style.cursor = 'default';
-              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
-              $messagediv.insertBefore('.nav-tabs');
-              document.body.style.cursor = 'default';
+                // save disabled
+                // kefo note - not sure if disabling saving at this point is the way 
+                // to go but keeping it for now.  Probably should not show the button
+                // at all if there is no method.
+                $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+                $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
+                $messagediv.insertBefore('.nav-tabs');
             }
-          } else {
-            // save disabled
-            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
-            $messagediv.append('<span class="str"><h3>Save disabled</h3></span>');
-            $messagediv.insertBefore('.nav-tabs');
-          }
-
         });
 
         $('#bfeditor-exitpublish').click(function () {
