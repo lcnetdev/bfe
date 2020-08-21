@@ -2063,8 +2063,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             bfelog.addMsg(new Error(), "INFO", "Published " + data[0].name);
                             
                             var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
-                            var displayText = publishdata[0].lccn !== undefined ? publishdata[0].lccn : publishdata[0].objid;
-                            $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+                            var displayText = data[0].lccn !== undefined ? data[0].lccn : data[0].objid;
+                            $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + data[0].objid+'>'+displayText+'</a>');
                             $messagediv.insertBefore('.nav-tabs');
                             
                             $('#bfeditor-formdiv').empty();
@@ -2078,7 +2078,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             exitFunction();
                         } else {
                             var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-                            $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed:</strong>' + data.errorThrown + '</span>');
+                            $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed:</strong>' + data.errorThrown + ' (' + data.errorText + ')</span>');
                             $messagediv.insertBefore('.nav-tabs');
                             //$messagediv.insertBefore('#bfeditor-previewPanel');
                         }
