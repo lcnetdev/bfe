@@ -194,13 +194,9 @@ exports.save = function (data, close, bfelog, callback){
 */
 
 exports.publish = function (bfestore, bfelog, callback) {
-    var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
-  
-    var url = config.versobase + "/profile-edit/server/publish";
-    var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
 
     bfestore.store2rdfxml(bfestore.store2jsonldExpanded(), function (rdfxml) {
-        var data = createSaveJson(bfestore, "save");
+        var data = createSaveJson(bfestore, "publish");
         data.rdfxml = JSON.stringify(rdfxml);
         
         var savedata = {};
@@ -212,6 +208,9 @@ exports.publish = function (bfestore, bfelog, callback) {
         savedata.status = data.status;
         savedata.rdf = data.rdf;
         
+        var url = config.url + "/profile-edit/server/publish";
+        var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+bfestore.name+"%22%7D";
+        console.log(JSON.stringify(savedata));
         $.when(
             $.ajax({
                 url: saveurl,
@@ -228,11 +227,13 @@ exports.publish = function (bfestore, bfelog, callback) {
                 contentType: "application/json; charset=utf-8"
             })
         ).done(function (savedata, publishdata) {
+            console.log(JSON.stringify(publishdata));
             callback(true, publishdata);                
         }).fail(function (XMLHttpRequest, textStatus, errorThrown){
             data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
             bfelog.addMsg(new Error(), "ERROR", "FAILED to save/publish.");
             bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+            console.log(XMLHttpRequest);
             return callback(false, data);
         }).always(function(){
             // $('#table_id').DataTable().ajax.reload();
