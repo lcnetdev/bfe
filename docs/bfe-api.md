@@ -164,9 +164,8 @@ Required
 ```
 
 Optional
-* `basedbURI`: URI for posting triples for publication in a triplestore QUESTION: Is this an accurate 
-  description of this property?  From the code this seems simply like a means to 
-  direct a user to the BF Database? 
+* `basedbURI`: Used to determine whether the "Search BIBFRAME database" link appears
+  and where the link goes.
 * `buildContext`: (Boolean) True to build typeahead side panels, which provide more 
   information - context - about the highlighted drop down option to assist with selection. 
   Defaults to `false`. 
@@ -174,7 +173,7 @@ Optional
   should be generated for that particular URI.  For example, this array - `['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/']`- 
   would generate a context panel for any Names or Subjects URI/Resource.
 * `buildContextForWorksEndpoint`: (String) This is a custom override for LC to redirect context panel requests from resources
-  at ID.LOC.GOV to an internal source.  QUESTOIN: Is this necessary still or could we use the ID data?
+  at ID.LOC.GOV to an internal source.  QUESTION: Is this necessary still or could we use the ID data?
 * `enableUserTemplates`: (Boolean)  This will permit users to generate their own "templates," which is a means to hide not-required fields in
   a chosen profile.  Default "true".
 * `enableLoadMarc`: (Boolean) This option - really only useful to LC - will enable the "Load MARC" tab in the `lcapplication` (see above).
