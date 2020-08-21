@@ -122,12 +122,12 @@ exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
         callback(new Error("ERROR: FAILED to load external source: " + uri));
       }
     });
-  }
+  };
 
 exports.save = function (bfestore, bfelog, callback){
   //var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
-  var data = createSaveJson(bfestore);
+  var data = createSaveJson(bfestore, "save");
 
   var url = config.versobase + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
     
@@ -139,10 +139,10 @@ exports.save = function (bfestore, bfelog, callback){
     contentType: "application/json; charset=utf-8"
   }).done(function (data) {  
         bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
-        data["status"] = "success";
+        data.status = "success";
         return callback(true, data);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
-        data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown }
+        data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
         bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
         bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
         return callback(false, data);
@@ -193,62 +193,54 @@ exports.save = function (data, close, bfelog, callback){
 };
 */
 
-exports.publish = function (data, rdfxml, savename, bfelog, callback){
+exports.publish = function (bfestore, bfelog, callback) {
     var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
     var url = config.versobase + "/profile-edit/server/publish";
     var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+savename+"%22%7D";
+
+    bfestore.store2rdfxml(bfestore.store2jsonldExpanded(), function (rdfxml) {
+        var data = createSaveJson(bfestore, "save");
+        data.rdfxml = JSON.stringify(rdfxml);
+        
+        var savedata = {};
+        savedata.name = bfestore.name;
+        savedata.profile = data.profile;
+        savedata.url = data.url;
+        savedata.created = data.created;
+        savedata.modified = data.modified;
+        savedata.status = data.status;
+        savedata.rdf = data.rdf;
+        
+        $.when(
+            $.ajax({
+                url: saveurl,
+                type: "POST",
+                data:JSON.stringify(savedata),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8"
+            }),
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8"
+            })
+        ).done(function (savedata, publishdata) {
+            callback(true, publishdata);                
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+            data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
+            bfelog.addMsg(new Error(), "ERROR", "FAILED to save/publish.");
+            bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+            return callback(false, data);
+        }).always(function(){
+            // $('#table_id').DataTable().ajax.reload();
+        });
+    });
+};
   
-    var savedata = {};
-    savedata.name = savename;
-    savedata.profile = data.profile;
-    savedata.url = data.url;
-    savedata.created = data.created;
-    savedata.modified = data.modified;
-    savedata.status = data.status;
-    savedata.rdf = data.rdf;
-  
-    data.rdfxml = JSON.stringify(rdfxml);
-    
-    $.when(
-      $.ajax({
-        url: saveurl,
-        type: "POST",
-        data:JSON.stringify(savedata),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8"
-      }),
-      $.ajax({
-        url: url,
-        type: "POST",
-        data: JSON.stringify(data),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8"
-      })).done(function (savedata, publishdata) {
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-        bfelog.addMsg(new Error(), "INFO", "Published " + publishdata[0].name);
-        var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
-        var displayText = publishdata[0].lccn !== undefined ? publishdata[0].lccn : publishdata[0].objid;
-        $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
-        $('#bfeditor-formdiv').empty();
-        $('#save-btn').remove();
-        $messagediv.insertBefore('.nav-tabs');
-        $('#bfeditor-previewPanel').remove();
-        $('.nav-tabs a[href="#browse"]').tab('show')
-        bfestore.store = [];
-        window.location.hash = "";
-        callback(true, data.name);                
-      }).fail(function (XMLHttpRequest, textStatus, errorThrown){
-        bfelog.addMsg(new Error(), "ERROR", "FAILED to save");
-        bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
-        $messagediv.append('<div class="alert alert-danger"><strong>Save Failed:</strong>'+errorThrown+'</span>');
-        $messagediv.insertBefore('#bfeditor-previewPanel');
-      }).always(function(){
-        // $('#table_id').DataTable().ajax.reload();
-      });
-  }
-  
-  exports.retrieveLDS =function (uri, bfestore, loadtemplates, bfelog, callback){
+  exports.retrieveLDS = function (uri, bfestore, loadtemplates, bfelog, callback){
 
     var url = config.versobase + "/profile-edit/server/retrieveLDS";
   
@@ -322,7 +314,7 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
     }
 }
 
-    function createSaveJson(bfestore) {
+    function createSaveJson(bfestore, action) {
       var save_json = {};
       save_json.name = bfestore.name;
       save_json.profile = bfestore.profile;
@@ -347,6 +339,37 @@ exports.publish = function (data, rdfxml, savename, bfelog, callback){
           bfestore.store.push(adminTriple);
         }
       }
+      
+        if (action == "publish") {
+            //update profile
+            if (_.some(bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
+                var profile = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
+                profile.o = bfestore.profile;
+            } else {
+                var admin = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
+                bfestore.addProfile(admin, bfeditor.bfestore.profile);
+            }
+            //works or instances
+            var profileType = _.last(bfestore.profile.split(':')) ==='Work' ? 'works' : 'instances';
+
+            save_json.status = 'published';
+            save_json.objid = 'loc.natlib.' + profileType + '.' + save_json.name + '0001';
+
+            var lccns;
+            if (_.some(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })) {
+                var lccnType = _.where(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s
+                lccns = _.where(bfestore.store, { s: lccnType, p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' })
+            }
+
+            if (!_.isEmpty(lccns)) {
+                for (var i = 0; i < lccns.length; i++) {
+                    if (!lccns[i].o.trim().startsWith('n')) {
+                        save_json.lccn = lccns[i].o.trim();
+                        save_json.objid = 'loc.natlib.'+ profileType +'.e' + save_json.lccn + '0001';
+                    }
+                }
+            }
+        }
 
       save_json.rdf = bfestore.store2jsonldExpanded();
       save_json.addedproperties = bfestore.addedProperties;

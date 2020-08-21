@@ -1984,7 +1984,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             var good_to_save = false;
                             // title required
                             $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-                            $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
+                            $messagediv.append('<strong>Did not meet save/publish criteria.  No title found:</strong>' + mintResource(bfestore.name));
                             $messagediv.insertBefore('.nav-tabs');
                     }
                 }
@@ -2018,12 +2018,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             
                         }
                     });
-                } else {
-                    // Not good to save.
-                    // What happens in this situation?
-                    var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
-                    $('#resource-id-popover #savemessage').remove();
-                    $('#resource-id-popover').append($failInfo);
                 }
 
                 document.body.style.cursor = 'default';
@@ -2042,93 +2036,67 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
 
         $('#bfeditor-exitpublish').click(function () {
-          bfeditor.bfestore.removeOrphans(bfestore.defaulturi);
-          bfeditor.bfestore.addSerialTypes();
-          document.body.style.cursor = 'wait';
-          $('.alert').remove();
-          if (editorconfig.publish !== undefined) {
-            $('#bfeditor-exitpublish').prop('disabled',true);
-            $('#bfeditor-exitsave').prop('disabled',true);
-            $('.alert').remove();
-            if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' })) {
-              bfeditor.bfestore.store2rdfxml(bfestore.store2jsonldExpanded(), function (rdfxml) {
-                //var rdfxml = $("#rdfxml .panel-body pre").text();
-                var save_json = {};
-                save_json.name = mintResource(bfestore.name);
-                save_json.profile = bfeditor.bfestore.profile;
-                save_json.url = bfeditor.bfestore.url;
-                save_json.created = bfeditor.bfestore.created;
-                save_json.modified = new Date().toUTCString();
-
-                if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
-                  var modifiedDate = new Date(save_json.modified);
-                  var modifiedDateString = modifiedDate.toJSON().split(/\./)[0];
-
-                  if (_.some(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
-                    _.each(_.where(bfestore.store, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }), function (cd) {
-                      cd.o = modifiedDateString;
-                    });
-                  } else {
-                    var adminTriple = {};
-                    adminTriple.s = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-                    adminTriple.o = modifiedDateString;
-                    adminTriple.otype = 'literal';
-                    bfeditor.bfestore.store.push(adminTriple);
-                  }
-                }
-
-                //update profile
-                if (_.some(bfestore.store, {'p': 'http://id.loc.gov/ontologies/bflc/profile'})){
-                  var profile = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bflc/profile' });
-                  profile.o = bfeditor.bfestore.profile;
-                } else {
-                  var admin = _.find(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }).o;
-                  bfeditor.bfestore.addProfile(admin, bfeditor.bfestore.profile);
-                }
-                //works or instances
-                var profileType = _.last(bfestore.profile.split(':')) ==='Work' ? 'works' : 'instances';
-
-                save_json.status = 'published';
-                save_json.objid = 'loc.natlib.' + profileType + '.' + save_json.name + '0001';
-
-                var lccns;
-
-                if (_.some(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })) {
-                  var lccnType = _.where(bfestore.store, {o: 'http://id.loc.gov/ontologies/bibframe/Lccn' })[0].s
-                  lccns = _.where(bfestore.store, { s: lccnType, p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value' })
-                }
-
-                if (!_.isEmpty(lccns)) {
-                  for (var i = 0; i < lccns.length; i++) {
-                    if (!lccns[i].o.trim().startsWith('n')) {
-                      save_json.lccn = lccns[i].o.trim();
-                      save_json.objid = 'loc.natlib.'+ profileType +'.e' + save_json.lccn + '0001';
+            if (editorconfig.publish !== undefined) {
+                bfeditor.bfestore.removeOrphans(bfestore.defaulturi);
+                bfeditor.bfestore.addSerialTypes();
+                document.body.style.cursor = 'wait';
+                $('.alert').remove();
+          
+                $('#bfeditor-exitpublish').prop('disabled',true);
+                $('#bfeditor-exitsave').prop('disabled',true);
+                
+                var good_to_publish = true;
+                if (entryfunc == "lcapplication") {
+                    // If there is no mainTitle OR the profile contains the word "test", then do not save.
+                    if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false ) {
+                            var good_to_publish = false;
+                            // title required
+                            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv.append('<strong>Did not meet save/publish criteria.  No title found:</strong>' + mintResource(bfestore.name));
+                            $messagediv.insertBefore('.nav-tabs');
                     }
-                  }
                 }
-
-                save_json.rdf = bfeditor.bfestore.store2jsonldExpanded();
-                editorconfig.publish.callback(save_json, rdfxml, bfeditor.bfestore.name, bfelog, function (published, publish_name) {
-                  exitFunction();
-                  bfelog.addMsg(new Error(), 'INFO', 'Publish:' + published + ' ' + publish_name);
-                });
-              });
+                if (good_to_publish) {
+                    editorconfig.publish.callback(bfestore, bfelog, function (success, data) {
+                        if (success) {
+                            document.body.scrollTop = document.documentElement.scrollTop = 0;
+                            bfelog.addMsg(new Error(), "INFO", "Published " + data[0].name);
+                            
+                            var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
+                            var displayText = publishdata[0].lccn !== undefined ? publishdata[0].lccn : publishdata[0].objid;
+                            $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + publishdata[0].objid+'>'+displayText+'</a>');
+                            $messagediv.insertBefore('.nav-tabs');
+                            
+                            $('#bfeditor-formdiv').empty();
+                            $('#save-btn').remove();
+                            $('#bfeditor-previewPanel').remove();
+                            $('.nav-tabs a[href="#browse"]').tab('show')
+                            
+                            bfestore.store = [];
+                            window.location.hash = "";
+                            
+                            exitFunction();
+                        } else {
+                            var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed:</strong>' + data.errorThrown + '</span>');
+                            $messagediv.insertBefore('.nav-tabs');
+                            //$messagediv.insertBefore('#bfeditor-previewPanel');
+                        }
+                    });
+                }
+                
+                document.body.style.cursor = 'default';
+                $('#bfeditor-exitpublish').prop('disabled',false);
+                $('#bfeditor-exitsave').prop('disabled',false);
             } else {
-              // title required
-              $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-              $messagediv.append('<strong>No title found:</strong>' + mintResource(bfestore.name));
-              $messagediv.insertBefore('.tabs');
-              document.body.style.cursor = 'default';
-              $('#bfeditor-exitpublish').prop('disabled',false);
-              $('#bfeditor-exitsave').prop('disabled',false);
-            }
-          } else {
-            // publish disabled
-            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
-            $messagediv.append('<strong>Publishing disabled</strong>');
-            $messagediv.insertBefore('.nav-tabs');
-          }          
+                // publish disabled
+                // kefo note - not sure if disabling saving at this point is the way 
+                // to go but keeping it for now.  Probably should not show the button
+                // at all if there is no method.
+                $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
+                $messagediv.append('<strong>Publishing disabled</strong>');
+                $messagediv.insertBefore('.nav-tabs');
+            }          
         });
 
         $('#bfeditor-exitcancel').attr('tabindex', tabIndices++);
