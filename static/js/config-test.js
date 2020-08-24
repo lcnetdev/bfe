@@ -10,6 +10,7 @@ function myCB(data) {
  * base URL of verso in the "config" definition below.
  */
 var rectobase = "http://localhost:3000";
+
 var baseDBURI;
 var resourceURI;
 var metaproxyURI;
@@ -51,7 +52,12 @@ if (env.ENABLEUSERTEMPLATES!=undefined){
     enableusertemplates=env.ENABLEUSERTEMPLATES;
 }
 
-var versoURL = rectobase + "/verso/api";
+if (env.VERSOBASE!=undefined){
+    versobase=env.VERSOBASE;
+} else {
+    versobase=rectobase;
+}
+var versoURL = versobase + "/verso/api";
 
 var config = {
      "logging": {
@@ -64,6 +70,7 @@ var config = {
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
     "metaproxyURI": metaproxyURI,
+    "versobase": versobase,
     "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
