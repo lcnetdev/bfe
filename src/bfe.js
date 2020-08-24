@@ -1996,7 +1996,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             
                     bfestore.addedProperties = addedProperties;
                     editorconfig.save.callback(bfestore, bfelog, function (success, data) {
-                        alert(JSON.stringify(data));
+                        //alert(JSON.stringify(data));
                         if (data.status == "success") {
                             bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
