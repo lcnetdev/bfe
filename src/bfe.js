@@ -871,7 +871,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
     var $tabuldiv = $('<div class="tabs"></div>');
     var $tabul = $('<ul class="nav nav-tabs"></ul>');
-    $tabul.append('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+
 /*
 === ====
   exports.fulleditor = function (config, id) {
@@ -896,7 +896,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     $tabul.append($browseTab);
 >>>> >>> aws
-*/
+*/    
+    var $browseTab = $('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+    $browseTab.click(function(){
+      exports.loadBrowseData();
+    })
+    $tabul.append($browseTab);
     $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
