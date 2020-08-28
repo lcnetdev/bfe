@@ -73,7 +73,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
         }
     }
 
-exports.retrieve = function (uri, bfestore, loadtemplates, bfelog, callback){
+exports.retrieve = function (uri, bfestore, loadtemplates, callback){
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
   var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';

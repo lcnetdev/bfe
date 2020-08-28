@@ -1164,7 +1164,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         try {
           bfestore.loadtemplates = temptemplates;
           var url = $(this.parentElement).find('#bfeditor-loadworkuriInput').val();
-          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, "", bfelog, function (result) {
+          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, function (result) {
             if (result instanceof Error){
               var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
               $messagediv.append('<strong>'+result.message+'</strong>');
