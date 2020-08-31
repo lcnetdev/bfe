@@ -5,7 +5,27 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
 
     var bfelog = require('src/bfelogging');
     var startingPoints = null;
-    
+
+    exports.getStoredJSONLD = function (config, id, callback){
+        url = config.url + "/api/getStoredJSONLD/" + id;
+        $.ajax({
+            dataType: "json",
+            type: "GET",
+            url: url,
+            async: false,
+            success: function (data) {
+                bfelog.addMsg(new Error(), "INFO", "Fetched stored JSONLD for " + id);
+                bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                callback(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                bfelog.addMsg(new Error(), "ERROR", "FAILED to fetch stored JSON: " + id);
+                bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                callback([]);
+            }
+        });
+    };
+ 
     exports.load = function(config, bfestore, callback) {
         if (config.toload !== undefined && config.toload.templates) {
             bfe.loadtemplatesANDlookupsCount = bfe.loadtemplatesANDlookupsCount + config.toload.templates.length;

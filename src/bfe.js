@@ -253,143 +253,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     */
   };
-  
-  exports.findTitle = function(data){
-    var retval;
-    var altretval;
-    var titleString = 'http://id.loc.gov/ontologies/bibframe/title'
-    var mainTitleString = 'http://id.loc.gov/ontologies/bibframe/mainTitle'
-
-    if (_.some(data, titleString)) {
-      var text = _.find(data, titleString)[titleString];
-      if (text !== undefined) {
-        _.each(text, function (el) {
-          if (el['@id'] !== undefined) {
-            var id = el['@id'];
-            var title = _.find(data, {
-              '@id': id
-            });
-            if (!_.isEmpty(title) && title['@type'].indexOf("http://id.loc.gov/ontologies/bibframe/Title") >= 0) {
-              if (_.has(title, mainTitleString)) 
-                { retval = title[mainTitleString][0]['@value']; 
-              } else if (_.has(title, 'http://www.w3.org/2000/01/rdf-schema#label')) { 
-                retval = title['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']; 
-              }
-            } else {
-              if (_.has(title, mainTitleString)) 
-                  altretval = title[mainTitleString][0]['@value'];
-            }
-          }
-        });
-      }
-    } else if (_.isEmpty(retval) && _.some(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')) {
-      altretval = _.find(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'][0]['@value'];
-      if (altretval === undefined) { altretval = _.find(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']; }
-    }
-
-    if (_.isEmpty(retval)){
-      if(!_.isEmpty(altretval))
-        retval = altretval;
-      else 
-        retval = 'No Title';
-    }
-    
-    return retval;
-  }
-
-  exports.findLccn = function(data){
-    var lccnval = 'N/A';
-    var lccns = _.filter(data, function (el) {
-      if (!_.isEmpty(el['@type'])) {
-        if (el['@type'][0].match('^(http|https)://id.loc.gov/ontologies/bibframe/Lccn')) {
-          if (_.has(el, ['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'])) {
-            if (!_.isEmpty(el['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'])) { return el['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value']; }
-          }
-        }
-      }
-    });
-    if (!_.isEmpty(lccns)) {
-      if (lccns.length === 1) {
-        lccnval = lccns[0]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'];
-      } else {
-        for (var i = 0; i < lccns.length; i++) {
-          if (!lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value'].startsWith('n')){
-            if (!_.some(lccns[i]['http://id.loc.gov/ontologies/bibframe/status'], {'@id': 'http://id.loc.gov/vocabulary/mstatus/cancinv'}))
-              lccnval = lccns[i]['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0]['@value']; 
-          }
-        }
-      }
-    }
-    return lccnval;
-  }
-
-  exports.findContribution = function(data){
-    var altretval;
-    var contributionval;
-
-    var contributionString = 'http://id.loc.gov/ontologies/bibframe/contribution'
-    if (_.some(data, contributionString)) {
-      var works = _.where(data,contributionString)
-      $(function(){
-      _.each(works, function(work){
-        var contributions = work[contributionString]
-        _.each(contributions, function (el) {
-          if (el['@id'] !== undefined) {
-            var id = el['@id'];
-            var contribution = _.find(data, {
-              '@id': id
-            });
-            if (!_.isEmpty(contribution) && !_.isEmpty(contribution['@type'])){
-              if(contribution['@type'].indexOf("http://id.loc.gov/ontologies/bflc/PrimaryContribution") >= 0) {
-                if(!_.isEmpty(contribution["http://id.loc.gov/ontologies/bibframe/agent"])){
-                  var agent = contribution["http://id.loc.gov/ontologies/bibframe/agent"][0]["@id"];
-                  if(!_.isEmpty(agent)){
-                    if(_.some(data, {"@id": agent}))
-                      if(!_.isEmpty( _.find(data, {"@id": agent})["http://www.w3.org/2000/01/rdf-schema#label"])) {
-                        contributionval = _.find(data, {"@id": agent})["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
-                        return contributionval;
-                      }
-                  }
-                }
-              }
-            }
-          }
-        });
-      });
-      });
-    } else if (_.isEmpty(contributionval) && _.some(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')) {
-      altretval = _.find(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'][0]['@value'];
-      if (altretval === undefined) { altretval = _.find(data, 'http://www.loc.gov/mads/rdf/v1#authoritativeLabel')['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']; }
-    }
-
-    if (_.isEmpty(contributionval)){
-        // Next three lines were active in decouplement but 
-        // commented out in postingchanges.  Keep latter. 
-      //if(!_.isEmpty(altretval))
-      // contributionval = altretval;
-      //else 
-      contributionval = '';
-    }
-    return contributionval;
-  }
-
-  exports.findCatalogerId = function (data){
-    var text = '';
-    var mahttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/metadataAssigner');
-    var mahttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/metadataAssigner');
-    var cihttp = _.findKey(data, 'http://id.loc.gov/ontologies/bflc/catalogerId');
-    var cihttps = _.findKey(data, 'https://id.loc.gov/ontologies/bflc/catalogerId');
-    if (mahttps) {
-      text = _.pluck(data[mahttps]['https://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
-    } else if (mahttp) {
-      text = _.pluck(data[mahttp]['http://id.loc.gov/ontologies/bflc/metadataAssigner'], '@value')[0];
-    } else if (cihttps) {
-      text = _.pluck(data[cihttps]['https://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
-    } else if (cihttp) {
-      text = _.pluck(data[cihttp]['http://id.loc.gov/ontologies/bflc/catalogerId'], '@value')[0];
-    }
-    return text;
-  }
 
   exports.loadBrowseData = function($browsediv){
     
@@ -404,7 +267,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         d.setDate(d.getDate()-30);
         oneMonthAgo = d.toISOString();
 
-      $.get( config.versobase + '/verso/api/bfs?filter[where][modified][gt]=' + oneMonthAgo, function( data ) {
+      $.get( config.url + '/api/list', function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
         var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
@@ -412,11 +275,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         twoWeeksPlusOfData = [];
         
         data.forEach(function(d){
-          d.title = bfe.findTitle(d.rdf);
-          d.lccn = bfe.findLccn(d.rdf);
-          d.contribution = bfe.findContribution(d.rdf);
-          d.catalogerid = bfe.findCatalogerId(d.rdf);
-
           if (new Date(d.modified).getTime()/1000 > twoWeeksAgo){
             twoWeeksOfData.push(d);
           }else{
@@ -572,10 +430,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'className': 'column-contribution',
               'width': '15%',
               'render': function (data, type, full, meta) {
-                
-                if(full.contribution == undefined){
-                  full.contribution = bfe.findContribution(data);
-                }
                 return full.contribution;
               }
             },
@@ -586,12 +440,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'render': function (data, type, full, meta) {
                 var retval;
                 var altretval;
-
-                var titleString = 'http://id.loc.gov/ontologies/bibframe/title'
-                var mainTitleString = 'http://id.loc.gov/ontologies/bibframe/mainTitle'
-                if (full.title == undefined){
-                  full.title = bfe.findTitle(data);
-                } 
                 return full.title;
               }
             },
@@ -601,10 +449,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '85px',
               'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
-                var text = 'N/A';
-                if (full.lccn == undefined){
-                  full.lccn = bfe.findLccn(data).trim().replace(/\s+/g,'');
-                }
                 text = full.lccn;
                 var ldsanchor = text.trim();
 
@@ -651,10 +495,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '85px',
               'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
-                
-                if(full.catalogerid == undefined){
-                  full.catalogerid = bfe.findCatalogerId(data);
-                }
                 return full.catalogerid.length > 60 ? full.catalogerid.substr(0, 58) + '...' : full.catalogerid;
               }
             },
@@ -749,7 +589,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     // editorconfig.retrieve.callback(cellData,bfestore, bfelog, cbLoadTemplates);
                     bfestore.store = [];
                     bfestore.state = 'edit';
-                    tempstore = bfestore.jsonld2store(rowData.rdf);
+                    tempstore = bfeapi.getStoredJSONLD(config, rowData.id, bfestore.jsonld2store);
                     bfestore.name = rowData.name;
                     bfestore.created = rowData.created;
                     bfestore.url = rowData.url;
