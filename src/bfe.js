@@ -263,27 +263,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         browseloaded = true;
 
-        var d = new Date();
-        d.setDate(d.getDate()-30);
-        oneMonthAgo = d.toISOString();
-
       $.get( config.url + '/api/list', function( data ) {
         $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
-        var twoWeeksAgo = new Date().getTime()/1000 - (14 * 24 * 60 * 60);
         twoWeeksOfData = [];
         twoWeeksPlusOfData = [];
-        
+
+        // Populate the table and save the data
         data.forEach(function(d){
-          if (new Date(d.modified).getTime()/1000 > twoWeeksAgo){
             twoWeeksOfData.push(d);
-          }else{
-            twoWeeksPlusOfData.push(d);
-          }         
-        });
-        twoWeeksOfData.forEach(function(d){
-          dataTable.row.add(d);
-        });
+            dataTable.row.add(d);
+         });
         dataTable.draw(false);
         
         var $addDataStatusDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
@@ -310,17 +300,33 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
 
         var lastTwoWeeksPlusClick = function(){
-          $addDataStatusDiv.text("Loading...");
-          window.setTimeout(function(){
-            twoWeeksPlusOfData.forEach(function(d){
-              dataTable.row.add(d);
-            });
-            dataTable.draw(false);
-            $addDataStatusDiv.text('All descriptions');
-            $addLastTwoWeeksDataButton.off('click');
-            $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-            $addDataStatusDiv.append($addLastTwoWeeksDataButton);
-          },500)
+            dataTable.clear().draw();
+            $addDataStatusDiv.text("Loading...");
+            if (twoWeeksPlusOfData.length > 0) {
+                window.setTimeout(function(){
+                    twoWeeksPlusOfData.forEach(function(d){
+                        dataTable.row.add(d);
+                    });
+                    dataTable.draw(false);
+                    $addDataStatusDiv.text('All descriptions');
+                    $addLastTwoWeeksDataButton.off('click');
+                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
+                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
+                },500)
+            } else {
+                $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+                $.get( config.url + '/api/list?daysago=30', function( data ) {
+                    data.forEach(function(d){
+                        dataTable.row.add(d);
+                        twoWeeksPlusOfData.push(d);
+                    });
+                    dataTable.draw(false);
+                    $addDataStatusDiv.text('Viewing last 30 days of descriptions');
+                    $addLastTwoWeeksDataButton.off('click');
+                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
+                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
+                });
+            }
         }
 
         var unpostedClick = function(){
