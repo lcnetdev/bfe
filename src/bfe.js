@@ -342,7 +342,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             if (!_.isEmpty(contribution) && !_.isEmpty(contribution['@type'])){
               if(contribution['@type'].indexOf("http://id.loc.gov/ontologies/bflc/PrimaryContribution") >= 0) {
                 if(!_.isEmpty(contribution["http://id.loc.gov/ontologies/bibframe/agent"])){
-                  var agent = contribution["http://id.loc.gov/ontologies/bibframe/agent"][0]["@id"]
+                  var agent = contribution["http://id.loc.gov/ontologies/bibframe/agent"][0]["@id"];
                   if(!_.isEmpty(agent)){
                     if(_.some(data, {"@id": agent}))
                       if(!_.isEmpty( _.find(data, {"@id": agent})["http://www.w3.org/2000/01/rdf-schema#label"])) {
@@ -5677,6 +5677,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
   function whichLabel(uri, store, callback) {
 
+    uri = uri.replace(/^(https:)/,"http:");
+    
+    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel uri: ' + uri);
+    
     if(_.isEmpty(store)){
       store = bfestore.store;
     }
@@ -5685,8 +5689,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     // normalize
     if (uri.startsWith('http://id.loc.gov/resources/works') || uri.startsWith('http://id.loc.gov/resources/instances')&& !_.isEmpty(config.resourceURI)) {
       jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
+      jsonuri = jsonuri.replace(/^(http:)/,"https:");
     } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
       jsonuri = uri + '.madsrdf_raw.json';
+      jsonuri = jsonuri.replace(/^(http:)/,"https:");
     }
 
     if (uri.endsWith('marcxml.xml')) {
@@ -5703,6 +5709,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         callback("");
       }
     } else {
+        bfelog.addMsg(new Error(), 'DEBUG', 'Making call to recto whichrt using: ' + jsonuri);
       $.ajax({
         type: 'GET',
         async: false,
