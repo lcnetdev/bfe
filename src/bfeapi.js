@@ -246,9 +246,37 @@ exports.publish = function (bfestore, bfelog, callback) {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8"
             })
-        ).done(function (savedata, publishdata) {
-            console.log(JSON.stringify(publishdata));
-            callback(true, publishdata);                
+        ).done(function (saveresponse, publishresponse) {
+            console.log(JSON.stringify(publishresponse));
+            pubstatus = publishresponse[0]
+            if (pubstatus.publish.status === "published") {
+                savedata.status = "success";
+                $.when(
+                    $.ajax({
+                        url: saveurl,
+                        type: "POST",
+                        data:JSON.stringify(savedata),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8"
+                    })
+                ).done(function (savedata) {
+                    bfelog.addMsg(new Error(), "INFO", "Resource saved after successful publication to BFDB.");
+                    console.log(savedata);
+                    console.log(pubstatus);
+                    callback(true, pubstatus);
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+                    data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
+                    bfelog.addMsg(new Error(), "ERROR", "FAILED to save after publish.");
+                    bfelog.addMsg(new Error(), "ERROR", "Request status: " + textStatus + "; Error msg: " + errorThrown);
+                    console.log(XMLHttpRequest);
+                    return callback(false, data);
+                });
+            } else {
+                data = { "status": "error", "errorText": pubstatus.publish.status, "errorThrown": pubstatus.publish.message };
+                bfelog.addMsg(new Error(), "ERROR", "FAILED to save after publish.");
+                bfelog.addMsg(new Error(), "ERROR", "Request status: " + pubstatus.publish.status + "; Error msg: " + pubstatus.publish.message);
+                return callback(false, data);
+            }
         }).fail(function (XMLHttpRequest, textStatus, errorThrown){
             data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
             bfelog.addMsg(new Error(), "ERROR", "FAILED to save/publish.");

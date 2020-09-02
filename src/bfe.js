@@ -1806,7 +1806,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           window.location.hash = '';
           bfeditor.bfestore.store = [];
           $('#table_id').DataTable().search('').draw();
-          //exports.loadBrowseData();
+          exports.loadBrowseData();
 // >>> >>>> aws
         }
 
@@ -1908,14 +1908,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     }
                 }
                 if (good_to_publish) {
+                    var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
+                    $messagediv.append('<strong>Saving description and posting description...');
+                    $messagediv.insertBefore('.nav-tabs');
                     editorconfig.publish.callback(bfestore, bfelog, function (success, data) {
+                        $('.alert').remove();
                         if (success) {
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
-                            bfelog.addMsg(new Error(), "INFO", "Published " + data[0].name);
+                            bfelog.addMsg(new Error(), "INFO", "Published " + data.name);
                             
-                            var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-info' });
-                            var displayText = data[0].lccn !== undefined ? data[0].lccn : data[0].objid;
-                            $messagediv.append('<strong>Description submitted for posting:</strong><a href=' + config.basedbURI + "/" + data[0].objid+'>'+displayText+'</a>');
+                            var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-success' });
+                            var displayText = data.lccn !== undefined ? data.lccn : data.objid;
+                            $messagediv.append('<strong>Description posted: </strong><a href=' + config.basedbURI + data.objid+'>'+displayText+'</a>');
                             $messagediv.insertBefore('.nav-tabs');
                             
                             $('#bfeditor-formdiv').empty();
@@ -1947,7 +1951,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-info' });
                 $messagediv.append('<strong>Publishing disabled</strong>');
                 $messagediv.insertBefore('.nav-tabs');
-            }          
+            }     
         });
 
         $('#bfeditor-exitcancel').attr('tabindex', tabIndices++);
