@@ -1909,7 +1909,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
                 if (good_to_publish) {
                     var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
-                    $messagediv.append('<strong>Saving description and posting description...');
+                    $messagediv.append('<strong>Saving description and posting description.  This takes a few seconds...');
                     $messagediv.insertBefore('.nav-tabs');
                     editorconfig.publish.callback(bfestore, bfelog, function (success, data) {
                         $('.alert').remove();
