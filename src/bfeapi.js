@@ -230,7 +230,7 @@ exports.publish = function (bfestore, bfelog, callback) {
         
         var url = config.url + "/profile-edit/server/publish";
         var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+bfestore.name+"%22%7D";
-        console.log(JSON.stringify(savedata));
+        //console.log(JSON.stringify(savedata));
         $.when(
             $.ajax({
                 url: saveurl,
@@ -247,10 +247,11 @@ exports.publish = function (bfestore, bfelog, callback) {
                 contentType: "application/json; charset=utf-8"
             })
         ).done(function (saveresponse, publishresponse) {
-            console.log(JSON.stringify(publishresponse));
+            //console.log(JSON.stringify(publishresponse));
             pubstatus = publishresponse[0]
             if (pubstatus.publish.status === "published") {
                 savedata.status = "success";
+                savedata.objid = pubstatus.objid;
                 $.when(
                     $.ajax({
                         url: saveurl,
@@ -261,8 +262,8 @@ exports.publish = function (bfestore, bfelog, callback) {
                     })
                 ).done(function (savedata) {
                     bfelog.addMsg(new Error(), "INFO", "Resource saved after successful publication to BFDB.");
-                    console.log(savedata);
-                    console.log(pubstatus);
+                    //console.log(savedata);
+                    //console.log(pubstatus);
                     callback(true, pubstatus);
                 }).fail(function (XMLHttpRequest, textStatus, errorThrown){
                     data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
