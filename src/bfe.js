@@ -519,7 +519,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             },
             //edit
             {
-              'data': 'url',
+              'data': 'id',
               'className': 'column-identifier',
               'width': '85px',
               'searchable': false,
