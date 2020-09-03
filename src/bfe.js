@@ -67,6 +67,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     /*
         Note: organizations and relators were commented out in postingchanges.
     */
+    /*
     'http://id.loc.gov/vocabulary/organizations': {
       'name': 'Organizations',
       'load': require('src/lookups/lcorganizations')
@@ -75,6 +76,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'name': 'Relators',
       'load': require('src/lookups/relators')
     },
+    */
     'http://rdaregistry.info/termList/FormatNoteMus': {
       'name': 'RDA-Format-Musical-Notation',
       'load': require('src/lookups/rdaformatnotemus')
