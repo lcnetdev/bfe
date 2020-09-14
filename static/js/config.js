@@ -15,7 +15,6 @@ var baseDBURI;
 var resourceURI;
 var metaproxyURI;
 var workContext;
-var oclckey;
 var loadmarc=false;
 var buildcontext = true;
 var enableusertemplates=true;
@@ -30,10 +29,6 @@ if (env.BASEDBURI!=undefined) {
     baseDBURI = env.BASEDBURI;
     resourceURI = baseDBURI + "/resources";
     workContext = resourceURI + "/works/";
-}
-
-if (env.OCLCKEY!=undefined) {
-    oclckey = env.OCLCKEY;
 }
 
 if (env.LOADMARC!=undefined) {
@@ -72,7 +67,6 @@ var config = {
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates" :enableusertemplates,
     "enableLoadMarc": loadmarc,
-    "oclckey": oclckey,
     "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
     "profiles": [

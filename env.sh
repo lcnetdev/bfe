@@ -1,5 +1,4 @@
 echo "env = {"
 echo "  RECTOBASE: '$RECTOBASE',"
-echo "  BASEDBURI: '$BASEDBURI',"
-echo "  OCLCKEY: '$OCLCKEY'"
+echo "  BASEDBURI: '$BASEDBURI'"
 echo "}"

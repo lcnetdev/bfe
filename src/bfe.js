@@ -1121,7 +1121,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       if ($('#marcdx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         url = config.metaproxyURI + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1166,7 +1166,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       //}
 
       if ($('#mergedx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         //url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1318,7 +1318,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       if ($('#marcdx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }

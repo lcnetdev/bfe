@@ -188,7 +188,6 @@ Optional
   load is the location of the Javascript file the contains the functions required to populate 
   the typeahead drop down selection list and then to process the selected item.  QUESTION: It
   is really hard to tell if this would even work any more.  Will it?
-* `oclckey`: (String) This holds the OCLC developer's key and is used to fetch MARC records from OCLC.  Used by `lcapplication` (see above).
 * `resourceURI`: Base URI for resources in the triplestore.
 * `toload`: Object that contains the template to load and the resource to load (i.e. populate the form)
 ```json

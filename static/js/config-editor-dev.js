@@ -13,7 +13,6 @@ var rectobase = "http://localhost:3000";
 var baseDBURI;
 var resourceURI;
 var workContext;
-var oclckey;
 var loadmarc=false;
 var buildcontext = true;
 var enableusertemplates=true;

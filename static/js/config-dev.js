@@ -14,7 +14,6 @@ var baseDBURI;
 var resourceURI;
 var workContext;
 var metaproxyURI;
-var oclckey;
 var buildcontext = true;
 
 var name = "config";
@@ -43,7 +42,6 @@ var config = {
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates": false,
     "enableLoadMarc": true,
-    "oclckey": oclckey,
     "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
     "profiles": [
