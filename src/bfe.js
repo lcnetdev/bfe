@@ -755,7 +755,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
     if(editorconfig.enableLoadMarc) {
       $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
-      $tabul.append('<li><a data-toggle="tab" id="loadmergetab" href="#loadmerge">Merge OCLC</a></li>');
+      //$tabul.append('<li><a data-toggle="tab" id="loadmergetab" href="#loadmerge">Merge OCLC</a></li>');
     }
     if(!_.isEmpty(editorconfig.basedbURI)){
       $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
