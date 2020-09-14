@@ -19,11 +19,11 @@ var buildcontext = true;
 
 var name = "config";
 
-baseDBURI = "https://preprod-8231.id.loc.gov"
+baseDBURI = "http://bibframe.org"
 resourceURI = baseDBURI + "/resources";
 workContext = resourceURI + "/works/";  // This is unused?
 
-var versobase = "https://preprod-3001.id.loc.gov";
+var versobase = "http://bibframe.org";
 var versoURL = versobase + "/verso/api";
 
 var config = {
