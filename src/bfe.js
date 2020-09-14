@@ -2461,7 +2461,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var $inputHolder;
         var $input_page;
         //default property type is literal
-        if ((property.type.startsWith('literal') && _.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type)) {
+        if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (_.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type))) {
           var vpattern = '';
           if(_.has(property, "valueConstraint")){
               vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
@@ -2614,7 +2614,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $formgroup.append($label);
           $formgroup.append($literalCol);
 
-        } else if ((property.type.startsWith('literal') && !_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type)) {
+        } else if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (!_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type))) {
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
