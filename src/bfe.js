@@ -3612,6 +3612,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             's': pd.o,
             'p': 'http://id.loc.gov/ontologies/bibframe/title'
           });
+          var aapdata = _.where(bfestore.store, {
+            's': pd.o,
+            'p': 'http://id.loc.gov/ontologies/bflc/aap'
+          });
           if (!_.isEmpty(titledata)){
             _.each(titledata, function(title){
               if(_.some(bfestore.store, {s: title.o, o: 'http://id.loc.gov/ontologies/bibframe/Title'}))
@@ -3619,6 +3623,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata = _.find(bfestore.store, {s: title.o, p: 'http://id.loc.gov/ontologies/bibframe/mainTitle'}).o
               }
             });
+          } else if (!_.isEmpty(aapdata)) {
+              displaydata = aapdata[0].o;
           }
         } else {
             // Not an Instance or Work.
@@ -5557,6 +5563,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         callback(_.find(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
       } else if(_.some(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
         callback(_.find(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
+      } else if(_.some(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap"})){
+        callback(_.find(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap" }).o);
       } else {
         callback("");
       }
