@@ -292,7 +292,7 @@ exports.publish = function (bfestore, bfelog, callback) {
   
   exports.retrieveLDS = function (uri, bfestore, loadtemplates, bfelog, callback){
 
-    var url = config.versobase + "/profile-edit/server/retrieveLDS";
+    var url = config.url + "/profile-edit/server/retrieveLDS";
   
     $.ajax({
       dataType: "json",
