@@ -3616,6 +3616,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             's': pd.o,
             'p': 'http://id.loc.gov/ontologies/bflc/aap'
           });
+          var provisionActivityStatement = _.where(bfestore.store, {
+            's': pd.o,
+            'p': 'http://id.loc.gov/ontologies/bibframe/provisionActivityStatement'
+          });
           if (!_.isEmpty(titledata)){
             _.each(titledata, function(title){
               if(_.some(bfestore.store, {s: title.o, o: 'http://id.loc.gov/ontologies/bibframe/Title'}))
@@ -3623,8 +3627,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata = _.find(bfestore.store, {s: title.o, p: 'http://id.loc.gov/ontologies/bibframe/mainTitle'}).o
               }
             });
+
           } else if (!_.isEmpty(aapdata)) {
               displaydata = aapdata[0].o;
+              
+          } else if (!_.isEmpty(provisionActivityStatement)) {
+              displaydata = provisionActivityStatement[0].o;
           }
         } else {
             // Not an Instance or Work.
