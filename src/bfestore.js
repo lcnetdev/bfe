@@ -24,7 +24,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       data: JSON.stringify(input),
       url: url,
       success: function (data) {
-        bfestore.store = bfestore.jsonldcompacted2store(data, function (expanded) {
+        //bfestore.store = 
+        bfestore.jsonldcompacted2store(data, function (expanded) {
           bfestore.store = [];
           var tempstore = bfestore.jsonld2store(expanded);
           var i = 0;
