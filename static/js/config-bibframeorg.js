@@ -55,7 +55,7 @@ if (env.ENABLEUSERTEMPLATES!=undefined){
 if (env.VERSOBASE!==undefined){
     versobase = env.VERSOBASE;
 } else {
-    verobase = rectobase;
+    versobase = rectobase;
 }
 var versoURL = versobase + "/verso/api";
 
@@ -64,6 +64,7 @@ var config = {
     "url" : rectobase,
     "baseURI": "http://id.loc.gov/",
     "basedbURI": baseDBURI,
+    "versobase": versobase,
     "resourceURI": resourceURI,
     "metaproxyURI": metaproxyURI,
     "buildContext": buildcontext,
