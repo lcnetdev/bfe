@@ -72,7 +72,7 @@ var config = {
     "profiles": [
         versoURL + "/configs?filter[where][configType]=profile"
     ],
-    "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
+    "api": ["save", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
     "return": {
         "format": "jsonld-expanded",
         "callback": myCB
