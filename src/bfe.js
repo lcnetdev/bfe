@@ -755,7 +755,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
     if(editorconfig.enableLoadMarc) {
       $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
-      $tabul.append('<li><a data-toggle="tab" id="loadmergetab" href="#loadmerge">Merge OCLC</a></li>');
+      //$tabul.append('<li><a data-toggle="tab" id="loadmergetab" href="#loadmerge">Merge OCLC</a></li>');
     }
     if(!_.isEmpty(editorconfig.basedbURI)){
       $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
@@ -1121,7 +1121,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       if ($('#marcdx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         url = config.metaproxyURI + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1166,7 +1166,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       //}
 
       if ($('#mergedx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         //url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1318,7 +1318,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       if ($('#marcdx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term + '&oclckey=' + editorconfig.oclckey;
+        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
       } else {
         url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
       }
@@ -1392,7 +1392,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         try {
           bfestore.loadtemplates = temptemplates;
           var url = $(this.parentElement).find('#bfeditor-loaduriInput, #loadmarc-uri').val();
-          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, "", bfelog, function (result) {
+          editorconfig.retrieve.callback(url, bfestore, bfestore.loadtemplates, function (result) {
             if (result instanceof Error){
               var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
               $messagediv.append('<strong>'+result.message+'</strong>');
@@ -2461,7 +2461,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var $inputHolder;
         var $input_page;
         //default property type is literal
-        if ((property.type.startsWith('literal') && _.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type)) {
+        if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (_.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type))) {
           var vpattern = '';
           if(_.has(property, "valueConstraint")){
               vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
@@ -2614,7 +2614,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $formgroup.append($label);
           $formgroup.append($literalCol);
 
-        } else if ((property.type.startsWith('literal') && !_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type)) {
+        } else if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (!_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type))) {
           if (_.has(property, 'valueConstraint')) {
             if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
               var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
@@ -3612,6 +3612,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             's': pd.o,
             'p': 'http://id.loc.gov/ontologies/bibframe/title'
           });
+          var aapdata = _.where(bfestore.store, {
+            's': pd.o,
+            'p': 'http://id.loc.gov/ontologies/bflc/aap'
+          });
+          var provisionActivityStatement = _.where(bfestore.store, {
+            's': pd.o,
+            'p': 'http://id.loc.gov/ontologies/bibframe/provisionActivityStatement'
+          });
           if (!_.isEmpty(titledata)){
             _.each(titledata, function(title){
               if(_.some(bfestore.store, {s: title.o, o: 'http://id.loc.gov/ontologies/bibframe/Title'}))
@@ -3619,6 +3627,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata = _.find(bfestore.store, {s: title.o, p: 'http://id.loc.gov/ontologies/bibframe/mainTitle'}).o
               }
             });
+
+          } else if (!_.isEmpty(aapdata)) {
+              displaydata = aapdata[0].o;
+              
+          } else if (!_.isEmpty(provisionActivityStatement)) {
+              displaydata = provisionActivityStatement[0].o;
           }
         } else {
             // Not an Instance or Work.
@@ -5557,6 +5571,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         callback(_.find(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
       } else if(_.some(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
         callback(_.find(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
+      } else if(_.some(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap"})){
+        callback(_.find(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap" }).o);
       } else {
         callback("");
       }

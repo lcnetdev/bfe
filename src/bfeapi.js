@@ -94,10 +94,16 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
     }
 
 exports.retrieve = function (uri, bfestore, loadtemplates, callback){
+
   var url = uri.match(/OCLC/) ? uri : config.url + "/profile-edit/server/whichrt";
   var dType = (bfestore.state == 'loadmarc' || uri.endsWith('.rdf')) ? 'xml' : 'json';
   var xmlType = (uri.endsWith('.rdf')||uri.match(/OCLC/)) ? 'rdf' : 'xml';
 
+    bfelog.addMsg(new Error(), "DEBUG", "bfeapi retrieve: uri: " + uri);
+    bfelog.addMsg(new Error(), "DEBUG", "bfeapi retrieve: bfestore.state: " + bfestore.state);
+    bfelog.addMsg(new Error(), "DEBUG", "bfeapi retrieve: dType: " + dType);
+    bfelog.addMsg(new Error(), "DEBUG", "bfeapi retrieve: xmlType: " + xmlType);
+    
   $.ajax({
     dataType: dType,
     type: "GET",
@@ -292,7 +298,7 @@ exports.publish = function (bfestore, bfelog, callback) {
   
   exports.retrieveLDS = function (uri, bfestore, loadtemplates, bfelog, callback){
 
-    var url = config.versobase + "/profile-edit/server/retrieveLDS";
+    var url = config.url + "/profile-edit/server/retrieveLDS";
   
     $.ajax({
       dataType: "json",
