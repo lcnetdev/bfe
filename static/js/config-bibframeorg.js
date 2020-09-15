@@ -25,27 +25,9 @@ if (env.RECTOBASE!==undefined){
     rectobase = env.RECTOBASE;
 }
 
-if (env.BASEDBURI!=undefined) {
-    baseDBURI = env.BASEDBURI;
-    resourceURI = baseDBURI + "/resources";
-    workContext = resourceURI + "/works/";
-}
-
-if (env.LOADMARC!=undefined) {
-    loadmarc = env.LOADMARC;
-}
-
-if (loadmarc){
-    metaproxyURI = env.METAPROXYURI;
-}
-
-if (env.BUILDCONTEXT!=undefined){
-    buildcontext = env.BUILDCONTEXT;
-}
-
-if (env.ENABLEUSERTEMPLATES!=undefined){
-    enableusertemplates=env.ENABLEUSERTEMPLATES;
-}
+baseDBURI = "http://bibframe.org"
+resourceURI = baseDBURI + "/resources";
+workContext = resourceURI + "/works/";  // This is unused?
 
 if (env.VERSOBASE!==undefined){
     versobase = env.VERSOBASE;
@@ -65,8 +47,8 @@ var config = {
     "buildContext": buildcontext,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
-    "enableUserTemplates" :enableusertemplates,
-    "enableLoadMarc": loadmarc,
+    "enableUserTemplates" :true,
+    "enableLoadMarc": true,
     "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
     "profiles": [
