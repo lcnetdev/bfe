@@ -6,8 +6,7 @@ function myCB(data) {
  * Editor profiles are read from a WS endpoint
  * The data are expected to be in a JSON array, with each object
  * in the array containing a "json" property that has the profile
- * itself. The "versoURL" variable is a convenience for setting the
- * base URL of verso in the "config" definition below.
+ * itself.
  */
 var rectobase = "http://localhost:3000";
 var baseDBURI;
@@ -23,8 +22,7 @@ baseDBURI = "https://preprod-8231.id.loc.gov"
 resourceURI = baseDBURI + "/resources";
 workContext = resourceURI + "/works/";  // This is unused?
 
-var versobase = "https://preprod-3001.id.loc.gov";
-var versoURL = versobase + "/verso/api";
+var versobase = "https://preprod-3001.id.loc.gov/verso";
 
 var save = {
         callback: function (data, bfelog, callback) {
@@ -160,11 +158,11 @@ var config = {
 
     "toload": toload,
 
-    // "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
+    // "startingPointsUrl": versobase + "/api/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "startingPoints": startingPoints,
-    "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
+    "literalLangDataUrl": versobase + '/api/configs?filter[where][configType]=literalLangData',
     "profiles": [
-        versoURL + "/configs?filter[where][configType]=profile"
+        versobase + "/api/configs?filter[where][configType]=profile"
     ],
     "save": save,
     "api": ["setStartingPoints", "load"],

@@ -983,7 +983,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1082,7 +1082,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1360,7 +1360,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       // bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -2048,7 +2048,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfestore.name = guid();
     bfestore.templateGUID = guid();
     bfestore.created = new Date().toUTCString();
-    bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+    bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
     bfestore.state = 'create';
     
     // Turn off edit mode of templates if they were in the middle of editing one
@@ -2748,7 +2748,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $addpropinput.prop('disabled', true);
             $addpropinput.attr('placeholder', 'Loading field choices...');
             $.ajax({
-              url: config.versobase + '/verso/api/configs?filter[where][configType]=ontology',
+              url: config.versobase + '/api/configs?filter[where][configType]=ontology',
               success: function (data) {
                 if (data.length == 0) {
                   $addpropinput.attr('placeholder', 'No ontologies defined...');

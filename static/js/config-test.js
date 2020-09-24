@@ -6,8 +6,7 @@ function myCB(data) {
  * Editor profiles are read from a WS endpoint
  * The data are expected to be in a JSON array, with each object
  * in the array containing a "json" property that has the profile
- * itself. The "versoURL" variable is a convenience for setting the
- * base URL of verso in the "config" definition below.
+ * itself.
  */
 var rectobase = "http://localhost:3000";
 
@@ -50,9 +49,8 @@ if (env.ENABLEUSERTEMPLATES!=undefined){
 if (env.VERSOBASE!=undefined){
     versobase=env.VERSOBASE;
 } else {
-    versobase=rectobase;
+    versobase=rectobase + "/verso";
 }
-var versoURL = versobase + "/verso/api";
 
 var config = {
      "logging": {
@@ -71,10 +69,10 @@ var config = {
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates" :enableusertemplates,
     "enableLoadMarc": loadmarc,
-    "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
-    "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
+    "startingPointsUrl": versobase + "/api/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
+    "literalLangDataUrl": versobase + '/api/configs?filter[where][configType]=literalLangData',
     "profiles": [
-        versoURL + "/configs?filter[where][configType]=profile"
+        versobase + "/api/configs?filter[where][configType]=profile"
     ],
     "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
     "return": {

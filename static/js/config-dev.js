@@ -22,8 +22,7 @@ baseDBURI = "https://preprod-8231.id.loc.gov"
 resourceURI = baseDBURI + "/resources";
 workContext = resourceURI + "/works/";  // This is unused?
 
-var versobase = "https://preprod-3001.id.loc.gov";
-var versoURL = versobase + "/verso/api";
+var versobase = "https://preprod-3001.id.loc.gov/verso";
 
 var config = {
      "logging": {
@@ -42,10 +41,10 @@ var config = {
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates": false,
     "enableLoadMarc": true,
-    "startingPointsUrl": versoURL + "/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
-    "literalLangDataUrl": versoURL + '/configs?filter[where][configType]=literalLangData',
+    "startingPointsUrl": versobase + "/api/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
+    "literalLangDataUrl": versobase + '/api/configs?filter[where][configType]=literalLangData',
     "profiles": [
-        versoURL + "/configs?filter[where][configType]=profile"
+        versobase + "/api/configs?filter[where][configType]=profile"
     ],
     "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
     "return": {

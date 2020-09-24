@@ -34,7 +34,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
             bfestore.name = guid();
             bfestore.templateGUID = guid();
             bfestore.created = new Date().toUTCString();
-            bfestore.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+            bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
             bfestore.state = 'create';
     
             // Turn off edit mode of templates if they were in the middle of editing one
@@ -155,7 +155,7 @@ exports.save = function (bfestore, bfelog, callback){
   
   var data = createSaveJson(bfestore, "save");
 
-  var url = config.versobase + "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
+  var url = config.versobase + "/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
     
   $.ajax({
     url: url,
@@ -325,7 +325,7 @@ exports.publish = function (bfestore, bfelog, callback) {
   }
 
   exports.deleteId = function(id, bfelog){
-    var url = config.versobase + "/verso/api/bfs/" + id;
+    var url = config.versobase + "/api/bfs/" + id;
   
     $.ajax({
       type: "DELETE",                
@@ -374,7 +374,7 @@ exports.publish = function (bfestore, bfelog, callback) {
       var save_json = {};
       save_json.name = bfestore.name;
       save_json.profile = bfestore.profile;
-      save_json.url = config.versobase + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      save_json.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
       save_json.created = bfestore.created;
       save_json.modified = new Date().toUTCString();
 
