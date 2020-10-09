@@ -26,7 +26,8 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
         });
     };
  
-    exports.load = function(config, bfestore, callback) {
+    // 9 Oct 2020 - Don't think this is used.  Disabling to see if we get an error.
+    exports.loXad = function(config, bfestore, callback) {
         if (config.toload !== undefined && config.toload.templates) {
             bfe.loadtemplatesANDlookupsCount = bfe.loadtemplatesANDlookupsCount + config.toload.templates.length;
             
@@ -34,7 +35,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
             bfestore.name = guid();
             bfestore.templateGUID = guid();
             bfestore.created = new Date().toUTCString();
-            bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+            bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
             bfestore.state = 'create';
     
             // Turn off edit mode of templates if they were in the middle of editing one
@@ -150,21 +151,26 @@ exports.retrieve = function (uri, bfestore, loadtemplates, callback){
     });
   };
 
-exports.save = function (bfestore, bfelog, callback){
+exports.save = function (params, callback){
+    var bfestore = params.bfestore;
+    var bfelog = params.bfelog;
+    var version = params.version || false;
   //var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
   var data = createSaveJson(bfestore, "save");
 
-  var url = config.versobase + "/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+data.name+"%22%7D";
-    
+  var url = "/ldp/verso/resources/" + data.name;
+
   $.ajax({
     url: url,
-    type: "POST",
-    data:JSON.stringify(data),
-    dataType: "json",
-    contentType: "application/json; charset=utf-8"
-  }).done(function (data) {  
-        bfelog.addMsg(new Error(), "INFO", "Saved " + data.id);
+    type: "PUT",
+    data: JSON.stringify(data),
+    dataType: "text",
+    contentType: "application/json"
+  }).done(function( response, textStatus, jqXHR ) {
+        if (jqXHR.status === 201 || jqXHR.status === 204) { 
+            bfelog.addMsg(new Error(), "INFO", "Saved " + data.name + " (" + jqXHR.status + ")");
+        }
         data.status = "success";
         return callback(true, data);
   }).fail(function (XMLHttpRequest, textStatus, errorThrown){
@@ -235,15 +241,15 @@ exports.publish = function (bfestore, bfelog, callback) {
         savedata.rdf = data.rdf;
         
         var url = config.url + "/profile-edit/server/publish";
-        var saveurl = "/verso/api/bfs/upsertWithWhere?where=%7B%22name%22%3A%20%22"+bfestore.name+"%22%7D";
+        var saveurl = "/ldp/verso/resources/" + bfestore.name;
         //console.log(JSON.stringify(savedata));
         $.when(
             $.ajax({
                 url: saveurl,
-                type: "POST",
+                type: "PUT",
                 data:JSON.stringify(savedata),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8"
+                dataType: "text",
+                contentType: "application/json"
             }),
             $.ajax({
                 url: url,
@@ -261,15 +267,17 @@ exports.publish = function (bfestore, bfelog, callback) {
                 $.when(
                     $.ajax({
                         url: saveurl,
-                        type: "POST",
+                        type: "PUT",
                         data:JSON.stringify(savedata),
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8"
+                        dataType: "text",
+                        contentType: "application/json"
                     })
-                ).done(function (savedata) {
-                    bfelog.addMsg(new Error(), "INFO", "Resource saved after successful publication to BFDB.");
-                    //console.log(savedata);
-                    //console.log(pubstatus);
+                ).done(function( response, textStatus, jqXHR ) {
+                    // This should only be a 204 by this point.
+                    if (jqXHR.status === 204) { 
+                        bfelog.addMsg(new Error(), "INFO", "Resource saved after successful publication to BFDB.");
+                        bfelog.addMsg(new Error(), "INFO", "Saved " + savedata.name + " (" + jqXHR.status + ")");
+                    }
                     callback(true, pubstatus);
                 }).fail(function (XMLHttpRequest, textStatus, errorThrown){
                     data = { "status": "error", "errorText": textStatus, "errorThrown": errorThrown };
@@ -295,7 +303,8 @@ exports.publish = function (bfestore, bfelog, callback) {
         });
     });
 };
-  
+
+    // Retrieve resource from either BFDB or ID.  
   exports.retrieveLDS = function (uri, bfestore, loadtemplates, bfelog, callback){
 
     var url = config.url + "/profile-edit/server/retrieveLDS";
@@ -325,7 +334,7 @@ exports.publish = function (bfestore, bfelog, callback) {
   }
 
   exports.deleteId = function(id, bfelog){
-    var url = config.versobase + "/api/bfs/" + id;
+    var url = "/ldp/verso/resources/" + id;
   
     $.ajax({
       type: "DELETE",                
@@ -374,7 +383,7 @@ exports.publish = function (bfestore, bfelog, callback) {
       var save_json = {};
       save_json.name = bfestore.name;
       save_json.profile = bfestore.profile;
-      save_json.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      save_json.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       save_json.created = bfestore.created;
       save_json.modified = new Date().toUTCString();
 

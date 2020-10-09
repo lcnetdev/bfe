@@ -521,7 +521,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             },
             //edit
             {
-              'data': 'id',
+              'data': 'name',
               'className': 'column-identifier',
               'width': '85px',
               'searchable': false,
@@ -530,12 +530,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'render': function (td, cellData, rowData, row) {
                 //             return '<a href="'+data+'">edit</a>';
 
-                return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.id + '" type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button> \
-                               <button id="bfeditor-delete' + rowData.id + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.id + '"><span class="glyphicon glyphicon-trash"></span></button> \
+                return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.name + '" type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button> \
+                               <button id="bfeditor-delete' + rowData.name + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.name + '"><span class="glyphicon glyphicon-trash"></span></button> \
                                </div>';
               },
               'createdCell': function (td, cellData, rowData, row, col) {
-                if (rowData.status === 'success' || rowData.status === 'published') { $(td).find('#bfeditor-delete' + rowData.id).attr('disabled', 'disabled'); }
+                if (rowData.status === 'success' || rowData.status === 'published') { $(td).find('#bfeditor-delete' + rowData.name).attr('disabled', 'disabled'); }
 
                 var useguid = shortUUID(guid());
                 var loadtemplate = {};
@@ -590,14 +590,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   temptemplates.push(loadtemplate);
                 });
 
-                $(td).find('#bfeditor-retrieve' + rowData.id).click(function () {
+                $(td).find('#bfeditor-retrieve' + rowData.name).click(function () {
                   if (editorconfig.retrieve !== undefined) {
                     // loadtemplates = temptemplates;
                     bfestore.loadtemplates = temptemplates;
                     // editorconfig.retrieve.callback(cellData,bfestore, bfelog, cbLoadTemplates);
                     bfestore.store = [];
                     bfestore.state = 'edit';
-                    tempstore = bfeapi.getStoredJSONLD(config, rowData.id, bfestore.jsonld2store);
+                    tempstore = bfeapi.getStoredJSONLD(config, rowData.name, bfestore.jsonld2store);
                     bfestore.name = rowData.name;
                     bfestore.created = rowData.created;
                     bfestore.url = rowData.url;
@@ -624,14 +624,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }
                 });
 
-                $(td).append($('<div class="modal fade" id="bfeditor-deleteConfirm' + rowData.id + '" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"> \
+                $(td).append($('<div class="modal fade" id="bfeditor-deleteConfirm' + rowData.name + '" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"> \
                               <div class="modal-body"><h4>Delete?</h4></div>\
                               <div class="modal-footer"><button type="button" class="btn btn-default" id="bfeditor-modalCancel" data-dismiss="modal">Cancel</button> \
-                              <button type="button" id="bfeditor-deleteConfirmButton' + rowData.id + '" class="btn btn-danger btn-ok" data-dismiss="modal">Delete</button></div></div></div></div></div>'));
+                              <button type="button" id="bfeditor-deleteConfirmButton' + rowData.name + '" class="btn btn-danger btn-ok" data-dismiss="modal">Delete</button></div></div></div></div></div>'));
 
-                $(td).find('#bfeditor-deleteConfirmButton' + rowData.id).click(function () {
+                $(td).find('#bfeditor-deleteConfirmButton' + rowData.name).click(function () {
                   if (editorconfig.deleteId !== undefined) {
-                    editorconfig.deleteId.callback(rowData.id, bfelog);
+                    editorconfig.deleteId.callback(rowData.name, bfelog);
                     //var table = $('#table_id').DataTable();
                     // table.row($(this).parents('tr')).remove().draw();
                     bfestore.store = [];
@@ -651,7 +651,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   }
                 });
 
-                $(td).find('#bfeditor-deleteConfirm' + rowData.id).on('hidden.bs.modal', function () {
+                $(td).find('#bfeditor-deleteConfirm' + rowData.name).on('hidden.bs.modal', function () {
                   var table = $('#table_id').DataTable();
                   bfestore.store = [];
                   // table.ajax.reload();
@@ -983,7 +983,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      // Below is unused; harmless.
+      bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1082,7 +1083,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1360,7 +1361,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.store = [];
       bfestore.name = guid();
       bfestore.created = new Date().toUTCString();
-      bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+      bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       // bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
 /*
@@ -1848,7 +1849,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $('#resource-id-popover').append($savingInfo);
             
                     bfestore.addedProperties = addedProperties;
-                    editorconfig.save.callback(bfestore, bfelog, function (success, data) {
+                    editorconfig.save.callback({bfestore: bfestore, bfelog: bfelog}, function (success, data) {
                         //alert(JSON.stringify(data));
                         if (data.status == "success") {
                             bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
@@ -2048,7 +2049,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfestore.name = guid();
     bfestore.templateGUID = guid();
     bfestore.created = new Date().toUTCString();
-    bfestore.url = config.versobase + '/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfestore.name + '%22%7D%7D';
+    bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
     bfestore.state = 'create';
     
     // Turn off edit mode of templates if they were in the middle of editing one
@@ -2748,7 +2749,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $addpropinput.prop('disabled', true);
             $addpropinput.attr('placeholder', 'Loading field choices...');
             $.ajax({
-              url: config.versobase + '/api/configs?filter[where][configType]=ontology',
+              url: '/api/listconfigs?where=index.resourceType:ontology',
+              contentType: 'application/json',
+              dataType: "json",
               success: function (data) {
                 if (data.length == 0) {
                   $addpropinput.attr('placeholder', 'No ontologies defined...');
@@ -3930,7 +3933,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('#resource-id-popover').append($savingInfo);
             
             bfestore.addedProperties = addedProperties;
-            editorconfig.save.callback(bfestore, bfelog, function (success, data) {
+            editorconfig.save.callback( {bfestore: bfestore, bfelog: bfelog} , function (success, data) {
                 $('#resource-id-popover #savingicon').remove()
                 $('#resource-id-popover #savemessage').remove();
                 
