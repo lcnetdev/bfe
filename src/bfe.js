@@ -25,7 +25,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   
   var tabIndices = 1;
 
-  var loadtemplates = [];
+    // Lint check
+  //var loadtemplates = [];
   var loadtemplatesANDlookupsCount = 0;
   var loadtemplatesANDlookupsCounter = 0;
 
@@ -5103,7 +5104,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         'id': formid
       });
       formobject = formobject[0];
-      bfelog.addMsg(new Error(), 'DEBUG', 'typeahead formobject: ', JSON.parse(JSON.stringify(formobject.store)));
+      bfelog.addMsg(new Error(), 'DEBUG', 'typeahead formobject store: ', JSON.parse(JSON.stringify(formobject.store)));
       formobject.resourceTemplates.forEach(function (t) {
         var properties = _.where(t.propertyTemplates, {
           'guid': propertyguid
@@ -5113,6 +5114,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           p = properties[0];
         }
       });
+      bfelog.addMsg(new Error(), 'DEBUG', "Property to be set with typeahead:", p);
 
       var lups = _.where(lookups, {
         'name': datasetname
@@ -5124,11 +5126,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       }
 
       // do we have new resourceURI?
+      bfelog.addMsg(new Error(), 'DEBUG', "suggestobject before calling getResource:", suggestionobject);
       lu.getResource(resourceURI, p, suggestionobject, function (returntriples, property) {
-        bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", returntriples);
+        bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", JSON.parse(JSON.stringify(returntriples)));
         bfelog.addMsg(new Error(), 'DEBUG', "Property returned from getResource func:", property);
         
-        var resourceTriple = '';
+        
+        var tripleConnectingModalWithLookup = '';
         var replaceBnode = !!(property.propertyLabel === 'Lookup' || property.type === 'lookup');
         bfelog.addMsg(new Error(), 'DEBUG', "Replace bnode? " + replaceBnode);
         var target = !!(property.type === 'target');
@@ -5141,11 +5145,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           // if this is the resource, replace the blank node; otherwise push the label
           if (_.some(formobject.store, {s: t.s}) && t.p !== 'http://www.w3.org/2000/01/rdf-schema#label') {
             
-            resourceTriple = _.find(formobject.store, {o: t.s});
-            bfelog.addMsg(new Error(), 'DEBUG', 'resourceTriple from store for this typeahead resource: ', resourceTriple);
+            tripleConnectingModalWithLookup = _.find(formobject.store, {o: t.s});
+            bfelog.addMsg(new Error(), 'DEBUG', 'tripleConnectingModalWithLookup from store for this typeahead resource: ', tripleConnectingModalWithLookup);
             
             bfelog.addMsg(new Error(), 'DEBUG', 'resourceTemplate in which typeahead is embedded: ', formobject.resourceTemplates[0]);
-            if (!replaceBnode || _.isEmpty(resourceTriple)) {
+            if (!replaceBnode || _.isEmpty(tripleConnectingModalWithLookup)) {
               // push the triples
               if (formobject.resourceTemplates[0].embedType === 'modal'){
                 formobject.store.push(t);
@@ -5153,55 +5157,53 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 bfestore.addTriple(t);
               }
             } else {
-              var resourceType = _.find(formobject.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: formobject.resourceTemplates[0].resourceURI });
-
-                if (
+                var resourceType = _.find(formobject.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: formobject.resourceTemplates[0].resourceURI });
+                bfelog.addMsg(new Error(), 'DEBUG', 'resourceType of this typeahead resourceTemplate: ', resourceType);
+                if ( replaceBnode && p.propertyURI == "http://www.w3.org/2002/07/owl#sameAs") {
+                    tripleConnectingModalWithLookup.o = t.o;
+                    resourceType.s = t.o;
+                    //formobject.store.push(resourceType);
+                    
+                } else if (
                     replaceBnode && 
                     formobject.resourceTemplates[0].embedType === 'modal' &&
                     resourceType.s == t.s
                     ) {
-                        /* 
-                            We have a situation where we 
-                                1) Have a lookup
-                                2) We're in a modal
-                                3) the Subject of lookup results matches the 
-                                    Subject of the modal resource.
-                            We do not want to replace the Object of the main resource
-                            with the object of the found triple.
-                        */
-                        formobject.store.push(t);
-                    } else if (replaceBnode || target) {
-                        resourceType.s = t.o;
-                        formobject.store.push(resourceType);
+                    /* 
+                        We have a situation where
+                            1) we have a lookup
+                            2) We're in a modal
+                            3) the Subject of lookup results matches the 
+                                Subject of the modal resource.
+                        We do not want to replace the Object of the main resource
+                        with the object of the found triple.
+                    */
+                    formobject.store.push(t);
+                
+                } else if (replaceBnode || target) {
+                    tripleConnectingModalWithLookup.o = t.o;
+                    resourceType.s = t.o;
+                    formobject.store.push(resourceType);
 
-                        resourceTriple.o = t.o;
-        
-                        formobject.defaulturi = t.o;
-                // find the bnode
-                formobject.store.push(resourceTriple);
-                if (!_.some(formobject.store, {"guid": resourceTriple.guid})){
-                  //if (target){
-                    //also push the blank node.
-                  //  t.target = 'true';
-                  //  resourceTriple.target = 'true';
-                  //  formobject.store.push(t);
-                 //   bfestore.addTriple(t);
-                  //}
-                  formobject.store.push(resourceTriple);
-                }
-              } else {
-                if (formobject.resourceTemplates[0].embedType === 'modal'){
-                  formobject.store.push(t);
+                    formobject.defaulturi = t.o;
+                    // find the bnode
+                    formobject.store.push(tripleConnectingModalWithLookup);
+                    if (!_.some(formobject.store, {"guid": tripleConnectingModalWithLookup.guid})){
+                      formobject.store.push(tripleConnectingModalWithLookup);
+                    }
                 } else {
-                  bfestore.addTriple(t);
+                    if (formobject.resourceTemplates[0].embedType === 'modal'){
+                        formobject.store.push(t);
+                    } else {
+                        bfestore.addTriple(t);
+                    }
                 }
-              }
             }
           } else {
             if (formobject.resourceTemplates[0].embedType === 'modal'){
-              formobject.store.push(t);
+                formobject.store.push(t);
             } else {
-              bfestore.addTriple(t);
+                bfestore.addTriple(t);
             }
           }
         });
