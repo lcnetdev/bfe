@@ -18,9 +18,17 @@ var buildcontext = true;
 
 var name = "config";
 
-baseDBURI = "https://preprod-8231.id.loc.gov"
+if (env.RECTOBASE!==undefined){
+    rectobase = env.RECTOBASE;
+}
+
+baseDBURI = "https://preprod-8210.id.loc.gov"
+if (env.BASEDBURI!=undefined) {
+    baseDBURI = env.BASEDBURI;
+}
 resourceURI = baseDBURI + "/resources";
 workContext = resourceURI + "/works/";  // This is unused?
+
 
 var config = {
      "logging": {
