@@ -3248,6 +3248,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
   function loadPropsdata(pd, property, form, fobject) {
+      bfelog.addMsg(new Error(), 'DEBUG', "loadPropsdata pd: ", pd);
+      bfelog.addMsg(new Error(), 'DEBUG', "loadPropsdata property: ", property);
     var $formgroup = $('#' + property.guid, form).closest('.form-group');
     var $save = $formgroup.find('.btn-toolbar').eq(0);
     // console.log(formgroup);
@@ -5084,6 +5086,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $(input).on('typeahead:selected', function (event, suggestionobject, datasetname) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Typeahead selection made');
       var form = $('#' + event.target.id).closest('form').eq(0);
+      bfelog.addMsg(new Error(), 'DEBUG', 'typeahead embededded in form: ', form);
       var formid = $('#' + event.target.id).closest('form').eq(0).attr('id');
       formid = formid.replace('bfeditor-form-', '');
       // reset page
@@ -5100,6 +5103,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         'id': formid
       });
       formobject = formobject[0];
+      bfelog.addMsg(new Error(), 'DEBUG', 'typeahead formobject: ', JSON.parse(JSON.stringify(formobject.store)));
       formobject.resourceTemplates.forEach(function (t) {
         var properties = _.where(t.propertyTemplates, {
           'guid': propertyguid
@@ -5122,9 +5126,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // do we have new resourceURI?
       lu.getResource(resourceURI, p, suggestionobject, function (returntriples, property) {
         bfelog.addMsg(new Error(), 'DEBUG', "Triples returned from lookup's getResource func:", returntriples);
-
+        bfelog.addMsg(new Error(), 'DEBUG', "Property returned from getResource func:", property);
+        
         var resourceTriple = '';
         var replaceBnode = !!(property.propertyLabel === 'Lookup' || property.type === 'lookup');
+        bfelog.addMsg(new Error(), 'DEBUG', "Replace bnode? " + replaceBnode);
         var target = !!(property.type === 'target');
 
         returntriples.forEach(function (t) {
@@ -5136,7 +5142,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           if (_.some(formobject.store, {s: t.s}) && t.p !== 'http://www.w3.org/2000/01/rdf-schema#label') {
             
             resourceTriple = _.find(formobject.store, {o: t.s});
-
+            bfelog.addMsg(new Error(), 'DEBUG', 'resourceTriple from store for this typeahead resource: ', resourceTriple);
+            
+            bfelog.addMsg(new Error(), 'DEBUG', 'resourceTemplate in which typeahead is embedded: ', formobject.resourceTemplates[0]);
             if (!replaceBnode || _.isEmpty(resourceTriple)) {
               // push the triples
               if (formobject.resourceTemplates[0].embedType === 'modal'){
@@ -5147,13 +5155,28 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             } else {
               var resourceType = _.find(formobject.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: formobject.resourceTemplates[0].resourceURI });
 
-              resourceType.s = t.o;
-              formobject.store.push(resourceType);
+                if (
+                    replaceBnode && 
+                    formobject.resourceTemplates[0].embedType === 'modal' &&
+                    resourceType.s == t.s
+                    ) {
+                        /* 
+                            We have a situation where we 
+                                1) Have a lookup
+                                2) We're in a modal
+                                3) the Subject of lookup results matches the 
+                                    Subject of the modal resource.
+                            We do not want to replace the Object of the main resource
+                            with the object of the found triple.
+                        */
+                        formobject.store.push(t);
+                    } else if (replaceBnode || target) {
+                        resourceType.s = t.o;
+                        formobject.store.push(resourceType);
 
-              if (replaceBnode || target) {
-                resourceTriple.o = t.o;
-
-                formobject.defaulturi = t.o;
+                        resourceTriple.o = t.o;
+        
+                        formobject.defaulturi = t.o;
                 // find the bnode
                 formobject.store.push(resourceTriple);
                 if (!_.some(formobject.store, {"guid": resourceTriple.guid})){
