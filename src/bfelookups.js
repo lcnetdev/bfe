@@ -901,7 +901,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
     var lcshared = require('src/lookups/lcshared');
     var bfelog = require('src/bfelogging');
     var cache = [];
-    exports.scheme = '/api/configs?filter[where][configType]=noteTypes&filter[fields][json]=true';
+    exports.scheme = '/ldp/verso/configs/?where=index.resourceType=noteTypes';
   
     exports.source = function (query, processSync, processAsync, formobject) {
       bfelog.addMsg(new Error(), 'INFO', query);
