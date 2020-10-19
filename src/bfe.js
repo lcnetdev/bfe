@@ -1939,7 +1939,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             
                             exitFunction();
                         } else {
-                            var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
                             $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed:</strong>' + data.errorThrown + ' (' + data.errorText + ')</span>');
                             $messagediv.insertBefore('.nav-tabs');
                             //$messagediv.insertBefore('#bfeditor-previewPanel');

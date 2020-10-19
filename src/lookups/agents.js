@@ -6,7 +6,7 @@ bfe.define('src/lookups/agents', ['require', 'exports', 'src/lookups/lcshared', 
     // This var is required because it is used as an identifier.
     exports.scheme = 'http://id.loc.gov/rwo/agents';
   
-    exports.source = function (query, processSync, processAsync, formobject) {
+    exports.source = function (query, processSync, processAsync) {
       // console.log(JSON.stringify(formobject.store));
 
       var scheme = 'http://id.loc.gov/authorities/names';

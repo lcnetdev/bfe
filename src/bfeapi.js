@@ -154,7 +154,7 @@ exports.retrieve = function (uri, bfestore, loadtemplates, callback){
 exports.save = function (params, callback){
     var bfestore = params.bfestore;
     var bfelog = params.bfelog;
-    var version = params.version || false;
+    //var version = params.version || false;
   //var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
   
   var data = createSaveJson(bfestore, "save");
