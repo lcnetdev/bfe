@@ -1,6 +1,6 @@
 bfe.define('src/lookups/agents', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
-    var bfelog = require('src/bfelogging');
+    //var bfelog = require('src/bfelogging');
     var cache = {};
   
     // This var is required because it is used as an identifier.
@@ -8,8 +8,6 @@ bfe.define('src/lookups/agents', ['require', 'exports', 'src/lookups/lcshared', 
   
     exports.source = function (query, processSync, processAsync, formobject) {
       // console.log(JSON.stringify(formobject.store));
-  
-      var triples = formobject.store;
 
       var scheme = 'http://id.loc.gov/authorities/names';
       var rdftype = '(rdftype:PersonalName OR rdftype:CorporateName OR rdftype:ConferenceName)';
@@ -34,7 +32,7 @@ bfe.define('src/lookups/agents', ['require', 'exports', 'src/lookups/lcshared', 
           //if (query.match(/^[Nn][A-z\s]{0,1}\d/)){
             //q = query.replace(/\s+/g,'').normalize();
           //}          
-          u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+          var u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
           $.ajax({
             url: u,
             dataType: 'jsonp',

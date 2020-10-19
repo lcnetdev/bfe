@@ -148,7 +148,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
       triple.otype = 'uri';
       triples.push(triple);
       // add label
-      url = selected.uri.replace(/^(http:)/,"");
+      var url = selected.uri.replace(/^(http:)/,"");
       $.ajax({
         url: url + '.jsonp',
         dataType: 'jsonp',

@@ -7,7 +7,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
     var startingPoints = null;
 
     exports.getStoredJSONLD = function (config, id, callback){
-        url = config.url + "/api/getStoredJSONLD/" + id;
+        var url = config.url + "/api/getStoredJSONLD/" + id;
         $.ajax({
             dataType: "json",
             type: "GET",
@@ -74,7 +74,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
                                 So, will parse the JSONLD myself, dagnabbit. 
                                 NOTE: it totally expects JSONLD expanded form.
                             */
-                            tempstore = bfestore.jsonld2store(data);
+                            var tempstore = bfestore.jsonld2store(data);
                             tempstore.forEach(function(t){
                                 if (t.p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.otype == "uri" && t.s == config.toload.defaulturi.replace('ml38281/', '')) {
                                     t.rtID = config.toload.templateID;
@@ -260,7 +260,7 @@ exports.publish = function (bfestore, bfelog, callback) {
             })
         ).done(function (saveresponse, publishresponse) {
             //console.log(JSON.stringify(publishresponse));
-            pubstatus = publishresponse[0]
+            var pubstatus = publishresponse[0]
             if (pubstatus.publish.status === "published") {
                 savedata.status = "success";
                 savedata.objid = pubstatus.objid;
@@ -439,7 +439,7 @@ exports.publish = function (bfestore, bfelog, callback) {
       save_json.rdf = bfestore.store2jsonldExpanded();
       save_json.addedproperties = bfestore.addedProperties;
       return save_json;
-    };
+    }
   
   function guid() {
     var translator = window.ShortUUID();

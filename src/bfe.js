@@ -458,7 +458,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'width': '85px',
               'className': 'column-identifier', 
               'render': function (data, type, full, meta) {
-                text = full.lccn;
+                var text = full.lccn;
                 var ldsanchor = text.trim();
 
                 // console.log(full.id);
@@ -837,7 +837,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               </form></div>');
 
     // Can this be moved out of there somehow?  It's repeated in fulleditor too.
-    editorconfig.setStartingPoints.callback(config, function (config) {
+    editorconfig.setStartingPoints.callback(config, function () {
         var getProfileOptions = 
            function (jqObject, elementType) {
             for (var h = 0; h < editorconfig.startingPoints.length; h++) {
@@ -1579,6 +1579,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       }
 
+      // Commenting out 2020 Oct 19 to fix lint crap.
+      /*
       var getProfileOptions = 
        function (jqObject, elementType) {
         for (var h = 0; h < config.startingPoints.length; h++) {
@@ -1596,6 +1598,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           }
         }
       }
+      */
       $(function(){
         $('.dropdown-submenu>a').unbind('click').click(function(e){
           var $openmenu = $('#createresourcesubmenuul.open');
@@ -1836,7 +1839,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 if (entryfunc == "lcapplication") {
                     // If there is no mainTitle OR the profile contains the word "test", then do not save.
                     if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false ) {
-                            var good_to_save = false;
+                            good_to_save = false;
                             // title required
                             $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
                             $messagediv.append('<strong>Did not meet save/publish criteria.  No title found:</strong>' + mintResource(bfestore.name));
@@ -1856,7 +1859,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
                         
-                            var $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
+                            $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
                             var decimaltranslator = window.ShortUUID("0123456789");
                             var resourceName = "e" + decimaltranslator.fromUUID(data.name);
                             var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
@@ -1904,7 +1907,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 if (entryfunc == "lcapplication") {
                     // If there is no mainTitle OR the profile contains the word "test", then do not save.
                     if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false ) {
-                            var good_to_publish = false;
+                            good_to_publish = false;
                             // title required
                             $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
                             $messagediv.append('<strong>Did not meet save/publish criteria.  No title found:</strong>' + mintResource(bfestore.name));
@@ -1912,7 +1915,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     }
                 }
                 if (good_to_publish) {
-                    var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
+                    $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
                     $messagediv.append('<strong>Saving description and posting description.  This takes a few seconds...');
                     $messagediv.insertBefore('.nav-tabs');
                     editorconfig.publish.callback(bfestore, bfelog, function (success, data) {
@@ -3925,7 +3928,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     _.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/mainTitle' }) === false || 
                     bfeditor.bfestore.profile.match(/[T|t]est/)
                 ) {
-                    var good_to_save = false;
+                    good_to_save = false;
                     // title required
             }
         }
@@ -5522,7 +5525,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
       return;
     } else if (rt.resourceURI == "http://id.loc.gov/ontologies/bflc/Hub") {
-      returnval = baseURI + 'resources/hubs/';
+      var returnval = baseURI + 'resources/hubs/';
       return callback(returnval);
     } else if (rt.resourceURI.startsWith('http://id.loc.gov') && rt.resourceURI.match(/(authorities|vocabulary)/)) {
       uri = rt.resourceURI + '.madsrdf_raw.json';
