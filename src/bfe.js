@@ -5,6 +5,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   var bfeapi = require('src/bfeapi');
   var bfeusertemplates = require('src/bfeusertemplates');
   var bfeliterallang = require('src/bfeliterallang');
+  
+  // By default, we will version the resource upon first save.
+  // If the resource is new - meaning never added to the database - the version
+  // preference is ignored in ldpjs.
+  var createVersion = 1;
 
   // var store = new rdfstore.Store();
   var profiles = [];
@@ -258,6 +263,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   };
 
   exports.loadBrowseData = function($browsediv){
+      
+      createVersion = 1;
     
     var loadData = function(){
       if (browseloaded){
@@ -1853,9 +1860,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $('#resource-id-popover').append($savingInfo);
             
                     bfestore.addedProperties = addedProperties;
-                    editorconfig.save.callback({bfestore: bfestore, bfelog: bfelog}, function (success, data) {
+                    editorconfig.save.callback({bfestore: bfestore, bfelog: bfelog, version: createVersion}, function (success, data) {
                         //alert(JSON.stringify(data));
                         if (data.status == "success") {
+                            createVersion = 0;
                             bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
                         
@@ -1918,9 +1926,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
                     $messagediv.append('<strong>Saving description and posting description.  This takes a few seconds...');
                     $messagediv.insertBefore('.nav-tabs');
-                    editorconfig.publish.callback(bfestore, bfelog, function (success, data) {
+                    editorconfig.publish.callback({bfestore: bfestore, bfelog: bfelog, version: createVersion}, function (success, data) {
                         $('.alert').remove();
                         if (success) {
+                            createVersion = 0;
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
                             bfelog.addMsg(new Error(), "INFO", "Published " + data.name);
                             
@@ -3939,7 +3948,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             $('#resource-id-popover').append($savingInfo);
             
             bfestore.addedProperties = addedProperties;
-            editorconfig.save.callback( {bfestore: bfestore, bfelog: bfelog} , function (success, data) {
+            editorconfig.save.callback( {bfestore: bfestore, bfelog: bfelog, version: createVersion} , function (success, data) {
+                createVersion = 0;
                 $('#resource-id-popover #savingicon').remove()
                 $('#resource-id-popover #savemessage').remove();
                 

@@ -154,16 +154,18 @@ exports.retrieve = function (uri, bfestore, loadtemplates, callback){
 exports.save = function (params, callback){
     var bfestore = params.bfestore;
     var bfelog = params.bfelog;
-    //var version = params.version || false;
-  //var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
-  
-  var data = createSaveJson(bfestore, "save");
-
-  var url = "/ldp/verso/resources/" + data.name;
+    var version = params.version;
+    
+    var data = createSaveJson(bfestore, "save");
+    bfelog.addMsg(new Error(), "INFO", "To save (version=" + version +"): " + data.name);
+    var url = "/ldp/verso/resources/" + data.name;
 
   $.ajax({
     url: url,
     type: "PUT",
+    beforeSend: function(request) {
+        request.setRequestHeader("Prefer", "version=" + version);
+    },
     data: JSON.stringify(data),
     dataType: "text",
     contentType: "application/json"
@@ -225,8 +227,10 @@ exports.save = function (data, close, bfelog, callback){
 };
 */
 
-exports.publish = function (bfestore, bfelog, callback) {
-
+exports.publish = function (params, callback) {
+    var bfestore = params.bfestore;
+    var bfelog = params.bfelog;
+    var version = params.version;
     bfestore.store2rdfxml(bfestore.store2jsonldExpanded(), function (rdfxml) {
         var data = createSaveJson(bfestore, "publish");
         data.rdfxml = JSON.stringify(rdfxml);
@@ -247,6 +251,9 @@ exports.publish = function (bfestore, bfelog, callback) {
             $.ajax({
                 url: saveurl,
                 type: "PUT",
+                beforeSend: function(request) {
+                    request.setRequestHeader("Prefer", "version=" + version);
+                },
                 data:JSON.stringify(savedata),
                 dataType: "text",
                 contentType: "application/json"
@@ -268,6 +275,9 @@ exports.publish = function (bfestore, bfelog, callback) {
                     $.ajax({
                         url: saveurl,
                         type: "PUT",
+                        beforeSend: function(request) {
+                            request.setRequestHeader("Prefer", "version=" + version);
+                        },
                         data:JSON.stringify(savedata),
                         dataType: "text",
                         contentType: "application/json"
