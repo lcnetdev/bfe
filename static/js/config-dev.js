@@ -44,7 +44,7 @@ var config = {
     "buildContext": true,
     "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
-    "enableUserTemplates": false,
+    "enableUserTemplates": true,
     "enableLoadMarc": true,
     "startingPointsUrl": "/api/listconfigs?where=index.resourceType:startingPoints&where=index.label:" + name,
     "literalLangDataUrl": '/api/listconfigs?where=index.resourceType:literalLangData',
