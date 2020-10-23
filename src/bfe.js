@@ -2099,7 +2099,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     cbLoadTemplates();
   }
 
-  /*
+    /*
     loadTemplates is an array of objects, each with this structure:
         {
             templateguid=guid,
@@ -2109,761 +2109,766 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             data=bfestore
         }
     */
-  function getForm(loadTemplates, pt) {
-    var rt, property;
-    // Create the form object.
-    var fguid = guid();
-    var fobject = {};
-    fobject.id = fguid;
-    fobject.store = [];
-    fobject.resourceTemplates = [];
-    fobject.resourceTemplateIDs = [];
-    fobject.formTemplates = [];
-
-    // Load up the requested templates, add seed data.
-    for (var urt = 0; urt < loadTemplates.length; urt++) {
-      rt = _.where(resourceTemplates, {
-        'id': loadTemplates[urt].resourceTemplateID
-      });
-      if (rt !== undefined && rt[0] !== undefined) {
-        fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
-        // console.log(loadTemplates[urt]);
-        fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
-        fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
-        fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
-        fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
-        // We need to make sure this resourceTemplate has a defaulturi
-        if (fobject.resourceTemplates[urt].defaulturi === undefined) {
-          // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + shortUUID(loadTemplates[urt].templateGUID);
-          whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI,
-            function (baseuri) {
-              var worklist = _.filter(bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
-              if (!_.isEmpty(worklist)) {
-                // check for type
-                var rtTypes = _.where(worklist, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI });
-                if (!_.isEmpty(rtTypes)) {
-                  
-                  fobject.resourceTemplates[urt].defaulturi = rtTypes[0].s;
-
-                  if (fobject.resourceTemplates[urt].embedType === "page"){
-                    // find uniq s, and look for one that has no o
-                    rtTypes.forEach(function (rtType){
-                      if(!_.some(bfestore.store, {o: rtType.s})){
-                        fobject.resourceTemplates[urt].defaulturi = rtType.s;
-                      }
-                    });
-                  }
-
-                } else {
-
-                  var rt = fobject.resourceTemplates[urt];
-                  // add type
-                  var triple = {};
-                  triple.guid = rt.useguid;
-                  triple.rtID = rt.id;
-                  triple.s = worklist[0].s;
-                  triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-                  triple.o = rt.resourceURI;
-                  triple.otype = 'uri';
-                  // fobject.store.push(triple);
-                  bfestore.addTriple(triple);
-
-                  fobject.resourceTemplates[urt].defaulturi = triple.s;
-                }
-              } else {
-                fobject.resourceTemplates[urt].defaulturi = baseuri + mintResource(loadTemplates[urt].templateGUID);
-              }
-            });
-        } else {
-          // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + loadTemplates[urt].templateGUID;
-        }
-
-        fobject.resourceTemplateIDs[urt] = rt[0].id;
-      } else {
-        bfelog.addMsg(new Error(), 'WARN', 'Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.');
-      }
-    }
-
-    // Let's create the form
-    var form = $('<form>', {
-      id: 'bfeditor-form-' + fobject.id,
-      class: 'form-horizontal',
-      role: 'form'
-    });
+    function getForm(loadTemplates, pt) {
+        var rt, property;
+        // Create the form object.
+        var fguid = guid();
+        var fobject = {};
+        fobject.id = fguid;
+        fobject.store = [];
+        fobject.resourceTemplates = [];
+        fobject.resourceTemplateIDs = [];
+        fobject.formTemplates = [];
     
-    form.submit(function(e){
-        e.preventDefault();
-    });
-    
-    var forEachFirst = true;
-    if (pt) {
-      fobject.resourceTemplates[0].propertyTemplates = pt;
-    }
-
-    fobject.resourceTemplates.forEach(function (rt) {
-      bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
-      var $resourcediv = $('<div>', {
-        id: rt.useguid,
-        'data-uri': rt.defaulturi
-      }); // is data-uri used?
-
-      // create a popover box to display resource ID of the thing.
-      var $resourcedivheading = $('<div>');
-      var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left" style="margin-right:5px">');
-      $resourcedivheadingh4.text($('#profileLabel').text());
-
-      if (rt.defaulturi.match(/^http/)) {
-        var rid = rt.defaulturi;
-        var rLabel = _.find(bfestore.store, {"s": rid, "p": "http://www.w3.org/2000/01/rdf-schema#label"});
-        var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
-        $resourceInfo.attr('data-content', rid);
-        $resourceInfo.attr('data-toggle', 'popover');
-        $resourceInfo.attr('title', !_.isEmpty(rLabel)? rLabel.o : 'Resource ID');
-        $resourceInfo.attr('id', 'resource-id-popover');
-        $resourceInfo.popover({ trigger: "click hover" });
-        $resourcedivheadingh4.append($resourceInfo);
-      }
-      if (rt.embedType != 'modal') {
-        $resourcedivheading.append($resourcedivheadingh4);
-      }
-
-      if (config.enableCloning) {
-          // create an empty clone button
-          var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
-
-          // populate the clone button for Instance or Work descriptions
-          if (rt.id.match(/:Instance$/i)) {
-            $clonebutton.attr('id', 'clone-instance');
-            $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
-            $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
-          } else if (rt.id.match(/:Work$/i)) {
-            $clonebutton.attr('id', 'clone-work');
-            $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
-            $clonebutton.data({ 'match': 'works', 'label': 'Work' });
-          }
-    
-          //clean up
-          //$('#cloneButtonGroup').remove();
-    
-          var $templateCloneButtonGroup;
-          
-          if ($('#cloneButtonGroup').length > 0){
-            $templateCloneButtonGroup = $('#cloneButtonGroup');
-            if (rt.id.match(/:Instance$/i)) {
-              $clonebutton = $('#clone-instance')
-            } else if (rt.id.match(/:Work$/i)) {
-              $clonebutton = $('#clone-work')
-            }
-          } else {
-            $templateCloneButtonGroup = $('<div>', {
-            id: 'cloneButtonGroup',
-            class: 'pull-right'
+        // Load up the requested templates, add seed data.
+        for (var urt = 0; urt < loadTemplates.length; urt++) {
+            rt = _.where(resourceTemplates, {
+                'id': loadTemplates[urt].resourceTemplateID
             });
-            $templateCloneButtonGroup.append($clonebutton);
-          }
-        
-          // append to the resource heading if there is a clone button id and is not a modal window      
-          if ($clonebutton.attr('id') && rt.embedType != 'modal') {
-            var newid = mintResource(guid());
-    
-            // ask user to input custom id
-            var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
-                  <div class="modal-dialog" role="document">\
-                    <div class="modal-content">\
-                      <div class="modal-header">\
-                        <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
-                        <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
-                      </div>\
-                      <div class="modal-body">\
-                          <div class="input-group col-xs-12">\
-                            <span class="input-group-addon">New Resource ID:</span>\
-                            <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
-                            <span class="input-group-btn">\
-                              <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
-                            </span>\
-                          </div>\
-                      </div>\
-                      <div class="modal-footer">\
-                        <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
-                      </div>\
-                    </div>\
-                  </div>\
-                </div>');
-            $resourcediv.append($cloneinput);
-          }
-        }
-        
-        // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
-        if (editorconfig.enableUserTemplates) {
-            if (!editorconfig.enableCloning) {
-                $templateCloneButtonGroup = $('<div>', { id: 'cloneButtonGroup', class: 'pull-right' });
-            }
-            var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
-            $('.template-controls').remove();
-            $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile, editorconfig));
-        }
+            if (rt !== undefined && rt[0] !== undefined) {
+                fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
+                // console.log(loadTemplates[urt]);
+                fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
+                fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
+                fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
+                fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
+                // We need to make sure this resourceTemplate has a defaulturi
+                if (fobject.resourceTemplates[urt].defaulturi === undefined) {
+                    // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + shortUUID(loadTemplates[urt].templateGUID);
+                    whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI,
+                        function (baseuri) {
+                            var worklist = _.filter(bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
+                            if (!_.isEmpty(worklist)) {
+                                // check for type
+                                var rtTypes = _.where(worklist, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: fobject.resourceTemplates[urt].resourceURI });
+                                if (!_.isEmpty(rtTypes)) {
+                                    fobject.resourceTemplates[urt].defaulturi = rtTypes[0].s;
 
-      if ($templateCloneButtonGroup !== undefined) {
-          $('#bfeditor-menudiv').append($templateCloneButtonGroup);
-      }
-      
-      $resourcediv.append($resourcedivheading);
-
-      $resourcediv.find('#clear-id').click(function () {
-        $('#resource-id').attr('value', '');
-        $('#resource-id').focus();
-      });
-
-      // the cloning starts here if clone button is clicked
-      $resourcediv.find('#clone-save').click(function () {
-        var rid = $('#resource-id').attr('value');
-        $('#clone-input').modal('hide');
-        var $msgnode = $('<div>', { id: "bfeditor-messagediv" });
-        var olduri = rt.defaulturi;
-
-        bfestore.name = guid();  // verso save name
-        // var rid = mintResource(guid()); // new resource id
-        var ctype = $clonebutton.data('label'); // get label for alert message
-        var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
-
-        // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
-        bfestore.store.forEach(function (trip) {
-          trip.s = trip.s.replace(re, "$1" + rid + "$2");
-          trip.o = trip.o.replace(re, "$1" + rid + "$2");
-        });
-
-        //remove lccn
-        var lccns = _.where(bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' });
-        if (lccns !== undefined) {
-          lccns.forEach(function (lccn) {
-            bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, { s: lccn.s }));
-            bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, { o: lccn.s }));
-          });
-        }
-
-        _.each(_.where(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }), function (am) {
-          //delete old procInfo
-          bfestore.addProcInfo(am.o, 'clone ' + $clonebutton.data().label.toLowerCase());
-        });
-
-        // reload the newly created template
-        cbLoadTemplates();
-
-
-        // start checking for errors (basically check for remnants of old resource IDs)
-        var errs = 0;
-        bfestore.store.forEach(function (trip) {
-          if (trip.s == olduri) {
-            errs++;
-          }
-        });
-
-        //disable clone button
-        $('#clone-work, #clone-instance').attr("disabled", "disabled");
-
-
-        if (errs > 0) {
-          $msgnode.append('<div class="alert alert-danger">Old ' + ctype + ' URIs found in cloned description. Clone failed!<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
-        } else {
-          $msgnode.append('<div class="alert alert-info">' + ctype + ' cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
-        }
-        $msgnode.insertBefore('.nav-tabs');
-      });
-
-      var $formgroup = $('<div>', {
-        class: 'form-group row'
-      });
-      var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-      // var $label = $('<label for="' + rt.useguid + '" class="col-sm-3 control-label" title="'+ rt.defaulturi + '">Set label?</label>');
-      var $resourceinput = $('<div class="col-sm-6"><input type="text" class="form-control" id="' + rt.useguid + '" tabindex="' + tabIndices++ + '"></div>');
-      var $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
-      var $linkbutton = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#x1f517;</button></div>');
-      var $linkmodal = $('<div class="modal fade" id="linkmodal' + rt.useguid + '" role="dialog"><div class="modal-dialog"><div class="modal-content"> \
-        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Link</h4></div> \
-        <div class="modal-body">' + rt.defaulturi + '</div></div></div></div>');
-
-      $button.click(function () {
-        setRtLabel(fobject.id, rt.useguid, rt.useguid + ' input', rt);
-      });
-
-      $linkbutton.click(function () {
-        $('#bfeditor').append($linkmodal);
-        $('#linkmodal' + rt.useguid).modal();
-        $('#linkmodal' + rt.useguid).on('show.bs.modal', function () {
-          $(this).css('z-index', 10000);
-        });
-      });
-
-      var enterHandler = function (event) {
-        if (event.keyCode == 13) {
-          setRtLabel(fobject.id, rt.useguid, property.guid);
-          if ($('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").length) {
-            $('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").focus();
-          }else if ($('#' + property.guid).parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
-            $('#' + property.guid).parent().parent().next().find("button").focus();
-          } else {
-            $('[id^=bfeditor-modalSave]').focus();
-          }
-        }
-      };
-
-      $resourceinput.keyup(enterHandler);
-      $resourceinput.append($saves);
-      $resourcediv.append($formgroup);
-      var addPropsUsed = {};
-      if (addedProperties !== undefined && rt.embedType == 'page' && !pt) {
-        addedProperties.forEach(function (adata) {
-          rt.propertyTemplates.push(adata);
-        });
-      }
-
-      // adding Admin Metadata to Work, instance, Item
-      if (RegExp(/(:Work|:Instance|:Item)$/).test(rt.id) && !_.some(rt.propertyTemplates, { "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata" })) {
-        var adminProp = {
-          "mandatory": "false",
-          "repeatable": "false",
-          "type": "resource",
-          "resourceTemplates": [],
-          "valueConstraint": {
-            "valueTemplateRefs": ["lc:RT:bf2:AdminMetadata:BFDB"],
-            "useValuesFrom": [],
-            "valueDataType": {},
-            "defaults": []
-          },
-          "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
-          "propertyLabel": "Administrative Metadata"
-        };
-        rt.propertyTemplates.push(adminProp);
-      }      
-
-      rt.propertyTemplates.forEach(function (property) {
-        // Each property needs to be uniquely identified, separate from
-        // the resourceTemplate.
-        var pguid = shortUUID(guid());
-        property.guid = pguid;
-        property.display = 'true';
-        addPropsUsed[property.propertyURI] = 1;
-        var $formgroup = $('<div>', {
-          class: 'form-group row template-property'
-        });
-   
-        // add the uri to the data of the element
-        $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
-
-
-        var $saves = $('<div class="form-group row" style="width:90%;"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-        var $label = $('<label for="' + property.guid + '" class="col-sm-2 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
-            
-        if (rt.embedType != 'modal') {
-          // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
-          if (property.mandatory !== true && property.mandatory !== "true"){
-            $label.append(bfeusertemplates.returnToggleHTML(property.propertyURI+'|'+property.propertyLabel));
-          }         
-        }
-        
-        if ((/^http/).test(property.remark)) {
-          $label.append('<a href="' + property.remark + '" target="_blank">' + property.propertyLabel + '</a>')
-        }else{
-          $label.append("<span>"+ property.propertyLabel + "</span>")        
-        }
-                
-        var $input;
-        var $button;
-        var $selectLang;
-        var $literalCol;
-        var $inputHolder;
-        var $input_page;
-        //default property type is literal
-        if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (_.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type))) {
-          var vpattern = '';
-          if(_.has(property, "valueConstraint")){
-              vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
-          }
-          
-          $literalCol = $('<div class="col-sm-10"></div>');
-          $inputHolder = $('<div class="input-group literal-input-group"></div>');
-          $input = $('<textarea rows="1" class="form-control literal-input" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '">');
-          $inputHolder.append($input);
-          $literalCol.append($inputHolder);  
-         
-          if (property.type == 'literal-lang') {
-            
-            var $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
-          
-            $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
-            
-            // add in all the languages
-            bfeliterallang.iso6391.forEach(function(l){
-                $selectLang.append($('<option value="'+ l.code + '">'+ l.code + ' (' + l.name + ')' +'</option>'));
-            });
-            
-            $inputHolder.append($selectLang);
-            var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
-            // add in all the languages
-            bfeliterallang.iso15924.forEach(function(s){
-                $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
-            });
-            
-            
-            $inputHolder.append($selectScript);
-            
-            // if they go to correct it remove 
-            $selectLang.on('click change',function(){$(this).removeClass('literal-select-error-start')});
-            $selectScript.on('click change',function(){$(this).removeClass('literal-select-error-start')});
-            
-        
-          }else{
-            // not building a literal lang input, need to float the + button over to the left
-            $buttonGroupHolder = $('<div class="input-group-btn pull-left" ></div>');
-          }
-          
-          $button = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
-          
-          $buttonGroupHolder.append($button);
-          
-          $inputHolder.append($buttonGroupHolder);
-          
-          $button.click(function () {
-            if (!document.getElementById(property.guid).checkValidity()){
-            //if ($input.find(':invalid').length == 1) {
-              alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
-              return false;
-            } else {
-            
-              // dont allow if the script or lang is blank
-              if (property.type == 'literal-lang') {
-                if ($('#' + property.guid).next().val() == 'lang'){
-                  $('#' + property.guid).next().addClass('literal-select-error-start');
-                  return false;
-                }                
-
-                // if ($('#' + property.guid).next().next().val() == ''){
-                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  // return false;
-                // }              
-              }
-                        
-              setLiteral(fobject.id, rt.useguid, property.guid);
-              if (rt.embedType === 'page'){
-                bfe.saveNoExit();
-              }
-            }
-          });
-          
-          
-
-          var enterHandler = function (event) {
-            if (event.keyCode == 13) {
-              event.target.value = event.target.value.trim();
-              if (!document.getElementById(property.guid).checkValidity()) {
-                    alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
-                    return false;
-              } else if (property.type == 'literal-lang') {
-                if ($('#' + property.guid).next().val() == 'lang'){
-                  $('#' + property.guid).next().addClass('literal-select-error-start');
-                  return false;
-                }                
-
-                // if ($('#' + property.guid).next().next().val() == ''){
-                  // $('#' + property.guid).next().next().addClass('literal-select-error-start');
-                  // return false;
-                // }              
-              }
-              // this prevents the select boxs from open the dropdown on enter press
-              event.preventDefault();
-            
-              setLiteral(fobject.id, rt.useguid, property.guid);
-              if (rt.embedType === 'page'){
-                bfe.saveNoExit();
-              }
-              // this trys to auto select the next possible input like a input or button
-              if ($('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").length) {
-                $('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").focus();
-              }else if ($('#' + property.guid).parent().parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
-                  $('#' + property.guid).parent().parent().parent().next().find("button").focus();
-              } else {
-                $('[id^=bfeditor-modalSave]').focus();
-              }
-            }else if (event.keyCode == 54 && event.ctrlKey && event.altKey) {
-              var text = this.value;
-              this.value = text + '\u00A9';
-            } else if (event.keyCode == 53 && event.ctrlKey && event.altKey) {
-              this.value = this.value + '\u2117';
-            } else if (event.metaKey && event.altKey) {
-
-              var cursorPos = $(this).prop('selectionStart');
-              var v = $(this).val();
-              var textBefore = v.substring(0,  cursorPos);
-              var textAfter  = v.substring(cursorPos, v.length);
-              
-              $(this).val(textBefore + bfeliterallang.characterShortcuts(event.key) + textAfter);
-              //this.value = this.value + bfeliterallang.characterShortcuts(event.key);
-            }else if ($('#' + property.guid)[0].nodeName.toLowerCase() == 'input' || $('#' + property.guid)[0].nodeName.toLowerCase() == 'textarea'){
-              // send off the text to try to guess the lang or script
-              var results = bfeliterallang.identifyLangScript($(this).val());
-              // if we get results for either set them in the select boxes follow this input
-              if (results.iso6391){
-                $('#' + property.guid).next().val(results.iso6391)
-              }
-              if (results.script){
-                $('#' + property.guid).next().next().val(results.script)
-              }
-              
-            }            
-          };
-
-          $input.keyup(enterHandler);
-          
-          // also handel enter keys press on the select
-          if ($selectLang){
-            $selectLang.keypress(enterHandler);
-            $selectScript.keypress(enterHandler);
-          
-          }
-
-          // this is where the added data shows up, so it will appear below the inputbox
-          $literalCol.append($saves);
-          
-          $formgroup.append($label);
-          $formgroup.append($literalCol);
-
-        } else if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (!_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type))) {
-          if (_.has(property, 'valueConstraint')) {
-            if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
-              var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
-              var $buttongrp = $('<div class="btn-group btn-group-md"></div>');
-              var vtRefs = property.valueConstraint.valueTemplateRefs;
-              for (var v = 0; v < vtRefs.length; v++) {
-                var vtrs = vtRefs[v];
-                var valueTemplates = _.where(resourceTemplates, {
-                  'id': vtrs
-                });
-                if (valueTemplates[0] !== undefined) {
-                  var vt = valueTemplates[0];
-                  // console.log(vt);
-                  var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
-                  var pid = property.guid;
-                  var newResourceURI = '_:bnode' + shortUUID(guid());
-                  $b.click({
-                    fobjectid: fobject.id,
-                    newResourceURI: newResourceURI,
-                    propertyguid: pid,
-                    template: vt
-                  }, function (event) {
-                    var theNewResourceURI = '_:bnode' + shortUUID(guid());
-                    openModal(event.data.fobjectid, event.data.template, theNewResourceURI, event.data.propertyguid, []);
-                    bfe.borderColor($(".modal-content:last")[0], event.data.template.id);
-                  });
-                  $buttongrp.append($b);
-                }
-              }
-              $buttondiv.append($buttongrp);
-
-              $formgroup.append($label);
-              $buttondiv.append($saves);
-              $formgroup.append($buttondiv);
-              // $formgroup.append($saves);
-            } else if (_.has(property.valueConstraint, 'useValuesFrom')) {
-              // Let's supress the lookup unless it is in a modal for now.
-              if (rt.embedType != 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
-                forEachFirst = false;
-                return;
-              }
-
-              var $inputdiv = $('<div class="col-sm-8"></div>');
-              $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" tabindex="' + tabIndices++ + '">');
-              $input_page = $('<input type="hidden" id="' + property.guid + '_page" class="typeaheadpage" value="1">');
-
-              $inputdiv.append($input);
-              $inputdiv.append($input_page);
-
-              $input.on('focus', function () {
-                if ($(this).val() === '') // you can also check for minLength
-                { $(this).data().ttTypeahead.input.trigger('queryChanged', ''); }
-              });
-
-              $formgroup.append($label);
-              $inputdiv.append($saves);
-              $formgroup.append($inputdiv);
-
-              if (rt.embedType == 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
-                // This is the first propertty *and* it is a look up.
-                // Let's treat it special-like.
-                var $saveLookup = $('<div class="modal-savechanges"><button type="button" class="btn btn-primary" style="display:none" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                var $spacer = $('<div class="modal-spacer"><span>OR</span></div>');
-                //$saveLookup.append($('<button id="bfeditor-modalLoadLookup" type="button" class="btn btn-primary" id="bfeditor-modalLoadLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Load</button>'));
-                $formgroup.append($saveLookup);
-                $formgroup.append($spacer);
-              }
-            } else {
-              // Type is resource, so should be a URI, but there is
-              // no "value template reference" or "use values from vocabularies"
-              // reference for it so just create label field
-              $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
-
-              $button = $('<div class="col-sm-1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button></div>');
-              $button.click(function () {
-                setResourceFromLabel(fobject.id, rt.useguid, property.guid);
-              });
-
-              $formgroup.append($label);
-              $input.append($saves);
-              $formgroup.append($input);
-              $formgroup.append($button);
-              // $formgroup.append($saves);
-            }
-          } else {
-            // Type is resource, so should be a URI, but there is
-            // no constraint for it so just create a label field.
-            $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
-
-            $button = $('<div class="col-sm-1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button></div>');
-            $button.click(function () {
-              setResourceFromLabel(fobject.id, rt.useguid, property.guid);
-            });
-
-            $formgroup.append($label);
-            $input.append($saves);
-            $formgroup.append($input);
-            $formgroup.append($button);
-            // $formgroup.append($saves);
-          }
-        }
-
-        $resourcediv.append($formgroup);
-        forEachFirst = false;
-      });
-
-      // starting the "add property" stuff here
-      if (rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
-        var substringMatcher = function (strs) {
-          return function findMatches(q, cb) {
-            strs = _.sortBy(strs, 'display');
-            var matches, substrRegex;
-            matches = [];
-            substrRegex = new RegExp(q, 'i');
-            $.each(strs, function (index, str) {
-              if (substrRegex.test(str.display) && !addPropsUsed[str.uri]) {
-                matches.push({
-                  'value': str.display,
-                  'label': str.label,
-                  'uri': str.uri
-                });
-              }
-            });
-            cb(matches);
-          };
-        };
-        var $addpropdata = $('<div>', { class: 'col-sm-8' });
-        var $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control add-property-input', placeholder: 'Type for suggestions' });
-        $addpropinput.click(function () {
-          if (addFields.length == 0) {
-            $addpropinput.prop('disabled', true);
-            $addpropinput.attr('placeholder', 'Loading field choices...');
-            $.ajax({
-              url: '/api/listconfigs?where=index.resourceType:ontology',
-              contentType: 'application/json',
-              dataType: "json",
-              success: function (data) {
-                if (data.length == 0) {
-                  $addpropinput.attr('placeholder', 'No ontologies defined...');
-                }
-                data.forEach(function (ont) {
-                  ont.json.url = ont.json.url.replace(/\.rdf$/, '.json');
-                  $.ajax({
-                    dataType: 'json',
-                    url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
-                    success: function (ontdata) {
-                      ontdata.forEach(function (o) {
-                        var prop = o['@type'][0].match(/property$/i);
-                        if (prop && o['http://www.w3.org/2000/01/rdf-schema#label'] !== undefined && o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']) {
-                          var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'];
-                          label = label.replace(/\s+/g, ' ');
-                          var uri = o['@id'];
-                          addFields.push({
-                            'label': label,
-                            'uri': uri,
-                            'display': label + ' (' + ont.json.label + ')'
-                          });
+                                    if (fobject.resourceTemplates[urt].embedType === "page") {
+                                        // find uniq s, and look for one that has no o
+                                        rtTypes.forEach(function (rtType){
+                                            if(!_.some(bfestore.store, {o: rtType.s})){
+                                                fobject.resourceTemplates[urt].defaulturi = rtType.s;
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    var rt = fobject.resourceTemplates[urt];
+                                    // add type
+                                    var triple = {};
+                                    triple.guid = rt.useguid;
+                                    triple.rtID = rt.id;
+                                    triple.s = worklist[0].s;
+                                    triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                                    triple.o = rt.resourceURI;
+                                    triple.otype = 'uri';
+                                    // fobject.store.push(triple);
+                                    bfestore.addTriple(triple);
+                                    fobject.resourceTemplates[urt].defaulturi = triple.s;
+                                }
+                            } else {
+                                fobject.resourceTemplates[urt].defaulturi = baseuri + mintResource(loadTemplates[urt].templateGUID);
+                            }
                         }
-                      });
-                    },
-                    error: function (err) {
-                      bfelog.addMsg(new Error(), 'INFO', err);
-                    },
-                    complete: function () {
-                      $addpropinput.prop('disabled', false);
-                      $addpropinput.attr('placeholder', 'Type for suggestions');
-                      $addpropinput.focus();
-                    }
-                  });
-                });
-              },
-              error: function (err) {
-                bfelog.addMsg(new Error(), 'INFO', err);
-              },
-            });
-          }
-        });
-
-        $addpropinput.appendTo($addpropdata).typeahead(
-          {
-            highlight: true,
-          },
-          {
-            name: 'resources',
-            displayKey: 'value',
-            source: substringMatcher(addFields),
-          }
-        ).on('typeahead:selected', function (e, suggestion) {
-          var newproperty = {
-            'mandatory': 'false',
-            'repeatable': 'true',
-            'type': 'literal',
-            'resourceTemplates': [],
-            'valueConstraint': {
-              'valueTemplateRefs': [],
-              'useValuesFrom': [],
-              'valueDataType': {}
-            },
-            'propertyLabel': suggestion.label,
-            'propertyURI': suggestion.uri,
-            'display': 'true',
-            'guid': guid()
-          };
-          rt.propertyTemplates.push(newproperty);
-          addedProperties.push(newproperty);
-          cbLoadTemplates(rt.propertyTemplates);
-        });
-        var $addproplabel = $('<label class="col-sm-2 control-label">Add Property</label>');
-        var $addprop = $('<div>', { class: 'form-group row' });
-        $addprop.append($addproplabel);
-        $addprop.append($addpropdata);
-        $resourcediv.append($addprop);
-      }
-      form.append($resourcediv);
-    });
-
-    // OK now we need to populate the form with data, if appropriate.
-    fobject.resourceTemplates.forEach(function (rt) {
-      // check for match...maybe do this earlier
-
-      if (_.where(bfestore.store, {
-        'o': rt.resourceURI
-      }).length > 0) {
-        //		if(_.where(bfestore.store,{"o":rt.resourceURI}).length > 1) {
-        if (bfestore.state !== 'edit') {
-          _.where(bfestore.store, {
-            'o': rt.resourceURI
-          }).forEach(function (triple) {
-            if (_.where(bfestore.store, {
-              'o': triple.s
-            }).length === 0) {
-              bfelog.addMsg(new Error(), 'INFO', triple.s);
-              rt.defaulturi = triple.s;
+                    );
+                } else {
+                    // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + loadTemplates[urt].templateGUID;
+                }
+                fobject.resourceTemplateIDs[urt] = rt[0].id;
+            } else {
+                bfelog.addMsg(new Error(), 'WARN', 'Unable to locate resourceTemplate. Verify the resourceTemplate ID is correct.');
             }
-          });
+        }
+
+        // Let's create the form
+        var form = $('<form>', {
+            id: 'bfeditor-form-' + fobject.id,
+            class: 'form-horizontal',
+            role: 'form'
+        });
+        form.submit(function(e){
+            e.preventDefault();
+        });
+    
+        var forEachFirst = true;
+        if (pt) {
+            fobject.resourceTemplates[0].propertyTemplates = pt;
+        }
+
+        fobject.resourceTemplates.forEach(function (rt) {
+            bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
+            var $resourcediv = $('<div>', {
+                id: rt.useguid,
+                'data-uri': rt.defaulturi
+            }); // is data-uri used?
+
+            // Show name of Profile being used.
+            var $resourcedivheading = $('<div>');
+            var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left" style="margin-right:5px">');
+            $resourcedivheadingh4.text($('#profileLabel').text());
+
+            // Create little 'i' icon with resource label and URI.
+            if (rt.defaulturi.match(/^http/)) {
+                var rid = rt.defaulturi;
+                var rLabel = _.find(bfestore.store, {"s": rid, "p": "http://www.w3.org/2000/01/rdf-schema#label"});
+                var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+                $resourceInfo.attr('data-content', rid);
+                $resourceInfo.attr('data-toggle', 'popover');
+                $resourceInfo.attr('title', !_.isEmpty(rLabel)? rLabel.o : 'Resource ID');
+                $resourceInfo.attr('id', 'resource-id-popover');
+                $resourceInfo.popover({ trigger: "click hover" });
+                $resourcedivheadingh4.append($resourceInfo);
+            }
+            if (rt.embedType != 'modal') {
+                $resourcedivheading.append($resourcedivheadingh4);
+            }
+
+            
+            // Clone the Work or Instance, because hoary practice.
+            if (config.enableCloning) {
+                // create an empty clone button
+                var $clonebutton = $('<button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#clone-input"></button>');
+
+                // populate the clone button for Instance or Work descriptions
+                if (rt.id.match(/:Instance$/i)) {
+                    $clonebutton.attr('id', 'clone-instance');
+                    $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
+                    $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
+                } else if (rt.id.match(/:Work$/i)) {
+                    $clonebutton.attr('id', 'clone-work');
+                    $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
+                    $clonebutton.data({ 'match': 'works', 'label': 'Work' });
+                }
+    
+                var $templateCloneButtonGroup;
+          
+                if ($('#cloneButtonGroup').length > 0){
+                    $templateCloneButtonGroup = $('#cloneButtonGroup');
+                    if (rt.id.match(/:Instance$/i)) {
+                        $clonebutton = $('#clone-instance')
+                    } else if (rt.id.match(/:Work$/i)) {
+                        $clonebutton = $('#clone-work')
+                    }
+                } else {
+                    $templateCloneButtonGroup = $('<div>', {
+                        id: 'cloneButtonGroup',
+                        class: 'pull-right'
+                    });
+                    $templateCloneButtonGroup.append($clonebutton);
+                }
+        
+                // append to the resource heading if there is a clone button id and is not a modal window      
+                if ($clonebutton.attr('id') && rt.embedType != 'modal') {
+                    var newid = mintResource(guid());
+    
+                    // ask user to input custom id
+                    var $cloneinput = $('<div id="clone-input" class="modal" tabindex="-1" role="dialog">\
+                          <div class="modal-dialog" role="document">\
+                            <div class="modal-content">\
+                              <div class="modal-header">\
+                                <h4 class="modal-title">Clone ' + $clonebutton.data('label') + '</h4>\
+                                <!-- <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button> -->\
+                              </div>\
+                              <div class="modal-body">\
+                                  <div class="input-group col-xs-12">\
+                                    <span class="input-group-addon">New Resource ID:</span>\
+                                    <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
+                                    <span class="input-group-btn">\
+                                      <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                                    </span>\
+                                  </div>\
+                              </div>\
+                              <div class="modal-footer">\
+                                <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                              </div>\
+                            </div>\
+                          </div>\
+                        </div>');
+                    $resourcediv.append($cloneinput);
+                }
+            }
+        
+            // User templates.
+            // add in the template select next to the clone button, pass the profile name, looks something like 'profile:bf2:Monograph:Work'
+            if (editorconfig.enableUserTemplates) {
+                if (!editorconfig.enableCloning) {
+                    $templateCloneButtonGroup = $('<div>', { id: 'cloneButtonGroup', class: 'pull-right' });
+                }
+                var activeProfile = loadTemplates.map(function(t){ return t.resourceTemplateID}).join('-');
+                $('.template-controls').remove();
+                $templateCloneButtonGroup.append(bfeusertemplates.returnSelectHTML(activeProfile, editorconfig));
+            }
+
+            if ($templateCloneButtonGroup !== undefined) {
+                $('#bfeditor-menudiv').append($templateCloneButtonGroup);
+            }
+      
+            $resourcediv.append($resourcedivheading);
+
+            $resourcediv.find('#clear-id').click(function () {
+                $('#resource-id').attr('value', '');
+                $('#resource-id').focus();
+            });
+
+            // the cloning starts here if clone button is clicked
+            $resourcediv.find('#clone-save').click(function () {
+                var rid = $('#resource-id').attr('value');
+                $('#clone-input').modal('hide');
+                var $msgnode = $('<div>', { id: "bfeditor-messagediv" });
+                var olduri = rt.defaulturi;
+
+                bfestore.name = guid();  // verso save name
+                // var rid = mintResource(guid()); // new resource id
+                var ctype = $clonebutton.data('label'); // get label for alert message
+                var re = RegExp('(/' + $clonebutton.data('match') + '/)[^/]+?(#.+$|$)'); // match on part of uri ie. /works/ or /instances/
+
+                // change all subjects in the triple store that match /instances/ or /works/ and assign new resource id
+                bfestore.store.forEach(function (trip) {
+                    trip.s = trip.s.replace(re, "$1" + rid + "$2");
+                    trip.o = trip.o.replace(re, "$1" + rid + "$2");
+                });
+
+                //remove lccn
+                var lccns = _.where(bfestore.store, { o: 'http://id.loc.gov/ontologies/bibframe/Lccn' });
+                if (lccns !== undefined) {
+                    lccns.forEach(function (lccn) {
+                        bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, { s: lccn.s }));
+                        bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, { o: lccn.s }));
+                    });
+                }
+
+                _.each(_.where(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' }), function (am) {
+                    //delete old procInfo
+                    bfestore.addProcInfo(am.o, 'clone ' + $clonebutton.data().label.toLowerCase());
+                });
+
+                // reload the newly created template
+                cbLoadTemplates();
+
+                // start checking for errors (basically check for remnants of old resource IDs)
+                var errs = 0;
+                bfestore.store.forEach(function (trip) {
+                    if (trip.s == olduri) {
+                        errs++;
+                    }
+                });
+
+                //disable clone button
+                $('#clone-work, #clone-instance').attr("disabled", "disabled");
+
+                if (errs > 0) {
+                    $msgnode.append('<div class="alert alert-danger">Old ' + ctype + ' URIs found in cloned description. Clone failed!<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+                } else {
+                    $msgnode.append('<div class="alert alert-info">' + ctype + ' cloned as ' + rid + '<button type="button" class="close" data-dismiss="alert"><span>&times; </span></button></div>');
+                }
+                $msgnode.insertBefore('.nav-tabs');
+            });
+
+            var $formgroup = $('<div>', {
+                class: 'form-group row'
+            });
+            $resourcediv.append($formgroup);
+            
+            /*
+            // Is any of the below used????
+            var $saves = $('<div class="form-group row"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
+            // var $label = $('<label for="' + rt.useguid + '" class="col-sm-3 control-label" title="'+ rt.defaulturi + '">Set label?</label>');
+            var $resourceinput = $('<div class="col-sm-6"><input type="text" class="form-control" id="' + rt.useguid + '" tabindex="' + tabIndices++ + '"></div>');
+            var $button = $('<div class="btn-group btn-group-md span1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
+            var $linkbutton = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">&#x1f517;</button></div>');
+            var $linkmodal = $('<div class="modal fade" id="linkmodal' + rt.useguid + '" role="dialog"><div class="modal-dialog"><div class="modal-content"> \
+                <div class="modal-header"><button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Link</h4></div> \
+                <div class="modal-body">' + rt.defaulturi + '</div></div></div></div>'
+            );
+
+            $button.click(function () {
+                setRtLabel(fobject.id, rt.useguid, rt.useguid + ' input', rt);
+            });
+
+            $linkbutton.click(function () {
+                $('#bfeditor').append($linkmodal);
+                $('#linkmodal' + rt.useguid).modal();
+                $('#linkmodal' + rt.useguid).on('show.bs.modal', function () {
+                    $(this).css('z-index', 10000);
+                });
+            });
+
+            var enterHandler = function (event) {
+                if (event.keyCode == 13) {
+                    setRtLabel(fobject.id, rt.useguid, property.guid);
+                    if ($('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").length) {
+                        $('#' + property.guid).parent().parent().next().find("input:not('.tt-hint')").focus();
+                    } else if ($('#' + property.guid).parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
+                        $('#' + property.guid).parent().parent().next().find("button").focus();
+                    } else {
+                        $('[id^=bfeditor-modalSave]').focus();
+                    }
+                }
+            };
+
+            $resourceinput.keyup(enterHandler);
+            $resourceinput.append($saves);
+            */
+            
+            var addPropsUsed = {};
+            if (addedProperties !== undefined && rt.embedType == 'page' && !pt) {
+                addedProperties.forEach(function (adata) {
+                    rt.propertyTemplates.push(adata);
+                });
+            }
+
+            // adding Admin Metadata to Work, instance, Item
+            if (
+                RegExp(/(:Work|:Instance|:Item)$/).test(rt.id) && 
+                !_.some(rt.propertyTemplates, { "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata" })
+            ) {
+                var adminProp = {
+                "mandatory": "false",
+                "repeatable": "false",
+                "type": "resource",
+                "resourceTemplates": [],
+                "valueConstraint": {
+                    "valueTemplateRefs": ["lc:RT:bf2:AdminMetadata:BFDB"],
+                    "useValuesFrom": [],
+                    "valueDataType": {},
+                    "defaults": []
+                },
+                "propertyURI": "http://id.loc.gov/ontologies/bibframe/adminMetadata",
+                "propertyLabel": "Administrative Metadata"
+                };
+                rt.propertyTemplates.push(adminProp);
+            }
+
+            rt.propertyTemplates.forEach(function (property) {
+                // Each property needs to be uniquely identified, separate from
+                // the resourceTemplate.
+                var pguid = shortUUID(guid());
+                property.guid = pguid;
+                property.display = 'true';
+                addPropsUsed[property.propertyURI] = 1;
+                var $formgroup = $('<div>', {
+                    class: 'form-group row template-property'
+                });
+   
+                // add the uri to the data of the element
+                $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
+
+                var $saves = $('<div class="form-group row" style="width:90%;"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
+                var $label = $('<label for="' + property.guid + '" class="col-sm-2 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
+            
+                if (rt.embedType != 'modal') {
+                    // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
+                    if (property.mandatory !== true && property.mandatory !== "true"){
+                        $label.append(bfeusertemplates.returnToggleHTML(property.propertyURI+'|'+property.propertyLabel));
+                    }         
+                }
+        
+                if ((/^http/).test(property.remark)) {
+                    $label.append('<a href="' + property.remark + '" target="_blank">' + property.propertyLabel + '</a>')
+                } else {
+                    $label.append("<span>"+ property.propertyLabel + "</span>")        
+                }
+                
+                var $input;
+                var $button;
+                var $selectLang;
+                var $literalCol;
+                var $inputHolder;
+                var $input_page;
+            
+                //default property type is literal
+                //if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (_.isEmpty(property.valueConstraint.useValuesFrom)) || _.isEmpty(property.type))) {
+                if (property.type == "literal" || property.type == "literal-lang") {
+                    var vpattern = '';
+                    if(_.has(property, "valueConstraint")) {
+                        vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
+                    }
+          
+                    $literalCol = $('<div class="col-sm-10"></div>');
+                    $inputHolder = $('<div class="input-group literal-input-group"></div>');
+                    $input = $('<textarea rows="1" class="form-control literal-input" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '">');
+                    $inputHolder.append($input);
+                    $literalCol.append($inputHolder);  
+             
+                    if (property.type == 'literal-lang') {
+                        var $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
+                        $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
+
+                        // add in all the languages
+                        bfeliterallang.iso6391.forEach(function(l){
+                            $selectLang.append($('<option value="'+ l.code + '">'+ l.code + ' (' + l.name + ')' +'</option>'));
+                        });
+            
+                        $inputHolder.append($selectLang);
+                        var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
+                        // add in all the languages
+                        bfeliterallang.iso15924.forEach(function(s){
+                            $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
+                        });
+    
+                        $inputHolder.append($selectScript);
+            
+                        // if they go to correct it remove 
+                        $selectLang.on('click change',function(){$(this).removeClass('literal-select-error-start')});
+                        $selectScript.on('click change',function(){$(this).removeClass('literal-select-error-start')});
+
+                    } else {
+                        // not building a literal lang input, need to float the + button over to the left
+                        $buttonGroupHolder = $('<div class="input-group-btn pull-left" ></div>');
+                    }
+          
+                    $plusButton = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
+                    $buttonGroupHolder.append($plusButton);
+                    $inputHolder.append($buttonGroupHolder);
+          
+                    $plusButton.click(function () {
+                        if (!document.getElementById(property.guid).checkValidity()) {
+                            alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+                            return false;
+                        } else {
+            
+                            // dont allow if the script or lang is blank
+                            if (property.type == 'literal-lang') {
+                                if ($('#' + property.guid).next().val() == 'lang') {
+                                    $('#' + property.guid).next().addClass('literal-select-error-start');
+                                    return false;
+                                }                
+                            }
+                            setLiteral(fobject.id, rt.useguid, property.guid);
+                            if (rt.embedType === 'page'){
+                                bfe.saveNoExit();
+                            }
+                        }
+                    });
+          
+                    // These actions are associated with keyup on the input field itself.
+                    var enterHandler = function (event) {
+                        if (event.keyCode == 13) {
+                            // Enter key
+                            event.target.value = event.target.value.trim();
+                            if (!document.getElementById(property.guid).checkValidity()) {
+                                alert('Invalid Value!\nThe value should match: ' + property.valueConstraint.validatePattern);
+                                return false;
+                            } else if (property.type == 'literal-lang') {
+                                if ($('#' + property.guid).next().val() == 'lang') {
+                                    $('#' + property.guid).next().addClass('literal-select-error-start');
+                                    return false;
+                                }
+                            }
+                            // this prevents the select boxs from open the dropdown on enter press
+                            event.preventDefault();
+                    
+                            setLiteral(fobject.id, rt.useguid, property.guid);
+                            if (rt.embedType === 'page'){
+                                bfe.saveNoExit();
+                            }
+                            // this trys to auto select the next possible input like an input or button
+                            if ($('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").length) {
+                                $('#' + property.guid).parent().parent().parent().next().find("input:not('.tt-hint')").focus();
+                            } else if ($('#' + property.guid).parent().parent().parent().next().find("button:not([class^='bfeditor-modalCancel'])").length) {
+                                $('#' + property.guid).parent().parent().parent().next().find("button").focus();
+                            } else {
+                                $('[id^=bfeditor-modalSave]').focus();
+                            }
+                        
+                        } else if (event.keyCode == 54 && event.ctrlKey && event.altKey) {
+                            // Copyright symbol
+                            var text = this.value;
+                            this.value = text + '\u00A9';
+                        
+                        } else if (event.keyCode == 53 && event.ctrlKey && event.altKey) {
+                            // Published symbol
+                            this.value = this.value + '\u2117';
+                    
+                        } else if (event.metaKey && event.altKey) {
+                            var cursorPos = $(this).prop('selectionStart');
+                            var v = $(this).val();
+                            var textBefore = v.substring(0,  cursorPos);
+                            var textAfter  = v.substring(cursorPos, v.length);
+                  
+                            $(this).val(textBefore + bfeliterallang.characterShortcuts(event.key) + textAfter);
+                            //this.value = this.value + bfeliterallang.characterShortcuts(event.key);
+                        } else if ($('#' + property.guid)[0].nodeName.toLowerCase() == 'input' || $('#' + property.guid)[0].nodeName.toLowerCase() == 'textarea'){
+                            // send off the text to try to guess the lang or script
+                            var results = bfeliterallang.identifyLangScript($(this).val());
+                            // if we get results for either set them in the select boxes follow this input
+                            if (results.iso6391){
+                                $('#' + property.guid).next().val(results.iso6391)
+                            }
+                            if (results.script){
+                                $('#' + property.guid).next().next().val(results.script)
+                            }
+                        }            
+                    };
+                    $input.keyup(enterHandler);
+              
+                    // also handle enter keys press on the select
+                    if ($selectLang){
+                        $selectLang.keypress(enterHandler);
+                        $selectScript.keypress(enterHandler);
+                    }
+    
+                    // this is where the added data shows up, so it will appear below the inputbox
+                    $literalCol.append($saves);
+            
+                    $formgroup.append($label);
+                    $formgroup.append($literalCol);
+    
+                }
+        
+                //else if ((property.type.startsWith('literal') && property.valueConstraint !== undefined && (!_.isEmpty(property.valueConstraint.useValuesFrom)) || !_.isEmpty(property.type))) {
+                if (
+                    property.type == "resource" || 
+                    property.type == "lookup" || 
+                    property.type == "target" || 
+                    property.type == "list" 
+                    ) {
+              
+                    if (_.has(property, 'valueConstraint')) {
+                
+                        if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
+                            // This property references other Resource Templates.
+                            var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
+                            var $buttongrp = $('<div class="btn-group btn-group-md"></div>');
+                            var vtRefs = property.valueConstraint.valueTemplateRefs;
+                            for (var v = 0; v < vtRefs.length; v++) {
+                                var vtrs = vtRefs[v];
+                                var valueTemplates = _.where(resourceTemplates, {
+                                    'id': vtrs
+                                });
+                                if (valueTemplates[0] !== undefined) {
+                                    var vt = valueTemplates[0];
+                                    // console.log(vt);
+                                    var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
+                                    var pid = property.guid;
+                                    var newResourceURI = '_:bnode' + shortUUID(guid());
+                                    $b.click({
+                                        fobjectid: fobject.id,
+                                        newResourceURI: newResourceURI,
+                                        propertyguid: pid,
+                                        template: vt
+                                        }, function (event) {
+                                            var theNewResourceURI = '_:bnode' + shortUUID(guid());
+                                            openModal(event.data.fobjectid, event.data.template, theNewResourceURI, event.data.propertyguid, []);
+                                            bfe.borderColor($(".modal-content:last")[0], event.data.template.id);
+                                        }
+                                    );
+                                    $buttongrp.append($b);
+                                }
+                            }
+                            $buttondiv.append($buttongrp);
+
+                            $formgroup.append($label);
+                            $buttondiv.append($saves);
+                            $formgroup.append($buttondiv);
+                            // $formgroup.append($saves);
+                
+                        } else if (_.has(property.valueConstraint, 'useValuesFrom')) {
+                            // This property's object should come from a controlled list.
+                        
+                            // Let's supress the lookup unless it is in a modal for now.
+                            if (rt.embedType != 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
+                                forEachFirst = false;
+                                return;
+                            }
+
+                            var $inputdiv = $('<div class="col-sm-8"></div>');
+                            $input = $('<input type="text" class="typeahead form-control" data-propertyguid="' + property.guid + '" id="' + property.guid + '" tabindex="' + tabIndices++ + '">');
+                            // Does this have a purpose.  Chasing the threads it seems unlikely.
+                            $input_page = $('<input type="hidden" id="' + property.guid + '_page" class="typeaheadpage" value="1">');
+
+                            $inputdiv.append($input);
+                            $inputdiv.append($input_page);
+
+                            // What is happenning here and why?  What is this meant to do?
+                            $input.on('focus', function () {
+                                if ($(this).val() === '') // you can also check for minLength
+                                { $(this).data().ttTypeahead.input.trigger('queryChanged', ''); }
+                            });
+
+                            $formgroup.append($label);
+                            $inputdiv.append($saves);
+                            $formgroup.append($inputdiv);
+
+                            if (rt.embedType == 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
+                                // This is the first propertty *and* it is a look up.
+                                // Let's treat it special-like.
+                                var $saveLookup = $('<div class="modal-savechanges"><button type="button" class="btn btn-primary" style="display:none" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
+                                var $spacer = $('<div class="modal-spacer"><span>OR</span></div>');
+                                $formgroup.append($saveLookup);
+                                $formgroup.append($spacer);
+                            }
+            
+                        } else {
+                            // Type is resource, so should be a URI, but there is
+                            // no "value template reference" or "use values from vocabularies"
+                            // reference for it so just create label field
+                            $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+
+                            $button = $('<div class="col-sm-1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button></div>');
+                            $button.click(function () {
+                                setResourceFromLabel(fobject.id, rt.useguid, property.guid);
+                            });
+    
+                            $formgroup.append($label);
+                            $input.append($saves);
+                            $formgroup.append($input);
+                            $formgroup.append($button);
+                            // $formgroup.append($saves);
+                        }
+                
+                    } else {
+                        // Type is resource, so should be a URI, but there is
+                        // no constraint for it so just create a label field.
+                        $input = $('<div class="col-sm-8"><input class="form-control" id="' + property.guid + '" placeholder="' + property.propertyLabel + '" tabindex="' + tabIndices++ + '"></div>');
+    
+                        $button = $('<div class="col-sm-1"><button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">Set</button></div>');
+                        $button.click(function () {
+                            setResourceFromLabel(fobject.id, rt.useguid, property.guid);
+                        });
+
+                        $formgroup.append($label);
+                        $input.append($saves);
+                        $formgroup.append($input);
+                        $formgroup.append($button);
+                        // $formgroup.append($saves);
+                    }
+                }
+
+                $resourcediv.append($formgroup);
+                forEachFirst = false;
+            });
+
+            // starting the "add property" stuff here
+            if (rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
+                var substringMatcher = function (strs) {
+                    return function findMatches(q, cb) {
+                        strs = _.sortBy(strs, 'display');
+                        var matches, substrRegex;
+                        matches = [];
+                        substrRegex = new RegExp(q, 'i');
+                        $.each(strs, function (index, str) {
+                            if (substrRegex.test(str.display) && !addPropsUsed[str.uri]) {
+                                matches.push({
+                                    'value': str.display,
+                                    'label': str.label,
+                                    'uri': str.uri
+                                });
+                            }
+                        });
+                        cb(matches);
+                    };
+                };
+                var $addpropdata = $('<div>', { class: 'col-sm-8' });
+                var $addpropinput = $('<input>', { id: 'addproperty', type: 'text', class: 'form-control add-property-input', placeholder: 'Type for suggestions' });
+                $addpropinput.click(function () {
+                    if (addFields.length == 0) {
+                        $addpropinput.prop('disabled', true);
+                        $addpropinput.attr('placeholder', 'Loading field choices...');
+                        $.ajax({
+                            url: '/api/listconfigs?where=index.resourceType:ontology',
+                            contentType: 'application/json',
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.length == 0) {
+                                    $addpropinput.attr('placeholder', 'No ontologies defined...');
+                                }
+                                data.forEach(function (ont) {
+                                    ont.json.url = ont.json.url.replace(/\.rdf$/, '.json');
+                                    $.ajax({
+                                        dataType: 'json',
+                                        url: config.url + '/profile-edit/server/whichrt?uri=' + ont.json.url,
+                                        success: function (ontdata) {
+                                            ontdata.forEach(function (o) {
+                                                var prop = o['@type'][0].match(/property$/i);
+                                                if (
+                                                    prop && 
+                                                    o['http://www.w3.org/2000/01/rdf-schema#label'] !== undefined && 
+                                                    o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value']
+                                                ) {
+                                                    var label = o['http://www.w3.org/2000/01/rdf-schema#label'][0]['@value'];
+                                                    label = label.replace(/\s+/g, ' ');
+                                                    var uri = o['@id'];
+                                                    addFields.push({
+                                                        'label': label,
+                                                        'uri': uri,
+                                                        'display': label + ' (' + ont.json.label + ')'
+                                                    });
+                                                }
+                                            });
+                                        },
+                                        error: function (err) {
+                                            bfelog.addMsg(new Error(), 'INFO', err);
+                                        },
+                                        complete: function () {
+                                            $addpropinput.prop('disabled', false);
+                                            $addpropinput.attr('placeholder', 'Type for suggestions');
+                                            $addpropinput.focus();
+                                        }
+                                    });
+                                });
+                            },
+                            error: function (err) {
+                                bfelog.addMsg(new Error(), 'INFO', err);
+                            },
+                        });
+                    }
+                });
+
+                $addpropinput.appendTo($addpropdata).typeahead(
+                    {
+                        highlight: true,
+                    },
+                    {
+                        name: 'resources',
+                        displayKey: 'value',
+                        source: substringMatcher(addFields),
+                    }
+                ).on('typeahead:selected', function (e, suggestion) {
+                    var newproperty = {
+                        'mandatory': 'false',
+                        'repeatable': 'true',
+                        'type': 'literal',
+                        'resourceTemplates': [],
+                        'valueConstraint': {
+                            'valueTemplateRefs': [],
+                            'useValuesFrom': [],
+                            'valueDataType': {}
+                        },
+                        'propertyLabel': suggestion.label,
+                        'propertyURI': suggestion.uri,
+                        'display': 'true',
+                        'guid': guid()
+                    };
+                    rt.propertyTemplates.push(newproperty);
+                    addedProperties.push(newproperty);
+                    cbLoadTemplates(rt.propertyTemplates);
+                });
+                var $addproplabel = $('<label class="col-sm-2 control-label">Add Property</label>');
+                var $addprop = $('<div>', { class: 'form-group row' });
+                $addprop.append($addproplabel);
+                $addprop.append($addpropdata);
+                $resourcediv.append($addprop);
+            }
+            form.append($resourcediv);
+        });
+
+
+        // OK now we need to populate the form with data, if appropriate.
+        fobject.resourceTemplates.forEach(function (rt) {
+            // check for match...maybe do this earlier
+
+            if (_.where(bfestore.store, {'o': rt.resourceURI}).length > 0) {
+                if (bfestore.state !== 'edit') {
+                    _.where(bfestore.store, {'o': rt.resourceURI}).forEach(
+                        function (triple) {
+                            if (_.where(bfestore.store, {'o': triple.s}).length === 0) {
+                                bfelog.addMsg(new Error(), 'INFO', triple.s);
+                                rt.defaulturi = triple.s;
+                            }
+                        });
+                    ///   LEFT OFF HERE /////
         } else {
           _.where(bfestore.store, {
             's': rt.defaulturi,
