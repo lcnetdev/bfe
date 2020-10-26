@@ -3394,7 +3394,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             if (!_.has(property.valueConstraint, "editable")) {
                 property.valueConstraint.editable = true;
             }
-            if (_.isEmpty(displaydata)){
+            if (_.isEmpty(displaydata)) {
                 whichLabel(pd.o, null, function (label) {
                     if (_.isEmpty(displaydata)) displaydata = label;
         
@@ -3464,7 +3464,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var parentLabel = _.find(bfestore.store, {'s': parent.s, 'p':'http://www.w3.org/2000/01/rdf-schema#label'});
 
         
-        if (labeldata.length === 1) {
+        if (labeldata.length === 0 & pd.otype === 'uri') {
+            // We didn't find a resource for this in the store, so just display the URI
+            displaydata = pd.o;
+        } else if (labeldata.length === 1) {
             var tpreflabel;
             var t = labeldata[0];
             if (t.otype === 'uri' || pd.otype == 'list') {
@@ -5422,148 +5425,145 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     return 'e' + decimaltranslator.fromUUID(uuid);
   }
 
-  function whichrt(rt, baseURI, callback) {
-    // for resource templates, determine if they are works, instances, or other
-    var uri;
-    if (rt.resourceURI.startsWith('http://www.loc.gov/mads/rdf/v1#')) {
-      uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', config.url + '/bfe/static/v1.json#');
-    } else if (rt.resourceURI.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
-      uri = rt.resourceURI.replace('http://id.loc.gov/resources', config.resourceURI) + '.json';
-    } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
-      return;
-    } else if (rt.resourceURI == "http://id.loc.gov/ontologies/bflc/Hub") {
-      var returnval = baseURI + 'resources/hubs/';
-      return callback(returnval);
-    } else if (rt.resourceURI.startsWith('http://id.loc.gov') && rt.resourceURI.match(/(authorities|vocabulary)/)) {
-      uri = rt.resourceURI + '.madsrdf_raw.json';
-    } else {
-      uri = rt.resourceURI + '.json';
-    }
-	uri = uri.replace('http://', 'https://'); 
-    $.ajax({
-      type: 'GET',
-      async: false,
-      url: uri,
-      success: function (data) {
-        var returnval = '_:bnode';
-        var truthy = false;
-        data.some(function (resource) {
-          if (resource['@id'] === rt.resourceURI && !truthy) {
-            if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'] !== undefined) {
-              if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://id.loc.gov/ontologies/bibframe/Work') {
-                returnval = baseURI + 'resources/works/';
-                truthy = true;
-              } else if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://id.loc.gov/ontologies/bibframe/Instance') {
-                returnval = baseURI + 'resources/instances/';
-                truthy = true;
-              } else if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://www.loc.gov/mads/rdf/v1#Name') {
-                returnval = baseURI + 'resources/agents/';
-                truthy = true;
-              }
-            } else if (resource['@id'] === 'http://id.loc.gov/ontologies/bibframe/Instance') {
-              returnval = baseURI + 'resources/instances/';
-              truthy = true;
-            } else if (resource['@id'] === 'http://id.loc.gov/ontologies/bibframe/Work') {
-              returnval = baseURI + 'resources/works/';
-              truthy = true;
-            }
-          }
-        });
-        callback(returnval);
-      },
-      error: function (XMLHttpRequest, textStatus, errorThrown) {
-        bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
-      }
-    });
-
-    // return returnval;
-  }
-
-  function whichLabel(uri, store, callback) {
-
-    uri = uri.replace(/^(https:)/,"http:");
-    
-    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel uri: ' + uri);
-    
-    if(_.isEmpty(store)){
-      store = bfestore.store;
-    }
-    // for resource templates, determine if they are works, instances, or other
-    var jsonuri = uri + '.json';
-    // normalize
-    if (uri.startsWith('http://id.loc.gov/resources/works') || uri.startsWith('http://id.loc.gov/resources/instances')&& !_.isEmpty(config.resourceURI)) {
-      jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
-      jsonuri = jsonuri.replace(/^(http:)/,"https:");
-    } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
-      jsonuri = uri + '.madsrdf_raw.json';
-      jsonuri = jsonuri.replace(/^(http:)/,"https:");
-    }
-
-    if (uri.endsWith('marcxml.xml')) {
-      var returnval = /[^/]*$/.exec(uri)[0].split('.')[0];
-      callback(returnval);
-    } else if (uri.match(/[works|instances]\/\d+#\w+\d+-\d+/) || uri.match(/_:.*/g) ) {      //fake uris
-      if(_.some(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
-        callback(_.find(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
-      } else if(_.some(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
-        callback(_.find(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
-      } else if(_.some(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
-        callback(_.find(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
-      } else if(_.some(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap"})){
-        callback(_.find(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap" }).o);
-      } else {
-        callback("");
-      }
-    } else {
-        bfelog.addMsg(new Error(), 'DEBUG', 'Making call to recto whichrt using: ' + jsonuri);
-      $.ajax({
-        type: 'GET',
-        async: false,
-        data: {
-          uri: jsonuri
-        },
-        url: config.url + '/profile-edit/server/whichrt',
-        success: function (data) {
-          var returnval;
-          var labelElements;
-          var authoritativeLabelElements;
-          var aapElements;
-          if(_.some(_.find(data, { '@id': uri }))) {
-            labelElements = _.find(data, { '@id': uri })['http://www.w3.org/2000/01/rdf-schema#label']
-            authoritativeLabelElements = _.find(data, { '@id': uri })['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'];
-            aapElements = _.find(data, { '@id': uri })['http://id.loc.gov/ontologies/bflc/aap'];
-          } 
-          if (!_.isEmpty(labelElements)) {
-            returnval = labelElements[0]["@value"];
-          } else if (!_.isEmpty(aapElements)) {
-            returnval = aapElements[0]["@value"]
-          } else if (!_.isEmpty(authoritativeLabelElements)) {
-            returnval = authoritativeLabelElements[0]["@value"]
-          } else {
-            // look for a rdfslabel
-            var labels = _.filter(data[2], function (prop) { if (prop[0] === 'rdfs:label') return prop; });
-            returnval = uri;
-
-            if (!_.isEmpty(labels)) {
-              returnval = labels[0][2];
-            } else if (_.has(data, "@graph")) {
-                if (_.some(data["@graph"], {"@id": uri})) {
-                  returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
-                } else if ( _.some(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})) {
-                  returnval = _.find(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})["rdf-schema:label"]
-                }
-            } 
-
-          }
-
-          callback(returnval);
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-          bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+    function whichrt(rt, baseURI, callback) {
+        // for resource templates, determine if they are works, instances, or other
+        var uri;
+        if (rt.resourceURI.startsWith('http://www.loc.gov/mads/rdf/v1#')) {
+            uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', config.url + '/bfe/static/v1.json#');
+        } else if (rt.resourceURI.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
+            uri = rt.resourceURI.replace('http://id.loc.gov/resources', config.resourceURI) + '.json';
+        } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
+            return;
+        } else if (rt.resourceURI == "http://id.loc.gov/ontologies/bflc/Hub") {
+            var returnval = baseURI + 'resources/hubs/';
+            return callback(returnval);
+        } else if (rt.resourceURI.startsWith('http://id.loc.gov') && rt.resourceURI.match(/(authorities|vocabulary)/)) {
+            uri = rt.resourceURI + '.madsrdf_raw.json';
+        } else {
+            uri = rt.resourceURI + '.json';
         }
-      });
+	    uri = uri.replace('http://', 'https://'); 
+        $.ajax({
+            type: 'GET',
+            async: false,
+            url: uri,
+            success: function (data) {
+                var returnval = '_:bnode';
+                var truthy = false;
+                data.some(function (resource) {
+                    if (resource['@id'] === rt.resourceURI && !truthy) {
+                        if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'] !== undefined) {
+                            if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://id.loc.gov/ontologies/bibframe/Work') {
+                                returnval = baseURI + 'resources/works/';
+                                truthy = true;
+                            } else if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://id.loc.gov/ontologies/bibframe/Instance') {
+                                returnval = baseURI + 'resources/instances/';
+                                truthy = true;
+                            } else if (resource['http://www.w3.org/2000/01/rdf-schema#subClassOf'][0]['@id'] === 'http://www.loc.gov/mads/rdf/v1#Name') {
+                                returnval = baseURI + 'resources/agents/';
+                                truthy = true;
+                            }
+                        } else if (resource['@id'] === 'http://id.loc.gov/ontologies/bibframe/Instance') {
+                            returnval = baseURI + 'resources/instances/';
+                            truthy = true;
+                        } else if (resource['@id'] === 'http://id.loc.gov/ontologies/bibframe/Work') {
+                            returnval = baseURI + 'resources/works/';
+                            truthy = true;
+                        }
+                    }
+                });
+                callback(returnval);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+            }
+        });
+        // return returnval;
     }
 
+    function whichLabel(uri, store, callback) {
+        uri = uri.replace(/^(https:)/,"http:");
+        bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel uri: ' + uri);
+        if(_.isEmpty(store)){
+            store = bfestore.store;
+        }
+        // for resource templates, determine if they are works, instances, or other
+        var jsonuri = uri + '.json';
+        // normalize
+        if (uri.startsWith('http://id.loc.gov/resources/works') || uri.startsWith('http://id.loc.gov/resources/instances')&& !_.isEmpty(config.resourceURI)) {
+            jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
+            jsonuri = jsonuri.replace(/^(http:)/,"https:");
+        } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
+            jsonuri = uri + '.madsrdf_raw.json';
+            jsonuri = jsonuri.replace(/^(http:)/,"https:");
+        }
+
+        if (uri.match(/bibframe\.example\.org/)) {
+            callback(uri);
+        } else if (uri.endsWith('marcxml.xml')) {
+            var returnval = /[^/]*$/.exec(uri)[0].split('.')[0];
+            callback(returnval);
+        } else if (uri.match(/[works|instances]\/\d+#\w+\d+-\d+/) || uri.match(/_:.*/g) ) {      //fake uris
+            if(_.some(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label"})){
+                callback(_.find(store, { s: uri, p: "http://www.w3.org/2000/01/rdf-schema#label" }).o);  
+            } else if(_.some(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"})){
+                callback(_.find(store, { s: uri, p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel" }).o);
+            } else if(_.some(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"})){
+                callback(_.find(store, { s: uri, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#value" }).o);
+            } else if(_.some(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap"})){
+                callback(_.find(store, { s: uri, p: "http://id.loc.gov/ontologies/bflc/aap" }).o);
+            } else {
+                callback("");
+            }
+        } else {
+            bfelog.addMsg(new Error(), 'DEBUG', 'Making call to recto whichrt using: ' + jsonuri);
+            $.ajax({
+                type: 'GET',
+                async: false,
+                data: {
+                  uri: jsonuri
+                },
+                url: config.url + '/profile-edit/server/whichrt',
+                success: function (data) {
+                    var returnval;
+                    var labelElements;
+                    var authoritativeLabelElements;
+                    var aapElements;
+                    if(_.some(_.find(data, { '@id': uri }))) {
+                        labelElements = _.find(data, { '@id': uri })['http://www.w3.org/2000/01/rdf-schema#label']
+                        authoritativeLabelElements = _.find(data, { '@id': uri })['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'];
+                        aapElements = _.find(data, { '@id': uri })['http://id.loc.gov/ontologies/bflc/aap'];
+                    } 
+                    if (!_.isEmpty(labelElements)) {
+                        returnval = labelElements[0]["@value"];
+                    } else if (!_.isEmpty(aapElements)) {
+                        returnval = aapElements[0]["@value"]
+                    } else if (!_.isEmpty(authoritativeLabelElements)) {
+                        returnval = authoritativeLabelElements[0]["@value"]
+                    } else {
+                        // look for a rdfslabel
+                        var labels = _.filter(data[2], function (prop) { if (prop[0] === 'rdfs:label') return prop; });
+                        returnval = uri;
+
+                        if (!_.isEmpty(labels)) {
+                            returnval = labels[0][2];
+                        } else if (_.has(data, "@graph")) {
+                            if (_.some(data["@graph"], {"@id": uri})) {
+                                returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
+                            } else if ( _.some(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})) {
+                                returnval = _.find(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})["rdf-schema:label"]
+                            }
+                        } 
+                    }
+                    callback(returnval);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+                }
+            });
+        }
     // return returnval;
-  }
+    }
+    // End whichLabel
+
 });
