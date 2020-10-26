@@ -2868,402 +2868,377 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                 rt.defaulturi = triple.s;
                             }
                         });
-                    ///   LEFT OFF HERE /////
-        } else {
-          _.where(bfestore.store, {
-            's': rt.defaulturi,
-            'o': rt.resourceURI
-          }).forEach(function (triple) {
-            if (_.where(bfestore.store, {
-              'o': triple.s
-            }).length === 0) {
-              bfelog.addMsg(new Error(), 'INFO', triple.s);
-              rt.defaulturi = triple.s;
-            }
-          });
-        }
-        //		} else {
-        //                rt.defaulturi =  _.where(bfestore.store,{"o":rt.resourceURI})[0].s;
-        //		}
-      }
-      var triple = {};
-      if (bfestore.state !== 'create' && rt.data.length === 0 && _.where(bfestore.store, {
-        's': rt.defaulturi,
-        'o': rt.resourceURI
-      }).length === 0) {
-        // Assume a fresh form, no pre-loaded data.
-        //var id = guid();
-        // var uri;
-        // var uri = editorconfig.baseURI + rt.useguid;
-        if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
-          fobject.defaulturi = rt.defaulturi;
-        } else {
-          fobject.defaulturi = editorconfig.baseURI + rt.useguid;
-        }
-
-        if (bfestore.state === 'edit' && _.some(bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': rt.resourceURI })) {
-          // match the rt to the type triple
-          triple = _.find(bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': rt.resourceURI });
-          rt.defaulturi = triple.o;
-          rt.guid = triple.guid;
-          triple.rtID = rt.id;
-        } else {
-          triple = {};
-          triple.guid = rt.useguid;
-          triple.rtID = rt.id;
-          triple.s = fobject.defaulturi;
-          triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-          triple.o = rt.resourceURI;
-          triple.otype = 'uri';
-          fobject.store.push(triple);
-
-          bfestore.addTriple(triple);
-          // bfestore.store.push(triple);
-          rt.guid = rt.useguid;
-        }
-        rt.propertyTemplates.forEach(function (property) {
-          if (_.has(property, 'valueConstraint')) {
-            if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
-              var vtRefs = property.valueConstraint.valueTemplateRefs;
-              for (var v = 0; v < vtRefs.length; v++) {
-                var vtrs = vtRefs[v];
-                if (fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id) {
-                  var relatedTemplates = _.where(bfestore.store, {
-                    rtID: vtrs
-                  });
-                  triple = {};
-                  triple.guid = shortUUID(guid());
-                  triple.s = fobject.defaulturi; //uri
-                  triple.p = property.propertyURI;
-                  triple.o = relatedTemplates[0].s;
-                  triple.otype = 'uri';
-                  fobject.store.push(triple);
-                  bfestore.addTriple(triple);
-                  property.display = 'false';
+                } else {
+                    _.where(bfestore.store, {
+                        's': rt.defaulturi,
+                        'o': rt.resourceURI
+                    }).forEach(function (triple) {
+                        if (_.where(bfestore.store, {
+                            'o': triple.s
+                        }).length === 0) {
+                            bfelog.addMsg(new Error(), 'INFO', triple.s);
+                            rt.defaulturi = triple.s;
+                        }
+                    });
                 }
-              }
             }
-          }
-        });
-/*
-<<< <<<< HEAD
-      } else { 
-        fobject.defaulturi = rt.defaulturi;
-        // the rt needs a type
-        if (
-            bfestore.state === 'create' && 
-            _.where(bfestore.store, {
-                's': rt.defaulturi,
-                'o': rt.resourceURI
-            }).length === 0
-           ) {
-=== ====
-*/
-      } else {
-        fobject.defaulturi = rt.defaulturi;
-        // the rt needs a type
-        if (bfestore.state === 'create') {
-//>>> >>>> aws
-          triple = {};
-          triple.guid = rt.useguid;
-          triple.rtID = rt.id;
-          triple.s = rt.defaulturi;
-          triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-          triple.o = rt.resourceURI;
-          triple.otype = 'uri';
-          fobject.store.push(triple);
-          
-          //console.log('4');
-          bfestore.addTriple(triple);
-          rt.guid = rt.useguid;
-        }
+            var triple = {};
+            if (
+                bfestore.state !== 'create' && 
+                rt.data.length === 0 && 
+                _.where(bfestore.store, {
+                    's': rt.defaulturi,
+                    'o': rt.resourceURI
+                }).length === 0
+            ) {
+                // Assume a fresh form, no pre-loaded data.
+                //var id = guid();
+                // var uri;
+                // var uri = editorconfig.baseURI + rt.useguid;
+                if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                    fobject.defaulturi = rt.defaulturi;
+                } else {
+                    fobject.defaulturi = editorconfig.baseURI + rt.useguid;
+                }
 
-        // This will likely be insufficient - we'll need the entire
-        // pre-loaded store in this 'first' form.
-        rt.data.forEach(function (t) {
-          var triple = {};
-          triple = t;
-          if (triple.guid === undefined) {
-            triple.guid = shortUUID(guid());
-          }
-          fobject.store.push(triple);
-        });
-      }
+                if (bfestore.state === 'edit' && _.some(bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': rt.resourceURI })) {
+                    // match the rt to the type triple
+                    triple = _.find(bfestore.store, { 'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'o': rt.resourceURI });
+                    rt.defaulturi = triple.o;
+                    rt.guid = triple.guid;
+                    triple.rtID = rt.id;
+                } else {
+                    triple = {};
+                    triple.guid = rt.useguid;
+                    triple.rtID = rt.id;
+                    triple.s = fobject.defaulturi;
+                    triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                    triple.o = rt.resourceURI;
+                    triple.otype = 'uri';
+                    fobject.store.push(triple);
 
-      // Populate form with pre-loaded data.
-      bfelog.addMsg(new Error(), 'DEBUG', 'Populating form with pre-loaded data, if any');
-      rt.propertyTemplates.forEach(function (property) {
-        if(!_.has(property, "valueConstraint")){
-          property.valueConstraint = {};
-        }
-        preloadData(property, rt, form, fobject);
-      });
-    });
-
-    forms.push(fobject);
-
-    bfelog.addMsg(new Error(), 'DEBUG', 'Newly created formobject.', fobject);
-    
-
-    return {
-      formobject: fobject,
-      form: form
-    };
-  }
-
-  function preloadData(property, rt, form, fobject) {
-
-    var propsdata = _.where(bfestore.store, {
-      's': rt.defaulturi,
-      'p': property.propertyURI
-    }); 
-
-    if (propsdata.length > 0 && _.has(property, 'valueConstraint')) {
-      if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
-        var parent = _.find(profiles, function (post) {
-          for (var i = 0; i < property.valueConstraint.valueTemplateRefs.length; i++) {
-            if (_.some(post.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] }))
-            //                            return _.find(post.Profile.resourceTemplates, {id: property.valueConstraint.valueTemplateRefs[i]})
-            { return post; }
-          }
-        });
-
-        if (parent !== undefined) {
-          
-          var parent_nodes = [];
-          var i = 0;
-          do {
-            if (_.some(parent.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] })) {
-              var node_uri = _.find(parent.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] }).resourceURI;
-              if (_.some(bfestore.store, { o: node_uri })) {
-                parent_nodes.push(_.find(bfestore.store, { o: node_uri }));
-              }
-            }
-            i++;
-          } while (parent_nodes === undefined || i < property.valueConstraint.valueTemplateRefs.length);
-
-          parent_nodes = _.unique(parent_nodes);
-
-          if (!_.isEmpty(parent_nodes)){
-            for (i in propsdata){
-              bfelog.addMsg(new Error(), 'DEBUG', 'Matching ' + propsdata[i].o);
-              if(!propsdata[i].o.startsWith('_:bnode') && !_.some(bfestore.store, {'s':propsdata[i].o})){
-                //add type triple
-                var triple = {};
-                triple.s = propsdata[i].o;
-                triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-                triple.o = parent_nodes[0].o;
-                triple.otype = 'uri';
-                triple.guid = propsdata[i].guid;
-                bfestore.addTriple(triple);
-        
-                //add label
-                bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + propsdata[i].o);
-                whichLabel(propsdata[i].o, null, function (label) {
-                  var labeltriple = {}
-                  labeltriple.s = propsdata[i].o;
-                  labeltriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-                  labeltriple.o = label;
-                  labeltriple.otype = 'literal';
-                  labeltriple.guid = propsdata[i].guid;
-                  bfestore.addTriple(labeltriple);
+                    bfestore.addTriple(triple);
+                    // bfestore.store.push(triple);
+                    rt.guid = rt.useguid;
+                }
+                rt.propertyTemplates.forEach(function (property) {
+                    if (_.has(property, 'valueConstraint')) {
+                        if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
+                            var vtRefs = property.valueConstraint.valueTemplateRefs;
+                            for (var v = 0; v < vtRefs.length; v++) {
+                                var vtrs = vtRefs[v];
+                                if (fobject.resourceTemplateIDs.indexOf(vtrs) > -1 && vtrs != rt.id) {
+                                    var relatedTemplates = _.where(bfestore.store, {
+                                        rtID: vtrs
+                                    });
+                                    triple = {};
+                                    triple.guid = shortUUID(guid());
+                                    triple.s = fobject.defaulturi; //uri
+                                    triple.p = property.propertyURI;
+                                    triple.o = relatedTemplates[0].s;
+                                    triple.otype = 'uri';
+                                    fobject.store.push(triple);
+                                    bfestore.addTriple(triple);
+                                    property.display = 'false';
+                                }
+                            }
+                        }
+                    }
                 });
-              }
-            }
-          }
 
-          var tempprops = [];
-          if (!_.isEmpty(parent_nodes)) {
-            for (var j = 0; j < parent_nodes.length; j++) {
-              // we only want the properties that have the subject which matches the parent node's characteristics
-              var bnodes = _.where(bfestore.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: parent_nodes[j].o });
-
-              for (var k = 0; k < propsdata.length; k++) {
-                if (_.some(bnodes, { s: propsdata[k].o })) {
-                  tempprops.push(propsdata[k]);
+            } else {
+                fobject.defaulturi = rt.defaulturi;
+                // the rt needs a type
+                if (bfestore.state === 'create') {
+                    triple = {};
+                    triple.guid = rt.useguid;
+                    triple.rtID = rt.id;
+                    triple.s = rt.defaulturi;
+                    triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                    triple.o = rt.resourceURI;
+                    triple.otype = 'uri';
+                    fobject.store.push(triple);
+          
+                    //console.log('4');
+                    bfestore.addTriple(triple);
+                    rt.guid = rt.useguid;
                 }
-              }
+
+                // This will likely be insufficient - we'll need the entire
+                // pre-loaded store in this 'first' form.
+                rt.data.forEach(function (t) {
+                    var triple = {};
+                    triple = t;
+                    if (triple.guid === undefined) {
+                        triple.guid = shortUUID(guid());
+                    }
+                    fobject.store.push(triple);
+                });
             }
-            propsdata = tempprops;
-          } else if (bfestore.state === 'loaduri' && propsdata[0].o.startsWith('http://id.loc.gov/resources/works')) {
-            // try with id.loc.gov
-            triple = {};
-            triple.s = propsdata[0].s;
-            triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-            triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
-            triple.otype = 'uri';
-            triple.guid = shortUUID(guid());
 
-            bfestore.addTriple(triple);
-            tempprops = [];
-            tempprops.push(triple);
-            propsdata = tempprops;
-          } else {
-            // skip this one
-            propsdata = [];
-          }
-        }
-      }
-    }
-
-    if (propsdata[0] === undefined) {
-      // log the resulttry again
-      // console.log(property.propertyURI + ' not matched.');
-    }
-    if (propsdata[0] !== undefined) {
-      // If this property exists for this resource in the pre-loaded data
-      // then we need to make it appear.
-      bfelog.addMsg(new Error(), 'DEBUG', 'Found pre-loaded data for ' + property.propertyURI);
-
-      if (fobject.resourceTemplates[0].defaulturi.startsWith('_:bnode')) {
-        if (_.some(propsdata, { 's': fobject.resourceTemplates[0].defaulturi })) {
-          propsdata.forEach(function (pd) {
-            loadPropsdata(pd, property, form, fobject);
-          });
-        } else {
-          bfelog.addMsg(new Error(), 'INFO', 'bnode not matched');
-        }
-      } else {
-        propsdata.forEach(function (pd) {
-          loadPropsdata(pd, property, form, fobject);
+            // Populate form with pre-loaded data.
+            bfelog.addMsg(new Error(), 'DEBUG', 'Populating form with pre-loaded data, if any');
+            rt.propertyTemplates.forEach(function (property) {
+                if(!_.has(property, "valueConstraint")){
+                    property.valueConstraint = {};
+                }
+                preloadData(property, rt, form, fobject);
+            });
         });
-      }
-    } else if (_.has(property, 'valueConstraint')) {
 
-      // we need to convert defaults from the old "defaults" model to the new.
-      if (!_.has(property.valueConstraint, 'defaults')) {
-        property.valueConstraint.defaults = [];
-        var defaultsObj = {};
-        if (!_.isEmpty(property.valueConstraint.defaultURI)) {
-          defaultsObj.defaultURI = property.valueConstraint.defaultURI;
-        }
-        if (!_.isEmpty(property.valueConstraint.defaultLiteral)) {
-          defaultsObj.defaultLiteral = property.valueConstraint.defaultLiteral;
-        }
-        if (!_.isEmpty(defaultsObj)) {
-          property.valueConstraint.defaults.push(defaultsObj);
-        }
-      }
-
-      // Otherwise - if the property is not found in the pre-loaded data
-      // then do we have a default value?
-
-      for (var d = 0; d < property.valueConstraint.defaults.length; d++) {
-        if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
-          var data;
-          var label;
-          var displayguid;
-          if (property.type.startsWith('literal') || _.isEmpty(property.type)) {
-            //the default is the literal
-            var literalTriple = {};
-            literalTriple.guid = shortUUID(guid());
-            if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
-              literalTriple.s = rt.defaulturi;
-            } else {
-              literalTriple.s = editorconfig.baseURI + rt.useguid;
-            }
-            literalTriple.p = property.propertyURI;
-            literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
-            literalTriple.otype = 'literal';
-            label = literalTriple;
-            displayguid = literalTriple.guid;
-            fobject.store.push(literalTriple);
-            bfestore.addTriple(literalTriple);
-
-          } else if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
-            data = property.valueConstraint.defaults[d].defaultURI;
-            bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
-            var triples = [];
-            // is there a type?
-            if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
-              var typeTriple = {};              
-              typeTriple.guid = shortUUID(guid());
-              typeTriple.s = data;
-              typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
-              typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
-              typeTriple.otype = 'uri';
-              fobject.store.push(typeTriple);
-              bfestore.addTriple(typeTriple);
-              triples.push(typeTriple)
-            }
-
-            // set the triples
-            triple = {};
-            triple.guid = shortUUID(guid());
-            if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
-              triple.s = rt.defaulturi;
-            } else {
-              triple.s = editorconfig.baseURI + shortUUID(rt.useguid);
-            }
-            triple.p = property.propertyURI;
-            triple.o = data;
-            triple.otype = 'uri';
-            fobject.store.push(triple);
-            bfestore.addTriple(triple);
-            triples.push(triple);
-
-            // set the label
-            label = {};
-            label.guid = shortUUID(guid());
-            if (triple) {
-              label.s = triple.o;
-            } else {
-              label.s = rt.defaulturi;
-            }
-            displayguid = label.guid;
-            label.otype = 'literal';
-            label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-            label.o = property.valueConstraint.defaults[d].defaultLiteral;
-            fobject.store.push(label);
-            bfestore.addTriple(label);
-            triples.push(label);
-          }
-
-          // set the form
-          var $formgroup = $('#' + property.guid, form).closest('.form-group');
-          var $save = $formgroup.find('.btn-toolbar').eq(0);
-
-          var displaydata = '';
-          if (_.has(property.valueConstraint.defaults[d], 'defaultLiteral')) {
-            displaydata = property.valueConstraint.defaults[d].defaultLiteral;
-          }
-          // displaydata = display;
-          var editable = true;
-          if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === 'false') {
-            editable = false;
-          }
-          var bgvars = {
-            'tguid': displayguid,
-            'tlabelhover': displaydata,
-            'tlabel': displaydata,
-            'fobjectid': fobject.id,
-            'inputid': property.guid,
-            'editable': editable,
-            'triples': triples
-          };
-          var $buttongroup = editDeleteButtonGroup(bgvars);
-          $save.append($buttongroup);
-
-//<<< <<<< HEAD
-          if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
-//=== ====
-//          if (property.repeatable === 'false') {
-//>>>> >>> aws
-            var $el = $('#' + property.guid, form);
-            if ($el.is('input')) {
-              $el.prop('disabled', true);
-            } else {
-              // console.log(property.propertyLabel);
-              var $buttons = $('div.btn-group-md', $el).find('button');
-              $buttons.each(function () {
-                $(this).prop('disabled', true);
-              });
-            }
-          }
-        }
-      }
+        forms.push(fobject);
+        bfelog.addMsg(new Error(), 'DEBUG', 'Newly created formobject.', fobject);
+        return {
+            formobject: fobject,
+            form: form
+        };
     }
-  }
+    // End of getForm function, some 800+ lines later.
+
+
+    function preloadData(property, rt, form, fobject) {
+        var propsdata = _.where(bfestore.store, {
+            's': rt.defaulturi,
+            'p': property.propertyURI
+        }); 
+
+        if (propsdata.length > 0 && _.has(property, 'valueConstraint')) {
+            if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
+                var parent = _.find(profiles, function (post) {
+                    for (var i = 0; i < property.valueConstraint.valueTemplateRefs.length; i++) {
+                        if (_.some(post.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] })) { 
+                            return post; 
+                        }
+                    }
+                });
+
+                if (parent !== undefined) {
+                    var parent_nodes = [];
+                    var i = 0;
+                    do {
+                        if (_.some(parent.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] })) {
+                            var node_uri = _.find(parent.Profile.resourceTemplates, { id: property.valueConstraint.valueTemplateRefs[i] }).resourceURI;
+                            if (_.some(bfestore.store, { o: node_uri })) {
+                                parent_nodes.push(_.find(bfestore.store, { o: node_uri }));
+                            }
+                        }
+                        i++;
+                    } while (parent_nodes === undefined || i < property.valueConstraint.valueTemplateRefs.length);
+
+                    parent_nodes = _.unique(parent_nodes);
+
+                    if (!_.isEmpty(parent_nodes)) {
+                        for (i in propsdata){
+                            bfelog.addMsg(new Error(), 'DEBUG', 'Matching ' + propsdata[i].o);
+                            if(!propsdata[i].o.startsWith('_:bnode') && !_.some(bfestore.store, {'s':propsdata[i].o})) {
+                                //add type triple
+                                var triple = {};
+                                triple.s = propsdata[i].o;
+                                triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                                triple.o = parent_nodes[0].o;
+                                triple.otype = 'uri';
+                                triple.guid = propsdata[i].guid;
+                                bfestore.addTriple(triple);
+        
+                                //add label
+                                bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + propsdata[i].o);
+                                whichLabel(propsdata[i].o, null, function (label) {
+                                    var labeltriple = {}
+                                    labeltriple.s = propsdata[i].o;
+                                    labeltriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+                                    labeltriple.o = label;
+                                    labeltriple.otype = 'literal';
+                                    labeltriple.guid = propsdata[i].guid;
+                                    bfestore.addTriple(labeltriple);
+                                });
+                            }
+                        }
+                    }
+
+                    var tempprops = [];
+                    if (!_.isEmpty(parent_nodes)) {
+                        for (var j = 0; j < parent_nodes.length; j++) {
+                            // we only want the properties that have the subject which matches the parent node's characteristics
+                            var bnodes = _.where(bfestore.store, { p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', o: parent_nodes[j].o });
+
+                            for (var k = 0; k < propsdata.length; k++) {
+                                if (_.some(bnodes, { s: propsdata[k].o })) {
+                                    tempprops.push(propsdata[k]);
+                                }
+                            }
+                        }
+                        propsdata = tempprops;
+                    } else if (bfestore.state === 'loaduri' && propsdata[0].o.startsWith('http://id.loc.gov/resources/works')) {
+                        // try with id.loc.gov
+                        triple = {};
+                        triple.s = propsdata[0].s;
+                        triple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+                        triple.o = 'http://id.loc.gov/ontologies/bibframe/Work';
+                        triple.otype = 'uri';
+                        triple.guid = shortUUID(guid());
+
+                        bfestore.addTriple(triple);
+                        tempprops = [];
+                        tempprops.push(triple);
+                        propsdata = tempprops;
+                    } else {
+                        // skip this one
+                        propsdata = [];
+                    }
+                }
+            }
+        }
+
+        if (propsdata[0] !== undefined) {
+            // If this property exists for this resource in the pre-loaded data
+            // then we need to make it appear.
+            bfelog.addMsg(new Error(), 'DEBUG', 'Found pre-loaded data for ' + property.propertyURI);
+
+            if (fobject.resourceTemplates[0].defaulturi.startsWith('_:bnode')) {
+                if (_.some(propsdata, { 's': fobject.resourceTemplates[0].defaulturi })) {
+                    propsdata.forEach(function (pd) {
+                        loadPropsdata(pd, property, form, fobject);
+                    });
+                } else {
+                    bfelog.addMsg(new Error(), 'INFO', 'bnode not matched');
+                }
+            } else {
+                propsdata.forEach(function (pd) {
+                    loadPropsdata(pd, property, form, fobject);
+                });
+            }
+        
+        } else if (_.has(property, 'valueConstraint')) {
+            // we need to convert defaults from the old "defaults" model to the new.
+            if (!_.has(property.valueConstraint, 'defaults')) {
+                property.valueConstraint.defaults = [];
+                var defaultsObj = {};
+                if (!_.isEmpty(property.valueConstraint.defaultURI)) {
+                    defaultsObj.defaultURI = property.valueConstraint.defaultURI;
+                }
+                if (!_.isEmpty(property.valueConstraint.defaultLiteral)) {
+                    defaultsObj.defaultLiteral = property.valueConstraint.defaultLiteral;
+                }
+                if (!_.isEmpty(defaultsObj)) {
+                    property.valueConstraint.defaults.push(defaultsObj);
+                }
+            }
+
+            // Otherwise - if the property is not found in the pre-loaded data
+            // then do we have a default value?
+            for (var d = 0; d < property.valueConstraint.defaults.length; d++) {
+                if (!_.isEmpty(property.valueConstraint.defaults[d].defaultURI) || !_.isEmpty(property.valueConstraint.defaults[d].defaultLiteral)) {
+                    var data;
+                    var label;
+                    var displayguid;
+                    if (property.type.startsWith('literal') || _.isEmpty(property.type)) {
+                        //the default is the literal
+                        var literalTriple = {};
+                        literalTriple.guid = shortUUID(guid());
+                        if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                            literalTriple.s = rt.defaulturi;
+                        } else {
+                            literalTriple.s = editorconfig.baseURI + rt.useguid;
+                        }
+                        literalTriple.p = property.propertyURI;
+                        literalTriple.o = property.valueConstraint.defaults[d].defaultLiteral;
+                        literalTriple.otype = 'literal';
+                        label = literalTriple;
+                        displayguid = literalTriple.guid;
+                        fobject.store.push(literalTriple);
+                        bfestore.addTriple(literalTriple);
+    
+                    } else if (_.has(property.valueConstraint.defaults[d], 'defaultURI') && !_.isEmpty(property.valueConstraint.defaults[d].defaultURI)) {
+                        data = property.valueConstraint.defaults[d].defaultURI;
+                        bfelog.addMsg(new Error(), 'DEBUG', 'Setting default data for ' + property.propertyURI);
+                        var triples = [];
+                        // is there a type?
+                        if (_.has(property.valueConstraint.valueDataType, 'dataTypeURI')) {
+                            var typeTriple = {};              
+                            typeTriple.guid = shortUUID(guid());
+                            typeTriple.s = data;
+                            typeTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'; // rdf:type
+                            typeTriple.o = property.valueConstraint.valueDataType.dataTypeURI;
+                            typeTriple.otype = 'uri';
+                            fobject.store.push(typeTriple);
+                            bfestore.addTriple(typeTriple);
+                            triples.push(typeTriple)
+                        }
+    
+                        // set the triples
+                        triple = {};
+                        triple.guid = shortUUID(guid());
+                        if (rt.defaulturi !== undefined && rt.defaulturi !== '') {
+                            triple.s = rt.defaulturi;
+                        } else {
+                            triple.s = editorconfig.baseURI + shortUUID(rt.useguid);
+                        }
+                        triple.p = property.propertyURI;
+                        triple.o = data;
+                        triple.otype = 'uri';
+                        fobject.store.push(triple);
+                        bfestore.addTriple(triple);
+                        triples.push(triple);
+    
+                        // set the label
+                        label = {};
+                        label.guid = shortUUID(guid());
+                        if (triple) {
+                            label.s = triple.o;
+                        } else {
+                            label.s = rt.defaulturi;
+                        }
+                        displayguid = label.guid;
+                        label.otype = 'literal';
+                        label.p = 'http://www.w3.org/2000/01/rdf-schema#label';
+                        label.o = property.valueConstraint.defaults[d].defaultLiteral;
+                        fobject.store.push(label);
+                        bfestore.addTriple(label);
+                        triples.push(label);
+                    }
+    
+                    // set the form
+                    var $formgroup = $('#' + property.guid, form).closest('.form-group');
+                    var $save = $formgroup.find('.btn-toolbar').eq(0);
+    
+                    var displaydata = '';
+                    if (_.has(property.valueConstraint.defaults[d], 'defaultLiteral')) {
+                        displaydata = property.valueConstraint.defaults[d].defaultLiteral;
+                    }
+                    // displaydata = display;
+                    var editable = true;
+                    if (property.valueConstraint.editable !== undefined && property.valueConstraint.editable === 'false') {
+                        editable = false;
+                    }
+                    var bgvars = {
+                        'tguid': displayguid,
+                        'tlabelhover': displaydata,
+                        'tlabel': displaydata,
+                        'fobjectid': fobject.id,
+                        'inputid': property.guid,
+                        'editable': editable,
+                        'triples': triples
+                    };
+                    var $buttongroup = editDeleteButtonGroup(bgvars);
+                    $save.append($buttongroup);
+    
+                    if (property.repeatable === 'false' || property.valueConstraint.repeatable == 'false') {
+                        var $el = $('#' + property.guid, form);
+                        if ($el.is('input')) {
+                            $el.prop('disabled', true);
+                        } else {
+                            // console.log(property.propertyLabel);
+                            var $buttons = $('div.btn-group-md', $el).find('button');
+                            $buttons.each(function () {
+                                $(this).prop('disabled', true);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // End preloadData function, some 200+ lines later.
 
   function loadPropsdata(pd, property, form, fobject) {
       bfelog.addMsg(new Error(), 'DEBUG', "loadPropsdata pd: ", pd);
