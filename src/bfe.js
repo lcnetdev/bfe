@@ -1,10 +1,11 @@
-bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/lib/aceconfig'], function (require, exports) {
+bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/bfelabels', 'src/lib/aceconfig'], function (require, exports) {
   var editorconfig = {};
   var bfestore = require('src/bfestore');
   var bfelog = require('src/bfelogging');
   var bfeapi = require('src/bfeapi');
   var bfeusertemplates = require('src/bfeusertemplates');
   var bfeliterallang = require('src/bfeliterallang');
+  var bfelabels = require('src/bfelabels');
   
   // By default, we will version the resource upon first save.
   // If the resource is new - meaning never added to the database - the version
@@ -4182,132 +4183,50 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
     exports.displayDataService = function(labeldata, displaydata){
+        bfelog.addMsg(new Error(), 'DEBUG', 'labeldata is: ', labeldata);
+        bfelog.addMsg(new Error(), 'DEBUG', 'displaydata is: ' + displaydata);
         
         if (displaydata === 'adminMetadata') {
             var admindisplaydata = '';
-            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/catalogerId' })){
+            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/catalogerId' })) {
                 admindisplaydata = _.find(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/catalogerId' }).o
             }
-            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/profile' })){
+            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/profile' })) {
                 admindisplaydata += ' ' + _.find(labeldata, { p: 'http://id.loc.gov/ontologies/bflc/profile' }).o
             } 
-      
-            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })){
+            if(_.some(labeldata, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' })) {
                 admindisplaydata += ' ' +_.find(labeldata, { p: 'http://id.loc.gov/ontologies/bibframe/changeDate' }).o
             }
-
             if (!_.isEmpty(admindisplaydata)) {
                 displaydata = admindisplaydata;
             }
             
         } else if (displaydata === 'contribution') {
             // lookup agent and role;
-            var role = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bibframe/role'
-            });
-            var agent = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bibframe/agent'
-            });
+            var roleLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/role', bfestore.store);
+            var agentLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/agent', bfestore.store);
 
-            if (!_.isEmpty(agent)) {
-                if (agent.o.match(/#Agent/) || agent.o.startsWith('_:b')) {
-                    var agentLabel = _.find(bfestore.store, {
-                        's': agent.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    });
-
-                    if (!_.isEmpty(agentLabel)) {
-                        displaydata = agentLabel.o;
-                    }
-                } else {
-                    // try looking up
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + agent.o);
-                    whichLabel(agent.o, null, function (label) {
-                        if (!_.isEmpty(label)) { 
-                            displaydata = label; 
-                        }
-                    });
-                }
+            if (agentLabel != "") {
+                displaydata = agentLabel;
             }
-            
-            if (!_.isEmpty(role)) {
-                if (role.o.match(/#Role/) || role.o.startsWith('_:b')) {
-                    var roleLabel = _.find(bfestore.store, {
-                        's': role.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    });
-
-                    if (!_.isEmpty(roleLabel) && displaydata !== 'contribution') {
-                        if (displaydata.endsWith(',')) {
-                            displaydata = displaydata + ' ' + roleLabel.o;
-                        } else {
-                            displaydata = displaydata + ', ' + roleLabel.o; 
-                        }
-                    }
+            if (displaydata !== 'contribution') {
+                if (agentLabel.endsWith(',')) {
+                    displaydata = displaydata + ' ' + roleLabel;
                 } else {
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + role.o);
-                    whichLabel(role.o, null, function (label) {
-                        if (!_.isEmpty(label) && displaydata !== 'contribution') { 
-                            if (displaydata.endsWith(',')) {
-                                displaydata = displaydata + ' ' + label; 
-                            } else {
-                                displaydata = displaydata + ', ' + label; 
-                            }
-                        }
-                    });
+                    displaydata = displaydata + ', ' + roleLabel; 
                 }
             }
     
         } else if (displaydata === 'relationship') {
             // lookup agent and role;
-            var relation = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bflc/relation'
-            });
-            var relatedTo = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bibframe/relatedTo'
-            });
-
-            if (!_.isEmpty(relatedTo)) {
-                if (relatedTo.o.match(/#Work/) || relatedTo.o.startsWith('_:b')) {
-                    var workLabel = _.find(bfestore.store, {
-                        's': relatedTo.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    });
-
-                    if (!_.isEmpty(workLabel)) {
-                        displaydata = workLabel.o;
-                    } else {
-                        displaydata = relatedTo.o
-                    }
-                } else {
-                    // try looking up
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + relatedTo.o);
-                    whichLabel(relatedTo.o, null, function (label) {
-                        if (!_.isEmpty(label)) { 
-                            displaydata = label; 
-                        }
-                    });
-                }
-            }
-
-            if (!_.isEmpty(relation)) {
-                if (relation.o.match(/#Relation/) || relation.o.startsWith('_:b')) {
-                    var relationLabel = _.find(bfestore.store, {
-                        's': relation.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    });
-
-                    if (!_.isEmpty(relationLabel) && displaydata !== 'relationship') {
-                        displaydata = relationLabel.o + ' ' + displaydata;
-                    }
-                } else {
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + relation.o);
-                    whichLabel(relation.o, null, function (label) {
-                        if (!_.isEmpty(label) && displaydata !== 'relationship') { 
-                            displaydata = label + ' ' + displaydata;
-                        }
-                    });
-                }
+            var relatedToLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/relatedTo', bfestore.store);
+            var relationLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bflc/relation', bfestore.store);
+            
+            if (relatedToLabel != "") {
+                displaydata = relatedToLabel;
+            };
+            if (displaydata !== 'relationship') { 
+                displaydata = relationLabel + ' ' + displaydata;
             }
 
         } else if (displaydata === 'hasItem') {
@@ -4349,69 +4268,27 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
         
         } else if (displaydata === 'provisionActivity') {
-            var place = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bibframe/place'
-            });
-            if (!_.isEmpty(place)) {
-                if (place.o.startsWith('_:b')) {
-                    var placeLabel = _.find(bfestore.store, {
-                        's': place.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    }).o;
-                } else {
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + place.o);
-                    whichLabel(place.o, null, function (label) {
-                        placeLabel = label;
-                    });
-                }
-            }
-            agent = _.find(labeldata, {
-                'p': 'http://id.loc.gov/ontologies/bibframe/agent'
-            }); 
-            if (!_.isEmpty(agent)) {
-                if (agent.o.startsWith('_:b')) {
-                    agentLabel = _.find(bfestore.store, {
-                        's': agent.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    });
-                    if (!_.isEmpty(agentLabel)) {
-                        agentLabel = agentLabel.o;
-                    }
-                } else if (agent.o.startsWith('//mlvlp06.loc.gov')) {
-                    var newagent = agent.o.replace(/\/\/mlvlp06.loc.gov:8288\/bfentities/, 'http://id.loc.gov/entities');
-                    _.each(_.where(bfestore.store, {
-                        's': agent.o,
-                    }), function (entity){
-                        entity.s = newagent;
-                    });
-                    agent.o = newagent;
-                    agentLabel = _.find(bfestore.store, {
-                        's': agent.o,
-                        'p': 'http://www.w3.org/2000/01/rdf-schema#label'
-                    }).o;
-                } else {
-                    bfelog.addMsg(new Error(), 'DEBUG', 'whichLabel from: ' + agent.o);
-                    whichLabel(agent.o, null, function (label) {
-                        agentLabel = label;
-                    });
-                }
-            }
-
+            var placeLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/place', bfestore.store);
+            var agentLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/agent', bfestore.store);
+            
+            var dateLabel = "";
             var date = _.find(labeldata, {
                 'p': 'http://id.loc.gov/ontologies/bibframe/date'
             });
-            if (!_.isEmpty(date)) { 
-                var dateLabel = date.o; 
+            if (date !== undefined) { 
+                dateLabel = date.o; 
             }
 
-            if (!_.isEmpty(placeLabel) && !_.isEmpty(agentLabel) && !_.isEmpty(dateLabel)) {
+            if (placeLabel != "" && agentLabel != "" && dateLabel != "") {
                 displaydata = placeLabel  + ': ' + agentLabel + ', ' + dateLabel;
-            } else if (!_.isEmpty(placeLabel) && !_.isEmpty(agentLabel) && _.isEmpty(dateLabel)) {
+            } else if (placeLabel != "" && agentLabel != "" && dateLabel == "") {
                 displaydata = placeLabel + ': ' + agentLabel;
-            } else if (_.isEmpty(placeLabel) && !_.isEmpty(agentLabel) && !_.isEmpty(dateLabel)) {
+            } else if (placeLabel == "" && agentLabel != "" && dateLabel != "") {
                 displaydata = agentLabel + ', ' + dateLabel;
-            } else if (!_.isEmpty(placeLabel) && _.isEmpty(agentLabel) && !_.isEmpty(dateLabel)) {
+            } else if (placeLabel != "" && agentLabel == "" && dateLabel != "") {
                 displaydata = placeLabel + ', ' + dateLabel;
+            } else if (placeLabel == "" && agentLabel == "" && dateLabel != "") {
+                displaydata = dateLabel;
             }
     
         } else if (displaydata === 'v1#componentList' || displaydata === 'genreForm') {
