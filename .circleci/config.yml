@@ -34,4 +34,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: pwd && yarn run lint
+      - run: pwd && ls -la && yarn run lint
