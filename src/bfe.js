@@ -2111,7 +2111,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
     */
     function getForm(loadTemplates, pt) {
-        var rt, property;
+        var rt;
         // Create the form object.
         var fguid = guid();
         var fobject = {};
@@ -2519,7 +2519,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         $buttonGroupHolder = $('<div class="input-group-btn pull-left" ></div>');
                     }
           
-                    $plusButton = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
+                    var $plusButton = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
                     $buttonGroupHolder.append($plusButton);
                     $inputHolder.append($buttonGroupHolder);
           
@@ -2579,7 +2579,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             this.value = text + '\u00A9';
                         
                         } else if (event.keyCode == 53 && event.ctrlKey && event.altKey) {
-                            // Published symbol
+                            // Phonogram symbol
                             this.value = this.value + '\u2117';
                     
                         } else if (event.metaKey && event.altKey) {
@@ -4224,7 +4224,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             
             if (relatedToLabel != "") {
                 displaydata = relatedToLabel;
-            };
+            }
             if (displaydata !== 'relationship') { 
                 displaydata = relationLabel + ' ' + displaydata;
             }
@@ -4269,7 +4269,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         
         } else if (displaydata === 'provisionActivity') {
             var placeLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/place', bfestore.store);
-            var agentLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/agent', bfestore.store);
+            agentLabel = bfelabels.getLabel(labeldata, 'http://id.loc.gov/ontologies/bibframe/agent', bfestore.store);
             
             var dateLabel = "";
             var date = _.find(labeldata, {
@@ -4278,17 +4278,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             if (date !== undefined) { 
                 dateLabel = date.o; 
             }
-
-            if (placeLabel != "" && agentLabel != "" && dateLabel != "") {
-                displaydata = placeLabel  + ': ' + agentLabel + ', ' + dateLabel;
-            } else if (placeLabel != "" && agentLabel != "" && dateLabel == "") {
-                displaydata = placeLabel + ': ' + agentLabel;
-            } else if (placeLabel == "" && agentLabel != "" && dateLabel != "") {
-                displaydata = agentLabel + ', ' + dateLabel;
-            } else if (placeLabel != "" && agentLabel == "" && dateLabel != "") {
-                displaydata = placeLabel + ', ' + dateLabel;
-            } else if (placeLabel == "" && agentLabel == "" && dateLabel != "") {
-                displaydata = dateLabel;
+            
+            displaydata = "";
+            if (placeLabel != "") {
+                displaydata = placeLabel;
+            }
+            if (agentLabel != "") {
+                if (displaydata != "") { displaydata = displaydata + " - "; }
+                displaydata = displaydata + agentLabel;
+            }
+            if (dateLabel != "") {
+                if (displaydata != "") { displaydata = displaydata + " - "; }
+                displaydata = displaydata + dateLabel;
+            }
+            if (dateLabel == "") {
+                displaydata = "provisionActivity";
             }
     
         } else if (displaydata === 'v1#componentList' || displaydata === 'genreForm') {
@@ -4396,6 +4400,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     return $buttongroup;
   }
 
+  /*
   function setRtLabel(formobjectID, resourceID, inputID, rt) {
     var formobject = _.where(forms, {
       'id': formobjectID
@@ -4429,6 +4434,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     $('#bfeditor-debug').html(JSON.stringify(bfestore.store, undefined, ' '));
   }
+  */
 
   function setLiteral(formobjectID, resourceID, inputID) {
     var formobject = _.where(forms, {
