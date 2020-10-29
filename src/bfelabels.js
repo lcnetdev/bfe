@@ -11,7 +11,7 @@ bfe.define('src/bfelabels', ['require', 'exports','src/bfelogging' ], function(r
             }); 
         if (triple !== undefined) {
             var uri = triple.o;
-            labelResource = _.find(store, {
+            var labelResource = _.find(store, {
                 's': uri,
                 'p': labelProp
             });
@@ -69,7 +69,6 @@ bfe.define('src/bfelabels', ['require', 'exports','src/bfelogging' ], function(r
             },
             url: config.url + '/profile-edit/server/whichrt',
             success: function (data) {
-                var returnval;
                 var labelElements;
                 var authoritativeLabelElements;
                 var aapElements;
