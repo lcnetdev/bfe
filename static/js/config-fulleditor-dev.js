@@ -160,10 +160,11 @@ var config = {
 
     // "startingPointsUrl": versobase + "/api/configs?filter[where][configType]=startingPoints&filter[where][name]=" + name,
     "startingPoints": startingPoints,
-    "literalLangDataUrl": versobase + '/api/configs?filter[where][configType]=literalLangData',
+    "literalLangDataUrl": '/api/listconfigs?where=index.resourceType:literalLangData',
     "profiles": [
-        versobase + "/api/configs?filter[where][configType]=profile"
+        "/api/listconfigs?where=index.resourceType:profile"
     ],
+    
     "save": save,
     "api": ["setStartingPoints", "load"],
     "return": {
