@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --version && eslint -c .eslintrc.json src/"
+    "lint": "eslint --debug -c .eslintrc.json src/"
   },
   "dependencies": {
     "grunt": "^1.x.x",
