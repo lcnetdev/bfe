@@ -4,7 +4,7 @@ bfe.define('src/bfelabels', ['require', 'exports','src/bfelogging' ], function(r
 
     var bfelog = require('src/bfelogging');
 
-    exports.getLabel = function(resource, property, store, labelProp = "http://www.w3.org/2000/01/rdf-schema#label") {
+    exports.getLabel = function(resource, property, store, labelProp="http://www.w3.org/2000/01/rdf-schema#label") {
         var label = "";
         var triple = _.find(resource, {
                 'p': property
