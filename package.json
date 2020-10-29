@@ -18,7 +18,7 @@
     "url": "http://github.com/lcnetdev/bfe.git"
   },
   "devDependencies": {
-    "eslint": "^7.12.1",
+    "eslint": ">=6.0.0",
     "express": "^4.17.1",
     "serve-static": "^1.13.2"
   },
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src/"
+    "lint": "eslint -c .eslintrc.json src/"
   },
   "dependencies": {
     "grunt": "^1.x.x",
