@@ -1,4 +1,4 @@
-module.exports = {
+{
     "extends": "eslint:recommended",
     "globals": {
         "_" : false,
@@ -16,5 +16,4 @@ module.exports = {
         "browser": true,
         "jquery": true
     },
-    
-};
+}
