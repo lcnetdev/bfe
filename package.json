@@ -6,12 +6,12 @@
     "editor",
     "rdf"
   ],
-  "version": "1.3.1",
+  "version": "2.0.1",
   "engines": {
     "node": ">=10.0.0"
   },
   "homepage": "http://github.com/lcnetdev/bfe",
-  "author": "Kirk Hess <khes@loc.gov>",
+  "author": "Kevin Ford <kefo@loc.gov>",
   "main": "Gruntfile.js",
   "repository": {
     "type": "git",
