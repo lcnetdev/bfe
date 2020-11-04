@@ -34,7 +34,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
             bfestore.store = [];
             bfestore.name = guid();
             bfestore.templateGUID = guid();
-            bfestore.created = new Date().toUTCString();
+            bfestore.created = new Date().toISOString();
             bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
             bfestore.state = 'create';
     
@@ -395,7 +395,7 @@ exports.publish = function (params, callback) {
       save_json.profile = bfestore.profile;
       save_json.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       save_json.created = bfestore.created;
-      save_json.modified = new Date().toUTCString();
+      save_json.modified = new Date().toISOString();
 
       if (_.some(bfestore.store, { 'p': 'http://id.loc.gov/ontologies/bibframe/adminMetadata' })) {
         var modifiedDate = new Date(save_json.modified);

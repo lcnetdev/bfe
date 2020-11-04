@@ -991,7 +991,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       bfestore.store = [];
       bfestore.name = guid();
-      bfestore.created = new Date().toUTCString();
+      bfestore.created = new Date().toISOString();
       // Below is unused; harmless.
       bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       bfestore.state = 'loaduri';
@@ -1000,7 +1000,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 === ====
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
-      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.created = new Date().toISOString();
       bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
@@ -1091,7 +1091,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       bfestore.store = [];
       bfestore.name = guid();
-      bfestore.created = new Date().toUTCString();
+      bfestore.created = new Date().toISOString();
       bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
@@ -1215,7 +1215,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
-      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.created = new Date().toISOString();
       bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
 >>>> >>> aws
@@ -1369,7 +1369,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       bfestore.store = [];
       bfestore.name = guid();
-      bfestore.created = new Date().toUTCString();
+      bfestore.created = new Date().toISOString();
       bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       // bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
@@ -1380,7 +1380,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
       bfeditor.bfestore.store = [];
       bfeditor.bfestore.name = guid();
-      bfeditor.bfestore.created = new Date().toUTCString();
+      bfeditor.bfestore.created = new Date().toISOString();
       bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
       // bfeditor.bfestore.state = 'loaduri';
       bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
@@ -2062,7 +2062,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     bfestore.store = [];
     bfestore.name = guid();
     bfestore.templateGUID = guid();
-    bfestore.created = new Date().toUTCString();
+    bfestore.created = new Date().toISOString();
     bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
     bfestore.state = 'create';
     
