@@ -264,18 +264,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   };
 
   exports.loadBrowseData = function($browsediv){
-      
       createVersion = 1;
     
     var loadData = function(){
       if (browseloaded){
         return true;
       }
-
         browseloaded = true;
 
       $.get( config.url + '/api/list', function( data ) {
-        $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+        $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
         
         twoWeeksOfData = [];
         twoWeeksPlusOfData = [];
@@ -287,21 +285,23 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
          });
         dataTable.draw(false);
         
-        var $addDataStatusDiv = $("<div>").text("Only data from the last two weeks is displayed: ").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
-        var $addLastTwoWeeksDataButton = $("<button>").text("Show Last Two Weeks").addClass('btn btn-basic btn-xs');
-        var $addTwoWeekPlusDataButton = $("<button>").text("Show Last Month of Descriptions").addClass('btn btn-basic btn-xs');
-        var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-xs');
+        var $addDataStatusDiv = $("<div>").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
+        var $addDataStatusText = $("<p>").append($("<em>").text("Only data from the last two weeks is displayed"));
+        $addDataStatusDiv.append($addDataStatusText);
+        var $addLastTwoWeeksDataButton = $("<button>").text("Show Last Two Weeks").addClass('btn btn-basic btn-sm');
+        var $addTwoWeekPlusDataButton = $("<button>").text("Show Last Month of Descriptions").addClass('btn btn-basic btn-sm');
+        var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-sm');
 
         var lastTwoWeeksClick = function(){
           dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
           $addDataStatusDiv.text("Loading...");
           window.setTimeout(function(){
             twoWeeksOfData.forEach(function(d){
               dataTable.row.add(d);
             });
             dataTable.draw(false);
-            $addDataStatusDiv.text("Only data from the last two weeks is displayed:");
+            $addDataStatusText.text("Only data from the last two weeks is displayed");
             $addDataStatusDiv.append($addUnpostedDataButton); 
             $addUnpostedDataButton.click(unpostedClick); 
             $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
@@ -319,20 +319,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         dataTable.row.add(d);
                     });
                     dataTable.draw(false);
-                    $addDataStatusDiv.text('All descriptions');
+                    $addDataStatusText.text('All descriptions');
                     $addLastTwoWeeksDataButton.off('click');
                     $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
                     $addDataStatusDiv.append($addLastTwoWeeksDataButton);
                 },500)
             } else {
-                $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+                $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
                 $.get( config.url + '/api/list?daysago=30', function( data ) {
                     data.forEach(function(d){
                         dataTable.row.add(d);
                         twoWeeksPlusOfData.push(d);
                     });
                     dataTable.draw(false);
-                    $addDataStatusDiv.text('Viewing last 30 days of descriptions');
+                    $addDataStatusText.text('Viewing last 30 days of descriptions');
                     $addLastTwoWeeksDataButton.off('click');
                     $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
                     $addDataStatusDiv.append($addLastTwoWeeksDataButton);
@@ -343,7 +343,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         var unpostedClick = function(){
           $addDataStatusDiv.text('Loading ...');
           dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
           window.setTimeout(function(){
             twoWeeksOfData.concat(twoWeeksPlusOfData).forEach(function(d){
               //if(_.isEmpty(d.status) || d.status != 'success')
@@ -351,7 +351,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 dataTable.row.add(d);
             });
             dataTable.draw(false);
-            $addDataStatusDiv.text("Only unposted displayed:");
+            $addDataStatusText.text("Only unposted displayed:");
             $addLastTwoWeeksDataButton.off('click');
             $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
             $addDataStatusDiv.append($addLastTwoWeeksDataButton); 
@@ -539,8 +539,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               'render': function (td, cellData, rowData, row) {
                 //             return '<a href="'+data+'">edit</a>';
 
-                return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.name + '" type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button> \
-                               <button id="bfeditor-delete' + rowData.name + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.name + '"><span class="glyphicon glyphicon-trash"></span></button> \
+                return '<div class="btn-group" id="retrieve-btn"><button id="bfeditor-retrieve' + rowData.name + '" type="button" class="btn btn-warning"><span class="fa fa-pencil"></span></button> \
+                               <button id="bfeditor-delete' + rowData.name + '"type="button" class="btn btn-danger" data-toggle="modal" data-target="#bfeditor-deleteConfirm' + rowData.name + '"><span class="fa fa-trash"></span></button> \
                                </div>';
               },
               'createdCell': function (td, cellData, rowData, row, col) {
@@ -672,7 +672,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         });
         
         // the datatable is initialized add a status message
-        $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+        $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
         loadData();
         browseloaded = false;
       });
@@ -682,7 +682,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       // the table already exists, clear it out
       dataTable.clear();
       dataTable.draw(false);
-      $('#table_id td').html('<h4><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+      $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
       $("#two-week-plus-div").remove();
       loadData();
       browseloaded = false;
@@ -726,55 +726,34 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     this.setConfig(config);
     editordiv = document.getElementById(id);
     var $containerdiv = $('<div class="container-fluid"><h2>Bibframe Editor Workspace</h2></div>');
+    if (config.enviro !== undefined && config.enviro.text !== undefined) {
+        var $envirodiv = $('<div class="container-fluid ' + config.enviro.classes +'"><h4 class="text-center font-weight-bold">' + config.enviro.text + '</h4></div>');
+        $containerdiv.prepend($envirodiv);
+    }
     var $tabuldiv = $('<div class="tabs"></div>');
-    var $tabul = $('<ul class="nav nav-tabs"></ul>');
+    var $tabul = $('<ul class="nav nav-tabs" id="theTabs" role="tablist"></ul>');
 
-/*
-=== ====
-  exports.fulleditor = function (config, id) {
-    this.setConfig(config);
-    editordiv = document.getElementById(id);
-    var $containerdiv = $('<div class="container-fluid"></div>');
-    var $tabuldiv = $('<div class="tabs "></div>');
-    var $tabul = $('<ul class="nav nav-tabs"></ul>');
-
-    var $tabcontentdiv = $('<div class="tab-content"></div>');
-    var $browsediv = $('<div id="browse" class="tab-pane fade in active"><br></div>');
-    var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
-    var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
-    var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
-    var $loadmarcdiv = $('<div id="loadmarc" class="tab-pane fade"><br></div>');
-    var $loadmergediv = $('<div id="loadmerge" class="tab-pane fade"><br></div>');
-
-    var $browseTab = $('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
-    $browseTab.click(function(){
-      exports.loadBrowseData();
-    })
-
-    $tabul.append($browseTab);
->>>> >>> aws
-*/    
-    var $browseTab = $('<li class="active"><a data-toggle="tab" id="browsetab" href="#browse">Browse</a></li>');
+    var $browseTab = $('<li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" id="browsetab" href="#browse" aria-controls="browse" aria-selected="true">Browse</a></li>');
     $browseTab.click(function(){
       exports.loadBrowseData();
     })
     $tabul.append($browseTab);
-    $tabul.append('<li><a data-toggle="tab" id="createtab" href="#create">Editor</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="loadworktab" href="#loadwork">Load Work</a></li>');
-    $tabul.append('<li><a data-toggle="tab" id="loadibctab" href="#loadibc">Load IBC</a></li>');
+    $tabul.append('<li class="nav-item"><a class="nav-link" data-toggle="tab" id="createtab" href="#create" role="tab" aria-controls="editor" aria-selected="false">Editor</a></li>');
+    $tabul.append('<li class="nav-item"><a class="nav-link" data-toggle="tab" id="loadworktab" href="#loadwork" role="tab" aria-controls="load-work" aria-selected="false">Load Work</a></li>');
+    $tabul.append('<li class="nav-item"><a class="nav-link" data-toggle="tab" id="loadibctab" href="#loadibc" role="tab" aria-controls="load-ibc" aria-selected="false">Load IBC</a></li>');
     if(editorconfig.enableLoadMarc) {
-      $tabul.append('<li><a data-toggle="tab" id="loadmarctab" href="#loadmarc">Load MARC</a></li>');
+      $tabul.append('<li class="nav-item"><a class="nav-link" data-toggle="tab" id="loadmarctab" href="#loadmarc" role="tab" aria-controls="load-marc" aria-selected="false">Load MARC</a></li>');
       //$tabul.append('<li><a data-toggle="tab" id="loadmergetab" href="#loadmerge">Merge OCLC</a></li>');
     }
     if(!_.isEmpty(editorconfig.basedbURI)){
-      $tabul.append('<ul class="nav navbar-nav navbar-right"><li class="divider"></li> \
-        <a href="' + editorconfig.basedbURI + '">» Search BIBFRAME database</a> </ul>')
+      $tabul.append('<ul class="nav justify-content-end"><li class="nav-item"> \
+        <a class="nav-link" href="' + editorconfig.basedbURI + '" role="tab" aria-controls="go-bfdb" aria-selected="false">» Search BIBFRAME database</a> </li></ul>')
     }
     $tabuldiv.append($tabul);
     $containerdiv.append($tabuldiv);
 
     var $tabcontentdiv = $('<div class="tab-content"></div>');
-    var $browsediv = $('<div id="browse" class="tab-pane fade in active"><br></div>');
+    var $browsediv = $('<div id="browse" class="tab-pane fade show active"><br></div>');
     var $creatediv = $('<div id="create" class="tab-pane fade"><br></div>');
     var $loadworkdiv = $('<div id="loadwork" class="tab-pane fade"><br></div>');
     var $loadibcdiv = $('<div id="loadibc" class="tab-pane fade"><br></div>');
@@ -782,47 +761,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var $loadmergediv = $('<div id="loadmerge" class="tab-pane fade"><br></div>');
     
     exports.loadBrowseData($browsediv);
-/*
-=== ====
-    var $menudiv = $('<div>', {
-      id: 'bfeditor-menudiv',
-      class: 'navbar navbar-expand-lg navbar-light bg-light col-md-10'
-    });
-    var $formdiv = $('<div>', {
-      id: 'bfeditor-formdiv',
-      class: 'col-md-10 main'
-    });
-    // var optiondiv = $('<div>', {id: "bfeditor-optiondiv", class: "col-md-2"});
-    var $rowdiv = $('<div>', {
-      class: 'row'
-    });
-
-    var $loader = $('<div><br /><br /><h2>Loading...</h2><div class="progress progress-striped active">\
-                          <div class="progress-bar progress-bar-info" id="bfeditor-loader" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 20%">\
-                              <span class="sr-only">80% Complete</span>\
-                          </div>\
-                      </div>');
-
-    $formdiv.append($loader);
-    exports.loadBrowseData($browsediv);
-    //$menudiv.append('<h3>Create Resource</h3>');
-    $menudiv.append('<span id="profileLabel" style="display: none"></span>');
-
-    var $createResourcediv = $('<div class="dropdown pull-left" style="padding-right: 10px">');
-    var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target=".dropdown-collapse">\
-    <span class="glyphicon glyphicon-plus"></span> Create Resource </span></button>');
-    
-    $createResourcediv.append($createResourceButton);
-    $menudiv.append($createResourcediv);
-
-    $rowdiv.append($menudiv);
-    $rowdiv.append($formdiv);
-
-    $creatediv.append($rowdiv);
-
-    var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
->>> >>>> aws
-*/
 
     var $loadworkform = $('<div class="container"> \
               <form role="form" method="get"> \
@@ -875,94 +813,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               e.preventDefault();
             });
           });
-
-/*
-=== ====
-    
-    editorconfig.setStartingPoints.callback(config, function (config) {
-      for (var h = 0; h < config.startingPoints.length; h++) {
-        var sp = config.startingPoints[h];
-        //var $menuul = $('<ul>', {
-        //  class: 'nav nav-sidebar'
-        //});
-        
-        //var $menuheadingul = null;
-        var $createResourcesubmenuul = null;
-        if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
-          //var $menuheading = $('<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '<span class="caret"></span></a></li>');
-          var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
-          
-          $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
-          //$menuheadingul = $('<ul class="dropdown-menu"></ul>');
-
-          //$menuheading.append($menuheadingul);
-          $createResourcesubmenu.append($createResourcesubmenuul);
-          
-          $createResourcemenuul.append($createResourcesubmenu)
-          //$menuul.append($menuheading);
-        }
-        for (var i = 0; i < sp.menuItems.length; i++) {
-          var $li = $('<li>');
-          var $a = $('<a>', {
-            href: '#',
-            id: 'sp-' + h + '_' + i,
-            class: "test",
-            tabindex: "-1"
-          });
-          $a.html(sp.menuItems[i].label);
-          $a.click(function (event) {
-            var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
-            $('#createresourcesubmenuul.open').hide();
-            $('#createresourcesubmenuul.open').removeClass('open');
-            $('#profileLabel').text(profile + ":" + event.target.text);
-            
-            bfe.exitButtons(editorconfig);
-
-            menuSelect(this.id);
-          });
-          $li.append($a);
-
-          if ($createResourcesubmenuul !== null) {
-            $createResourcesubmenuul.append($li)
-          } else {
-            $createResourcemenuul.append($li)
-          }
-        }
-        $createResourcediv.append($createResourcemenuul);
-
-      }
-
-      var getProfileOptions = 
-       function (jqObject, elementType) {
-        for (var h = 0; h < config.startingPoints.length; h++) {
-          var sp = config.startingPoints[h];
-          var label = sp.menuGroup
-          for (var i = 0; i < sp.menuItems.length; i++) {
-            var $option = $('<option>', {
-              class: 'dropdown-item',
-              value: 'sp-' + h + '_' + i
-            });
-            if (sp.menuItems[i].type[0] === elementType) {
-              $option.html(label);
-              jqObject.append($option);
-            }
-          }
-        }
-      }
-      $(function(){
-        $('.dropdown-submenu>a').unbind('click').click(function(e){
-          var $openmenu = $('#createresourcesubmenuul.open');
-          $openmenu.hide();
-          $openmenu.removeClass('open');
-          var $dropdown = $(this).next('ul');
-          $dropdown.addClass('open');
-          $dropdown.toggle();
-          e.stopPropagation();
-          e.preventDefault();
-        });
-      });
->>> >>>> aws
-*/
 
       getProfileOptions($loadworkform.find('#bfeditor-loadwork-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
       getProfileOptions($loadmarcdiv.find('#bfeditor-loadmarc-dropdownMenu'), "http://id.loc.gov/ontologies/bibframe/Work");
@@ -1071,7 +921,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $messagediv.append('<strong>Retrieve disabled</strong>');
         $messagediv.insertBefore('.nav-tabs');
         $('#bfeditor-previewPanel').remove();
-        $('.nav-tabs a[href="#browse"]').tab('show')
+        $('#theTabs a[href="#browse"]').tab('show');
       }
     });
 
@@ -1095,131 +945,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
       bfestore.state = 'loaduri';
       bfestore.profile = spoints.useResourceTemplates[0];
-/*
-=== ====
-    $loadmarcdiv.append($('<div class="container"> \
-              <form role="form" method="get"> \
-              <div class="form-group"> \
-              <label for="marcdx">Identifier</label> \
-              <div class="input-group"> \
-              <div class="input-group-btn"> \
-              <button type="button" id="marcdx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bib ID <span class="caret"></span></button> \
-              <ul class="dropdown-menu"> \
-              <li><a href="#" id="bibid">Bib ID</a></li> \
-              <li><a href="#" id="lccn">LCCN</a></li> \
-              <li><a href="#" id="oclc">OCLC</a></li> \
-              </ul></div> \
-              <input id="bfeditor-loadmarcterm" class="form-control" placeholder="Enter Bib ID, LCCN or OCLC number" type="text" name="url"></div> \
-              <input type="hidden" id="loadmarc-uri"></hidden>\
-              <label for="bfeditor-loadmarc-dropdown">Choose Profile</label> \
-              <div id="bfeditor-loadmarc-dropdown" class="dropdown"><select id="bfeditor-loadmarc-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
-              <button id="bfeditor-loadmarc" type="button" class="btn btn-primary">Submit</button> \
-              </form></div>'));
-
-    
-
-    $loadmarcdiv.find('.dropdown-menu > li > a').click(function () {
-      $('#marcdx').html($(this).text() + ' <span class="caret">');
-    });
-    $loadmarcdiv.find('#bfeditor-loadmarc').click(function () {
-      var term = $('#bfeditor-loadmarcterm').val();
-      var dx = 'rec.id';
-      var url;
-
-      if ($('#marcdx').text().match(/LCCN/i)) {
-        dx = 'bath.lccn';
-      }
-
-      if ($('#marcdx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
-      } else {
-        url = config.metaproxyURI + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
-      }
-      $('#loadmarc-uri').attr('value', url);
-    });
-
-    //merge
-    $loadmergediv.append($('<div class="container"> \
-              <form role="form" method="get"> \
-              <div class="form-group"> \
-              <label for="marcdx">Identifier</label> \
-              <div class="input-group"> \
-              <div class="input-group-btn"> \
-              <button type="button" id="mergedx" class="btn btn-default dropdown-toggle" data-toggle="dropdown">OCLC<span class="caret"></span></button> \
-              <ul class="dropdown-menu"> \
-              <li><a href="#" id="oclc">OCLC</a></li> \
-              <li><a href="#" id="bibid">Bib ID</a></li> \
-              <li><a href="#" id="lccn">LCCN</a></li> \
-              </ul></div> \
-              <input id="bfeditor-loadmergeterm" class="form-control" placeholder="Enter OCLC, Bib ID or LCCN" type="text" name="url"></div> \
-              <input type="hidden" id="loadmerge-uri"></hidden>\
-              <label for="url">URL for Bibframe JSON</label> \
-              <input id="bfeditor-loadibcuriInput" class="form-control" placeholder="Enter URL for Bibframe" type="text" name="url" id="url"> \
-              <label for="bfeditor-loadmerge-dropdown">Choose Profile</label> \
-              <div id="bfeditor-loadmerge-dropdown" class="dropdown"><select id="bfeditor-loadmerge-dropdownMenu" type="select" class="form-control">Select Profile</select></div></div> \
-              <button id="bfeditor-loadmerge" type="button" class="btn btn-primary">Submit</button> \
-              </form></div>'));
-
-    
-
-    $loadmergediv.find('.dropdown-menu > li > a').click(function () {
-      $('#marcdx').html($(this).text() + ' <span class="caret">');
-    });
-
-    $loadmergediv.find('#bfeditor-loadmerge').click(function () {
-      var term = $('#bfeditor-loadmergeterm').val();
-      //var dx = 'rec.id';
-      var url;
-
-      //if ($('#mergedx').text().match(/LCCN/i)) {
-      //  dx = 'bath.lccn';
-      //}
-
-      if ($('#mergedx').text().match(/OCLC/i)) {
-        url = config.url + '/bfe/server/retrieveOCLC?oclcnum='+ term;
-      } else {
-        //url = 'http://lx2.loc.gov:210/LCDB?query=' + dx + '=' + term + '&recordSchema=bibframe2a&maximumRecords=1';
-      }
-      $('#loadmerge-uri').attr('value', url);
-    });
-
-    $tabcontentdiv.append($browsediv);
-    $tabcontentdiv.append($creatediv);
-    $tabcontentdiv.append($loadworkdiv);
-    $tabcontentdiv.append($loadibcdiv);
-    $tabcontentdiv.append($loadmarcdiv);
-    $tabcontentdiv.append($loadmergediv);
-
-    $tabcontentdiv.find('#bfeditor-loadibcuri, #bfeditor-loadmerge').click(function () {
-      // var loadtemplates = [];
-
-      if (this.id == 'bfeditor-loadmerge') {
-        var spid = $(this.parentElement).find('#bfeditor-loadmerge-dropdownMenu').val();
-
-        var label = $(this.parentElement).find('#bfeditor-loadmerge-dropdownMenu option:selected').text();
-        $('#profileLabel').text(label + ":Instance");
-
-        var spnums = spid.replace('sp-', '').split('_');
-        spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
-        bfeditor.bfestore.state = 'loadmarc';
-      } else {
-        spid = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu').val();
-        label = $(this.parentElement).find('#bfeditor-loadibc-dropdownMenu option:selected').text();
-        $('#profileLabel').text(label + ":Instance");
-  
-        spnums = spid.replace('sp-', '').split('_');
-  
-        var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
-        bfeditor.bfestore.state = 'loaduri';
-      }
-
-      bfeditor.bfestore.store = [];
-      bfeditor.bfestore.name = guid();
-      bfeditor.bfestore.created = new Date().toISOString();
-      bfeditor.bfestore.url = config.url + '/verso/api/bfs?filter=%7B%22where%22%3A%20%7B%22name%22%3A%20%22' + bfeditor.bfestore.name + '%22%7D%7D';
-      bfeditor.bfestore.profile = spoints.useResourceTemplates[0];
->>>> >>> aws
-*/
 
       var temptemplates = [];
       spoints.useResourceTemplates.forEach(function (l) {
@@ -1455,18 +1180,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     
     exports.fulleditor(config, "create");
 
-    // Debug div
-    if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
-      var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12 main panel-group">\
-                           <div class="panel panel-default"><div class="panel-heading">\
-                           <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#debuginfo">Debug output</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="debuginfo"><div class="panel-body"><pre id="bfeditor-debug"></pre></div></div></div>\
-                           </div>');
-      $(editordiv).append($debugdiv);
-      var $debugpre = $('#bfeditor-debug');
-      $debugpre.html(JSON.stringify(profiles, undefined, ' '));
-    }
-
     var $footer = $('<footer>', {
       class: 'footer'
     });
@@ -1525,15 +1238,40 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $formdiv.append($loader);
 
     $menudiv.append('<span id="profileLabel" style="display: none"></span>');
-
-    var $createResourcediv = $('<div class="dropdown pull-left" style="padding-right: 10px">');
-    var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-target=".dropdown-collapse">\
-    <span class="glyphicon glyphicon-plus"></span> Create Resource </span></button>');
     
-    $createResourcediv.append($createResourceButton);
-    $menudiv.append($createResourcediv);
+    /*
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown link
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Submenu</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Submenu action</a></li>
+              <li><a class="dropdown-item" href="#">Another submenu action</a></li>
+    */
+    
+    var $createResourceDiv = $('<div class="btn-group-vertical pull-left" style="padding-right: 10px"></div>');
+    //var $createResourceButton = $('<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-plus"></span> Create Resource </span></button>');
+    var $createResourceButton = $('<div class="btn-group" role="group"> \
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> \
+                <span class="fa fa-plus"></span> Create Resource </span> \
+            </button> \
+        </div>');
+    var $buttonGroupProfiles = $('<ul class="dropdown-menu" aria-labelledby="btnGroupDrop1"></ul>');
+    $createResourceButton.append($buttonGroupProfiles);
+    $createResourceDiv.append($createResourceButton);
+    $menudiv.append($createResourceDiv);
 
     $rowdiv.append($menudiv);
+    //$rowdiv.append('<div class="row"><span id="profileLabel"></span></div>');
     $rowdiv.append($formdiv);
 
     if ( entryfunc == "fulleditor" ) {
@@ -1544,112 +1282,98 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     } else {
         $(editordiv).append($rowdiv);    
     }
-
-    var $createResourcemenuul = $('<ul id="createResourcemenuul" class="dropdown-menu"></ul>');
     
     editorconfig.setStartingPoints.callback(config, function (config) {
-      for (var h = 0; h < config.startingPoints.length; h++) {
-        var sp = config.startingPoints[h];
-        var $createResourcesubmenuul = null;
-        if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
-          var $createResourcesubmenu =  $('<li class="dropdown-submenu"><a class="test" href="#">' + sp.menuGroup + '<span class="caret-right"></span></a></li>');
-          
-          $createResourcesubmenuul = $('<ul id="createresourcesubmenuul" class="dropdown-menu"></ul>');
-          $createResourcesubmenu.append($createResourcesubmenuul);
-          $createResourcemenuul.append($createResourcesubmenu)
-        }
-        for (var i = 0; i < sp.menuItems.length; i++) {
-          var $li = $('<li>');
-          var $a = $('<a>', {
-            href: '#',
-            id: 'sp-' + h + '_' + i,
-            class: "test",
-            tabindex: "-1"
-          });
-          $a.html(sp.menuItems[i].label);
-          $a.click(function (event) {
-            var profile = $($(event.target.parentElement.parentElement.parentElement).contents()[0]).text();
-            $('#createresourcesubmenuul.open').hide();
-            $('#createresourcesubmenuul.open').removeClass('open');
-            $('#profileLabel').text(profile + ":" + event.target.text);
-            
-            menuSelect(this.id);
-          });
-          $li.append($a);
-
-          if ($createResourcesubmenuul !== null) {
-            $createResourcesubmenuul.append($li)
-          } else {
-            $createResourcemenuul.append($li)
-          }
-        }
-        $createResourcediv.append($createResourcemenuul);
-
-      }
-
-      // Commenting out 2020 Oct 19 to fix lint crap.
-      /*
-      var getProfileOptions = 
-       function (jqObject, elementType) {
         for (var h = 0; h < config.startingPoints.length; h++) {
-          var sp = config.startingPoints[h];
-          var label = sp.menuGroup
-          for (var i = 0; i < sp.menuItems.length; i++) {
-            var $option = $('<option>', {
-              class: 'dropdown-item',
-              value: 'sp-' + h + '_' + i
-            });
-            if (sp.menuItems[i].type[0] === elementType) {
-              $option.html(label);
-              jqObject.append($option);
+            var sp = config.startingPoints[h];
+            var $createResourcesubmenuul = null;
+            if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
+                /*
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown link
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Submenu</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Submenu action</a></li>
+              <li><a class="dropdown-item" href="#">Another submenu action</a></li>
+              */
+                var $profileGroup = $('<li class="dropdown-submenu"></li>');
+                var $profileButton = $('<a id="subProfileGroup' + h +'" class="dropdown-item dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + sp.menuGroup + '</a>');
+                var $subProfilesGroup = $('<ul class="dropdown-menu" aria-labelledby="subProfileGroup' + h +'"></ul>')
+
+                for (var i = 0; i < sp.menuItems.length; i++) {
+                    var $li = $('<li>');
+                    var $a = $('<a>', {
+                        href: '#',
+                        id: 'sp-' + h + '_' + i,
+                        class: "dropdown-item",
+                        tabindex: "-1"
+                    });
+                    $a.html(sp.menuItems[i].label);
+                    $a.click(function (event) {
+                        event.preventDefault();
+                        var $subMenu = $('#' + event.target.id).closest('.dropdown-submenu');
+                        var $profileObj = $subMenu.find('a')[0];
+                        var profile = $profileObj.text;
+                        $('#profileLabel').text(profile + ":" + event.target.text);
+                        menuSelect(this.id);
+                    });
+                    $li.append($a);
+                    $subProfilesGroup.append($a);
+                }
+                $profileGroup.append($profileButton);
+                $profileGroup.append($subProfilesGroup);
+                $buttonGroupProfiles.append($profileGroup);
             }
-          }
+            
+            $(function(){
+                $('.dropdown-submenu > a').on("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();                
+    
+                    var $openmenu = $('.dropdown-submenu > .dropdown-submenu.show');
+                    $openmenu.hide();
+                    $openmenu.removeClass('hide');
+    
+                    var submenu = $(this);
+                    $('.dropdown-submenu .dropdown-menu').removeClass('show');
+                    submenu.next('.dropdown-menu').addClass('show');
+                });
+            });
+
+            $(function(){
+                $('.dropdown').on("hidden.bs.dropdown", function() {
+                    // hide any open menus when parent closes
+                    $('.dropdown-menu.show').removeClass('show');
+                });
+            });
         }
-      }
-      */
-      $(function(){
-        $('.dropdown-submenu>a').unbind('click').click(function(e){
-          var $openmenu = $('#createresourcesubmenuul.open');
-          $openmenu.hide();
-          $openmenu.removeClass('open');
-          var $dropdown = $(this).next('ul');
-          $dropdown.addClass('open');
-          $dropdown.toggle();
-          e.stopPropagation();
-          e.preventDefault();
-        });
-      });
-
     });
-
-/*
-=== ====
-      } else {
-        // retrieve disabled
-        $(this.parentElement).find('#bfeditor-loaduriInput').val('This function has been disabled');
-      }
-    });
-
-
-    $containerdiv.append($tabcontentdiv);
-
-    $(editordiv).append($containerdiv);
-
->>> >>>> aws
-*/
 
     // Debug div
+    // Full editor.
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
-      var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12 main panel-group">\
-                           <div class="panel panel-default"><div class="panel-heading">\
-                           <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#debuginfo">Debug output</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="debuginfo"><div class="panel-body"><pre id="bfeditor-debug"></pre></div></div></div>\
-                           </div>');
+      var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12">\
+                        <div class="card"> \
+                            <div class="card-body"> \
+                                <h3 class="card-title"><a role="button" data-toggle="collapse" href="#debuginfo">Debug output</a></h3> \
+                                <div class="card-text collapse in" id="debuginfo"> \
+                                    <pre id="bfeditor-debug"></pre> \
+                                </div> \
+                           </div>\
+                        </div>\
+                        </div>');
       $(editordiv).append($debugdiv);
-
-      $('#debuginfo').collapse();
-      //var $debugpre = $('#bfeditor-debug');
-      //$debugpre.html(JSON.stringify(profiles, undefined, ' '));
 
     }
 
@@ -1716,7 +1440,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $(editordiv).append($creatediv);
     
     // Debug div
+    // exports.editor
     if (editorconfig.logging !== undefined && editorconfig.logging.level !== undefined && editorconfig.logging.level == 'DEBUG') {
+      /*
       var $debugdiv = $('<div>', {
         class: 'col-md-12'
       });
@@ -1725,8 +1451,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         id: 'bfeditor-debug'
       });
       $debugdiv.append($debugpre);
-      $(editordiv).append($debugdiv);
-      $debugpre.html(JSON.stringify(profiles, undefined, ' '));
+      */
+        var $debugdiv = $('<div id="bfeditor-debugdiv" class="col-md-12">\
+                        <div class="card"> \
+                            <div class="card-body"> \
+                                <h3 class="card-title"><a role="button" data-toggle="collapse" href="#debuginfo">Debug output</a></h3> \
+                                    <div class="card-text collapse in" id="debuginfo"> \
+                                    <pre id="bfeditor-debug"></pre> \
+                                </div> \
+                           </div>\
+                        </div>\
+                        </div>');
+      $(editordiv).append($debugdiv);$(editordiv).append($debugdiv);
+      $('#debuginfo').collapse();
+      //$debugpre.html(JSON.stringify(profiles, undefined, ' '));
     }
 
     var $footer = $('<div>', {
@@ -1856,7 +1594,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
                 if (good_to_save) {
                     
-                    var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+                    var $savingInfo = $('<span id="savingicon" style="color: black" class="fa fa-refresh fa-refresh-animate"></span>');
                     $('#bfeditor-exitcancel').text("Cancel");
                     $('#resource-id-popover').append($savingInfo);
             
@@ -1871,9 +1609,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
                             var decimaltranslator = window.ShortUUID("0123456789");
                             var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-                            var linkUrl = config.url + '/bfe/index.html#' + resourceName.substring(0,8);
-                            $messagediv.append('<strong>Description saved:</strong><a href='+linkUrl+'>'+resourceName.substring(0,8)+'</a>');
-                            $messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
+                            var page = location.href.split("/").pop(); 
+                            if (page.indexOf('#') > 0) {
+                                page = page.split('#')[0];
+                            }
+                            var linkUrl = config.url + '/bfe/' + page + '#' + resourceName.substring(0,8);
+                            $messagediv.append('<strong>Description saved:</strong> <button type="button" class="btn btn-link" onclick="window.location.reload();">'+resourceName.substring(0,8)+'</button>');
+                            //$messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
                             $messagediv.insertBefore('.nav-tabs');
                         
                             $('#bfeditor-exitcancel').text("Cancel");
@@ -1989,17 +1731,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           bfeditor.bfestore.store2jsonldcompacted(jsonstr, jsonPanel);
 
           function humanizedPanel(data) {
-            $('#humanized .panel-body pre').text(data);
+            $('#humanized pre').text(data);
           }
 
           function jsonPanel(data) {
             bfestore.store2turtle(data, humanizedPanel);
 
-            $('#jsonld .panel-body pre').text(JSON.stringify(data, undefined, ' '));
+            $('#jsonld pre').text(JSON.stringify(data, undefined, ' '));
 
             if (typeof d3 !== "undefined") {
                 bfestore.store2jsonldnormalized(data, function (expanded) {
-                    d3.jsonldVis(expanded, '#jsonld-vis .panel-body', {
+                    d3.jsonldVis(expanded, '#jsonld-vis', {
                         w: 800,
                         h: 600,
                         maxLabelWidth: 250
@@ -2012,17 +1754,41 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           var $backButton = $('<button id="bfeditor-exitback" type="button" class="btn btn-warning">&#9664;</button>');
 
           var $bfeditor = $('#create > .row');
-          var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10 main panel-group">\
-                           <div class="panel panel-default"><div class="panel-heading">\
-                           <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#humanized">Preview</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="humanized"><div class="panel-body"><pre></pre></div></div>\
-                           <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld">JSONLD</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="jsonld"><div class="panel-body"><pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre></div></div>\
-                           <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#rdfxml">RDF-XML</a></h3></div>\
-                           <div class="panel-collapse collapse in" id="rdfxml"><div class="panel-body"><pre></pre></div></div>\
-                           <div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3</div></div>\
-                           <div class="panel-collapse collapse in" id="jsonld-vis"><div class="panel-body"></div></div></div>\
-                           </div>');
+          var $preview = $('<div id="bfeditor-previewPanel" class="col-md-10">\
+                                <div class="card"> \
+                                    <div class="card-body"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#humanized">Preview</a></h3> \
+                                        <div class="card-text collapse in" id="humanized"> \
+                                            <pre></pre> \
+                                        </div> \
+                                    </div> \
+                                </div> \
+                                \
+                                <div class="card"> \
+                                    <div class="card-body"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonld">JSONLD</a></h3> \
+                                        <div class="card-text collapse in" id="jsonld"> \
+                                                <pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre> \
+                                        </div> \
+                                    </div> \
+                                </div> \
+                                \
+                                <div class="card"> \
+                                    <div class="card-body"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#rdfxml">RDF-XML</a></h3> \
+                                        <div class="card-text collapse in" id="rdfxml"> \
+                                            <pre></pre> \
+                                        </div> \
+                                    </div> \
+                                </div> \
+                                \
+                                <div class="card"> \
+                                    <div class="card-body"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3> \
+                                        <div class="card-text collapse in" id="jsonld-vis"></div> \
+                                    </div> \
+                                </div> \
+                            </div>');
 
           $('#exitButtonGroup').append($backButton);
 
@@ -2184,7 +1950,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // Let's create the form
         var form = $('<form>', {
             id: 'bfeditor-form-' + fobject.id,
-            class: 'form-horizontal',
+            class: 'form',
             role: 'form'
         });
         form.submit(function(e){
@@ -2200,19 +1966,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
             var $resourcediv = $('<div>', {
                 id: rt.useguid,
-                'data-uri': rt.defaulturi
+                'data-uri': rt.defaulturi,
+                 class: 'form-inline'
             }); // is data-uri used?
 
             // Show name of Profile being used.
-            var $resourcedivheading = $('<div>');
-            var $resourcedivheadingh4 = $('<h4 id="resource-title" class="pull-left" style="margin-right:5px">');
+            var $resourcedivheading = $('<div class="row pt-3">');
+            var $resourcedivheadingh4 = $('<h4 id="resource-title">');
             $resourcedivheadingh4.text($('#profileLabel').text());
 
             // Create little 'i' icon with resource label and URI.
             if (rt.defaulturi.match(/^http/)) {
                 var rid = rt.defaulturi;
                 var rLabel = _.find(bfestore.store, {"s": rid, "p": "http://www.w3.org/2000/01/rdf-schema#label"});
-                var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+                var $resourceInfo = $('<a><span class="fa fa-info-sign"></span></a>');
                 $resourceInfo.attr('data-content', rid);
                 $resourceInfo.attr('data-toggle', 'popover');
                 $resourceInfo.attr('title', !_.isEmpty(rLabel)? rLabel.o : 'Resource ID');
@@ -2233,11 +2000,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // populate the clone button for Instance or Work descriptions
                 if (rt.id.match(/:Instance$/i)) {
                     $clonebutton.attr('id', 'clone-instance');
-                    $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Instance');
+                    $clonebutton.html('<span class="fa fa-duplicate"></span> Clone Instance');
                     $clonebutton.data({ 'match': 'instances', 'label': 'Instance' });
                 } else if (rt.id.match(/:Work$/i)) {
                     $clonebutton.attr('id', 'clone-work');
-                    $clonebutton.html('<span class="glyphicon glyphicon-duplicate"></span> Clone Work');
+                    $clonebutton.html('<span class="fa fa-duplicate"></span> Clone Work');
                     $clonebutton.data({ 'match': 'works', 'label': 'Work' });
                 }
     
@@ -2275,13 +2042,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                     <span class="input-group-addon">New Resource ID:</span>\
                                     <input type="text" class="form-control" id="resource-id" value="' + newid + '">\
                                     <span class="input-group-btn">\
-                                      <button class="btn btn-default" type="button" id="clear-id">Clear</button>\
+                                      <button class="btn btn-light" type="button" id="clear-id">Clear</button>\
                                     </span>\
                                   </div>\
                               </div>\
                               <div class="modal-footer">\
                                 <button type="button" class="btn btn-primary" id="clone-save">Save</button>\
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>\
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>\
                               </div>\
                             </div>\
                           </div>\
@@ -2369,7 +2136,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             var $formgroup = $('<div>', {
                 class: 'form-group row'
             });
-            $resourcediv.append($formgroup);
+            form.append($formgroup);
+            // EDIT HERE $resourcediv.append($formgroup);
             
             /*
             // Is any of the below used????
@@ -2455,8 +2223,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 // add the uri to the data of the element
                 $formgroup.data('uriLabel',property.propertyURI+'|'+property.propertyLabel);
 
-                var $saves = $('<div class="form-group row" style="width:90%;"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
-                var $label = $('<label for="' + property.guid + '" class="col-sm-2 control-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
+                var $saves = $('<div class="row" style="width:90%;"><div class="btn-toolbar col-sm-12" role="toolbar"></div></div></div>');
+                var $label = $('<label for="' + property.guid + '" class="col-md-3 col-form-label" title="' + ((property.remark) ? property.remark : "") + '"></label>');
             
                 if (rt.embedType != 'modal') {
                     // add in the on/off switch for making templates, pass it the uri|label combo as well so it knows to set it on off flag
@@ -2486,15 +2254,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         vpattern = (property.valueConstraint.validatePattern !== undefined) ? ' pattern="' + property.valueConstraint.validatePattern + '"' : '';
                     }
           
-                    $literalCol = $('<div class="col-sm-10"></div>');
+                    $literalCol = $('<div class="col-md-9"></div>');
                     $inputHolder = $('<div class="input-group literal-input-group"></div>');
                     $input = $('<textarea rows="1" class="form-control literal-input" id="' + property.guid + '"' + vpattern + ' tabindex="' + tabIndices++ + '">');
                     $inputHolder.append($input);
                     $literalCol.append($inputHolder);  
              
                     if (property.type == 'literal-lang') {
-                        var $buttonGroupHolder = $('<div class="input-group-btn" ></div>');
-                        $selectLang = $('<select id="' + property.guid + '-lang" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
+                        $selectLang = $('<select id="' + property.guid + '-lang" class="form-control form-control-lg literal-select"' + ' tabindex="' + tabIndices++ + '"><option>lang</option></select>');
 
                         // add in all the languages
                         bfeliterallang.iso6391.forEach(function(l){
@@ -2502,7 +2269,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         });
             
                         $inputHolder.append($selectLang);
-                        var $selectScript = $('<select id="' + property.guid + '-script" class="form-control literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
+                        var $selectScript = $('<select id="' + property.guid + '-script" class="form-control form-control-lg literal-select"' + ' tabindex="' + tabIndices++ + '"><option></option></select>');
                         // add in all the languages
                         bfeliterallang.iso15924.forEach(function(s){
                             $selectScript.append($('<option value="'+ s.alpha_4 + '">'+ s.alpha_4 + ' (' + s.name + ')' +'</option>'));
@@ -2513,15 +2280,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         // if they go to correct it remove 
                         $selectLang.on('click change',function(){$(this).removeClass('literal-select-error-start')});
                         $selectScript.on('click change',function(){$(this).removeClass('literal-select-error-start')});
-
-                    } else {
-                        // not building a literal lang input, need to float the + button over to the left
-                        $buttonGroupHolder = $('<div class="input-group-btn pull-left" ></div>');
                     }
           
-                    var $plusButton = $('<button type="button"  class="btn btn-default" tabindex="' + tabIndices++ + '">&#10133;</button>');
-                    $buttonGroupHolder.append($plusButton);
-                    $inputHolder.append($buttonGroupHolder);
+                    var $plusButton = $('<div class="input-group-append"><button type="button" class="btn btn-secondary" tabindex="' + tabIndices++ + '">&#10133;</button></div>');
+                    $inputHolder.append($plusButton);
           
                     $plusButton.click(function () {
                         if (!document.getElementById(property.guid).checkValidity()) {
@@ -2630,8 +2392,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 
                         if (_.has(property.valueConstraint, 'valueTemplateRefs') && !_.isEmpty(property.valueConstraint.valueTemplateRefs)) {
                             // This property references other Resource Templates.
-                            var $buttondiv = $('<div class="col-sm-8" id="' + property.guid + '"></div>');
-                            var $buttongrp = $('<div class="btn-group btn-group-md"></div>');
+                            var $buttondiv = $('<div class="col-md-9" id="' + property.guid + '"></div>');
+                            var $buttongrp = $('<div class="btn-group btn-group" role="group"></div>');
                             var vtRefs = property.valueConstraint.valueTemplateRefs;
                             for (var v = 0; v < vtRefs.length; v++) {
                                 var vtrs = vtRefs[v];
@@ -2641,7 +2403,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                 if (valueTemplates[0] !== undefined) {
                                     var vt = valueTemplates[0];
                                     // console.log(vt);
-                                    var $b = $('<button type="button" class="btn btn-default" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
+                                    var $b = $('<button type="button" class="btn btn-secondary" tabindex="' + tabIndices++ + '">' + vt.resourceLabel + '</button>');
                                     var pid = property.guid;
                                     var newResourceURI = '_:bnode' + shortUUID(guid());
                                     $b.click({
@@ -2737,7 +2499,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     }
                 }
 
-                $resourcediv.append($formgroup);
+                form.append($formgroup);
+                // EDIT HERE $resourcediv.append($formgroup);
                 forEachFirst = false;
             });
 
@@ -2846,15 +2609,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     addedProperties.push(newproperty);
                     cbLoadTemplates(rt.propertyTemplates);
                 });
-                var $addproplabel = $('<label class="col-sm-2 control-label">Add Property</label>');
+                var $addproplabel = $('<label class="col-md-3 col-form-label">Add Property</label>');
                 var $addprop = $('<div>', { class: 'form-group row' });
                 $addprop.append($addproplabel);
                 $addprop.append($addpropdata);
-                $resourcediv.append($addprop);
+                //$resourcediv.append($addprop);
+                form.append($addprop);
             }
-            form.append($resourcediv);
+            form.prepend($resourcediv);
+            // $resourcediv.append(form);
         });
-
+            
 
         // OK now we need to populate the form with data, if appropriate.
         fobject.resourceTemplates.forEach(function (rt) {
@@ -3667,6 +3432,26 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                   </div> \
               </div> \
           </div> ';
+    var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
+                <div class="modal-dialog modal-lg" role="document"> \
+                    <div class="modal-content"> \
+                        <div class="modal-header"> \
+                            <h5 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h5> \
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
+                                <span aria-hidden="true">&times;</span> \
+                            </button> \
+                            <button type="button" class="btn btn-primary save" id="bfeditor-modalSaveHeader-modalID"> \
+                              <span>Save changes</span> \
+                            </button> \
+                        </div> \
+                        <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
+                        <div class="modal-footer"> \
+                            <button type="button" class="btn btn-secondary" id="bfeditor-modalCancel-modalID"  data-dismiss="modal">Close</button> \
+                            <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
+                        </div> \
+                    </div> \
+                </div> \
+            </div>';
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Opening modal for resourceURI ' + resourceURI);
     bfelog.addMsg(new Error(), 'DEBUG', 'inputID of DOM element / property when opening modal: ' + inputID);
@@ -3739,7 +3524,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $('#bfeditor-modaltitle-' + form.formobject.id).html(loadtemplate.resourceLabel);
     if (resourceURI.match(/^http/)) {
       var rid = resourceURI;
-      var $resourceInfo = $('<a><span class="glyphicon glyphicon-info-sign"></span></a>');
+      var $resourceInfo = $('<a><span class="fa fa-info-sign"></span></a>');
       $resourceInfo.attr('data-content', rid);
       $resourceInfo.attr('data-toggle', 'popover');
       $resourceInfo.attr('title', 'Resource ID');
@@ -3844,7 +3629,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
         if (good_to_save) {
         
-            var $savingInfo = $('<span id="savingicon" style="color: black" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+            var $savingInfo = $('<span id="savingicon" style="color: black" class="fa fa-refresh fa-refresh-animate"></span>');
             $('#bfeditor-exitcancel').text("Cancel");
             $('#resource-id-popover').append($savingInfo);
             
@@ -3856,10 +3641,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 
                 if (data.status == "success") {
                     bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.name);
-                    var $successInfo = $('<span id="savemessage" style="color: #228B22" class="glyphicon glyphicon-ok-circle"></span>');
+                    var $successInfo = $('<span id="savemessage" style="color: #228B22" class="pl-2 fa fa-check-circle"></span>');
                     $('#resource-id-popover').append($successInfo);
                 } else {
-                    var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+                    var $failInfo = $('<span id="savemessage" style="color: red" class="fa fa-remove-circle"></span>');
                     $('#resource-id-popover').append($failInfo);
                     
                     var $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
@@ -3872,7 +3657,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             // Not saved.
             $('#resource-id-popover #savemessage').remove();
             
-            var $failInfo = $('<span id="savemessage" style="color: red" class="glyphicon glyphicon-remove-circle"></span>');
+            var $failInfo = $('<span id="savemessage" style="color: red" class="fa fa-remove-circle"></span>');
             $('#resource-id-popover').append($failInfo);
         }
         
@@ -4366,16 +4151,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     
 
-    var $displaybutton = $('<button type="button" class="btn btn-default" title="' + bgvars.tlabelhover + '">' + display + '</button>');
+    var $displaybutton = $('<button type="button" class="btn btn-light" title="' + bgvars.tlabelhover + '">' + display + '</button>');
     // check for non-blanknode
     if (bgvars.tlabelURI !== undefined && bgvars.tlabelURI.match('^!_:b')) {
-      $displaybutton = $('<button type="button" class="btn btn-default" title="' + bgvars.tlabelhover + '"><a href="' + bgvars.tlabelURI + '">' + display + '</a></button>');
+      $displaybutton = $('<button type="button" class="btn btn-light" title="' + bgvars.tlabelhover + '"><a href="' + bgvars.tlabelURI + '">' + display + '</a></button>');
     }
     $buttongroup.append($displaybutton);
 
     if (bgvars.editable === undefined || bgvars.editable === "true" || bgvars.editable === true) {
       // var $editbutton = $('<button type="button" class="btn btn-warning">e</button>');
-      var $editbutton = $('<button class="btn btn-warning" type="button"> <span class="glyphicon glyphicon-pencil"></span></button>');
+      var $editbutton = $('<button class="btn btn-warning" type="button"> <span class="fa fa-pencil"></span></button>');
       $editbutton.click(function () {
         if (bgvars.triples.length === 1) {
           editTriple(bgvars.fobjectid, bgvars.inputid, bgvars.triples[0]);
@@ -4385,7 +4170,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
       $buttongroup.append($editbutton);
     }
-    var $delbutton = $('<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span> </button>');
+    var $delbutton = $('<button class="btn btn-danger" type="button"><span class="fa fa-trash"></span> </button>');
     //          var $delbutton = $('<button type="button" class="btn btn-danger">x</button>');
     $delbutton.click(function () {
       if (bgvars.triples.length === 1) {
@@ -4399,42 +4184,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     return $buttongroup;
   }
-
-  /*
-  function setRtLabel(formobjectID, resourceID, inputID, rt) {
-    var formobject = _.where(forms, {
-      'id': formobjectID
-    });
-    formobject = formobject[0];
-    var data = $('#' + inputID).val();
-    if (!_.isEmpty(data)) {
-      var triple = {};
-      triple.guid = shortUUID(guid());
-      triple.s = rt.defaulturi;
-      triple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-      triple.o = data;
-      triple.otype = 'literal';
-      triple.olang = 'en';
-      bfestore.addTriple(triple);
-      formobject.store.push(triple);
-
-      var formgroup = $('#' + inputID, formobject.form).closest('.form-group');
-      var save = $(formgroup).find('.btn-toolbar')[0];
-      var bgvars = {
-        'tguid': triple.guid,
-        'tlabel': data,
-        'tlabelhover': data,
-        'fobjectid': formobjectID,
-        'inputid': inputID,
-        'triples': [triple]
-      };
-      var $buttongroup = editDeleteButtonGroup(bgvars);
-      $(save).append($buttongroup);
-      $('#' + inputID).val('');
-    }
-    $('#bfeditor-debug').html(JSON.stringify(bfestore.store, undefined, ' '));
-  }
-  */
 
   function setLiteral(formobjectID, resourceID, inputID) {
     var formobject = _.where(forms, {
@@ -4635,6 +4384,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       displayKey: 'value'
     };
     if (dshashes.length === 1) {
+        console.log(dshashes[0]);
       $(input).typeahead(
         opts,
         dshashes[0]
@@ -4806,7 +4556,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     
     $(input).on('typeahead:render', function (event, suggestions, asyncFlag, dataset) {
-      bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
+      //bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
 
       if (editorconfig.buildContext) {
 
@@ -4893,7 +4643,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     $(input).on('typeahead:selected', function (event, suggestionobject, datasetname) {
       bfelog.addMsg(new Error(), 'DEBUG', 'Typeahead selection made');
       var form = $('#' + event.target.id).closest('form').eq(0);
-      bfelog.addMsg(new Error(), 'DEBUG', 'typeahead embededded in form: ', form);
+      //bfelog.addMsg(new Error(), 'DEBUG', 'typeahead embededded in form: ', form);
       var formid = $('#' + event.target.id).closest('form').eq(0).attr('id');
       formid = formid.replace('bfeditor-form-', '');
       // reset page

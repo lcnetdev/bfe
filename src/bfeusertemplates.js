@@ -119,9 +119,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       $actions.css('right','-200px');
       
       if (mode === 'editing'){      
-        var $saveAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>');
+        var $saveAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="fa fa-floppy-disk"></span> Save</button>');
         $saveAction.on('click',exports.saveTemplate);               
-        var $deleteAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="glyphicon glyphicon-trash"></span> Delete</button>');
+        var $deleteAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="fa fa-trash"></span> Delete</button>');
         $deleteAction.on('click',exports.deleteTemplate);       
         $actions.html('');
         $actions.append($saveAction);
@@ -130,9 +130,9 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       }
       
       if (mode === 'using'){      
-        var $editAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="glyphicon glyphicon-pencil"></span> Edit</button>');
+        var $editAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="fa fa-pencil"></span> Edit</button>');
         $editAction.on('click',exports.editTemplate);               
-        var $unselectAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="glyphicon glyphicon-stop"></span> Stop Using</button>');
+        var $unselectAction = $('<button class="btn btn-default btn-xs" type="button" ><span class="fa fa-stop"></span> Stop Using</button>');
         $unselectAction.on('click',exports.stopUsingTemplate);       
         $actions.html('');
         $actions.append($unselectAction);
@@ -191,7 +191,7 @@ bfe.define('src/bfeusertemplates', ['require', 'exports' ], function(require, ex
       // set this has our current active profile
       exports.activeProfile = pt;
       var $templateSelect = $('<div class="template-controls">\
-          <div id="template-controls-actions"><span class="glyphicon glyphicon-pencil"></span>Edit Profile</div>\
+          <div id="template-controls-actions"><span class="fa fa-pencil"></span>Edit Profile</div>\
           <select class="form-control">\
           <option value="your-templates-ignore">Your Templates:</option>\
           </select>	  \

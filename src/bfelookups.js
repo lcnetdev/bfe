@@ -58,6 +58,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
   
           var u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
           u = u.replace(/^(http:)/,"");
+          console.log("calling lookup")
           $.ajax({
             url: u,
             dataType: 'jsonp',

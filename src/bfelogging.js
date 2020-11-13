@@ -77,6 +77,8 @@ bfe.define('src/bfelogging', ['require', 'exports' ], function(require, exports)
         entry.fileName = error.fileName;
         entry.lineNumber = error.lineNumber;
         if (typeof data==="object" || data instanceof Array) {
+            console.log(typeof data);
+            console.log(data);
             entry.msg = JSON.stringify(data);
         } else {
             entry.msg = data;

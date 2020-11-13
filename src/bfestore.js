@@ -645,7 +645,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             callback(result);
           });
           var input = {};
-          input.n3 = $("#humanized .panel-body pre").text().normalize("NFC");
+          input.n3 = $("#humanized pre").text().normalize("NFC");
           $.ajax({
             url: "/profile-edit/server/n3/rdfxml",
             type: "POST",
@@ -654,7 +654,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             contentType: "application/json",
             success: function (rdfxml) {
               var data = new XMLSerializer().serializeToString(rdfxml);
-              $("#rdfxml .panel-body pre").text(data);
+              $("#rdfxml pre").text(data);
             },
             error: function (XMLHttpRequest, status, err) {
               bfeditor.bfelog.addMsg(new Error(), "ERROR", err);

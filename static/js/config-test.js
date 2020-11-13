@@ -51,6 +51,10 @@ var config = {
       "level": "DEBUG",
       "toConsole": true
     }, 
+     "enviro": {
+         "classes": "bg-warning text-dark",
+         "text": "TEST    TEST    TEST"
+     },
     "name": name,
     "url" : rectobase,
     "baseURI": "http://id.loc.gov/",
