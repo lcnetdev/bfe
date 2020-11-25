@@ -285,87 +285,68 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
          });
         dataTable.draw(false);
         
-        var $addDataStatusDiv = $("<div>").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
-        var $addDataStatusText = $("<p>").append($("<em>").text("Only data from the last two weeks is displayed"));
-        $addDataStatusDiv.append($addDataStatusText);
-        var $addLastTwoWeeksDataButton = $("<button>").text("Show Last Two Weeks").addClass('btn btn-basic btn-sm');
-        var $addTwoWeekPlusDataButton = $("<button>").text("Show Last Month of Descriptions").addClass('btn btn-basic btn-sm');
-        var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-sm');
+        var $addDataStatusDiv = $("<div>").attr('id','two-week-plus-div').addClass('row pull-left').css({'padding-right':'20px'});
+        var $lastTwoWeeksButton = $("<button>").text("Last Two Weeks of Desciptions").addClass('btn btn-basic btn-sm font-italic');
+        var $lastTwoWeeksPLUSButton = $("<button>").text("Last Month of Descriptions").addClass('btn btn-basic btn-sm');
+        var $unpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-sm');
 
         var lastTwoWeeksClick = function(){
-          dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
-          $addDataStatusDiv.text("Loading...");
-          window.setTimeout(function(){
-            twoWeeksOfData.forEach(function(d){
-              dataTable.row.add(d);
+            dataTable.clear().draw();
+            twoWeeksOfData = [];
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $lastTwoWeeksButton.addClass("font-italic");
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+            $.get( config.url + '/api/list?daysago=15', function( data ) {
+                data.forEach(function(d){
+                    dataTable.row.add(d);
+                    twoWeeksOfData.push(d);
+                });
+                dataTable.draw(false);
             });
-            dataTable.draw(false);
-            $addDataStatusText.text("Only data from the last two weeks is displayed");
-            $addDataStatusDiv.append($addUnpostedDataButton); 
-            $addUnpostedDataButton.click(unpostedClick); 
-            $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
-            $addDataStatusDiv.append($addTwoWeekPlusDataButton)
-            $addTwoWeekPlusDataButton.click(lastTwoWeeksPlusClick);
-          },500)
-        }
-
+        };
+        $lastTwoWeeksButton.click(lastTwoWeeksClick);
+        
         var lastTwoWeeksPlusClick = function(){
             dataTable.clear().draw();
-            $addDataStatusDiv.text("Loading...");
-            if (twoWeeksPlusOfData.length > 0) {
-                window.setTimeout(function(){
-                    twoWeeksPlusOfData.forEach(function(d){
-                        dataTable.row.add(d);
-                    });
-                    dataTable.draw(false);
-                    $addDataStatusText.text('All descriptions');
-                    $addLastTwoWeeksDataButton.off('click');
-                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
-                },500)
-            } else {
-                $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
-                $.get( config.url + '/api/list?daysago=30', function( data ) {
-                    data.forEach(function(d){
-                        dataTable.row.add(d);
-                        twoWeeksPlusOfData.push(d);
-                    });
-                    dataTable.draw(false);
-                    $addDataStatusText.text('Viewing last 30 days of descriptions');
-                    $addLastTwoWeeksDataButton.off('click');
-                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
+            twoWeeksPlusOfData = [];
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $lastTwoWeeksPLUSButton.addClass("font-italic");
+            $.get( config.url + '/api/list?daysago=30', function( data ) {
+                data.forEach(function(d){
+                    dataTable.row.add(d);
+                    twoWeeksPlusOfData.push(d);
                 });
-            }
-        }
-
-        var unpostedClick = function(){
-          $addDataStatusDiv.text('Loading ...');
-          dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
-          window.setTimeout(function(){
-            twoWeeksOfData.concat(twoWeeksPlusOfData).forEach(function(d){
-              //if(_.isEmpty(d.status) || d.status != 'success')
-              if(d.status === 'published')
-                dataTable.row.add(d);
+                dataTable.draw(false);
             });
-            dataTable.draw(false);
-            $addDataStatusText.text("Only unposted displayed:");
-            $addLastTwoWeeksDataButton.off('click');
-            $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-            $addDataStatusDiv.append($addLastTwoWeeksDataButton); 
-          },500)
-        }
+        };
+        $lastTwoWeeksPLUSButton.click(lastTwoWeeksPlusClick);
 
-        ///verso/api/bfs?filter[where][status][nlike]=success
+        var unpostedClick = function() {
+            dataTable.clear().draw();
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $unpostedDataButton.addClass("font-italic");
+          
+            window.setTimeout(function(){
+                var tabledata = twoWeeksOfData;
+                if (twoWeeksPlusOfData.length > 0) {
+                    tabledata = twoWeeksPlusOfData;
+                }
+                tabledata.forEach(function(d){
+                    if(d.status === 'published') {
+                        dataTable.row.add(d);
+                    }
+                });  
+                dataTable.draw(false);
+            }, 500)
+        };
+        $unpostedDataButton.click(unpostedClick); 
         
-        $addUnpostedDataButton.click(unpostedClick); 
-        $addTwoWeekPlusDataButton.click(lastTwoWeeksPlusClick);
-        $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-        $addDataStatusDiv.append($addUnpostedDataButton); 
+        $addDataStatusDiv.append($lastTwoWeeksButton);
+        $addDataStatusDiv.append($unpostedDataButton); 
         $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
-        $addDataStatusDiv.append($addTwoWeekPlusDataButton);          
+        $addDataStatusDiv.append($lastTwoWeeksPLUSButton);          
         $("#table_id_filter").append($addDataStatusDiv);
 
         $("#table_id_filter label").show();
@@ -1782,12 +1763,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                     </div> \
                                 </div> \
                                 \
-                                <div class="card"> \
+                                <!-- <div class="card"> \
                                     <div class="card-body"> \
                                         <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3> \
                                         <div class="card-text collapse in" id="jsonld-vis"></div> \
                                     </div> \
-                                </div> \
+                                </div> --> \
                             </div>');
 
           $('#exitButtonGroup').append($backButton);
