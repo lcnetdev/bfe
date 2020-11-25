@@ -2457,10 +2457,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             if (rt.embedType == 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
-                                var $saveLookup = $('<div class="modal-savechanges"><button type="button" class="btn btn-primary" style="display:none" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                                var $spacer = $('<div class="modal-spacer"><span>OR</span></div>');
-                                $formgroup.append($saveLookup);
-                                $formgroup.append($spacer);
+                                // See below for where $spacer is inserted.
+                                var $spacer = $('<hr><p class="text-center font-weight-bold">OR</p><hr>');
                             }
             
                         } else {
@@ -2500,6 +2498,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
 
                 form.append($formgroup);
+                if ($spacer !== undefined) {
+                    // This is the OR spacer after the lookup.  Put here because 
+                    // it will land betwixt the lookup div and the next one.
+                    form.append($spacer);
+                }
                 // EDIT HERE $resourcediv.append($formgroup);
                 forEachFirst = false;
             });
@@ -3417,32 +3420,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     // Modals
     var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
-              <div class="modal-dialog modal-lg"> \
-                  <div class="modal-content"> \
-                      <div class="modal-header"> \
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
-                          <button type="button" class="btn btn-primary save" id="bfeditor-modalSaveHeader-modalID">Save changes</span></button> \
-                          <h4 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h4> \
-                      </div> \
-                      <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
-                      <div class="modal-footer"> \
-                          <button type="button" class="btn btn-default" id="bfeditor-modalCancel-modalID" data-dismiss="modal">Cancel</button> \
-                          <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
-                      </div> \
-                  </div> \
-              </div> \
-          </div> ';
-    var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
                 <div class="modal-dialog modal-lg" role="document"> \
                     <div class="modal-content"> \
                         <div class="modal-header"> \
                             <h5 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h5> \
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
-                                <span aria-hidden="true">&times;</span> \
-                            </button> \
-                            <button type="button" class="btn btn-primary save" id="bfeditor-modalSaveHeader-modalID"> \
-                              <span>Save changes</span> \
-                            </button> \
+                            <div class="float-right"> \
+                            <button type="button" class="btn btn-secondary mr-1" id="bfeditor-modalCancelHeader-modalID"  data-dismiss="modal">Close</button> \
+                            <button type="button" class="btn btn-primary" id="bfeditor-modalSaveHeader-modalID"><span>Save changes</span></button> \
+                            </div> \
                         </div> \
                         <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
                         <div class="modal-footer"> \
