@@ -1267,7 +1267,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     editorconfig.setStartingPoints.callback(config, function (config) {
         for (var h = 0; h < config.startingPoints.length; h++) {
             var sp = config.startingPoints[h];
-            var $createResourcesubmenuul = null;
             if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
                 /*
 <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -1594,7 +1593,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             if (page.indexOf('#') > 0) {
                                 page = page.split('#')[0];
                             }
-                            var linkUrl = config.url + '/bfe/' + page + '#' + resourceName.substring(0,8);
                             $messagediv.append('<strong>Description saved:</strong> <button type="button" class="btn btn-link" onclick="window.location.reload();">'+resourceName.substring(0,8)+'</button>');
                             //$messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
                             $messagediv.insertBefore('.nav-tabs');
@@ -4521,6 +4519,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
     }
     
+    /*  e-s-lint complains about the unused vars.  But I think they're legitly expected? */
+    /* eslint-disable no-unused-vars */
     $(input).on('typeahead:render', function (event, suggestions, asyncFlag, dataset) {
       //bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
 
