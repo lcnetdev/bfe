@@ -16,6 +16,20 @@
   margin-top: -1px;
 }
 
+
+/* Change link colors for sandstone theme. */
+a {
+    color: #325d88;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #1d3750;
+    text-decoration: underline;
+}
+
+/* Change edit button colors for sandstone theme. */
 .btn-warning {
   color: #fff;
   background-color: #f4bf3c;
@@ -47,10 +61,4 @@
   color: #fff;
   background-color: #ef5c0e;
   border-color: #e3570d;
-}
-
-.btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
-.show > .btn-warning.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(246, 144, 89, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(246, 144, 89, 0.5);
 }
