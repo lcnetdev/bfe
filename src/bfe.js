@@ -3506,10 +3506,41 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       handle: ".modal-header"
     });
 
+    // Let's use use good old function sytax
+    function saveChangesFunc(event, varobj) {
+        var callingformobjectid = varobj.callingformobjectid;
+        var form = varobj.form;
+        
+        varobj.triples.forEach(function (triple) {
+            removeTriple(callingformobjectid, inputID, null, triple);
+        });
+        if (form.formobject.store.length <= 2) {
+            $('#bfeditor-modalSave-' + form.formobject.id).off('click');
+            $('#bfeditor-modal-' + form.formobject.id).modal('hide');
+        } else {
+            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, varobj.inputID, _.uniq(form.formobject.store));
+            bfe.saveNoExit();
+        }
+    }
+
+    var varobj = {
+        callingformobjectid: callingformobjectid,
+        triples: triplespassed,
+        inputID: inputID,
+        form: form
+    }
+    // Assign the listener callback to a variable
+    var saveChangesTest = (event) => saveChangesFunc(event, varobj); 
+
+
 //<<< <<<< HEAD
 //    $('#bfeditor-modalSave-' + form.formobject.id).click(function () {
 //==== ===
     var saveChanges = function () {
+        var callingformobjectid = this.id.replace("bfeditor-modalSaveHeader-", "");
+        callingformobjectid = callingformobjectid.replace("bfeditor-modalSave-", "");
+        console.log(callingformobjectid);
+        
 // >>>> >>> aws
       triples.forEach(function (triple) {
         removeTriple(callingformobjectid, inputID, null, triple);
@@ -3552,13 +3583,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         bfe.saveNoExit();
       }
     }
-    $('#bfeditor-modalSave-' + form.formobject.id).click(saveChanges);
-    $('#bfeditor-modalSaveHeader-' + form.formobject.id).click(saveChanges);
+    $('#bfeditor-modalSave-' + form.formobject.id).click(saveChangesTest);
+    $('#bfeditor-modalSaveHeader-' + form.formobject.id).click(saveChangesTest);
     $('#bfeditor-modalSave-' + form.formobject.id).attr('tabindex', tabIndices++);
     
 // >>> >>>> aws
     $('#bfeditor-modal-' + form.formobject.id).on('hide.bs.modal', function () {
       $(this).empty();
+    });
+
+    // This ensures any parent modals remain valid and active.
+    $('#bfeditor-modal-' + form.formobject.id).on('hidden.bs.modal', function () {
+        if ($('.modal:visible').length) { // check whether parent modal is opend after child modal close
+            $('body').addClass('modal-open'); // if open mean length is 1 then add a bootstrap css class to body of the page
+        }
     });
 
     $('.typeahead', form.form).each(function () {
@@ -3648,6 +3686,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     var lookupLabel;
     var tsubject = resourceID;
+    console.log(forms);
     var callingformobject = _.where(forms, {
       'id': formobjectID
     });
@@ -3663,6 +3702,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'o': resourcetemplate.resourceURI
     };
 
+    console.log(callingformobject);
+    console.log(propertyguid);
     resourceType.rtID = _.where(callingformobject.resourceTemplates[0].propertyTemplates, {
       'guid': propertyguid
     })[0].valueConstraint.valueTemplateRefs[0];
