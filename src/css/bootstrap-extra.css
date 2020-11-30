@@ -29,6 +29,11 @@ a:hover {
     text-decoration: underline;
 }
 
+/*  Sandstone has buttons that are ALL CAPS. This resets that. */
+.btn {
+  text-transform: none;
+}
+
 /* Change edit button colors for sandstone theme. */
 .btn-warning {
   color: #fff;

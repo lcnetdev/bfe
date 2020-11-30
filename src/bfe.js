@@ -4115,10 +4115,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     
 
-    var $displaybutton = $('<button type="button" class="btn btn-light text-capitalize" title="' + bgvars.tlabelhover + '">' + display + '</button>');
+    var $displaybutton = $('<button type="button" class="btn btn-light" title="' + bgvars.tlabelhover + '">' + display + '</button>');
     // check for non-blanknode
     if (bgvars.tlabelURI !== undefined && bgvars.tlabelURI.match('^!_:b')) {
-      $displaybutton = $('<button type="button" class="btn btn-light text-capitalize" title="' + bgvars.tlabelhover + '"><a href="' + bgvars.tlabelURI + '">' + display + '</a></button>');
+      $displaybutton = $('<button type="button" class="btn btn-light" title="' + bgvars.tlabelhover + '"><a href="' + bgvars.tlabelURI + '">' + display + '</a></button>');
     }
     $buttongroup.append($displaybutton);
 
