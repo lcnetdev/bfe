@@ -3102,6 +3102,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata = exports.labelMaker(pd, property);
             }
 
+            bfelog.addMsg(new Error(), 'DEBUG', 'displayData is: ' + displaydata);
             if (displaydata === undefined) {
                 if (data !== undefined && data.o !== undefined) {
                     displaydata = data.o;
@@ -3975,6 +3976,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     exports.displayDataService = function(labeldata, displaydata){
         bfelog.addMsg(new Error(), 'DEBUG', 'labeldata is: ', labeldata);
         bfelog.addMsg(new Error(), 'DEBUG', 'displaydata is: ' + displaydata);
+        bfelog.addMsg(new Error(), 'DEBUG', 'NOTE:  displaydata is the name of the property basically');
         
         if (displaydata === 'adminMetadata') {
             var admindisplaydata = '';
@@ -4081,7 +4083,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 if (displaydata != "") { displaydata = displaydata + " - "; }
                 displaydata = displaydata + dateLabel;
             }
-            if (dateLabel == "") {
+            if (displaydata == "" && dateLabel == "") {
                 displaydata = "provisionActivity";
             }
     
