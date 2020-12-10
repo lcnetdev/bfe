@@ -220,47 +220,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       editorconfig.baseURI = window.location.protocol + '//' + window.location.host + '/';
     }
     bfelog.addMsg(new Error(), 'INFO', 'baseURI is ' + editorconfig.baseURI);
-
-    /*
-    // This was active in postingchanges, but missing from decouplment.
-    // Think it has been moved to bfeapi, but keep around just in case.
-    if (config.load !== undefined) {
-      loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + config.load.length;
-      config.load.forEach(function (l) {
-        var tempstore = [];
-        l.templateID.forEach(function (lt) {
-          var useguid = guid();
-          var loadtemplate = {};
-          loadtemplate.templateGUID = useguid;
-          loadtemplate.resourceTemplateID = lt;
-          loadtemplate.resourceURI = l.defaulturi;
-          loadtemplate.embedType = 'page';
-          loadtemplate.data = tempstore;
-          loadtemplates.push(loadtemplate);
-        });
-        if (l.source !== undefined && l.source.location !== undefined && l.source.requestType !== undefined) {
-          $.ajax({
-            url: l.source.location,
-            dataType: l.source.requestType,
-            success: function (data) {
-              bfelog.addMsg(new Error(), 'INFO', 'Fetched external source baseURI' + l.source.location);
-              bfelog.addMsg(new Error(), 'DEBUG', 'Source data', data);
-
-              tempstore = bfestore.jsonld2store(data);
-              // loadtemplate.data = tempstore;
-              cbLoadTemplates();
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-              bfelog.addMsg(new Error(), 'ERROR', 'FAILED to load external source: ' + l.source.location);
-              bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
-            }
-          });
-        } else {
-          cbLoadTemplates();
-        }
-      });
-    }
-    */
   };
 
   exports.loadBrowseData = function($browsediv){
@@ -782,7 +741,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
               <button id="bfeditor-loadibcuri" type="button" class="btn btn-primary" disabled=disabled>Submit URL</button> \
               </form></div>');
 
-    // Can this be moved out of there somehow?  It's repeated in fulleditor too.
+    // Can this be moved out of there somehow?  It's repeated in fulleditor too.  This is lcapplication.
     editorconfig.setStartingPoints.callback(config, function () {
         var getProfileOptions = 
            function (jqObject, elementType) {
@@ -1462,7 +1421,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                            </div>\
                         </div>\
                         </div>');
-      $(editordiv).append($debugdiv);$(editordiv).append($debugdiv);
+      $(editordiv).append($debugdiv);
+      //$(editordiv).append($debugdiv);
       $('#debuginfo').collapse();
       //$debugpre.html(JSON.stringify(profiles, undefined, ' '));
     }
@@ -1494,7 +1454,9 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
   var cbLoadTemplates = exports.cbLoadTemplates = function(propTemps) {
     //clear the URL params
-    window.history.replaceState(null, null, window.location.pathname);
+    if (entryfunc == "lcapplication") {
+        window.history.replaceState(null, null, window.location.pathname);
+    }
 //<<<< <<< HEAD
     
     bfe.exitButtons(editorconfig);
@@ -1543,24 +1505,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           $('#bfeditor-previewPanel').remove();
           
           $('#bfeditor-formdiv').show();
-/*
-<<<< <<< HEAD
-          $('#bfeditor-formdiv').empty();
-          $('[href=\\#browse]').tab('show');
-          window.location.hash = '';
-          bfestore.store = [];
-          $('#table_id').DataTable().search('').draw();
-          exports.loadBrowseData();
-==== ===
-*/
           $('#bfeditor-formdiv').removeAttr('style');
           $('#bfeditor-formdiv').empty();
-          //$('[href=\\#browse]').tab('show');
-          window.location.hash = '';
-          bfeditor.bfestore.store = [];
-          $('#table_id').DataTable().search('').draw();
-          exports.loadBrowseData();
-// >>> >>>> aws
+          
+          if (entryfunc == "lcapplication") {
+              window.location.hash = '';
+              bfeditor.bfestore.store = [];
+              $('#table_id').DataTable().search('').draw();
+              exports.loadBrowseData();
+          } else {
+              window.history.back();
+          }
+
         }
 
         $('#bfeditor-exitcancel').click(function () {
@@ -1821,6 +1777,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     // store = new rdfstore.Store();
   function menuSelect(spid) {
+      bfelog.addMsg(new Error(), 'DEBUG', 'Menu item selected: ', spid);
     var spnums = spid.replace('sp-', '').split('_');
     var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
     addedProperties = [];
@@ -1855,7 +1812,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
     var procInfo = 'create ' + rt_type
     bfeditor.bfestore.profile = loadtemplates[0].resourceTemplateID;
-    var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
+    var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + guid();
+    if (entryfunc == "lcapplication") {
+        defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
+    }
+    bfelog.addMsg(new Error(), 'DEBUG', 'Default URI (new) is: ' + defaulturi);
     var catalogerId;
     if (config.enableLoadMarc && !_.isEmpty(window.localStorage.bfeUser)){
       catalogerId = JSON.parse(window.localStorage.bfeUser)["bflc:catalogerId"];
@@ -5130,17 +5091,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         if(_.isEmpty(store)){
             store = bfestore.store;
         }
-        // for resource templates, determine if they are works, instances, or other
-        var jsonuri = uri + '.json';
-        // normalize
-        if (uri.startsWith('http://id.loc.gov/resources/works') || uri.startsWith('http://id.loc.gov/resources/instances')&& !_.isEmpty(config.resourceURI)) {
-            jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
-            jsonuri = jsonuri.replace(/^(http:)/,"https:");
-        } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
-            jsonuri = uri + '.madsrdf_raw.json';
-            jsonuri = jsonuri.replace(/^(http:)/,"https:");
-        }
-
+        
         if (uri.match(/bibframe\.example\.org/)) {
             callback(uri);
         } else if (uri.endsWith('marcxml.xml')) {
@@ -5159,51 +5110,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 callback("");
             }
         } else {
-            bfelog.addMsg(new Error(), 'DEBUG', 'Making call to recto whichrt using: ' + jsonuri);
-            $.ajax({
-                type: 'GET',
-                async: false,
-                data: {
-                  uri: jsonuri
-                },
-                url: config.url + '/profile-edit/server/whichrt',
-                success: function (data) {
-                    var returnval;
-                    var labelElements;
-                    var authoritativeLabelElements;
-                    var aapElements;
-                    if(_.some(_.find(data, { '@id': uri }))) {
-                        labelElements = _.find(data, { '@id': uri })['http://www.w3.org/2000/01/rdf-schema#label']
-                        authoritativeLabelElements = _.find(data, { '@id': uri })['http://www.loc.gov/mads/rdf/v1#authoritativeLabel'];
-                        aapElements = _.find(data, { '@id': uri })['http://id.loc.gov/ontologies/bflc/aap'];
-                    } 
-                    if (!_.isEmpty(labelElements)) {
-                        returnval = labelElements[0]["@value"];
-                    } else if (!_.isEmpty(aapElements)) {
-                        returnval = aapElements[0]["@value"]
-                    } else if (!_.isEmpty(authoritativeLabelElements)) {
-                        returnval = authoritativeLabelElements[0]["@value"]
-                    } else {
-                        // look for a rdfslabel
-                        var labels = _.filter(data[2], function (prop) { if (prop[0] === 'rdfs:label') return prop; });
-                        returnval = uri;
-
-                        if (!_.isEmpty(labels)) {
-                            returnval = labels[0][2];
-                        } else if (_.has(data, "@graph")) {
-                            if (_.some(data["@graph"], {"@id": uri})) {
-                                returnval = _.find(data["@graph"], {"@id": uri})["rdf-schema:label"]
-                            } else if ( _.some(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})) {
-                                returnval = _.find(data["@graph"], {"@type": ["http://id.loc.gov/ontologies/lclocal/Hub"]})["rdf-schema:label"]
-                            }
-                        } 
-                    }
-                    callback(returnval);
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
-                }
-            });
+            console.log(bfelabels);
+            bfelabels.findLabel(uri, callback);
         }
     // return returnval;
     }
