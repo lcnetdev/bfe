@@ -26,8 +26,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
         });
     };
  
-    // 9 Oct 2020 - Don't think this is used.  Disabling to see if we get an error.
-    exports.loXad = function(config, bfestore, callback) {
+    exports.load = function(config, bfestore, callback) {
         if (config.toload !== undefined && config.toload.templates) {
             bfe.loadtemplatesANDlookupsCount = bfe.loadtemplatesANDlookupsCount + config.toload.templates.length;
             
@@ -62,9 +61,12 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
                     $.ajax({
                         url: config.toload.source.location,
                         dataType: config.toload.source.requestType,
+                        beforeSend: function(request) {
+                            request.setRequestHeader("Accept", "application/ld+json;profile=\"http://www.w3.org/ns/json-ld#expanded\"");
+                        },
                         success: function (data) {
                             bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI" + config.toload.source.location);
-                            bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+                            bfelog.addMsg(new Error(), "DEBUG", "Source data ", data);
                             /*
                                 OK, so I would /like/ to just use rdfstore here
                                 but it is treating literals identified using @value
@@ -112,7 +114,7 @@ exports.retrieve = function (uri, bfestore, loadtemplates, callback){
     url: url,
     success: function (data) {
       bfelog.addMsg(new Error(), "INFO", "Fetched external source baseURI " + uri);
-      bfelog.addMsg(new Error(), "DEBUG", "Source data", data);
+      bfelog.addMsg(new Error(), "DEBUG", "Source data ", data);
       
       if (dType == 'xml' && xmlType == 'xml') {
         var recCount = $('zs\\:numberOfRecords', data).text();
@@ -362,8 +364,9 @@ exports.publish = function (params, callback) {
   }
 
   exports.setStartingPoints = function (config, callback){
-    if ( startingPoints !== null ) {
-        config.startingPoints = startingPoints;
+      bfelog.addMsg(new Error(), 'DEBUG', 'Setting Starting Points');
+    if ( config.startingPoints ) {
+        bfelog.addMsg(new Error(), 'DEBUG', 'Starting Points set in config: ' + config.startingPoints);
         callback(config);
     } else if (config.startingPointsUrl) {
         bfelog.addMsg(new Error(), 'DEBUG', 'Starting Points URL: ' + config.startingPointsUrl);
