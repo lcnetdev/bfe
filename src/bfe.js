@@ -244,87 +244,68 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
          });
         dataTable.draw(false);
         
-        var $addDataStatusDiv = $("<div>").attr('id','two-week-plus-div').addClass('pull-left').css({'padding-right':'20px','line-height':'26px'});
-        var $addDataStatusText = $("<p>").append($("<em>").text("Only data from the last two weeks is displayed"));
-        $addDataStatusDiv.append($addDataStatusText);
-        var $addLastTwoWeeksDataButton = $("<button>").text("Show Last Two Weeks").addClass('btn btn-basic btn-sm');
-        var $addTwoWeekPlusDataButton = $("<button>").text("Show Last Month of Descriptions").addClass('btn btn-basic btn-sm');
-        var $addUnpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-sm');
+        var $addDataStatusDiv = $("<div>").attr('id','two-week-plus-div').addClass('row pull-left').css({'padding-right':'20px'});
+        var $lastTwoWeeksButton = $("<button>").text("Last Two Weeks of Desciptions").addClass('btn btn-basic btn-sm font-italic');
+        var $lastTwoWeeksPLUSButton = $("<button>").text("Last Month of Descriptions").addClass('btn btn-basic btn-sm');
+        var $unpostedDataButton = $("<button>").text("Unposted Only").addClass('btn btn-basic btn-sm');
 
         var lastTwoWeeksClick = function(){
-          dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
-          $addDataStatusDiv.text("Loading...");
-          window.setTimeout(function(){
-            twoWeeksOfData.forEach(function(d){
-              dataTable.row.add(d);
+            dataTable.clear().draw();
+            twoWeeksOfData = [];
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $lastTwoWeeksButton.addClass("font-italic");
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+            $.get( config.url + '/api/list?daysago=15', function( data ) {
+                data.forEach(function(d){
+                    dataTable.row.add(d);
+                    twoWeeksOfData.push(d);
+                });
+                dataTable.draw(false);
             });
-            dataTable.draw(false);
-            $addDataStatusText.text("Only data from the last two weeks is displayed");
-            $addDataStatusDiv.append($addUnpostedDataButton); 
-            $addUnpostedDataButton.click(unpostedClick); 
-            $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
-            $addDataStatusDiv.append($addTwoWeekPlusDataButton)
-            $addTwoWeekPlusDataButton.click(lastTwoWeeksPlusClick);
-          },500)
-        }
-
+        };
+        $lastTwoWeeksButton.click(lastTwoWeeksClick);
+        
         var lastTwoWeeksPlusClick = function(){
             dataTable.clear().draw();
-            $addDataStatusDiv.text("Loading...");
-            if (twoWeeksPlusOfData.length > 0) {
-                window.setTimeout(function(){
-                    twoWeeksPlusOfData.forEach(function(d){
-                        dataTable.row.add(d);
-                    });
-                    dataTable.draw(false);
-                    $addDataStatusText.text('All descriptions');
-                    $addLastTwoWeeksDataButton.off('click');
-                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
-                },500)
-            } else {
-                $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
-                $.get( config.url + '/api/list?daysago=30', function( data ) {
-                    data.forEach(function(d){
-                        dataTable.row.add(d);
-                        twoWeeksPlusOfData.push(d);
-                    });
-                    dataTable.draw(false);
-                    $addDataStatusText.text('Viewing last 30 days of descriptions');
-                    $addLastTwoWeeksDataButton.off('click');
-                    $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-                    $addDataStatusDiv.append($addLastTwoWeeksDataButton);
+            twoWeeksPlusOfData = [];
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Loading Data</span></h4>');
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $lastTwoWeeksPLUSButton.addClass("font-italic");
+            $.get( config.url + '/api/list?daysago=30', function( data ) {
+                data.forEach(function(d){
+                    dataTable.row.add(d);
+                    twoWeeksPlusOfData.push(d);
                 });
-            }
-        }
-
-        var unpostedClick = function(){
-          $addDataStatusDiv.text('Loading ...');
-          dataTable.clear().draw();
-          $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
-          window.setTimeout(function(){
-            twoWeeksOfData.concat(twoWeeksPlusOfData).forEach(function(d){
-              //if(_.isEmpty(d.status) || d.status != 'success')
-              if(d.status === 'published')
-                dataTable.row.add(d);
+                dataTable.draw(false);
             });
-            dataTable.draw(false);
-            $addDataStatusText.text("Only unposted displayed:");
-            $addLastTwoWeeksDataButton.off('click');
-            $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-            $addDataStatusDiv.append($addLastTwoWeeksDataButton); 
-          },500)
-        }
+        };
+        $lastTwoWeeksPLUSButton.click(lastTwoWeeksPlusClick);
 
-        ///verso/api/bfs?filter[where][status][nlike]=success
+        var unpostedClick = function() {
+            dataTable.clear().draw();
+            $('#table_id td').html('<h4><span class="fa fa-refresh fa-refresh-animate"></span><span>&nbsp;&nbsp;Processing Data</span></h4>');
+            $("#two-week-plus-div > .font-italic").removeClass("font-italic");
+            $unpostedDataButton.addClass("font-italic");
+          
+            window.setTimeout(function(){
+                var tabledata = twoWeeksOfData;
+                if (twoWeeksPlusOfData.length > 0) {
+                    tabledata = twoWeeksPlusOfData;
+                }
+                tabledata.forEach(function(d){
+                    if(d.status === 'published') {
+                        dataTable.row.add(d);
+                    }
+                });  
+                dataTable.draw(false);
+            }, 500)
+        };
+        $unpostedDataButton.click(unpostedClick); 
         
-        $addUnpostedDataButton.click(unpostedClick); 
-        $addTwoWeekPlusDataButton.click(lastTwoWeeksPlusClick);
-        $addLastTwoWeeksDataButton.click(lastTwoWeeksClick);
-        $addDataStatusDiv.append($addUnpostedDataButton); 
+        $addDataStatusDiv.append($lastTwoWeeksButton);
+        $addDataStatusDiv.append($unpostedDataButton); 
         $addDataStatusDiv.append($("<span>").css({'margin':'0 .2em'}));
-        $addDataStatusDiv.append($addTwoWeekPlusDataButton);          
+        $addDataStatusDiv.append($lastTwoWeeksPLUSButton);          
         $("#table_id_filter").append($addDataStatusDiv);
 
         $("#table_id_filter label").show();
@@ -1245,7 +1226,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     editorconfig.setStartingPoints.callback(config, function (config) {
         for (var h = 0; h < config.startingPoints.length; h++) {
             var sp = config.startingPoints[h];
-            var $createResourcesubmenuul = null;
             if (typeof sp.menuGroup !== undefined && sp.menuGroup !== '') {
                 /*
 <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -1569,7 +1549,6 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             if (page.indexOf('#') > 0) {
                                 page = page.split('#')[0];
                             }
-                            var linkUrl = config.url + '/bfe/' + page + '#' + resourceName.substring(0,8);
                             $messagediv.append('<strong>Description saved:</strong> <button type="button" class="btn btn-link" onclick="window.location.reload();">'+resourceName.substring(0,8)+'</button>');
                             //$messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
                             $messagediv.insertBefore('.nav-tabs');
@@ -1738,12 +1717,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                     </div> \
                                 </div> \
                                 \
-                                <div class="card"> \
+                                <!-- <div class="card"> \
                                     <div class="card-body"> \
                                         <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonld-vis">Visualize</a></h3> \
                                         <div class="card-text collapse in" id="jsonld-vis"></div> \
                                     </div> \
-                                </div> \
+                                </div> --> \
                             </div>');
 
           $('#exitButtonGroup').append($backButton);
@@ -2418,10 +2397,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             if (rt.embedType == 'modal' && forEachFirst && property.propertyLabel.match(/lookup/i)) {
                                 // This is the first propertty *and* it is a look up.
                                 // Let's treat it special-like.
-                                var $saveLookup = $('<div class="modal-savechanges"><button type="button" class="btn btn-primary" style="display:none" id="bfeditor-modalSaveLookup-' + fobject.id + '" tabindex="' + tabIndices++ + '">Save changes</button></div>');
-                                var $spacer = $('<div class="modal-spacer"><span>OR</span></div>');
-                                $formgroup.append($saveLookup);
-                                $formgroup.append($spacer);
+                                // See below for where $spacer is inserted.
+                                var $spacer = $('<hr><p class="text-center font-weight-bold">OR</p><hr>');
                             }
             
                         } else {
@@ -2461,6 +2438,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 }
 
                 form.append($formgroup);
+                if ($spacer !== undefined) {
+                    // This is the OR spacer after the lookup.  Put here because 
+                    // it will land betwixt the lookup div and the next one.
+                    form.append($spacer);
+                }
                 // EDIT HERE $resourcediv.append($formgroup);
                 forEachFirst = false;
             });
@@ -3081,6 +3063,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 displaydata = exports.labelMaker(pd, property);
             }
 
+            bfelog.addMsg(new Error(), 'DEBUG', 'displayData is: ' + displaydata);
             if (displaydata === undefined) {
                 if (data !== undefined && data.o !== undefined) {
                     displaydata = data.o;
@@ -3378,32 +3361,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     // Modals
     var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
-              <div class="modal-dialog modal-lg"> \
-                  <div class="modal-content"> \
-                      <div class="modal-header"> \
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
-                          <button type="button" class="btn btn-primary save" id="bfeditor-modalSaveHeader-modalID">Save changes</span></button> \
-                          <h4 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h4> \
-                      </div> \
-                      <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
-                      <div class="modal-footer"> \
-                          <button type="button" class="btn btn-default" id="bfeditor-modalCancel-modalID" data-dismiss="modal">Cancel</button> \
-                          <button type="button" class="btn btn-primary" id="bfeditor-modalSave-modalID">Save changes</button> \
-                      </div> \
-                  </div> \
-              </div> \
-          </div> ';
-    var modal = '<div class="modal fade" id="bfeditor-modal-modalID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> \
                 <div class="modal-dialog modal-lg" role="document"> \
                     <div class="modal-content"> \
                         <div class="modal-header"> \
                             <h5 class="modal-title" id="bfeditor-modaltitle-modalID">Modal title</h5> \
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> \
-                                <span aria-hidden="true">&times;</span> \
-                            </button> \
-                            <button type="button" class="btn btn-primary save" id="bfeditor-modalSaveHeader-modalID"> \
-                              <span>Save changes</span> \
-                            </button> \
+                            <div class="float-right"> \
+                            <button type="button" class="btn btn-secondary mr-1" id="bfeditor-modalCancelHeader-modalID"  data-dismiss="modal">Close</button> \
+                            <button type="button" class="btn btn-primary" id="bfeditor-modalSaveHeader-modalID"><span>Save changes</span></button> \
+                            </div> \
                         </div> \
                         <div class="modal-body" id="bfeditor-modalbody-modalID"></div> \
                         <div class="modal-footer"> \
@@ -3503,10 +3468,41 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       handle: ".modal-header"
     });
 
+    // Let's use use good old function sytax
+    function saveChangesFunc(event, varobj) {
+        var callingformobjectid = varobj.callingformobjectid;
+        var form = varobj.form;
+        
+        varobj.triples.forEach(function (triple) {
+            removeTriple(callingformobjectid, inputID, null, triple);
+        });
+        if (form.formobject.store.length <= 2) {
+            $('#bfeditor-modalSave-' + form.formobject.id).off('click');
+            $('#bfeditor-modal-' + form.formobject.id).modal('hide');
+        } else {
+            setResourceFromModal(callingformobjectid, form.formobject.id, resourceURI, form.formobject.defaulturi, varobj.inputID, _.uniq(form.formobject.store));
+            bfe.saveNoExit();
+        }
+    }
+
+    var varobj = {
+        callingformobjectid: callingformobjectid,
+        triples: triplespassed,
+        inputID: inputID,
+        form: form
+    }
+    // Assign the listener callback to a variable
+    var saveChangesTest = (event) => saveChangesFunc(event, varobj); 
+
+
 //<<< <<<< HEAD
 //    $('#bfeditor-modalSave-' + form.formobject.id).click(function () {
 //==== ===
     var saveChanges = function () {
+        var callingformobjectid = this.id.replace("bfeditor-modalSaveHeader-", "");
+        callingformobjectid = callingformobjectid.replace("bfeditor-modalSave-", "");
+        console.log(callingformobjectid);
+        
 // >>>> >>> aws
       triples.forEach(function (triple) {
         removeTriple(callingformobjectid, inputID, null, triple);
@@ -3549,13 +3545,20 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         bfe.saveNoExit();
       }
     }
-    $('#bfeditor-modalSave-' + form.formobject.id).click(saveChanges);
-    $('#bfeditor-modalSaveHeader-' + form.formobject.id).click(saveChanges);
+    $('#bfeditor-modalSave-' + form.formobject.id).click(saveChangesTest);
+    $('#bfeditor-modalSaveHeader-' + form.formobject.id).click(saveChangesTest);
     $('#bfeditor-modalSave-' + form.formobject.id).attr('tabindex', tabIndices++);
     
 // >>> >>>> aws
     $('#bfeditor-modal-' + form.formobject.id).on('hide.bs.modal', function () {
       $(this).empty();
+    });
+
+    // This ensures any parent modals remain valid and active.
+    $('#bfeditor-modal-' + form.formobject.id).on('hidden.bs.modal', function () {
+        if ($('.modal:visible').length) { // check whether parent modal is opend after child modal close
+            $('body').addClass('modal-open'); // if open mean length is 1 then add a bootstrap css class to body of the page
+        }
     });
 
     $('.typeahead', form.form).each(function () {
@@ -3645,6 +3648,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     var lookupLabel;
     var tsubject = resourceID;
+    console.log(forms);
     var callingformobject = _.where(forms, {
       'id': formobjectID
     });
@@ -3660,6 +3664,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'o': resourcetemplate.resourceURI
     };
 
+    console.log(callingformobject);
+    console.log(propertyguid);
     resourceType.rtID = _.where(callingformobject.resourceTemplates[0].propertyTemplates, {
       'guid': propertyguid
     })[0].valueConstraint.valueTemplateRefs[0];
@@ -3931,6 +3937,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     exports.displayDataService = function(labeldata, displaydata){
         bfelog.addMsg(new Error(), 'DEBUG', 'labeldata is: ', labeldata);
         bfelog.addMsg(new Error(), 'DEBUG', 'displaydata is: ' + displaydata);
+        bfelog.addMsg(new Error(), 'DEBUG', 'NOTE:  displaydata is the name of the property basically');
         
         if (displaydata === 'adminMetadata') {
             var admindisplaydata = '';
@@ -4037,7 +4044,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 if (displaydata != "") { displaydata = displaydata + " - "; }
                 displaydata = displaydata + dateLabel;
             }
-            if (dateLabel == "") {
+            if (displaydata == "" && dateLabel == "") {
                 displaydata = "provisionActivity";
             }
     
@@ -4516,6 +4523,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       
     }
     
+    /*  e-s-lint complains about the unused vars.  But I think they're legitly expected? */
+    /* eslint-disable no-unused-vars */
     $(input).on('typeahead:render', function (event, suggestions, asyncFlag, dataset) {
       //bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
 
