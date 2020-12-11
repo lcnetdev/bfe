@@ -53,8 +53,10 @@ bfe.define('src/bfelabels', ['require', 'exports','src/bfelogging' ], function(r
         
         var jsonuri = uri + '.json';
         // normalize
+        console.log(uri);
+        console.log(config.resourceURI);
         if (uri.startsWith('http://id.loc.gov/resources') && !_.isEmpty(config.resourceURI)) {
-            jsonuri = uri.replace('http://id.loc.gov/resources', config.resourceURI) + '.jsonld';
+            jsonuri = uri.replace('http://id.loc.gov/', config.resourceURI) + '.jsonld';
         } else if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
             jsonuri = uri + '.madsrdf_raw.json';
         }
