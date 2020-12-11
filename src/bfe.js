@@ -1672,7 +1672,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           function jsonPanel(data) {
             bfestore.store2turtle(data, humanizedPanel);
 
-            $('#jsonld pre').text(JSON.stringify(data, undefined, ' '));
+            $('#jsonlddiv pre').text(JSON.stringify(data, undefined, ' '));
 
             if (typeof d3 !== "undefined") {
                 bfestore.store2jsonldnormalized(data, function (expanded) {
@@ -1701,8 +1701,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                 \
                                 <div class="card"> \
                                     <div class="card-body"> \
-                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonld">JSONLD</a></h3> \
-                                        <div class="card-text collapse in" id="jsonld"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#jsonlddiv">JSONLD</a></h3> \
+                                        <div class="card-text collapse in" id="jsonlddiv"> \
                                                 <pre>' + JSON.stringify(jsonstr, undefined, ' ') + '</pre> \
                                         </div> \
                                     </div> \

@@ -469,8 +469,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     });
   };
 
-  exports.jsonld2store = function (jsonld) {
-    jsonld.forEach(function (resource) {
+  exports.jsonld2store = function (jsonld_data) {
+    jsonld_data.forEach(function (resource) {
       var s = typeof resource['@id'] !== 'undefined' ? resource['@id'] : '_:b' + shortUUID(guid());
       for (var p in resource) {
         if (p !== '@id') {
@@ -677,7 +677,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       'datatypes': 'http://id.loc.gov/datatypes/',
       'lclocal': 'http://id.loc.gov/ontologies/lclocal/'
     };
-
     jsonld.compact(jsonstr, context, function (err, compacted) {
       callback(compacted);
     });
@@ -696,8 +695,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
       'lclocal': 'http://id.loc.gov/ontologies/lclocal/'
     };
 
-    jsonld.expand(jsonstr, context, function (err, jsonld) {
-      callback(jsonld);
+    jsonld.expand(jsonstr, context, function (err, jsonld_data) {
+      callback(jsonld_data);
     });
   };
 
