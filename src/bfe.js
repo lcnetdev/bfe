@@ -1542,17 +1542,19 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                             bfelog.addMsg(new Error(), 'INFO', 'Saved: ' + data.save_name);
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
                         
-                            $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
-                            var decimaltranslator = window.ShortUUID("0123456789");
-                            var resourceName = "e" + decimaltranslator.fromUUID(data.name);
-                            var page = location.href.split("/").pop(); 
-                            if (page.indexOf('#') > 0) {
-                                page = page.split('#')[0];
+                            if (entryfunc == "lcapplication") {
+                                $messagediv = $('<div>', {id: "bfeditor-messagediv", class: 'alert alert-info' });
+                                var decimaltranslator = window.ShortUUID("0123456789");
+                                var resourceName = "e" + decimaltranslator.fromUUID(data.name);
+                                var page = location.href.split("/").pop(); 
+                                if (page.indexOf('#') > 0) {
+                                    page = page.split('#')[0];
+                                }
+                                $messagediv.append('<strong>Description saved:</strong> <button type="button" class="btn btn-link" onclick="window.location.reload();">'+resourceName.substring(0,8)+'</button>');
+                                //$messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
+                                $messagediv.insertBefore('.nav-tabs');
                             }
-                            $messagediv.append('<strong>Description saved:</strong> <button type="button" class="btn btn-link" onclick="window.location.reload();">'+resourceName.substring(0,8)+'</button>');
-                            //$messagediv.append($('<button>', {onclick: "document.getElementById('bfeditor-messagediv').style.display='none'", class: 'close' }).append('<span>&times;</span>'));
-                            $messagediv.insertBefore('.nav-tabs');
-                        
+                            
                             $('#bfeditor-exitcancel').text("Cancel");
                         } else {
                             
@@ -1604,32 +1606,44 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-warning' });
                     $messagediv.append('<strong>Saving description and posting description.  This takes a few seconds...');
                     $messagediv.insertBefore('.nav-tabs');
-                    editorconfig.publish.callback({bfestore: bfestore, bfelog: bfelog, version: createVersion}, function (success, data) {
-                        $('.alert').remove();
-                        if (success) {
+                    editorconfig.publish.callback({bfestore: bfestore, bfelog: bfelog, version: createVersion}, function (err, data) {
+                        /*
+                            WARNING WARNING WARNING.
+                            If this is ever merged into main, the callback funtion is now a 
+                            proper Javascript callback.  On success, first parameter should be null.
+                        */
+                        if (err) {
+                            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
+                            $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed: </strong>' + err.name + ' (' + err.message + ')</span>');
+                                
+                            if (entryfunc == "lcapplication") {
+                                $messagediv.insertBefore('.nav-tabs');
+                                //$messagediv.insertBefore('#bfeditor-previewPanel');
+                            } else {
+                                $messagediv.insertBefore('#bfeditor-menudiv');
+                            }
+                        } else {
                             createVersion = 0;
                             document.body.scrollTop = document.documentElement.scrollTop = 0;
                             bfelog.addMsg(new Error(), "INFO", "Published " + data.name);
-                            
-                            var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-success' });
-                            var displayText = data.lccn !== undefined ? data.lccn : data.objid;
-                            $messagediv.append('<strong>Description posted: </strong><a href=' + config.basedbURI + data.objid+'>'+displayText+'</a>');
-                            $messagediv.insertBefore('.nav-tabs');
-                            
-                            $('#bfeditor-formdiv').empty();
-                            $('#save-btn').remove();
-                            $('#bfeditor-previewPanel').remove();
-                            $('.nav-tabs a[href="#browse"]').tab('show')
-                            
                             bfestore.store = [];
-                            window.location.hash = "";
                             
-                            exitFunction();
-                        } else {
-                            $messagediv = $('<div>', { id: 'bfeditor-messagediv', class: 'alert alert-danger', role: 'alert' });
-                            $messagediv.append('<div class="alert alert-danger"><strong>Save/Publish Failed:</strong>' + data.errorThrown + ' (' + data.errorText + ')</span>');
-                            $messagediv.insertBefore('.nav-tabs');
-                            //$messagediv.insertBefore('#bfeditor-previewPanel');
+                            if (entryfunc == "lcapplication") {
+                                $('.alert').remove();
+                                var $messagediv = $('<div>', {id: "bfeditor-messagediv",class: 'alert alert-success' });
+                                var displayText = data.lccn !== undefined ? data.lccn : data.objid;
+                                $messagediv.append('<strong>Description posted: </strong><a href=' + config.basedbURI + data.objid+'>'+displayText+'</a>');
+                                $messagediv.insertBefore('.nav-tabs');
+                                $('#save-btn').remove();
+                                $('#bfeditor-previewPanel').remove();
+                                $('.nav-tabs a[href="#browse"]').tab('show')
+                                window.location.hash = "";
+                                exitFunction();
+                            }
+                            $('#bfeditor-menudiv').empty();
+                            $('#bfeditor-menudiv').hide();
+                            $('#bfeditor-formdiv').empty();
+                            
                         }
                     });
                 }
