@@ -35,7 +35,7 @@ bfe.define('src/bfeapi', ['require', 'exports', 'src/bfelogging'], function (req
             bfestore.templateGUID = guid();
             bfestore.created = new Date().toISOString();
             bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
-            bfestore.state = 'create';
+            bfestore.state = 'edit';
     
             // Turn off edit mode of templates if they were in the middle of editing one
             //bfeusertemplates.editMode = false;
