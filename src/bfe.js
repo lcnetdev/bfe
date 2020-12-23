@@ -71,6 +71,18 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'name': 'LC-Instances',
       'load': require('src/lookups/lcinstances')
     },
+    'http://id.loc.gov/vocabulary/bfTypes': {
+      'name': 'BF-Types',
+      'load': require('src/lookups/bfTypes')
+    },
+    'http://id.loc.gov/vocabulary/bflcTypes': {
+      'name': 'BFLC-Types',
+      'load': require('src/lookups/bflcTypes')
+    },
+    'http://id.loc.gov/vocabulary/madsrdfTypes': {
+      'name': 'MADSRDF-Types',
+      'load': require('src/lookups/madsrdfTypes')
+    },
     /*
         Note: organizations and relators were commented out in postingchanges.
     */
@@ -1848,12 +1860,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             if (rt !== undefined && rt[0] !== undefined) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
-                // console.log(loadTemplates[urt]);
+                console.log(JSON.stringify(fobject.resourceTemplates[urt]));
                 fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
                 fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
                 fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
                 fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
                 // We need to make sure this resourceTemplate has a defaulturi
+                console.log(JSON.stringify(fobject.resourceTemplates[urt]));
                 if (fobject.resourceTemplates[urt].defaulturi === undefined) {
                     // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + shortUUID(loadTemplates[urt].templateGUID);
                     whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI,
@@ -1918,6 +1931,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
         fobject.resourceTemplates.forEach(function (rt) {
             bfelog.addMsg(new Error(), 'DEBUG', 'Creating form for: ' + rt.id, rt);
+            console.log(JSON.stringify(rt));
             var $resourcediv = $('<div>', {
                 id: rt.useguid,
                 'data-uri': rt.defaulturi,
@@ -2462,7 +2476,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
 
             // starting the "add property" stuff here
-            if (rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
+            if (entryfunc == "lcapplication" && rt.embedType == 'page' && bfeusertemplates.getEditMode() !== true) {
                 var substringMatcher = function (strs) {
                     return function findMatches(q, cb) {
                         strs = _.sortBy(strs, 'display');
@@ -2582,6 +2596,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         fobject.resourceTemplates.forEach(function (rt) {
             bfelog.addMsg(new Error(), 'DEBUG', 'Populating form with data.');
             bfelog.addMsg(new Error(), 'DEBUG', 'bfestore.state is "' + bfestore.state + '".');
+            bfelog.addMsg(new Error(), 'DEBUG', 'rt is: ', rt);
             // check for match...maybe do this earlier
 
             if (_.where(bfestore.store, {'o': rt.resourceURI}).length > 0) {
@@ -2607,7 +2622,11 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     });
                 }
             }
-            var triple = {};
+            bfelog.addMsg(new Error(), 'DEBUG', 'rt is now: ', rt);
+            bfelog.addMsg(new Error(), 'DEBUG', 'store state is: ' + bfestore.state);
+            bfelog.addMsg(new Error(), 'DEBUG', 'rt data length is: ' + rt.data.length);
+            bfelog.addMsg(new Error(), 'DEBUG', 'number of triples in store for s=' + rt.defaulturi + ' and o=' + rt.resourceURI + ': ', _.where(bfestore.store, {'s': rt.defaulturi, 'o': rt.resourceURI }));
+            bfelog.addMsg(new Error(), 'DEBUG', 'bfestore.store: ', bfestore.store);
             if (
                 bfestore.state !== 'create' && 
                 rt.data.length === 0 && 
@@ -2722,6 +2741,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
 
     function preloadData(property, rt, form, fobject) {
+        bfelog.addMsg(new Error(), 'DEBUG', 'Entering preloadData()');
+        bfelog.addMsg(new Error(), 'DEBUG', 'Property is ', property);
+        bfelog.addMsg(new Error(), 'DEBUG', 'rt is ', rt);
+        bfelog.addMsg(new Error(), 'DEBUG', 'fobject is ', fobject);
         var propsdata = _.where(bfestore.store, {
             's': rt.defaulturi,
             'p': property.propertyURI
@@ -4917,6 +4940,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
     });
     var bnode = _.find(triples, {guid:tguid});
+    bfelog.addMsg(new Error(), 'DEBUG', 'bnode is ', bnode);
 
     if (resourceTypes[0] == undefined) {
       // try @type?
@@ -4926,7 +4950,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     }
     bfelog.addMsg(new Error(), 'DEBUG', 'Triples represent these resourceTypes', resourceTypes);
     
-    var thisResourceType = _.find(resourceTypes, {s: bnode.o})
+    var thisResourceType = _.find(resourceTypes, {s: bnode.o});
+    bfelog.addMsg(new Error(), 'DEBUG', 'thisResourceType is ', thisResourceType);
 
    /* for (var i in resourceTypes){
       if (resourceTypes[i].rtID !== undefined){
@@ -5056,7 +5081,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         // for resource templates, determine if they are works, instances, or other
         var uri;
         if (rt.resourceURI.startsWith('http://www.loc.gov/mads/rdf/v1#')) {
-            uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', config.url + '/bfe/static/v1.json#');
+            //uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', config.url + '/bfe/static/v1.json#');
+            uri = rt.resourceURI.replace('http://www.loc.gov/mads/rdf/v1#', 'https://id.loc.gov/ontologies/madsrdf/v1.json#');
         } else if (rt.resourceURI.startsWith('http://id.loc.gov/resources' && !_.isEmpty(config.resourceURI))) {
             uri = rt.resourceURI.replace('http://id.loc.gov/resources', config.resourceURI) + '.json';
         } else if (rt.resourceURI.startsWith(config.rectobase +'/resources')) {
@@ -5099,6 +5125,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         }
                     }
                 });
+                //console.log("returnval is " + returnval, rt, data);
                 callback(returnval);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
