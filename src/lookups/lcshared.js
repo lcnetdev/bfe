@@ -281,7 +281,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
 
     exports.fetchContextData = function(uri,callback){
 
-      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
+      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary|entities)/)) {
         var jsonuri = uri + '.madsrdf_raw.jsonld';
         jsonuri = jsonuri.replace(/^(http:)/,"https:");
       } else {
