@@ -216,8 +216,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
         //remove old procInfos
         bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/procInfo' }));
 
-        adminTriple = _createLiteralTriple(resourceURI, "http://id.loc.gov/ontologies/bflc/procInfo", procInfo);
-        bfeditor.bfestore.store.push(adminTriple);
+        if (procInfo !== undefined) {
+            adminTriple = _createLiteralTriple(resourceURI, "http://id.loc.gov/ontologies/bflc/procInfo", procInfo);
+            bfeditor.bfestore.store.push(adminTriple);
+        }
     }
 
     exports.addProfile = function (resourceURI, profile) {
