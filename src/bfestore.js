@@ -92,211 +92,140 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     var mintedUri = config.url + '/resources/' + mintedId;
 
     var bnode = '_:bnode' +  shortUUID(guid());
+    
+    var resourceType = "bibframe";
+    var amProp = "http://id.loc.gov/ontologies/bibframe/adminMetadata";
+    var amType = "http://id.loc.gov/ontologies/bibframe/AdminMetadata";
+    if ( resourceURI.indexOf("/resources/") === -1 ) {
+        // This is not a bibframe resource....
+        resourceType = "Authority";
+        amProp = "http://www.loc.gov/mads/rdf/v1#adminMetadata";
+        amType = "http://id.loc.gov/ontologies/RecordInfo#RecordInfo";
+    } else if ( resourceURI.indexOf("/resources/hubs/") > -1 ) {
+        // This is a Hub.
+        resourceType = "Hub";
+    }
 
     var adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = resourceURI;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/adminMetadata';
-    adminTriple.o = bnode;
-    adminTriple.otype = 'uri';
+    adminTriple = _createURITriple(resourceURI, amProp, bnode);
     bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/AdminMetadata';
-    adminTriple.otype = 'uri';
+    adminTriple = _createURITriple(bnode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", amType);
     bfeditor.bfestore.store.push(adminTriple);
 
     if (!_.isEmpty(catalogerId)){
-      adminTriple = {};
-      adminTriple.guid = shortUUID(guid());
-      adminTriple.s = bnode;
-      adminTriple.p = 'http://id.loc.gov/ontologies/bflc/catalogerId';
-      adminTriple.o = catalogerId;
-      adminTriple.otype = 'literal';
-      bfeditor.bfestore.store.push(adminTriple);
+        adminTriple = _createLiteralTriple(bnode, "http://id.loc.gov/ontologies/bflc/catalogerId", catalogerId);
+        bfeditor.bfestore.store.push(adminTriple); 
     }
 
     if (!_.isEmpty(encodingLevel)){
-      adminTriple = {};
-      adminTriple.guid = shortUUID(guid());
-      adminTriple.s = bnode;
-      adminTriple.p = 'http://id.loc.gov/ontologies/bflc/encodingLevel';
-      adminTriple.o = encodingLevel;
-      adminTriple.otype = 'uri';
-      bfeditor.bfestore.store.push(adminTriple);
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bflc/encodingLevel", encodingLevel);
+        bfeditor.bfestore.store.push(adminTriple);
     }
+    
+    if (resourceType == "bibframe") {
+        
+        var cdate = new Date(bfeditor.bfestore.created);
+        var cdate_value = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+        var cdate_triple = _createLiteralTriple(bnode, "http://id.loc.gov/ontologies/bibframe/creationDate", cdate_value, "http://www.w3.org/2001/XMLSchema#date");
+        bfeditor.bfestore.store.push(cdate_triple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/creationDate';
-    var d = new Date(bfeditor.bfestore.created);
-    adminTriple.o = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
-    adminTriple.otype = 'literal';
-    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#date';
-    bfeditor.bfestore.store.push(adminTriple);
+        //var mdate = new Date().toUTCString();
+        var mdate_value = new Date().toJSON().split(/\./)[0];
+        var mdate_triple = _createLiteralTriple(bnode, "http://id.loc.gov/ontologies/bibframe/changeDate", mdate_triple, "http://www.w3.org/2001/XMLSchema#dateTime");
+        bfeditor.bfestore.store.push(mdate_triple);
 
-    adminTriple = {};
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/changeDate';
-    var modifiedDate = new Date().toUTCString();
-    adminTriple.o = new Date(modifiedDate).toJSON().split(/\./)[0];
-    adminTriple.otype = 'literal';
-    adminTriple.odatatype = 'http://www.w3.org/2001/XMLSchema#dateTime';
-    bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionAuthentication';
-    adminTriple.o = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
+        // description authentication
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bibframe/descriptionAuthentication", "http://id.loc.gov/vocabulary/marcauthen/pcc");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createURITriple("http://id.loc.gov/vocabulary/marcauthen/pcc", "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://id.loc.gov/ontologies/bibframe/DescriptionAuthentication");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple("http://id.loc.gov/vocabulary/marcauthen/pcc", "http://www.w3.org/2000/01/rdf-schema#label", "pcc");
+        bfeditor.bfestore.store.push(adminTriple);
+        // description authentication
+        
+        
+        // description descriptionConvention
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bibframe/descriptionConventions", "http://id.loc.gov/vocabulary/descriptionConventions/rda");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createURITriple("http://id.loc.gov/vocabulary/descriptionConventions/rda", "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://id.loc.gov/ontologies/bibframe/DescriptionConventions");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple("http://id.loc.gov/vocabulary/descriptionConventions/rda", "http://www.w3.org/2000/01/rdf-schema#label", "RDA");
+        bfeditor.bfestore.store.push(adminTriple);
+        // description descriptionConvention
+        
+        
+        // description language
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bibframe/descriptionLanguage", "http://id.loc.gov/vocabulary/descriptionConventions/rda");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createURITriple("http://id.loc.gov/vocabulary/languages/eng", "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://id.loc.gov/ontologies/bibframe/Language");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple("http://id.loc.gov/vocabulary/languages/eng", "http://www.w3.org/2000/01/rdf-schema#label", "English");
+        bfeditor.bfestore.store.push(adminTriple);
+        // description language
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionAuthentication';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/marcauthen/pcc';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'pcc';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
+        // description modifier
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bibframe/descriptionModifier", "http://id.loc.gov/vocabulary/organizations/dlc");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createURITriple("http://id.loc.gov/vocabulary/organizations/dlc", "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://id.loc.gov/ontologies/bibframe/DescriptionModifier");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple("http://id.loc.gov/vocabulary/organizations/dlc", "http://www.w3.org/2000/01/rdf-schema#label", "DLC");
+        bfeditor.bfestore.store.push(adminTriple);
+        // description modifier
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionConventions';
-    adminTriple.o = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionConventions';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
+        // Note sure what's going on here, but OK.
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/bibframe/identifiedBy", mintedUri);
+        bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/descriptionConventions/rda';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'RDA';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
+        adminTriple = _createURITriple(mintedUri, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://id.loc.gov/ontologies/bibframe/Local");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple(mintedUri, "http://www.w3.org/1999/02/22-rdf-syntax-ns#value", mintedId);
+        bfeditor.bfestore.store.push(adminTriple);
+        
+    } else {
+        // Stopped here.  Must do admin metadata for Authorities and Hubs.
+        var cdate = new Date(bfeditor.bfestore.created);
+        adminTriple = _createLiteralTriple(bnode, "http://id.loc.gov/ontologies/RecordInfo#recordChangeDate", cdate.toISOString(), "http://www.w3.org/2001/XMLSchema#dateTime");
+        bfeditor.bfestore.store.push(adminTriple);
+        
+        adminTriple = _createLiteralTriple(bnode, "http://id.loc.gov/ontologies/RecordInfo#recordStatus", "new");
+        bfeditor.bfestore.store.push(adminTriple);
 
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionLanguage';
-    adminTriple.o = 'http://id.loc.gov/vocabulary/languages/eng';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Language';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/languages/eng';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'English';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/descriptionModifier';
-    adminTriple.o = 'http://id.loc.gov/vocabulary/organizations/dlc';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/DescriptionModifier';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = 'http://id.loc.gov/vocabulary/organizations/dlc';
-    adminTriple.p = 'http://www.w3.org/2000/01/rdf-schema#label';
-    adminTriple.o = 'dlc';
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = bnode;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bibframe/identifiedBy';
-    adminTriple.o = mintedUri;
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = mintedUri;
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-    adminTriple.o = 'http://id.loc.gov/ontologies/bibframe/Local';
-    adminTriple.otype = 'uri';
-    bfeditor.bfestore.store.push(adminTriple);
-
-    adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = mintedUri;
-    adminTriple.p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
-    adminTriple.o = mintedId;
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-
+        adminTriple = _createURITriple(bnode, "http://id.loc.gov/ontologies/RecordInfo#recordContentSource", "http://id.loc.gov/vocabulary/organizations/dlc");
+        bfeditor.bfestore.store.push(adminTriple);
+    }
+    
     this.addProcInfo(bnode, procInfo);
     this.addProfile(bnode, rtID);
 
   }
 
-  exports.addProcInfo = function (resourceURI, procInfo) {
-    //remove old procInfos
-    bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/procInfo' }));
+    exports.addProcInfo = function (resourceURI, procInfo) {
+        //remove old procInfos
+        bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/procInfo' }));
 
-    var adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = resourceURI;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bflc/procInfo';
-    adminTriple.o = procInfo;
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-  }
+        adminTriple = _createLiteralTriple(resourceURI, "http://id.loc.gov/ontologies/bflc/procInfo", procInfo);
+        bfeditor.bfestore.store.push(adminTriple);
+    }
 
-  exports.addProfile = function (resourceURI, profile) {
-    bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/profile' }));
+    exports.addProfile = function (resourceURI, profile) {
+        bfeditor.bfestore.store = _.without(bfeditor.bfestore.store, _.findWhere(bfeditor.bfestore.store, { s: resourceURI, p: 'http://id.loc.gov/ontologies/bflc/profile' }));
 
-    var adminTriple = {};
-    adminTriple.guid = shortUUID(guid());
-    adminTriple.s = resourceURI;
-    adminTriple.p = 'http://id.loc.gov/ontologies/bflc/profile';
-    adminTriple.o = profile;
-    adminTriple.otype = 'literal';
-    bfeditor.bfestore.store.push(adminTriple);
-  }
+        adminTriple = _createLiteralTriple(resourceURI, "http://id.loc.gov/ontologies/bflc/profile", profile);
+        bfeditor.bfestore.store.push(adminTriple);
+    }
 
   exports.removeOrphans = function (defaultURI) {
     _.forEach(exports.store, function(t) {
@@ -755,6 +684,41 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
 
     bfeditor.bfestore.loadtemplates.data = bfeditor.bfestore.store;
   }
+
+    /**
+     * turi = URI or bnode
+     * tprop = URI, e.g. http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+     * tvalue = string
+     * tdatatype = URI, e.g. http://www.w3.org/2001/XMLSchema#dateTime
+     */ 
+    function _createLiteralTriple(turi, tprop, tvalue, tdatatype) {
+        var triple = {};
+        triple.guid = shortUUID(guid());
+        triple.s = turi;
+        triple.p = tprop;
+        triple.o = tvalue;
+        triple.otype = 'literal';
+        if (tdatatype != undefined) {
+            triple.odatatype = tdatatype;
+        }
+        return triple
+    }
+    
+    /**
+     * turi = URI or bnode
+     * tprop = URI, e.g. http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+     * tvalue = string
+     * tdatatype = URI, e.g. http://www.w3.org/2001/XMLSchema#dateTime
+     */ 
+    function _createURITriple(turi, tprop, tvalue_uri) {
+        var triple = {};
+        triple.guid = shortUUID(guid());
+        triple.s = turi;
+        triple.p = tprop;
+        triple.o = tvalue_uri;
+        triple.otype = 'uri';
+        return triple
+    }
 
   /**
    * Generates a GUID string.
