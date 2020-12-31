@@ -1781,56 +1781,62 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
   }
 
     // store = new rdfstore.Store();
-  function menuSelect(spid) {
-      bfelog.addMsg(new Error(), 'DEBUG', 'Menu item selected: ', spid);
-    var spnums = spid.replace('sp-', '').split('_');
-    var spoints = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
-    addedProperties = [];
+    function menuSelect(spid) {
+        bfelog.addMsg(new Error(), 'DEBUG', 'Menu item selected: ' + spid);
+        var spnums = spid.replace('sp-', '').split('_');
+        var selectedMenuItem = editorconfig.startingPoints[spnums[0]].menuItems[spnums[1]];
+        addedProperties = [];
 
-    bfestore.store = [];
-    bfestore.name = guid();
-    bfestore.templateGUID = guid();
-    bfestore.created = new Date().toISOString();
-    bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
-    bfestore.state = 'create';
+        bfestore.store = [];
+        bfestore.name = guid();
+        bfestore.templateGUID = guid();
+        bfestore.created = new Date().toISOString();
+        bfestore.url = config.url + '/ldp/verso/resources/' + bfestore.name;
+        bfestore.state = 'create';
     
-    // Turn off edit mode of templates if they were in the middle of editing one
-    bfeusertemplates.editMode = false;
-    bfeusertemplates.editModeTemplate = false;
+        // Turn off edit mode of templates if they were in the middle of editing one
+        bfeusertemplates.editMode = false;
+        bfeusertemplates.editModeTemplate = false;
 
-    var loadtemplates = [];
+        var loadtemplates = [];
 
-    spoints.useResourceTemplates.forEach(function (l) {
-      var loadtemplate = {};
-      var tempstore = [];
-      loadtemplate.templateGUID = bfestore.templateGUID;
-      loadtemplate.resourceTemplateID = l;
-      loadtemplate.embedType = 'page';
-      loadtemplate.data = tempstore;
-      loadtemplates.push(loadtemplate);
-      // cbLoadTemplates();
-    });
+        selectedMenuItem.useResourceTemplates.forEach(function (l) {
+            var loadtemplate = {};
+            var tempstore = [];
+            loadtemplate.templateGUID = bfestore.templateGUID;
+            loadtemplate.resourceTemplateID = l;
+            loadtemplate.embedType = 'page';
+            loadtemplate.data = tempstore;
+            loadtemplate.baseURIpath = selectedMenuItem.baseURIpath;
+            loadtemplates.push(loadtemplate);
+            // cbLoadTemplates();
+        });
 
-    bfestore.loadtemplates = loadtemplates;
-
-    //adminMetadata
-    var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
-    var procInfo = 'create ' + rt_type
-    bfeditor.bfestore.profile = loadtemplates[0].resourceTemplateID;
-    var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + guid();
-    if (entryfunc == "lcapplication") {
-        defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
+        bfestore.loadtemplates = loadtemplates;
+        bfeditor.bfestore.profile = loadtemplates[0].resourceTemplateID;
+        
+        //adminMetadata
+        if ( loadtemplates[0].baseURIpath !== undefined ) {
+            var defaulturi = editorconfig.baseURI + loadtemplates[0].baseURIpath + guid();
+        } else if (entryfunc == "lcapplication") {
+            var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
+            var procInfo = 'create ' + rt_type
+            var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + mintResource(bfestore.templateGUID);
+        } else {
+            bfelog.addMsg(new Error(), 'WARN', 'baseURIpath not set on menuItem; consider using baseURIpath; not lcapplication');
+            var rt_type = _.last(loadtemplates[0].resourceTemplateID.split(":")).toLowerCase();
+            var defaulturi = editorconfig.baseURI + 'resources/' + rt_type + 's/' + guid();
+        }
+        bfelog.addMsg(new Error(), 'DEBUG', 'Default URI (new) is: ' + defaulturi);
+        loadtemplates[0].resourceURI = defaulturi;
+        //var catalogerId;
+        if (config.enableLoadMarc && !_.isEmpty(window.localStorage.bfeUser)){
+          var catalogerId = JSON.parse(window.localStorage.bfeUser)["bflc:catalogerId"];
+        }
+        bfeditor.bfestore.addAdminMetadata(defaulturi, procInfo, bfeditor.bfestore.profile, "", catalogerId);
+        bfestore.loadtemplates.data = bfeditor.bfestore.store;
+        cbLoadTemplates();
     }
-    bfelog.addMsg(new Error(), 'DEBUG', 'Default URI (new) is: ' + defaulturi);
-    var catalogerId;
-    if (config.enableLoadMarc && !_.isEmpty(window.localStorage.bfeUser)){
-      catalogerId = JSON.parse(window.localStorage.bfeUser)["bflc:catalogerId"];
-    }
-    bfeditor.bfestore.addAdminMetadata(defaulturi, procInfo, bfeditor.bfestore.profile, "", catalogerId);
-    bfestore.loadtemplates.data = bfeditor.bfestore.store;
-
-    cbLoadTemplates();
-  }
 
     /*
     loadTemplates is an array of objects, each with this structure:
@@ -1860,15 +1866,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             });
             if (rt !== undefined && rt[0] !== undefined) {
                 fobject.resourceTemplates[urt] = JSON.parse(JSON.stringify(rt[0]));
-                console.log(JSON.stringify(fobject.resourceTemplates[urt]));
+                ///console.log(JSON.stringify(fobject.resourceTemplates[urt]));
                 fobject.resourceTemplates[urt].data = loadTemplates[urt].data;
                 fobject.resourceTemplates[urt].defaulturi = loadTemplates[urt].resourceURI;
                 fobject.resourceTemplates[urt].useguid = loadTemplates[urt].templateGUID;
                 fobject.resourceTemplates[urt].embedType = loadTemplates[urt].embedType;
                 // We need to make sure this resourceTemplate has a defaulturi
-                console.log(JSON.stringify(fobject.resourceTemplates[urt]));
+                //console.log(JSON.stringify(fobject.resourceTemplates[urt]));
                 if (fobject.resourceTemplates[urt].defaulturi === undefined) {
                     // fobject.resourceTemplates[urt].defaulturi = whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI) + shortUUID(loadTemplates[urt].templateGUID);
+                    bfelog.addMsg(new Error(), 'DEBUG', 'bfestore default uri is: ' + bfestore.defaulturi);
                     whichrt(fobject.resourceTemplates[urt], editorconfig.baseURI,
                         function (baseuri) {
                             var worklist = _.filter(bfestore.store, function (s) { return s.s.indexOf(baseuri) !== -1; });
