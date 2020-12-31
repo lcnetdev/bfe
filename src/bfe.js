@@ -1829,7 +1829,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
         bfelog.addMsg(new Error(), 'DEBUG', 'Default URI (new) is: ' + defaulturi);
         loadtemplates[0].resourceURI = defaulturi;
-        //var catalogerId;
+        var catalogerId = window.catalogerId;
         if (config.enableLoadMarc && !_.isEmpty(window.localStorage.bfeUser)){
           var catalogerId = JSON.parse(window.localStorage.bfeUser)["bflc:catalogerId"];
         }
