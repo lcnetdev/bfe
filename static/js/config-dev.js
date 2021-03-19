@@ -60,7 +60,7 @@ var config = {
     "startingPointsUrl": "/api/listconfigs?where=index.resourceType:startingPoints&where=index.label:" + name,
     "literalLangDataUrl": '/api/listconfigs?where=index.resourceType:literalLangData',
     "profiles": [
-        "https://preprod-3001.id.loc.gov/api/listconfigs?where=index.resourceType:profile"
+        "/api/listconfigs?where=index.resourceType:profile"
     ],
     "api": ["save", "publish", "retrieveLDS", "retrieve", "deleteId", "setStartingPoints"],
     "return": {
