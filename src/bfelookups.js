@@ -379,29 +379,32 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
 
     exports.fetchContextData = function(uri,callback){
 
-      if (uri.startsWith('http://id.loc.gov') && uri.match(/(authorities|vocabulary)/)) {
-        var jsonuri = uri + '.madsrdf_raw.jsonld';
-        jsonuri = jsonuri.replace(/^(http:)/,"https:");
-      } else {
-        jsonuri = uri + '.jsonld';
-      }
+        if (uri.indexOf('id.loc.gov/') > -1 && uri.match(/(authorities|vocabulary)/)) {
+            var jsonuri = uri + '.madsrdf_raw.jsonld';
+        } else {
+            jsonuri = uri + '.jsonld';
+        }
+      
+        if (uri.indexOf('id.loc.gov') > -1) {
+            jsonuri = jsonuri.replace(/^(http:)/,"https:");
+        }
       
 
-      $.ajax({
-        url: jsonuri,
-        dataType: 'json',
-        success: function (data) {    
+        $.ajax({
+            url: jsonuri,
+            dataType: 'json',
+            success: function (data) {    
+              
+                var id = uri.split('/')[uri.split('/').length-1];
+                data.uri = uri;
           
-          var id = uri.split('/')[uri.split('/').length-1];
-          data.uri = uri;
-          
-          var d = JSON.stringify(exports.extractContextData(data));
-          sessionStorage.setItem(id, d);
-          if (callback){
-            callback(d)
-          }
-        }
-      });   
+                var d = JSON.stringify(exports.extractContextData(data));
+                sessionStorage.setItem(id, d);
+                if (callback){
+                    callback(d)
+                }
+            }
+        });   
     };
   
     exports.rdfType = function(type){
@@ -432,13 +435,6 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
 
     exports.processSuggestions = function (suggestions, query) {
 
-      // was trying to pre-fetch some of the results, just causes a lot of slow down, not really needed
-      // suggestions[3].forEach(function(v,i){
-        // if (i<=10){
-          // exports.fetchContextData(v)       
-        // }      
-      // });
-      
       var typeahead_source = [];
       if (suggestions[1] !== undefined) {
         for (var s = 0; s < suggestions[1].length; s++) {
@@ -504,7 +500,7 @@ bfe.define('src/lookups/lcnames', ['require', 'exports', 'src/lookups/lcshared',
               });
               break;
             }
-            bfelog.addMsg(new Error(), 'INFO',typeahead_source);
+            bfelog.addMsg(new Error(), 'INFO', typeahead_source);
           }
         }
       }
