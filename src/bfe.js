@@ -51,6 +51,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'name': 'LCNAF',
       'load': require('src/lookups/lcnames')
     },
+    'http://preprod.id.loc.gov/authorities/names': {
+      'name': 'LCNAF',
+      'load': require('src/lookups/lcnames-preprod')
+    },
     'http://id.loc.gov/rwo/agents': {
       'name': 'LC-Agents',
       'load': require('src/lookups/agents')
@@ -207,6 +211,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       });
     }
 
+    /*
     if (config.lookups !== undefined) {
       loadtemplatesANDlookupsCount = loadtemplatesANDlookupsCount + Object.keys(config.lookups).length;
       config.lookups.foreach(function (lu) {
@@ -215,6 +220,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           setLookup(r);
         });
       });
+    }
+    */
+    if (config.lookups !== undefined) {
+        for (const k in config.lookups) {
+            var lu = config.lookups[k];
+            bfelog.addMsg(new Error(), 'INFO', 'Loading lookup: ' + lu.require);
+            lu.load = require(lu.require);
+        }
+        Object.assign(lookups, config.lookups);
     }
     if (editorconfig.baseURI === undefined) {
       editorconfig.baseURI = window.location.protocol + '//' + window.location.host + '/';
@@ -3687,7 +3701,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
     var lookupLabel;
     var tsubject = resourceID;
-    console.log(forms);
+    //console.log(forms);
     var callingformobject = _.where(forms, {
       'id': formobjectID
     });
@@ -3703,8 +3717,8 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       'o': resourcetemplate.resourceURI
     };
 
-    console.log(callingformobject);
-    console.log(propertyguid);
+    //console.log(callingformobject);
+    //console.log(propertyguid);
     resourceType.rtID = _.where(callingformobject.resourceTemplates[0].propertyTemplates, {
       'guid': propertyguid
     })[0].valueConstraint.valueTemplateRefs[0];
@@ -4370,13 +4384,14 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfelog.addMsg(new Error(), 'DEBUG', 'Lookup is', lu);
 
       var dshash = {};
+      dshash.scheme = uvf;
       dshash.name = lu.name;
       dshash.source = function (query, sync, async) {
         lu.load.source(query, sync, async, formobject);
       };
       dshash.limit = 50;
       dshash.templates = {
-        header: '<h3>' + lu.name + '</h3>',
+        header: '<h3 data-scheme="' + uvf + '">' + lu.name + '</h3>',
         footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
       };
       // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
@@ -4391,7 +4406,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       displayKey: 'value'
     };
     if (dshashes.length === 1) {
-        console.log(dshashes[0]);
+        //console.log(dshashes[0]);
       $(input).typeahead(
         opts,
         dshashes[0]
@@ -4565,12 +4580,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     /*  e-s-lint complains about the unused vars.  But I think they're legitly expected? */
     /* eslint-disable no-unused-vars */
     $(input).on('typeahead:render', function (event, suggestions, asyncFlag, dataset) {
-      //bfelog.addMsg(new Error(), 'DEBUG', event, suggestions, asyncFlag, dataset);
-
+      //bfelog.addMsg(new Error(), 'DEBUG', this);
       if (editorconfig.buildContext) {
+          
+        var propertyguid = dataset.propertyguid;
+        bfelog.addMsg(new Error(), 'DEBUG', 'propertyguid for typeahead input is ' + propertyguid);
 
         $('.tt-suggestion').each(function (i, v) {
           v = $(v);
+         // console.log(v);
+
           // already has been tooltipterized
           if (v.hasClass('tooltipstered')) {
             return true
@@ -4616,11 +4635,16 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
                 } else {
 
-                  var useUri = $instance.data('ttSelectableObject').uri;
-                  if (useUri.indexOf('id.loc.gov/resources/works/') > -1 && !_.isEmpty(editorconfig.buildContextForWorksEndpoint)) {
-                    useUri = useUri.replace('http://id.loc.gov/resources/works/', editorconfig.buildContextForWorksEndpoint);
-                  }
-                  lcshared.fetchContextData(useUri, function (data) {
+                    var suggestitem_scheme = v[0].parentNode.firstChild.dataset.scheme
+                    var suggestitem_schemeBaseURL = suggestitem_scheme.split('/').slice(0,3).join('/');
+                    var useUri = $instance.data('ttSelectableObject').uri;
+                    if (useUri.indexOf('id.loc.gov/resources/works/') > -1 && !_.isEmpty(editorconfig.buildContextForWorksEndpoint)) {
+                        useUri = useUri.replace('http://id.loc.gov/resources/works/', editorconfig.buildContextForWorksEndpoint);
+                    } else if ( suggestitem_scheme.indexOf('id.loc.gov/') > -1 && useUri.indexOf('http://id.loc.gov') > -1) {
+                        var schemeBaseURL = suggestitem_scheme.split('/').slice(0,3).join('/');
+                        useUri = useUri.replace('http://id.loc.gov', suggestitem_schemeBaseURL);
+                    }
+                    lcshared.fetchContextData(useUri, function (data) {
 
                     // call the 'content' method to update the content of our tooltip with the returned data.
                     // note: this content update will trigger an update animation (see the updateAnimation option)
