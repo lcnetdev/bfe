@@ -3299,14 +3299,37 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                         displaydata = label;
                     });
                 } else {
+                    var source = _.find(labeldata, {
+                        s: tvalue.s,
+                        p: 'http://id.loc.gov/ontologies/bibframe/source'
+                    });
+                    if (!_.isEmpty(source) && !_.isEmpty(source.o)) {
+                        var sourceLabel = _.find(bfestore.store, {
+                            s: source.o,
+                            p: 'http://www.w3.org/2000/01/rdf-schema#label'
+                        });
+                        if (!_.isEmpty(sourceLabel) && !_.isEmpty(sourceLabel.o)) {
+                            sourceLabel = sourceLabel.o;
+                        } else {
+                            sourceLabel = undefined;
+                        }
+                    }
                     var qualifier = _.find(labeldata, {
                         s: tvalue.s,
                         p: 'http://id.loc.gov/ontologies/bibframe/qualifier'
                     });
+                    var type  = _.find(labeldata, {
+                        s: tvalue.s,
+                        p: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+                    });
+                    displaydata = tvalue.o;
                     if (!_.isEmpty(qualifier) && !_.isEmpty(qualifier.o)) {
-                        displaydata = tvalue.o + ' ' + qualifier.o;
-                    } else {
-                        displaydata = tvalue.o;
+                        displaydata += ' ' + qualifier.o;
+                    } else if (sourceLabel != undefined) {
+                        displaydata += ' (' + sourceLabel + ')';
+                    } else if (!_.isEmpty(type) && !_.isEmpty(type.o)) {
+                        var tparts = type.o.split('/');
+                        displaydata += ' (' + tparts[tparts.length - 1] + ')';
                     }
                 }
 
