@@ -8,14 +8,55 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                'builds/bfe-test.js' : ['src/lib/mini_require.js', 'src/bfe.js','src/bfestore.js','src/bfelogging.js','src/bfeusertemplates.js','src/bfeliterallang.js','src/bfelookups.js', 'src/lookups/names-preprod.js', 'src/bfelabels.js', 'src/bfeapi.js','src/lib/aceconfig.js'],
-                'builds/bfe-test.css' : ['src/css/bootstrap-extra.css', 'src/css/typeahead.css', 'src/css/bfeusertemplates.css', 'src/css/bfeliterallang.css'],
+                    'builds/bfe-test.js' : [
+                        'src/lib/mini_require.js', 
+                        'src/bfe.js','src/bfestore.js',
+                        'src/bfelogging.js',
+                        'src/bfeusertemplates.js',
+                        'src/bfeliterallang.js',
+                        
+                        'src/lookups/lcshared.js',
+                        'src/bfelookups.js', 
+                        'src/lookups/names-preprod.js', 
+                        
+                        'src/bfelabels.js', 
+                        'src/bfeapi.js', 
+                        'src/lib/aceconfig.js'
+                    ],
+                    
+                    'builds/bfe-test.css' : [
+                        'src/css/bootstrap-extra.css', 
+                        'src/css/typeahead.css', 
+                        'src/css/bfeusertemplates.css', 
+                        'src/css/bfeliterallang.css'
+                    ],
                 }
             },
             dist: {
                 files: {
-                'builds/bfe.js' : ['src/lib/mini_require.js', 'src/bfe.js','src/bfestore.js','src/bfelogging.js','src/bfeusertemplates.js','src/bfeliterallang.js','src/bfelookups.js', 'src/lookups/names-preprod.js', 'src/bfelabels.js', 'src/bfeapi.js','src/lib/aceconfig.js'], 
-                'builds/bfe.css' : ['src/css/bootstrap-extra.css', 'src/css/typeahead.css', 'src/css/bfeusertemplates.css', 'src/css/bfeliterallang.css'],
+                    'builds/bfe.js' : [
+                        'src/lib/mini_require.js', 
+                        'src/bfe.js', 
+                        'src/bfestore.js',
+                        'src/bfelogging.js', 
+                        'src/bfeusertemplates.js',
+                        'src/bfeliterallang.js',
+                    
+                        'src/lookups/lcshared.js',
+                        'src/bfelookups.js', 
+                        'src/lookups/names-preprod.js',
+                    
+                        'src/bfelabels.js', 
+                        'src/bfeapi.js',
+                        'src/lib/aceconfig.js'
+                    ], 
+                    
+                    'builds/bfe.css' : [
+                        'src/css/bootstrap-extra.css', 
+                        'src/css/typeahead.css', 
+                        'src/css/bfeusertemplates.css', 
+                        'src/css/bfeliterallang.css'
+                    ],
                 }
             },
         },
