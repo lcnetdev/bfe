@@ -70,96 +70,7 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
         }
       });
     };
-  
-    exports.processJSONLDSuggestions = function (suggestions, query, scheme) {
-      var typeahead_source = [];
-      if (suggestions['@graph'] !== undefined) {
-        for (var s = 0; s < suggestions['@graph'].length; s++) {
-          if (suggestions['@graph'][s].inScheme !== undefined) {
-            if (suggestions['@graph'][s]['@type'] === 'Concept' && suggestions['@graph'][s].inScheme === scheme) {
-              if (suggestions['@graph'][s].prefLabel.en.length !== undefined) {
-                var l = suggestions['@graph'][s].prefLabel.en;
-                // break;
-                // var l = suggestions['@graph'][s]['prefLabel']['@value'];
-              }
-              var u = suggestions['@graph'][s]['@id'];
-              typeahead_source.push({
-                uri: u,
-                value: l
-              });
-            }
-          }
-        }
-      }
-      if (typeahead_source.length === 0) {
-        typeahead_source[0] = {
-          uri: '',
-          value: '[No suggestions found for ' + query + '.]'
-        };
-      }
-      exports.addLiteralOption(typeahead_source, query);
-      return typeahead_source;
-    };
 
-    exports.processQASuggestions = function (suggestions, query) {
-      var typeahead_source = [];
-      if (suggestions[1] !== undefined) {
-        for (var s = 0; s < suggestions.length; s++) {
-          var l = suggestions[s]["label"];
-          var u = suggestions[s]["uri"];
-          var id = suggestions[s]["id"];
-          var d = l + ' (' + id + ')';
-  
-          typeahead_source.push({
-            uri: u,
-            id: id,
-            value: l,
-            display: d
-          });
-        }
-      }
-      if (typeahead_source.length === 0) {
-        typeahead_source[0] = {
-          uri: '',
-          display: '[No suggestions found for ' + query + '.]'
-        };
-      }
-      exports.addLiteralOption(typeahead_source, query);
-
-      return typeahead_source;
-    };
-
-    exports.processNoteTypeSuggestions = function (suggestions, query) {
-      var typeahead_source = [];
-      var substrMatch = new RegExp('^' + query, 'i');
-      if (suggestions[0].json !== undefined) {
-        for (var s = 0; s < suggestions[0].json.length; s++) {
-          var l = suggestions[0].json[s];
-  
-          if(substrMatch.test(l) || _.isEmpty(query)){
-            typeahead_source.push({
-              uri: "",
-              id: 'literalLookup',
-              value: l,
-              display: l
-            });
-          }
-        }
-      }
-      if (typeahead_source.length === 0) {
-        typeahead_source[0] = {
-          uri: '',
-          display: '[No suggestions found for ' + query + '.]'
-        };
-      }
-      exports.addLiteralOption(typeahead_source, query);
-
-      return typeahead_source;
-    };
-    
-    exports.addLiteralOption = function (data, query){
-      data.push({uri: "_:b1", id: "literal", value: query, display: query + "(Literal Value)"});
-    }
 
     exports.extractContextData = function(data){
       var results = { source: [], variant : [], uri: data.uri, title: null, contributor:[], date:null, genreForm: null, nodeMap:{}};
@@ -309,72 +220,6 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
         });   
     };
   
-    exports.rdfType = function(type){
-      var rdftype = '';
-      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName' || type == 'http://id.loc.gov/ontologies/bibframe/Person') {
-        rdftype = 'rdftype:PersonalName';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
-        rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place' || type == 'http://id.loc.gov/ontologies/bibframe/Place' || type == 'http://www.loc.gov/mads/rdf/v1#Geographic') {
-        rdftype = 'rdftype:Geographic';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Temporal'){
-        rdftype= 'rdftype:Temporal'; 
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization' || type == 'http://id.loc.gov/ontologies/bibframe/Organization') {
-        rdftype = 'rdftype:CorporateName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family' || type == 'http://id.loc.gov/ontologies/bibframe/Family') {
-        rdftype = "rdftype:FamilyName";
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting' || type == 'http://id.loc.gov/ontologies/bibframe/Meeting') {
-        rdftype = 'rdftype:ConferenceName';
-      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction' || type == 'http://id.loc.gov/ontologies/bibframe/Jurisdiction') {
-        rdftype = 'rdftype:Geographic';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/GenreForm' || type == 'http://www.loc.gov/mads/rdf/v1#GenreForm') {
-        rdftype = 'rdftype:GenreForm';
-      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Role') {
-        rdftype = 'rdftype:Role';
-      }
-      return rdftype;
-    }
-
-    exports.processSuggestions = function (suggestions, query) {
-
-      var typeahead_source = [];
-      if (suggestions[1] !== undefined) {
-        for (var s = 0; s < suggestions[1].length; s++) {
-          var l = suggestions[1][s];
-          var u = suggestions[3][s];
-          var id = u.replace(/.+\/(.+)/, '$1');
-          if (id.length==32){
-            var d = l;
-          }else{
-            d = l + ' (' + id + ')';
-          }
-          
-          if (suggestions.length === 5) {
-            var i = suggestions[4][s];
-            var li = l + ' (' + i + ')';
-          } else {
-            li = l;
-          }
-  
-          typeahead_source.push({
-            uri: u,
-            id: id,
-            value: li,
-            display: d
-          });
-        }
-      }
-      if (typeahead_source.length === 0) {
-        typeahead_source[0] = {
-          uri: '',
-          display: '[No suggestions found for ' + query + '.]'
-        };
-      }
-      exports.addLiteralOption(typeahead_source, query);
-
-      return typeahead_source;
-    };
-  
     exports.processATOM = function (atomjson, query) {
       var typeahead_source = [];
       for (var k in atomjson) {
@@ -415,149 +260,31 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
       // console.log(typeahead_source);
       return typeahead_source;
     };
-
-    exports.simpleQuery = function (query, cache, scheme, processSync, processAsync) {
-      return exports.complexQuery (query, cache, scheme, "ID" , processSync, processAsync, null)
+    
+    exports.rdfType = function(type){
+      var rdftype = '';
+      if (type == 'http://www.loc.gov/mads/rdf/v1#PersonalName' || type == 'http://id.loc.gov/ontologies/bibframe/Person') {
+        rdftype = 'rdftype:PersonalName';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Topic') {
+        rdftype = '(rdftype:Topic OR rdftype:ComplexSubject)';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Place' || type == 'http://id.loc.gov/ontologies/bibframe/Place' || type == 'http://www.loc.gov/mads/rdf/v1#Geographic') {
+        rdftype = 'rdftype:Geographic';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Temporal'){
+        rdftype= 'rdftype:Temporal'; 
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Organization' || type == 'http://id.loc.gov/ontologies/bibframe/Organization') {
+        rdftype = 'rdftype:CorporateName';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Family' || type == 'http://id.loc.gov/ontologies/bibframe/Family') {
+        rdftype = "rdftype:FamilyName";
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Meeting' || type == 'http://id.loc.gov/ontologies/bibframe/Meeting') {
+        rdftype = 'rdftype:ConferenceName';
+      } else if (type == 'http://www.loc.gov/mads/rdf/v1#Jurisdiction' || type == 'http://id.loc.gov/ontologies/bibframe/Jurisdiction') {
+        rdftype = 'rdftype:Geographic';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/GenreForm' || type == 'http://www.loc.gov/mads/rdf/v1#GenreForm') {
+        rdftype = 'rdftype:GenreForm';
+      } else if (type == 'http://id.loc.gov/ontologies/bibframe/Role') {
+        rdftype = 'rdftype:Role';
+      }
+      return rdftype;
     }
 
-    exports.complexQuery = function (query, cache, scheme, resultType, processSync, processAsync, formobject) {
-      bfelog.addMsg(new Error(), 'INFO','q is ' + query);
-
-      if (!_.isEmpty(formobject)){
-        var triples = formobject.store;
-    
-        var type = '';
-        var hits = _.where(triples, {
-          'p': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
-        });
-        if (hits[0] !== undefined) {
-          type = hits[0].o;
-        }
-    
-        var rdftype = exports.rdfType(type);
-        var q = '';
-        if (scheme !== '' && rdftype !== '') {
-          q = 'cs:' + scheme + ' AND ' + rdftype;
-        } else if (rdftype !== '') {
-          q = rdftype;
-        } else if (scheme !== '') {
-          q = 'cs:' + scheme;
-        }
-
-        if (q !== '') {
-          q = q + ' AND ' + query.replace('?', '').normalize() + '*'; 
-        } else {
-          q = query.normalize();
-        }
-      } else {
-        q = query.normalize();
-      }
-
-      if (cache[q]) {
-        processSync(cache[q]);
-        return;
-      }
-      if (typeof this.searching !== 'undefined') {
-        clearTimeout(this.searching);
-        processSync([]);
-      }
-      this.searching = setTimeout(function () {
-        if (resultType == "NoteType") {
-          u = config.url + "/profile-edit/server/whichrt?uri=" + scheme;
-          $.ajax({
-            url: encodeURI(u),
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = exports.processNoteTypeSuggestions(data, query);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        } else if ((query === '' || query === ' ') && resultType == "ID" && !(scheme.match(/resources\/[works|instances]/) || scheme.match(/authorities/) || scheme.match(/entities/))) {
-          var u = scheme + '/suggest/?count=100&q=';
-          u = u.replace(/^(http:)/,"");
-          $.ajax({
-            url: encodeURI(u),
-            dataType: 'jsonp',
-            success: function (data) {
-              var parsedlist = exports.processSuggestions(data, '');
-              return processAsync(parsedlist);
-            }
-          });
-        } else if (query.length > 2 && query.substr(0, 1) == '?' && resultType == "ID") {          
-            u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
-            u = u.replace(/^(http:)/,"");
-            $.ajax({
-              url: encodeURI(u),
-              dataType: 'jsonp',
-              success: function (data) {
-                var parsedlist = exports.processATOM(data, query);
-                cache[q] = parsedlist;
-                return processAsync(parsedlist);
-              }
-            });
-        } else if (query.length >= 2 && resultType == "ID" && query.match(/^[A-Za-z\s]{0,3}[0-9]{3,}$/)) {
-          if (query.match(/^[0-9]{3,}$/)) {
-            u = scheme + '/suggest/lccn/' + query.replace(/\s/g,'');
-          } else {
-            u = scheme + '/suggest/token/' + query.replace(/\s/g,'');
-          }
-          u = u.replace(/^(http:)/,"");
-          $.ajax({
-            url: encodeURI(u),
-            dataType: 'json',
-            success: function (data) {
-              var parsedlist = exports.processSuggestions(data, query);
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            },
-            fail: function (err){
-              bfelog.addMsg(new Error(), 'INFO',err);
-            }
-          });
-        } else if (query.length >= 1 && !query.match(/^[A-Za-z]{0,2}[0-9]{2,}$/)) {
-          if (resultType == "ID"){
-            u = scheme + '/suggest/?count=50&q=' + query;
-            u = u.replace(/^(http:)/,"");
-            $.ajax({
-              url: encodeURI(u),
-              dataType: 'jsonp',
-              success: function (data) {
-                var parsedlist;
-
-                if (resultType == "QA"){
-                  parsedlist = exports.processQASuggestions(data, query);
-                } else if (resultType == "RDA") {
-                  parsedlist = exports.processJSONLDSuggestions(data, query);
-                } else {
-                  parsedlist = exports.processSuggestions(data, query);
-                }
-
-                cache[q] = parsedlist;
-                return processAsync(parsedlist);
-              }
-            });
-          } else {
-            u = "/profile-edit/server/whichrt?uri=" + scheme + '?q=' + query;
-            $.ajax({
-              url: encodeURI(u),
-              dataType: 'json',
-              success: function (data) {
-              var parsedlist;
-
-              if (resultType == "QA"){
-                parsedlist = exports.processQASuggestions(data, query);
-              } else if (resultType == "RDA") {
-                parsedlist = exports.processJSONLDSuggestions(data, query);
-              } else {
-                return [];
-              }
-              cache[q] = parsedlist;
-              return processAsync(parsedlist);
-            }
-          });
-        }
-        }
-      }, 300); // 300 ms
-    };
-  });
+});

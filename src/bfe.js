@@ -4396,30 +4396,38 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     var uvfs = p.valueConstraint.useValuesFrom;
     var dshashes = [];
     uvfs.forEach(function (uvf) {
-      // var lups = _.where(lookups, {"scheme": uvf});
-      var lu = lookups[uvf];
-      if (lu === undefined) {
-        lu = buildLookup(uvf);
-        lookups[uvf] = lu;
-      }
+        // var lups = _.where(lookups, {"scheme": uvf});
+        var lu = lookups[uvf];
+        if (lu === undefined) {
+            bfelog.addMsg(new Error(), 'DEBUG', 'Lookup undefined for ' + uvf + '. Will try to build one.');
+            /*
+                The lookup is undefined because it has not been supplied
+                either in the config or in the block of lookup definitions 
+                above.  Therefore, let's try to build one based on what we can 
+                learn from the use values from URI and the relevant 
+                systems.
+            */
+            lu = buildLookup(uvf);
+            lookups[uvf] = lu;
+        }
 
-      bfelog.addMsg(new Error(), 'DEBUG', 'Setting typeahead scheme: ' + uvf);
-      bfelog.addMsg(new Error(), 'DEBUG', 'Lookup is', lu);
+        bfelog.addMsg(new Error(), 'DEBUG', 'Setting typeahead scheme: ' + uvf);
+        bfelog.addMsg(new Error(), 'DEBUG', 'Lookup is', lu);
 
-      var dshash = {};
-      dshash.scheme = uvf;
-      dshash.name = lu.name;
-      dshash.source = function (query, sync, async) {
-        lu.load.source(query, sync, async, formobject);
-      };
-      dshash.limit = 50;
-      dshash.templates = {
-        header: '<h3 data-scheme="' + uvf + '">' + lu.name + '</h3>',
-        footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
-      };
-      // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
-      dshash.displayKey = 'display';      
-      dshashes.push(dshash);
+        var dshash = {};
+        dshash.scheme = uvf;
+        dshash.name = lu.name;
+        dshash.source = function (query, sync, async) {
+            lu.load.source(query, sync, async, formobject);
+        };
+        dshash.limit = 50;
+        dshash.templates = {
+            header: '<h3 data-scheme="' + uvf + '">' + lu.name + '</h3>',
+            footer: '<div id="dropdown-footer" class=".col-sm-1"></div>'
+        };
+        // dshash.displayKey = (dshash.name.match(/^LCNAF|^LCSH/)) ? 'display' : 'value';
+        dshash.displayKey = 'display';      
+        dshashes.push(dshash);
     });
 
     bfelog.addMsg(new Error(), 'DEBUG', 'Data source hashes', dshashes);
@@ -4913,23 +4921,38 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     });
   }
 
-  function buildLookup(name) {
-    var lcshared = require('src/lookups/lcshared');
-    var cache = [];
-    var lu = {};
-    lu.name = name.substr(name.lastIndexOf('/') + 1);
-    lu.load = {};
-    lu.load.scheme = name;
-    lu.load.source = function (query, processSync, processAsync) {
-      return lcshared.simpleQuery(query, cache, name, processSync, processAsync);
-    };
+    /*
+        Let's see if we can build a lookup based on the scheme.
+    */
+    function buildLookup(scheme) {
+        var lcshared = require('src/lookups/lcshared');
+        var cache = [];
+        var lu = {};
+        lu.name = scheme.substr(scheme.lastIndexOf('/') + 1);
+        lu.load = {};
+        lu.load.scheme = scheme;
+        if ( scheme.indexOf('id.loc.gov') > 0 ) {
+            var suggest2 = require('src/lookups/lcshared_suggest2');
+            lu.load.source = function (query, processSync, processAsync) {
+                return suggest2.suggest2Query(query, cache, scheme, processSync, processAsync);
+            };
+            lu.load.getResource = function (subjecturi, property, selected, process) {
+                return lcshared.getResource(subjecturi, property, selected, process);
+            };
+        } else {
+            // Well, the 'else' kicks it back to what existed before and that's
+            // OK for now.
+            var suggest1 = require('src/lookups/lcshared_suggest1');
+            lu.load.source = function (query, processSync, processAsync) {
+                return suggest1.suggest1Query(query, cache, scheme, "ID", processSync, processAsync);
+            };
 
-    lu.load.getResource = function (subjecturi, property, selected, process) {
-      return lcshared.getResource(subjecturi, property, selected, process);
-    };
-
-    return lu;
-  }
+            lu.load.getResource = function (subjecturi, property, selected, process) {
+                return lcshared.getResource(subjecturi, property, selected, process);
+            };
+        }
+        return lu;
+    }
 
   function editTriple(formobjectID, inputID, t) {
     var formobject = _.where(forms, {

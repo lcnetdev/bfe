@@ -1,5 +1,6 @@
-bfe.define('src/lookups/lcnames-preprod', ['require', 'exports', 'src/lookups/lcshared', 'src/bfelogging'], function (require, exports) {
+bfe.define('src/lookups/lcnames-preprod', ['require', 'exports', 'src/lookups/lcshared', 'src/lookups/lcshared_suggest2', 'src/bfelogging'], function (require, exports) {
     var lcshared = require('src/lookups/lcshared');
+    var suggest2 = require('src/lookups/lcshared_suggest2');
     var bfelog = require('src/bfelogging');
     var cache = {};
   
@@ -55,13 +56,13 @@ bfe.define('src/lookups/lcnames-preprod', ['require', 'exports', 'src/lookups/lc
                 bfelog.addMsg(new Error(), 'INFO',query);
                 if (rdftype !== '') { suggestquery += '&rdftype=' + rdftype.replace('rdftype:', ''); }
   
-                var u = exports.scheme + '/suggest/?q=' + suggestquery + '&count=50';
+                var u = exports.scheme + '/suggest2/?q=' + suggestquery + '&count=50';
                 u = u.replace(/^(http:)/,"");
                 $.ajax({
                     url: u,
                     dataType: 'jsonp',
                     success: function (data) {
-                        var parsedlist = lcshared.processSuggestions(data, query);
+                        var parsedlist = suggest2.processSuggestions(data, query);
                         cache[q] = parsedlist;
                         return processAsync(parsedlist);
                     }
