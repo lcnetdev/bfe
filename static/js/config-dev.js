@@ -29,6 +29,12 @@ if (env.BASEDBURI!=undefined) {
 resourceURI = baseDBURI + "/resources";
 workContext = resourceURI + "/works/";  // This is unused?
 
+var lookups = {
+    'http://preprod.id.loc.gov/authorities/names': {
+      'name': 'LCNAF',
+      'require': 'src/lookups/lcnames'
+    }
+};
 
 var config = {
      "logging": {
@@ -45,8 +51,9 @@ var config = {
     "basedbURI": baseDBURI,
     "resourceURI": resourceURI,
     "metaproxyURI": metaproxyURI,
+    //"lookups": lookups,
     "buildContext": true,
-    "buildContextFor": ['id.loc.gov/authorities/names/','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
+    "buildContextFor": ['id.loc.gov/authorities/names','id.loc.gov/authorities/subjects/','http://id.loc.gov/authorities/childrensSubjects','id.loc.gov/vocabulary/relators/','id.loc.gov/resources/works/', 'id.loc.gov/bfentities/providers/','id.loc.gov/entities/providers/','id.loc.gov/authorities/genreForms'],
     "buildContextForWorksEndpoint": workContext,
     "enableUserTemplates": true,
     "enableLoadMarc": true,
