@@ -16,6 +16,8 @@ module.exports = function(grunt) {
                         'src/bfeliterallang.js',
                         
                         'src/lookups/lcshared.js',
+                        'src/lookups/lcshared_suggest1.js',
+                        'src/lookups/lcshared_suggest2.js',
                         'src/bfelookups.js', 
                         'src/lookups/names-preprod.js', 
                         
@@ -43,6 +45,8 @@ module.exports = function(grunt) {
                         'src/bfeliterallang.js',
                     
                         'src/lookups/lcshared.js',
+                        'src/lookups/lcshared_suggest1.js',
+                        'src/lookups/lcshared_suggest2.js',
                         'src/bfelookups.js', 
                         'src/lookups/names-preprod.js',
                     
