@@ -4931,7 +4931,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         lu.name = scheme.substr(scheme.lastIndexOf('/') + 1);
         lu.load = {};
         lu.load.scheme = scheme;
-        if ( scheme.indexOf('id.loc.gov') > 0 ) {
+        if ( scheme.indexOf('id.loc.gov') > 0 && !scheme.match(/(resources)/) ) {
             var suggest2 = require('src/lookups/lcshared_suggest2');
             lu.load.source = function (query, processSync, processAsync) {
                 return suggest2.suggest2Query(query, cache, scheme, processSync, processAsync);
