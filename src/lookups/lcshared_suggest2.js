@@ -22,7 +22,7 @@ bfe.define('src/lookups/lcshared_suggest2', ['require', 'exports', 'src/lookups/
                 var al = hit.aLabel;
                 var u = hit.uri;
                 var id = u.replace(/.+\/(.+)/, '$1');
-                var d = l + ' (' + id + ')';
+                var d = l + ' [' + id + ']';
                 if (id.length==32){
                     d = l;
                 }
