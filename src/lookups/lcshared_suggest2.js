@@ -86,10 +86,10 @@ bfe.define('src/lookups/lcshared_suggest2', ['require', 'exports', 'src/lookups/
             if (q !== '') {
                 q = q + ' AND ' + query.replace('?', '').normalize() + '*'; 
             } else {
-                q = query.normalize();
+                q = query.replace('?', '').normalize();
             }
         } else {
-            q = query.normalize();
+            q = query.replace('?', '').normalize();
         }
 
         if (cache[q]) {
@@ -109,19 +109,20 @@ bfe.define('src/lookups/lcshared_suggest2', ['require', 'exports', 'src/lookups/
                     url: encodeURI(u),
                     dataType: 'jsonp',
                     success: function (data) {
-                        var parsedlist = processSuggestions(data, '');
+                        var parsedlist = exports.processSuggestions(data, '');
                         return processAsync(parsedlist);
                     }
                 });
             } else if (query.length > 2 && query.substr(0, 1) == '?') {
                 // If the search string begins with a question mark.
-                u = 'http://id.loc.gov/search/?format=jsonp&start=1&count=50&q=' + q;
+                u = scheme + '/suggest2/?q=' + q + '&searchtype=keyword&count=50';
+                console.log(u);
                 u = u.replace(/^(http:)/,"");
                 $.ajax({
                     url: encodeURI(u),
                     dataType: 'jsonp',
                     success: function (data) {
-                        var parsedlist = exports.processATOM(data, query);
+                        var parsedlist = exports.processSuggestions(data, query);
                         cache[q] = parsedlist;
                         return processAsync(parsedlist);
                     }
@@ -140,7 +141,7 @@ bfe.define('src/lookups/lcshared_suggest2', ['require', 'exports', 'src/lookups/
                     url: encodeURI(u),
                     dataType: 'json',
                     success: function (data) {
-                        var parsedlist = processSuggestions(data, query);
+                        var parsedlist = exports.processSuggestions(data, query);
                         cache[q] = parsedlist;
                         return processAsync(parsedlist);
                     },

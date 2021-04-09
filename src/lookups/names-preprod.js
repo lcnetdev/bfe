@@ -68,16 +68,17 @@ bfe.define('src/lookups/lcnames-preprod', ['require', 'exports', 'src/lookups/lc
                     }
                 });
             } else if (query.length > 2) {
+                q = query;
                 if (query.match(/^[Nn][A-z\s]{0,1}\d/)){
                     q = query.replace(/\s+/g,'').normalize();
-                }          
-                u = schemeBaseURL + '/search/?format=jsonp&start=1&count=50&q=' + q.replace('?', '');
+                }
+                u = exports.scheme + '/suggest2/?q=' + q.replace('?', '') + '&searchtype=keyword&count=50';
                 u = u.replace(/^(http:)/,"");
                 $.ajax({
                     url: u,
                     dataType: 'jsonp',
                     success: function (data) {
-                        var parsedlist = lcshared.processATOM(data, query);
+                        var parsedlist = suggest2.processSuggestions(data, query);
                         cache[q] = parsedlist;
                         return processAsync(parsedlist);
                     }
