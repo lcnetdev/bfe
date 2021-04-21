@@ -1723,12 +1723,12 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           // bfeditor.bfestore.store2turtle(jsonstr, humanizedPanel);
           bfeditor.bfestore.store2jsonldcompacted(jsonstr, jsonPanel);
 
-          function humanizedPanel(data) {
-            $('#humanized pre').text(data);
+          function turtlePanel(data) {
+            $('#turtle pre').text(data);
           }
 
           function jsonPanel(data) {
-            bfestore.store2turtle(data, humanizedPanel);
+            bfestore.store2turtle(data, turtlePanel);
 
             $('#jsonld pre').text(JSON.stringify(data, undefined, ' '));
 
@@ -1742,7 +1742,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                 });
             }
           }
-
+            
           document.body.scrollTop = document.documentElement.scrollTop = 0;
           var $backButton = $('<button id="bfeditor-exitback" type="button" class="btn btn-warning">&#9664;</button>');
 
@@ -1752,6 +1752,15 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                     <div class="card-body"> \
                                         <h3 class="card-title"><a role="button" data-toggle="collapse" href="#humanized">Preview</a></h3> \
                                         <div class="card-text collapse in" id="humanized"> \
+                                            <pre></pre> \
+                                        </div> \
+                                    </div> \
+                                </div> \
+                                \
+                                <div class="card"> \
+                                    <div class="card-body"> \
+                                        <h3 class="card-title"><a role="button" data-toggle="collapse" href="#turtle">Turtle</a></h3> \
+                                        <div class="card-text collapse in" id="turtle"> \
                                             <pre></pre> \
                                         </div> \
                                     </div> \
@@ -1794,6 +1803,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
 
           $('#bfeditor-formdiv').hide();
           $bfeditor.append($preview);
+          
+          var humanStr = bfestore.store2text();
+          $('#humanized pre').text(humanStr);
+          
         });
 
         $('#bfeditor-exitpreview').attr('tabindex', tabIndices++);

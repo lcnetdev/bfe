@@ -613,6 +613,120 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     }
     return json;
   };
+  
+    function recurseJSONLDexpanded(uri, level, json, linkingProperty = "") {
+        var nl = "\n";
+        var space = "   ";
+        var nlindent = nl + space;
+        for (i = 0; i < level; i++) {
+            nlindent += space;
+        }
+        var nlindentindent = nl + space + space;
+        for (i = 0; i < level; i++) {
+            nlindentindent += space;
+        }
+        var predata = "";
+        var resources = _.filter(json, function(r) { return r["@id"] == uri; });
+        if (resources.length === 0) {
+            // This might be a URI reference but no additional data is present.
+            // Let's treat it as an rdfs:resource reference.
+            if ( !uri.startsWith("_:") ) {
+                predata += nlindent + "ID: " + uri;
+            }
+        }
+        // The things is, there should only be 1.  This is probably safer...
+        resources.forEach(function(resource) {
+            if (level === 0) {
+                predata += nl + "ID: " + resource["@id"];
+            } else if ( !resource["@id"].startsWith("_:") ) {
+                predata += nlindent + "ID: " + resource["@id"];
+            }
+            if (resource["@type"] !== undefined) {
+                var types = [];
+                resource["@type"].forEach(function(t) {
+                    if (t["@id"] !== undefined) {
+                        var val = t["@id"];
+                    } else {
+                        val = t;
+                    }
+                    val = val.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
+                    val = val.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
+                    types.push(val);
+                });
+                var typesStr = types.join(' ');
+                var typePropMatch = true;
+                if ( linkingProperty == "" || typesStr.toLowerCase().indexOf( linkingProperty.toLowerCase() ) === -1 )  {
+                    typePropMatch = false;
+                }
+                if ( !typePropMatch )  {
+                    predata += nlindent + "Type(s): ";
+                    predata += nlindentindent + typesStr;
+                }
+            }
+            skip_properties = [
+                "http://www.w3.org/2000/01/rdf-schema#label",
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+                "http://id.loc.gov/ontologies/bibframe/code"
+            ];
+            var label = "";
+            if ( resource["http://www.w3.org/2000/01/rdf-schema#label"] !== undefined ) {
+                label = resource["http://www.w3.org/2000/01/rdf-schema#label"][0]["@value"];
+            } else if ( resource["http://id.loc.gov/ontologies/bibframe/code"] !== undefined ) {
+                label = resource["http://id.loc.gov/ontologies/bibframe/code"][0]["@value"];
+            } else if ( resource["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"] !== undefined ) {
+                label = resource["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
+            }
+            if (label != "") {
+                predata += nlindent + "Label";    
+                predata += nlindentindent + label;    
+            }
+            for (var t in resource) {
+                if ( skip_properties.indexOf(t) === -1 ) {
+                    if (t !== "@type" && t !== "@id") {
+                        var prop = t.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
+                        prop = prop.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
+                        prop = prop.replace("http://www.w3.org/2000/01/rdf-schema#", "rdfs:");
+                        prop = prop.replace("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:");
+                        prop = prop.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
+                        predata += nlindent + prop;
+                        if (resource[t]["@list"] !== undefined) {
+                            resource[t]["@list"].forEach(function(o) {
+                                if (o["@id"] !== undefined) {
+                                    predata += nlindentindent + "*)"
+                                    predata += recurseJSONLDexpanded(o["@id"], level + 3, json, prop);
+                                } else {
+                                    predata += nlindentindent + o["@value"];
+                                    if (resource.length > 1) {
+                                        predata += nl;
+                                    }
+                                }
+                            });
+                        } else {
+                            resource[t].forEach(function(o) {
+                                if (o["@id"] !== undefined) {
+                                    predata += recurseJSONLDexpanded(o["@id"], level + 1, json, prop);
+                                } else {
+                                    predata += nlindentindent + o["@value"];
+                                    if (resource.length > 1) {
+                                        predata += nl;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        return predata;
+    };
+  
+    exports.store2text = function() {
+        var predata = "";
+        var json = exports.store2jsonldExpanded();
+        var uri = this.defaulturi;
+        predata += recurseJSONLDexpanded(uri, 0, json);
+        return predata;
+    }
 
   exports.store2turtle = function (jsonstr, callback) {
     jsonld.toRDF(jsonstr, {
@@ -645,7 +759,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             callback(result);
           });
           var input = {};
-          input.n3 = $("#humanized pre").text().normalize("NFC");
+          input.n3 = $("#turtle pre").text().normalize("NFC");
           $.ajax({
             url: "/profile-edit/server/n3/rdfxml",
             type: "POST",
