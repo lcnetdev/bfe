@@ -651,6 +651,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                     }
                     val = val.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
                     val = val.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
+                    val = val.replace("http://performedmusicontology.org/ontology/", "pmo:");
+                    val = val.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
                     types.push(val);
                 });
                 var typesStr = types.join(' ');
@@ -688,9 +690,10 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                         prop = prop.replace("http://www.w3.org/2000/01/rdf-schema#", "rdfs:");
                         prop = prop.replace("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:");
                         prop = prop.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
-                        predata += nlindent + prop;
+                        prop = prop.replace("http://performedmusicontology.org/ontology/", "pmo:");
                         if (resource[t]["@list"] !== undefined) {
                             resource[t]["@list"].forEach(function(o) {
+                                predata += nlindent + prop;
                                 if (o["@id"] !== undefined) {
                                     predata += nlindentindent + "*)"
                                     predata += recurseJSONLDexpanded(o["@id"], level + 3, json, prop);
@@ -703,6 +706,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                             });
                         } else {
                             resource[t].forEach(function(o) {
+                                predata += nlindent + prop;
                                 if (o["@id"] !== undefined) {
                                     predata += recurseJSONLDexpanded(o["@id"], level + 1, json, prop);
                                 } else {
