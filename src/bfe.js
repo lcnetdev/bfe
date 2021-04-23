@@ -4727,7 +4727,10 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       $(input).parent().siblings('.typeaheadpage').val(1);
       //var resourceid = $(form).children('div').eq(0).attr('id');
       var resourceURI = $(form).find('div[data-uri]').eq(0).attr('data-uri');
+        bfelog.addMsg(new Error(), 'DEBUG', 'resourceURI for typeahead selection is ' + resourceURI);
 
+        bfelog.addMsg(new Error(), 'DEBUG', 'event.target.id is ' + event.target.id);
+        //bfelog.addMsg(new Error(), 'DEBUG', 'form  is  ', form);
       var propertyguid = $('#' + event.target.id).attr('data-propertyguid');
       bfelog.addMsg(new Error(), 'DEBUG', 'propertyguid for typeahead input is ' + propertyguid);
 
@@ -5075,20 +5078,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
     
     formobject = formobject[0];
     if ($('#' + t.guid).length && t !== undefined) {
-      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid, t);
+      bfelog.addMsg(new Error(), 'DEBUG', 'Removing dispay component related to triple: ' + t.guid, t);
       // $("#" + t.guid).empty();
       $('#' + t.guid).remove();
     } else if ($('#' + tguid).length){
     
-      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + tguid, null);
+      bfelog.addMsg(new Error(), 'DEBUG', 'This does nothing in removing triple? ' + tguid, null);
       //$('#' + tguid).remove();
     }
 
     if (!_.isEmpty(t.guid)) {
-      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple: ' + t.guid);
+      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple from form object: ' + t.guid);
       formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
         guid: t.guid
       }));
+      bfelog.addMsg(new Error(), 'DEBUG', 'Removing triple from store: ' + t.guid);
       bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
         guid: t.guid
       }));
@@ -5103,6 +5107,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfelog.addMsg(new Error(), 'DEBUG', 'Missing guid - formobjectID: ' + formobjectID + ' inputID: ' + inputID + ' tguid' + tguid, t);
     }
 
+    // Reset the input box so it is enabled and transparent.
     var $el = $('#' + inputID, formobject.form);
     if ($el.is('input') && $el.hasClass('typeahead')) {
       var $inputs = $('#' + inputID, formobject.form).parent().find("input[data-propertyguid='" + inputID + "']");
@@ -5122,21 +5127,23 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         $(this).prop('disabled', false);
       });
     }
-    /*formobject.store = _.without(formobject.store, _.findWhere(formobject.store, {
-      guid: t.guid
-    }));
-    bfestore.store = _.without(bfestore.store, _.findWhere(bfestore.store, {
-      guid: t.guid
-    }));*/
 
     $('#bfeditor-debug').html(JSON.stringify(bfestore.store, undefined, ' '));
   }
 
   function removeTriples(formobjectID, inputID, tID, triples) {
-    bfelog.addMsg(new Error(), 'DEBUG', 'Removing triples for formobjectID: ' + formobjectID + ' and inputID: ' + inputID, triples);
+    var formobject = _.where(forms, {
+      'id': formobjectID
+    });
+    formobject = formobject[0];
+    bfelog.addMsg(new Error(), 'DEBUG', 'formobject store, priro to triple removal:', formobject.store);
+    bfelog.addMsg(new Error(), 'DEBUG', 'Removing triples for formobjectID: ' + formobjectID + ' and inputID: ' + inputID);
+    bfelog.addMsg(new Error(), 'DEBUG', 'Triples to be removed: ', triples);
     triples.forEach(function (triple) {
       removeTriple(formobjectID, inputID, tID, triple);
     });
+    bfelog.addMsg(new Error(), 'DEBUG', 'Current store, after triple removal:', bfestore.store);
+    bfelog.addMsg(new Error(), 'DEBUG', 'Current formobject store, after triple removal:', formobject.store);
   }
 
   /**
