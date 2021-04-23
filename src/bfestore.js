@@ -674,8 +674,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             skip_properties = [
                 "http://www.w3.org/2000/01/rdf-schema#label",
                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
-                "http://id.loc.gov/ontologies/bibframe/code",
-                "http://id.loc.gov/ontologies/bibframe/adminMetadata"
+                "http://id.loc.gov/ontologies/bibframe/code"
             ];
             var label = "";
             if ( resource["http://www.w3.org/2000/01/rdf-schema#label"] !== undefined ) {
