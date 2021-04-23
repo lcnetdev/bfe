@@ -664,7 +664,6 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                 });
                 var typesStr = types.join(' ');
                 var typePropMatch = true;
-                //if ( linkingProperty == "" || typesStr.toLowerCase().indexOf( linkingProperty.toLowerCase() ) === -1 )  {
                 if ( linkingProperty == "" || typesStr.toLowerCase() != linkingProperty.toLowerCase() )  {
                     typePropMatch = false;
                 }
@@ -688,6 +687,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             if (label != "") {
                 predata += nlindent + "Label -- " + label;
             }
+            var demarcateProps = {
+                "bf:hasInstance": "Instance", 
+                "bf:hasItem": "Item", 
+                "bf:instanceOf": "Work"
+            };
             for (var t in resource) {
                 if ( skip_properties.indexOf(t) === -1 ) {
                     if (t !== "@type" && t !== "@id") {
@@ -709,6 +713,9 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                             });
                         } else {
                             resource[t].forEach(function(o) {
+                                if ( demarcateProps[prop] !== undefined ) {
+                                    predata += nlindent + "---------------  Begin " + demarcateProps[prop] + " ---------------";
+                                }
                                 predata += nlindent + prop;
                                 if (o["@id"] !== undefined) {
                                     predata += recurseJSONLDexpanded(o["@id"], level + 1, json, prop);
@@ -718,7 +725,11 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                                         predata += nl;
                                     }
                                 }
+                                if ( demarcateProps[prop] !== undefined ) {
+                                    predata += nlindent + "---------------  End " + demarcateProps[prop] + " ---------------";
+                                }
                             });
+                            
                         }
                     }
                 }
