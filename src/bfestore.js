@@ -613,7 +613,17 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
     }
     return json;
   };
-  
+
+    function replaceNS(ns) {
+        ns = ns.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
+        ns = ns.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
+        ns = ns.replace("http://www.w3.org/2000/01/rdf-schema#", "rdfs:");
+        ns = ns.replace("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:");
+        ns = ns.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
+        ns = ns.replace("http://performedmusicontology.org/ontology/", "pmo:");
+        return ns;
+    };
+    
     function recurseJSONLDexpanded(uri, level, json, linkingProperty = "") {
         var nl = "\n";
         var space = "   ";
@@ -631,15 +641,15 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
             // This might be a URI reference but no additional data is present.
             // Let's treat it as an rdfs:resource reference.
             if ( !uri.startsWith("_:") ) {
-                predata += nlindent + "ID: " + uri;
+                predata += nlindent + "URI -- " + uri;
             }
         }
         // The things is, there should only be 1.  This is probably safer...
         resources.forEach(function(resource) {
             if (level === 0) {
-                predata += nl + "ID: " + resource["@id"];
+                predata += nl + "URI -- " + resource["@id"];
             } else if ( !resource["@id"].startsWith("_:") ) {
-                predata += nlindent + "ID: " + resource["@id"];
+                predata += nlindent + "URI -- " + resource["@id"];
             }
             if (resource["@type"] !== undefined) {
                 var types = [];
@@ -649,10 +659,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                     } else {
                         val = t;
                     }
-                    val = val.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
-                    val = val.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
-                    val = val.replace("http://performedmusicontology.org/ontology/", "pmo:");
-                    val = val.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
+                    val = replaceNS(val);
                     types.push(val);
                 });
                 var typesStr = types.join(' ');
@@ -661,14 +668,14 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                     typePropMatch = false;
                 }
                 if ( !typePropMatch )  {
-                    predata += nlindent + "Type(s): ";
-                    predata += nlindentindent + typesStr;
+                    predata += nlindent + "Type(s) -- " + typesStr;
                 }
             }
             skip_properties = [
                 "http://www.w3.org/2000/01/rdf-schema#label",
                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
-                "http://id.loc.gov/ontologies/bibframe/code"
+                "http://id.loc.gov/ontologies/bibframe/code",
+                "http://id.loc.gov/ontologies/bibframe/adminMetadata"
             ];
             var label = "";
             if ( resource["http://www.w3.org/2000/01/rdf-schema#label"] !== undefined ) {
@@ -679,26 +686,22 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                 label = resource["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"][0]["@value"];
             }
             if (label != "") {
-                predata += nlindent + "Label";    
-                predata += nlindentindent + label;    
+                predata += nlindent + "Label -- " + label;
             }
             for (var t in resource) {
                 if ( skip_properties.indexOf(t) === -1 ) {
                     if (t !== "@type" && t !== "@id") {
-                        var prop = t.replace("http://id.loc.gov/ontologies/bibframe/", "bf:");
-                        prop = prop.replace("http://id.loc.gov/ontologies/bflc/", "bflc:");
-                        prop = prop.replace("http://www.w3.org/2000/01/rdf-schema#", "rdfs:");
-                        prop = prop.replace("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:");
-                        prop = prop.replace("http://www.loc.gov/mads/rdf/v1#", "madsrdf:");
-                        prop = prop.replace("http://performedmusicontology.org/ontology/", "pmo:");
+                        var prop = replaceNS(t);
                         if (resource[t]["@list"] !== undefined) {
+                            var count = 1;
+                            predata += nlindent + prop;
                             resource[t]["@list"].forEach(function(o) {
-                                predata += nlindent + prop;
                                 if (o["@id"] !== undefined) {
-                                    predata += nlindentindent + "*)"
+                                    predata += nlindentindent + count + ")";
+                                    count++;
                                     predata += recurseJSONLDexpanded(o["@id"], level + 3, json, prop);
                                 } else {
-                                    predata += nlindentindent + o["@value"];
+                                    predata += " -- " + o["@value"];
                                     if (resource.length > 1) {
                                         predata += nl;
                                     }
@@ -710,7 +713,7 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                                 if (o["@id"] !== undefined) {
                                     predata += recurseJSONLDexpanded(o["@id"], level + 1, json, prop);
                                 } else {
-                                    predata += nlindentindent + o["@value"];
+                                    predata += " -- " + o["@value"];
                                     if (resource.length > 1) {
                                         predata += nl;
                                     }
