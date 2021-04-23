@@ -664,7 +664,8 @@ bfe.define('src/bfestore', ['require', 'exports'], function (require, exports) {
                 });
                 var typesStr = types.join(' ');
                 var typePropMatch = true;
-                if ( linkingProperty == "" || typesStr.toLowerCase().indexOf( linkingProperty.toLowerCase() ) === -1 )  {
+                //if ( linkingProperty == "" || typesStr.toLowerCase().indexOf( linkingProperty.toLowerCase() ) === -1 )  {
+                if ( linkingProperty == "" || typesStr.toLowerCase() != linkingProperty.toLowerCase() )  {
                     typePropMatch = false;
                 }
                 if ( !typePropMatch )  {
