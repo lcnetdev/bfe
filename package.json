@@ -38,6 +38,6 @@
     "grunt-contrib-concat": "^1.x.x",
     "grunt-contrib-cssmin": "^3.x.x",
     "grunt-contrib-uglify-es": "^3.x.x",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.21"
   }
 }
