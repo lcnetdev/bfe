@@ -1,4 +1,5 @@
 bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/bfelabels', 'src/lib/aceconfig'], function (require, exports) {
+
   var editorconfig = {};
   var bfestore = require('src/bfestore');
   var bfelog = require('src/bfelogging');
@@ -4601,6 +4602,13 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
           });
           html = html + '</ul>';
         }  
+        if (data.nodeMap.collections && data.nodeMap.collections.length > 0) {
+          html = html + '<h5>Collections</h5><ul>';
+          data.nodeMap.collections.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }  
         if (data.nodeMap.hasBroaderAuthority && data.nodeMap.hasBroaderAuthority.length > 0) {
           html = html + '<h5>Broader</h5><ul>';
           data.nodeMap.hasBroaderAuthority.forEach(function (c) {
@@ -4614,7 +4622,21 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             html = html + '<li>' + c + '</li>';
           });
           html = html + '</ul>';
-        }  
+        }
+        if (data.nodeMap.see && data.nodeMap.see.length > 0) {
+          html = html + '<h5>See Also</h5><ul>';
+          data.nodeMap.see.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        }
+        if (data.nodeMap.hasRelatedAuthority && data.nodeMap.hasRelatedAuthority.length > 0) {
+          html = html + '<h5>Related Authority</h5><ul>';
+          data.nodeMap.hasRelatedAuthority.forEach(function (c) {
+            html = html + '<li>' + c + '</li>';
+          });
+          html = html + '</ul>';
+        } 
         
         html = html + '</div><div style="text-align:right"><a target="_blank" href="' + data.uri + '">View on id.loc.gov</a></div>'
         return html;

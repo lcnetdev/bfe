@@ -113,6 +113,12 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
         } 
         if (n['http://www.loc.gov/mads/rdf/v1#hasNarrowerAuthority']){
           nodeMap.hasNarrowerAuthority = n['http://www.loc.gov/mads/rdf/v1#hasNarrowerAuthority'].map(function(d){ return d['@id']})
+        }
+        if (n['http://www.loc.gov/mads/rdf/v1#see']){
+          nodeMap.see = n['http://www.loc.gov/mads/rdf/v1#see'].map(function(d){ return d['@id']})
+        }
+        if (n['http://www.loc.gov/mads/rdf/v1#hasRelatedAuthority']){
+          nodeMap.hasRelatedAuthority = n['http://www.loc.gov/mads/rdf/v1#hasRelatedAuthority'].map(function(d){ return d['@id']})
         } 
 
       })
@@ -186,6 +192,24 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
             results.genreForm = n['rdf-schema:label'];
           }
         }
+        
+        if (n['http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection']) { 
+            results.nodeMap.collections = [];
+            n['http://www.loc.gov/mads/rdf/v1#isMemberOfMADSCollection'].forEach(function(val){ 
+                if (val['@id']) {
+                    var coll_label_parts = val['@id'].split("_");
+                    var coll_label = coll_label_parts[1];
+                    if (coll_label_parts.length > 2) {
+                        coll_label = coll_label_parts.slice(1).join(' ');
+                    }
+                    if (coll_label != "LCNAF" && coll_label.match(/[A-Z]{4}|[A-Z][a-z]+/g)) {
+                        coll_label = coll_label.match(/[A-Z]{4}|[A-Z][a-z]+/g).join(" ");
+                    }
+                    results.nodeMap.collections.push(coll_label);
+                }
+            })
+        }
+
       });    
       return results;
     }
@@ -202,7 +226,6 @@ bfe.define('src/lookups/lcshared', ['require', 'exports', 'src/bfelogging'], fun
             jsonuri = jsonuri.replace(/^(http:)/,"https:");
         }
       
-
         $.ajax({
             url: jsonuri,
             dataType: 'json',
