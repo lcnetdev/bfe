@@ -104,5 +104,42 @@ bfe.define('src/bfelabels', ['require', 'exports','src/bfelogging' ], function(r
             }
         });
     }
+    
+    exports.findURIatID = function(scheme, label) {
+        var idInfo = { uri: "", validationMessage: "Not found", label: label };
+        var labelservice = scheme + "/label/" + encodeURIComponent(label);
+        labelservice = labelservice.replace(/^(http:)/,"https:");
+        labelservice = labelservice.replace('//id.loc.gov/','//preprod-8288.id.loc.gov/');
+        bfelog.addMsg(new Error(), 'DEBUG', 'labelservice uri: ' + labelservice);
+
+        /*
+        The browser will automatically follow 302, 303 redirects.  It is impossible
+        therefore to perform a HEAD request, get the initial response, pluck the 
+        X-URI out of it, and move one with our lives.  We must wait for all the 
+        redirects to play out and the content delivered.
+        */
+        $.ajax({
+            type: 'GET',
+            async: false,
+            headers: { 'Accept': 'application/json' },
+            url: labelservice
+        })
+        .done(function(d, s, xhr) {
+            uri = xhr.getResponseHeader('x-uri');
+            preflabel = xhr.getResponseHeader('x-preflabel');
+            idInfo = { uri: uri, label: preflabel };
+            prelabel_normalized = preflabel.replace('.', '').replace(' ', '');
+            label_normalized = label.replace('.', '').replace(' ', '');
+            if (prelabel_normalized != label_normalized) {
+                idInfo.validationMessage = "See reference";
+            } else {
+                idInfo.validationMessage = "Heading validated";
+            }
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            bfelog.addMsg(new Error(), 'ERROR', 'Request status: ' + textStatus + '; Error msg: ' + errorThrown);
+        });
+        return idInfo;
+    };
 
 });

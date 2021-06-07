@@ -1,5 +1,7 @@
 bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', 'src/bfeapi', 'src/bfelabels', 'src/lib/aceconfig'], function (require, exports) {
 
+    //sessionStorage.clear();
+    
   var editorconfig = {};
   var bfestore = require('src/bfestore');
   var bfelog = require('src/bfelogging');
@@ -3131,6 +3133,146 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
             }
 
             bfelog.addMsg(new Error(), 'DEBUG', 'displayData is: ' + displaydata);
+            
+            var displayResourceURI;
+            var idInfo = {};
+            var displayResource = _.where(bfestore.store, {
+                's': pd.o
+            });
+            bfelog.addMsg(new Error(), 'DEBUG', 'displayResource is: ', displayResource);
+            if ( property.propertyURI == "http://id.loc.gov/ontologies/bibframe/contribution" ) {
+                var agentUri = _.find(displayResource, {
+                    p: "http://id.loc.gov/ontologies/bibframe/agent"
+                });
+                if (
+                        !_.isEmpty(agentUri) &&
+                        !agentUri.o.startsWith("_:b") && 
+                        agentUri.o.indexOf("//id.loc.gov/") > 0
+                    ) {
+                    // If agentUri is not empty, if it is not a blank node, and 
+                    // if the URI is an ID uri....
+                    // Found an agent URI
+                    idInfo = { uri: agentUri.o, validationMessage: "Heading validated" };
+                } else if (!_.isEmpty(agentUri)) {
+                    var uriOfRDFSLabel = _.find(displayResource, {
+                        p: "http://www.w3.org/2000/01/rdf-schema#label"
+                    });
+                    if (!_.isEmpty(uriOfRDFSLabel)) {
+                        // Not crazy about this, but going to hard code LCNAF.
+                        var scheme = "http://id.loc.gov/authorities/names";
+                        idInfo = bfelabels.findURIatID(scheme, uriOfRDFSLabel.o);
+                    
+                        if (idInfo.validationMessage != "Not found") {
+                            // Let's take what is likely a bnode and replace it in 
+                            // the graph with the correct URI.
+                            var replaceBnode = agentUri.o.slice();
+                            var foundUri = idInfo.uri.slice();
+                            var as_subjects = _.where(bfestore.store, {
+                                s: replaceBnode
+                            });
+                            forEach(function(t) {
+                               t.s = foundUri;
+                            });
+                            displayResource.o = foundUri;
+                        }
+                    }
+                }
+            } else if ( property.propertyURI == "http://id.loc.gov/ontologies/bibframe/genreForm" ) {
+                var uriOfRDFSLabel = _.find(displayResource, {
+                    p: "http://www.w3.org/2000/01/rdf-schema#label"
+                });
+                if (
+                        !_.isEmpty(uriOfRDFSLabel) && 
+                        !uriOfRDFSLabel.s.startsWith("_:b") && 
+                        uriOfRDFSLabel.s.indexOf("//id.loc.gov/") > 0
+                    ) {
+                    idInfo = { uri: uriOfRDFSLabel.s, validationMessage: "Heading validated" };
+                } else {
+                    idInfo = { uri: "", validationMessage: "Not found" };
+                }
+            } else if ( property.propertyURI == "http://id.loc.gov/ontologies/bibframe/subject" ) {
+                var uriOfRDFSLabel = _.find(displayResource, {
+                    p: "http://www.w3.org/2000/01/rdf-schema#label"
+                });
+                if (
+                        !_.isEmpty(uriOfRDFSLabel) && 
+                        !uriOfRDFSLabel.s.startsWith("_:b") && 
+                        uriOfRDFSLabel.s.indexOf("//id.loc.gov/") > 0
+                    ) {
+                    idInfo = { uri: uriOfRDFSLabel.s, validationMessage: "Heading validated" };
+                } else if (!_.isEmpty(uriOfRDFSLabel)) {
+                    var scheme_t = _.find(displayResource, {
+                        p: "http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme"
+                    });
+                    if (!_.isEmpty(scheme_t)) {
+                        var scheme = scheme_t.o;
+                        idInfo = bfelabels.findURIatID(scheme, uriOfRDFSLabel.o);
+                        // If we have a match here, then it will be "Heading validated,"
+                        // which is correct.
+                        if (idInfo.validationMessage != "Not found") {
+                            // Let's take what is likely a bnode and replace it in 
+                            // the graph with the correct URI.
+                            var replaceBnode = displayResource[0].s.slice();
+                            var foundUri = idInfo.uri.slice();
+                            var as_subjects = _.where(bfestore.store, {
+                                s: replaceBnode
+                            });
+                            as_subjects.forEach(function(t) {
+                               t.s = foundUri;
+                            });
+                            var as_objects = _.where(bfestore.store, {
+                                o: replaceBnode
+                            });
+                            as_objects.forEach(function(t) {
+                               t.o = foundUri;
+                            });
+                        } else {
+                            // We didn't find anything in the above step, so let's see 
+                            // if we can match the first component.
+                            var componentOne = _.find(displayResource, {
+                                p: "http://www.loc.gov/mads/rdf/v1#componentList"
+                            });
+                            bfelog.addMsg(new Error(), 'DEBUG', 'componentOne is: ', componentOne);
+                            if (
+                                !_.isEmpty(componentOne) && 
+                                !componentOne.o.startsWith("_:b")
+                            ) {
+                                idInfo = { uri: componentOne.o, validationMessage: "Partial heading validation" };
+                            } else if (!_.isEmpty(componentOne)) {
+                                var uriOfAuthLabel = _.find(bfestore.store, {
+                                    s: componentOne.o,
+                                    p: "http://www.loc.gov/mads/rdf/v1#authoritativeLabel"
+                                });
+                                idInfo = bfelabels.findURIatID(scheme, uriOfAuthLabel.o);
+                                if (idInfo.validationMessage != "Not found") {
+                                    // IF we found something, we need to set the 
+                                    // message to partial validation.
+                                    idInfo.validationMessage = "Partial heading validation"
+                                        
+                                    // Let's take what is likely a bnode and replace it in 
+                                    // the graph with the correct URI.
+                                    var replaceBnode = componentOne.o.slice();
+                                    var foundUri = idInfo.uri.slice();
+                                    var as_subjects = _.where(bfestore.store, {
+                                        s: replaceBnode
+                                    });
+                                    as_subjects.forEach(function(t) {
+                                       t.s = foundUri;
+                                    });
+                                    var as_objects = _.where(bfestore.store, {
+                                        o: replaceBnode
+                                    });
+                                    as_objects.forEach(function(t) {
+                                       t.o = foundUri;
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            bfelog.addMsg(new Error(), 'DEBUG', 'idInfo is: ', idInfo);
+            
             if (displaydata === undefined) {
                 if (data !== undefined && data.o !== undefined) {
                     displaydata = data.o;
@@ -3166,6 +3308,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
         }
         
         triples.push(pd);
+        bfelog.addMsg(new Error(), 'DEBUG', 'triples before button creation are: ', triples);
 
         if (hasTemplate) {
             if (!_.has(property.valueConstraint, "editable")) {
@@ -3205,6 +3348,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     'tguid': pd.guid,
                     'tlabelhover': displaydata,
                     'tlabel': displaydata,
+                    'idInfo': idInfo,
                     'fobjectid': fobject.id,
                     'inputid': property.guid,
                     'editable': property.valueConstraint.editable,
@@ -4239,6 +4383,31 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
       bfe.saveNoExit();
     });
     $buttongroup.append($delbutton);
+    
+    //if (bgvars.turi !== undefined && bgvars.turi.match('^!_:b')) {
+    if (bgvars.idInfo !== undefined && bgvars.idInfo.uri !== undefined) {
+        var bClass = "btn btn-success";
+        var sClass = "fa fa-check";
+        var sClassStyle = 'style="color:white"';
+        if (bgvars.idInfo.validationMessage == "Partial heading validation") {
+            bClass = "btn btn-outline-success";
+        } else if (bgvars.idInfo.validationMessage == "See reference") {
+            bClass = "btn btn-outline-warning";
+            var sClass = "fa fa-close";
+        } else if (bgvars.idInfo.validationMessage == "Not found") {
+            bClass = "btn btn-outline-danger";
+            var sClass = "fa fa-close";
+        }
+        $uributton = $('<button class="' + bClass +'" type="button"><span class="' + sClass + '" "' + sClassStyle + '"></span></button>');
+        if (bgvars.idInfo.validationMessage != "Not found") {
+            $urilink = $('<a href="' + bgvars.idInfo.uri + '" title="' + bgvars.idInfo.validationMessage + '" target="_blank"></a>');
+        } else {
+            $urilink = $('<a href="https://id.loc.gov/search/?q=' + encodeURIComponent(bgvars.idInfo.label) + '" title="' + bgvars.idInfo.validationMessage + '" target="_blank"></a>');
+        }
+        $urilink.append($uributton);
+        $buttongroup.append($urilink);
+
+    }
 
     return $buttongroup;
   }
