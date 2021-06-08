@@ -3292,11 +3292,17 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                     ) {
                     idInfo = { uri: uriOfRDFSLabel.s, validationMessage: "Heading validated" };
                 } else if (!_.isEmpty(uriOfRDFSLabel)) {
+                    var childrens = _.find(displayResource, {
+                        p: "http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme",
+                        o: "http://id.loc.gov/authorities/childrensSubjects"
+                    });
                     var scheme_t = _.find(displayResource, {
                         p: "http://www.loc.gov/mads/rdf/v1#isMemberOfMADSScheme"
                     });
                     var scheme = "";
-                    if (_.isEmpty(scheme_t)) {
+                    if (!_.isEmpty(childrens)) {
+                        scheme = "http://id.loc.gov/authorities/childrensSubjects";
+                    } else if (_.isEmpty(scheme_t)) {
                         // scheme_t is empty; let's see if there's a source property.
                         var source_t = _.find(displayResource, {
                             p: "http://id.loc.gov/ontologies/bibframe/source"
@@ -3311,7 +3317,7 @@ bfe.define('src/bfe', ['require', 'exports', 'src/bfestore', 'src/bfelogging', '
                                     scheme = "http://id.loc.gov/vocabulary/graphicMaterials";
                                 } else if (source_code.o == "lcsh" ) {
                                     scheme = "http://id.loc.gov/authorities/subjects";
-                                } else if (source_code.o == "lcshac" || source_code.o == "lcshj" ) {
+                                } else if (source_code.o == "lcac" || source_code.o == "lcshac" || source_code.o == "lcshj" ) {
                                     scheme = "http://id.loc.gov/authorities/childrensSubjects";
                                 }
                             }
