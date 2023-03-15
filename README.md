@@ -1,7 +1,7 @@
 [bfe][demo-page]
 =======================
 [![CircleCI](https://circleci.com/gh/lcnetdev/bfe/tree/main.svg?style=svg)](https://circleci.com/gh/lcnetdev/bfe/tree/main)
-*** Note: This editor is no longer under development. The Library of Congress is <a href="http://github.com/lcnetdev/marva-front-end">MARVA</a> to edit BIBFRAME resources.
+*** Note: This editor is no longer under development. The Library of Congress is using <a href="http://github.com/lcnetdev/marva-frontend">MARVA</a> to edit BIBFRAME resources.   ***
 
 `bfe` is a standalone Editor for the Library of Congress's [Bibliographic Framework 
 (BIBFRAME) Initiative][bfi].  It can be used more generically as an editor for RDF data. 
